@@ -1,0 +1,14 @@
+[
+  {
+    "phrase": "paste previous",
+    "action": { "type": "plugin", "value": "clipboard paste_previous" }
+  },
+  {
+    "phrase": "clipboard history",
+    "action": { "type": "plugin", "value": "clipboard show_history" }
+  },
+  {
+    "phrase": "clear clipboard",
+    "action": { "type": "plugin", "value": "clipboard clear" }
+  }
+]
