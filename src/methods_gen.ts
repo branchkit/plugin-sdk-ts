@@ -19,6 +19,8 @@ import {
   MethodHudRemoveChannel,
   MethodHudSetSize,
   MethodHudShow,
+  MethodInputClick,
+  MethodInputClipboardAction,
   MethodInputClipboardRead,
   MethodInputClipboardReadAll,
   MethodInputClipboardWrite,
@@ -26,8 +28,13 @@ import {
   MethodInputDoubleClick,
   MethodInputDrag,
   MethodInputListInputSources,
+  MethodInputMouseButton,
+  MethodInputPressKey,
+  MethodInputRawKey,
   MethodInputRightClick,
+  MethodInputScroll,
   MethodInputSwitchInputSource,
+  MethodInputTypeText,
   MethodKeyNamesSet,
   MethodKeybindsRegister,
   MethodListsDelete,
@@ -72,6 +79,7 @@ import {
   MethodNativeHideApp,
   MethodNativeIsAppHidden,
   MethodNativeKeyboardLayout,
+  MethodNativeLaunchApp,
   MethodNativeListNotifications,
   MethodNativeListSpaces,
   MethodNativeLoginItems,
@@ -82,6 +90,7 @@ import {
   MethodNativeMute,
   MethodNativeNotify,
   MethodNativeObserveWindows,
+  MethodNativeOpenTarget,
   MethodNativePlaySound,
   MethodNativePollBurst,
   MethodNativePreventSleep,
@@ -244,6 +253,15 @@ declare module "./plugin.js" {
     nativeSetWindowLevel(windowId: string, level: "floating" | "normal" | "below"): Promise<boolean>;
     controlSignal(signal: string): Promise<void>;
     eventsEmit(eventType: string, data?: unknown, correlationId?: string): Promise<void>;
+    inputTypeText(text: string): Promise<void>;
+    inputPressKey(code?: number, name?: string, modifiers?: string[]): Promise<void>;
+    inputRawKey(code: number, direction: "press" | "release" | "click"): Promise<void>;
+    inputClick(button?: "left" | "right" | "middle"): Promise<void>;
+    inputScroll(direction: "up" | "down" | "left" | "right", amount?: number): Promise<void>;
+    inputMouseButton(direction: "press" | "release", button?: "left" | "right" | "middle"): Promise<void>;
+    inputClipboardAction(action: "copy" | "paste" | "set", text?: string): Promise<void>;
+    nativeLaunchApp(bundleId: string, newInstance?: boolean): Promise<void>;
+    nativeOpenTarget(target: string): Promise<void>;
   }
 }
 
@@ -1294,6 +1312,94 @@ Plugin.prototype.eventsEmit = async function(eventType: string, data?: unknown, 
       event_type: eventType,
       data,
       correlation_id: correlationId,
+    },
+  );
+};
+
+Plugin.prototype.inputTypeText = async function(text: string) {
+  const result = await this.call(
+    MethodInputTypeText,
+    {
+      text,
+    },
+  );
+};
+
+Plugin.prototype.inputPressKey = async function(code?: number, name?: string, modifiers?: string[]) {
+  const result = await this.call(
+    MethodInputPressKey,
+    {
+      code,
+      name,
+      modifiers,
+    },
+  );
+};
+
+Plugin.prototype.inputRawKey = async function(code: number, direction: "press" | "release" | "click") {
+  const result = await this.call(
+    MethodInputRawKey,
+    {
+      code,
+      direction,
+    },
+  );
+};
+
+Plugin.prototype.inputClick = async function(button?: "left" | "right" | "middle") {
+  const result = await this.call(
+    MethodInputClick,
+    {
+      button,
+    },
+  );
+};
+
+Plugin.prototype.inputScroll = async function(direction: "up" | "down" | "left" | "right", amount?: number) {
+  const result = await this.call(
+    MethodInputScroll,
+    {
+      direction,
+      amount,
+    },
+  );
+};
+
+Plugin.prototype.inputMouseButton = async function(direction: "press" | "release", button?: "left" | "right" | "middle") {
+  const result = await this.call(
+    MethodInputMouseButton,
+    {
+      direction,
+      button,
+    },
+  );
+};
+
+Plugin.prototype.inputClipboardAction = async function(action: "copy" | "paste" | "set", text?: string) {
+  const result = await this.call(
+    MethodInputClipboardAction,
+    {
+      action,
+      text,
+    },
+  );
+};
+
+Plugin.prototype.nativeLaunchApp = async function(bundleId: string, newInstance?: boolean) {
+  const result = await this.call(
+    MethodNativeLaunchApp,
+    {
+      bundle_id: bundleId,
+      new_instance: newInstance,
+    },
+  );
+};
+
+Plugin.prototype.nativeOpenTarget = async function(target: string) {
+  const result = await this.call(
+    MethodNativeOpenTarget,
+    {
+      target,
     },
   );
 };

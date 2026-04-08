@@ -941,6 +941,49 @@ export interface EventsEmitRequest {
   correlation_id?: string;
 }
 
+export interface InputTypeTextRequest {
+  text: string;
+}
+
+export interface InputPressKeyRequest {
+  code?: number;
+  name?: string;
+  modifiers?: string[];
+}
+
+export interface InputRawKeyRequest {
+  code: number;
+  direction: "press" | "release" | "click";
+}
+
+export interface InputClickRequest {
+  button?: "left" | "right" | "middle";
+}
+
+export interface InputScrollRequest {
+  direction: "up" | "down" | "left" | "right";
+  amount?: number;
+}
+
+export interface InputMouseButtonRequest {
+  button?: "left" | "right" | "middle";
+  direction: "press" | "release";
+}
+
+export interface InputClipboardActionRequest {
+  action: "copy" | "paste" | "set";
+  text?: string;
+}
+
+export interface NativeLaunchAppRequest {
+  bundle_id: string;
+  new_instance?: boolean;
+}
+
+export interface NativeOpenTargetRequest {
+  target: string;
+}
+
 // ===== Actuator → Plugin request/response types =====
 
 export interface RenderSettingsRequest {
