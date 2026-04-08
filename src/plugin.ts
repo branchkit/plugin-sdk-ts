@@ -1,5 +1,6 @@
 import { createInterface } from "node:readline";
 import { Log } from "./log.js";
+import { APIVersion } from "./contracts_gen.js";
 
 // --- JSON-RPC 2.0 message types ---
 
@@ -284,6 +285,14 @@ export class Plugin {
   private sendError(id: number, code: number, message: string): void {
     this.write({ jsonrpc: "2.0", id, error: { code, message } });
   }
+}
+
+/**
+ * Returns the BranchKit API version from the actuator (env var),
+ * falling back to the version this SDK was compiled against.
+ */
+export function apiVersion(): string {
+  return process.env.BRANCHKIT_API_VERSION ?? APIVersion;
 }
 
 export { Log } from "./log.js";

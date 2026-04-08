@@ -1,4 +1,4 @@
-export { Plugin, RpcCallError } from "./plugin.js";
+export { Plugin, RpcCallError, apiVersion } from "./plugin.js";
 export { Log } from "./log.js";
 export { PushCommands } from "./commands.js";
 export { ListenLocal, Listener, type ConnectInfo } from "./listen.js";
