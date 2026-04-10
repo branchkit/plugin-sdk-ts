@@ -130,6 +130,12 @@ export const MethodSettingsRulesCreate = "settings.rules_create" as const; // si
 export const MethodSettingsRulesUpdate = "settings.rules_update" as const; // since 0.1.0
 export const MethodStoreGet = "store.get" as const; // since 0.1.0
 export const MethodStorePush = "store.push" as const; // since 0.1.0
+export const MethodSystemLaunchApp = "system.launch_app" as const; // since 0.1.0
+export const MethodSystemNotify = "system.notify" as const; // since 0.1.0
+export const MethodSystemRunEval = "system.run_eval" as const; // since 0.1.0
+export const MethodSystemRunScript = "system.run_script" as const; // since 0.1.0
+export const MethodSystemRunShell = "system.run_shell" as const; // since 0.1.0
+export const MethodSystemRunTool = "system.run_tool" as const; // since 0.1.0
 export const MethodTagsGet = "tags.get" as const; // since 0.1.0
 export const MethodTagsModify = "tags.modify" as const; // since 0.1.0
 
