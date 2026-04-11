@@ -154,6 +154,7 @@ export const EventAppFocused = "_platform.app.focused" as const;
 export const EventDisplayChanged = "_platform.display.changed" as const;
 export const EventInputSessionEnded = "_platform.input.session_ended" as const;
 export const EventKeyboardLayoutChanged = "_platform.keyboard.layout_changed" as const;
+export const EventPluginDegraded = "_platform.plugin.degraded" as const;
 export const EventPluginDisabled = "_platform.plugin.disabled" as const;
 export const EventPluginEnabled = "_platform.plugin.enabled" as const;
 export const EventSelectionPicked = "_platform.selection.picked" as const;
