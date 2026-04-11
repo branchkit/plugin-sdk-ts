@@ -2,7 +2,7 @@
 // Run: just contracts
 
 import { Plugin } from "./plugin.js";
-import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, DeliveredNotification, DisplayMetadata, ExecuteResponse, GrammarPushResponse, HUDRemoveChannelResponse, InputClipboardReadResponse, InputSource, KeyNamesSetResponse, KeybindsRegisterResponse, ListsGetResponse, ListsUpdateResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, NativeWorldModelResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, StoreGetResponse, SystemRunEvalResponse, SystemRunScriptResponse, TileableEntry, WindowFrame } from "./types_gen.js";
+import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, DeliveredNotification, DisplayMetadata, ExecuteResponse, GrammarPushResponse, HUDRemoveChannelResponse, InputClipboardReadResponse, InputSource, KeyNamesSetResponse, KeybindsRegisterResponse, ListsGetResponse, ListsUpdateResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, StoreGetResponse, SystemRunEvalResponse, SystemRunScriptResponse, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
 import {
   MethodCommandsDiscover,
   MethodCommandsHasPartial,
@@ -258,7 +258,7 @@ declare module "./plugin.js" {
     nativeVolume(): Promise<NativeVolumeResponse>;
     nativeWarpCursor(x: number, y: number): Promise<void>;
     nativeWifi(): Promise<NativeWifiResponse>;
-    nativeWorldModel(onScreen?: boolean): Promise<NativeWorldModelResponse>;
+    nativeWorldModel(onScreen?: boolean): Promise<WorldModel>;
     selectionPick(index: number): Promise<SelectionPickResponse>;
     selectionSet(items?: unknown, title?: unknown): Promise<void>;
     sessionEndCleanup(): Promise<SessionEndCleanupResponse>;
@@ -1324,7 +1324,7 @@ Plugin.prototype.nativeWorldModel = async function(onScreen?: boolean) {
       on_screen: onScreen,
     },
   );
-  return result as NativeWorldModelResponse;
+  return result as WorldModel;
 };
 
 Plugin.prototype.selectionPick = async function(index: number) {

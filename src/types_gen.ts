@@ -40,10 +40,10 @@ export interface ActiveSpace {
 }
 
 export interface AppData {
-  name: string;
+  aliases: string[];
   bundle_id: string;
-  aliases?: string[];
   enabled?: boolean;
+  name: string;
 }
 
 export interface AudioDevice {
@@ -63,6 +63,8 @@ export interface BluetoothDevice {
   is_paired: boolean;
   name: string;
 }
+
+export type CalibrateAction = "start" | "speech" | "cancel";
 
 export interface ClipboardContents {
   available_types: string[];
@@ -125,30 +127,30 @@ export interface DisplayMetadata {
 }
 
 export interface Frame {
+  h: number;
+  w: number;
   x: number;
   y: number;
-  w: number;
-  h: number;
 }
 
 export interface HudItem {
+  icon?: string;
   id: string;
+  subtitle?: string;
   tag?: string;
   title: string;
-  subtitle?: string;
-  icon?: string;
 }
 
 export interface HudResponse {
-  title: string;
-  footer: string;
   content_html?: string;
+  footer: string;
   sections?: HudSection[];
+  title: string;
 }
 
 export interface HudSection {
-  title: string;
   items: HudItem[];
+  title: string;
 }
 
 export interface InputSource {
@@ -189,6 +191,8 @@ export interface MenuItem {
  */
 export type MergeStrategy = "authoritative" | "collect" | "keyed";
 
+export type OnActionStatus = "ok" | "error" | "not_handled";
+
 export interface RunningApp {
   bundle_id?: unknown;
   is_active: boolean;
@@ -210,6 +214,8 @@ export interface SpaceInfo {
   space_id: number;
   space_type: string;
 }
+
+export type SpeechPipelineAction = "pass" | "consume";
 
 export interface SpotlightResult {
   kind: string;
@@ -252,10 +258,11 @@ export interface WindowInfo {
 }
 
 export interface WorldModel {
-  windows?: WindowInfo[];
-  displays?: DisplayInfo[];
-  active_window_id?: string;
   active_app?: string;
+  active_window_id?: string;
+  displays: DisplayInfo[];
+  keyboard_layout_id: string;
+  windows: WindowInfo[];
 }
 
 // ===== Plugin → Actuator request/response types =====
@@ -1208,14 +1215,6 @@ export interface NativeWorldModelRequest {
   on_screen?: boolean;
 }
 
-export interface NativeWorldModelResponse {
-  active_app?: unknown;
-  active_window_id?: unknown;
-  displays?: DisplayInfo[];
-  keyboard_layout_id?: string;
-  windows?: WindowInfo[];
-}
-
 export interface SelectionPickRequest {
   index: number;
 }
@@ -1364,56 +1363,55 @@ export interface TagsModifyResponse {
 
 // ===== Actuator → Plugin request/response types =====
 
-export interface RenderSettingsRequest {
-  tab_key: string;
-  search?: string;
-  apps?: AppData[];
-  commands?: Record<string, unknown>;
-  active_tags?: string[];
-}
-
-export interface RenderSettingsResponse {
-  html: string;
-}
-
-export interface RenderHUDRequest {
-  hud_mode: string;
-  apps?: AppData[];
-  title?: string;
-  footer?: string;
-  sections?: HudSection[];
-}
-
-export interface OnActionRequest {
-  action: string;
-  params?: Record<string, unknown>;
-  active_app?: string;
-  active_window_id?: string;
-}
-
-export interface OnActionResponse {
-  status: "ok" | "error" | "not_handled";
-  shell_action?: string;
-  control_message?: string;
-}
-
 export interface BuildCommandRegistryRequest {
-  commands_by_plugin: Record<string, unknown>;
-  user_commands?: Record<string, unknown>[];
+  commands_by_plugin: unknown;
+  user_commands?: unknown[];
 }
 
 export interface BuildCommandRegistryResponse {
   phonetics_count: number;
 }
 
-export interface SpeechPipelineRequest {
-  transcript: string;
-  is_final: boolean;
-  mode: string;
+export interface CalibrateRequest {
+  action: CalibrateAction;
+  words?: string[];
 }
 
-export interface SpeechPipelineResponse {
-  action: "pass" | "consume";
+export interface CalibrateResponse {
+  calibration_active: boolean;
+}
+
+export interface OnActionRequest {
+  action: string;
+  active_app?: string;
+  active_window_id?: string;
+  params?: unknown;
+}
+
+export interface OnActionResponse {
+  control_message?: string;
+  shell_action?: string;
+  status: OnActionStatus;
+}
+
+export interface RenderHUDRequest {
+  apps?: AppData[];
+  footer?: string;
+  hud_mode: string;
+  sections?: HudSection[];
+  title?: string;
+}
+
+export interface RenderSettingsRequest {
+  active_tags?: string[];
+  apps?: AppData[];
+  commands?: unknown;
+  search?: string;
+  tab_key: string;
+}
+
+export interface RenderSettingsResponse {
+  html: string;
 }
 
 export interface SpeechOrchestrateRequest {
@@ -1422,15 +1420,16 @@ export interface SpeechOrchestrateRequest {
 }
 
 export interface SpeechOrchestrateResponse {
+  actions_to_execute?: unknown[];
   result: string;
-  actions_to_execute?: Record<string, unknown>[];
 }
 
-export interface CalibrateRequest {
-  action: "start" | "speech" | "cancel";
-  words?: string[];
+export interface SpeechPipelineRequest {
+  is_final: boolean;
+  mode: string;
+  transcript: string;
 }
 
-export interface CalibrateResponse {
-  calibration_active: boolean;
+export interface SpeechPipelineResponse {
+  action: SpeechPipelineAction;
 }
