@@ -280,7 +280,7 @@ export interface CommandsDiscoverResponse {
 
 export interface CommandsHasPartialRequest {
   active_tags?: unknown;
-  words: string[];
+  words?: string[];
 }
 
 export interface CommandsHasPartialResponse {
@@ -296,7 +296,7 @@ export interface CommandsListResponse {
 
 export interface CommandsMatchRequest {
   active_tags?: unknown;
-  words: string[];
+  words?: string[];
 }
 
 export interface CommandsMatchResponse {
@@ -456,7 +456,7 @@ export interface InputClipboardWriteResponse {
 }
 
 export interface InputClipboardWriteItemsRequest {
-  items: ClipboardWriteItem[];
+  items?: ClipboardWriteItem[];
 }
 
 export interface InputClipboardWriteItemsResponse {
@@ -551,7 +551,7 @@ export interface InputTypeTextResponse {
 }
 
 export interface KeyNamesSetRequest {
-  names: Record<string, number>;
+  names?: Record<string, number>;
 }
 
 export interface KeyNamesSetResponse {
@@ -665,7 +665,7 @@ export interface NativeAxElementTreeRequest {
 }
 
 export interface NativeAxObserveRequest {
-  notifications: string[];
+  notifications?: string[];
   pid: number;
 }
 
@@ -683,7 +683,7 @@ export interface NativeAxPerformActionResponse {
 }
 
 export interface NativeAxReadAttributesRequest {
-  attributes: string[];
+  attributes?: string[];
   element: AXElementRef;
 }
 
@@ -706,7 +706,7 @@ export interface NativeAxUnobserveResponse {
 }
 
 export interface NativeBatchIsTileableRequest {
-  window_ids: string[];
+  window_ids?: string[];
 }
 
 export interface NativeBatchIsTileableResponse {
@@ -714,7 +714,7 @@ export interface NativeBatchIsTileableResponse {
 }
 
 export interface NativeBatchSetFramesRequest {
-  frames: WindowFrame[];
+  frames?: WindowFrame[];
   readback?: boolean;
 }
 
@@ -756,7 +756,7 @@ export interface NativeCaptureWindowResponse {
 }
 
 export interface NativeClickMenuItemRequest {
-  path: string[];
+  path?: string[];
   pid: number;
 }
 
@@ -1305,6 +1305,7 @@ export interface SystemLaunchAppResponse {
 
 export interface SystemNotifyRequest {
   body: string;
+  duration_secs?: unknown;
   title: string;
 }
 

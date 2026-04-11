@@ -142,9 +142,9 @@ import {
 declare module "./plugin.js" {
   interface Plugin {
     commandsDiscover(activeTags?: unknown, requireTag?: unknown, words?: unknown): Promise<CommandsDiscoverResponse>;
-    commandsHasPartial(words: string[], activeTags?: unknown): Promise<CommandsHasPartialResponse>;
+    commandsHasPartial(activeTags?: unknown, words?: string[]): Promise<CommandsHasPartialResponse>;
     commandsList(): Promise<CommandsListResponse>;
-    commandsMatch(words: string[], activeTags?: unknown): Promise<CommandsMatchResponse>;
+    commandsMatch(activeTags?: unknown, words?: string[]): Promise<CommandsMatchResponse>;
     controlSignal(signal: string): Promise<void>;
     eventsAppend(eventType: string, data?: unknown, sessionId?: string): Promise<void>;
     eventsEmit(eventType: string, correlationId?: unknown, data?: unknown): Promise<void>;
@@ -161,7 +161,7 @@ declare module "./plugin.js" {
     inputClipboardRead(contentType: string): Promise<InputClipboardReadResponse>;
     inputClipboardReadAll(): Promise<ClipboardContents[]>;
     inputClipboardWrite(contentType: string, data: string): Promise<void>;
-    inputClipboardWriteItems(items: ClipboardWriteItem[]): Promise<void>;
+    inputClipboardWriteItems(items?: ClipboardWriteItem[]): Promise<void>;
     inputDoubleClick(x?: unknown, y?: unknown): Promise<void>;
     inputDrag(fromX: number, fromY: number, toX: number, toY: number, durationMs?: number): Promise<void>;
     inputListInputSources(): Promise<InputSource[]>;
@@ -172,7 +172,7 @@ declare module "./plugin.js" {
     inputScroll(direction: string, amount?: number): Promise<void>;
     inputSwitchInputSource(sourceId: string): Promise<boolean>;
     inputTypeText(text: string): Promise<void>;
-    keyNamesSet(names: Record<string, number>): Promise<KeyNamesSetResponse>;
+    keyNamesSet(names?: Record<string, number>): Promise<KeyNamesSetResponse>;
     keybindsRegister(snapshot: unknown): Promise<KeybindsRegisterResponse>;
     listsDelete(name: string): Promise<void>;
     listsGet(name: string): Promise<ListsGetResponse>;
@@ -185,19 +185,19 @@ declare module "./plugin.js" {
     nativeAudioDevices(): Promise<AudioDevice[]>;
     nativeAxElementAtPoint(pid: number, x: number, y: number): Promise<NativeAxElementAtPointResponse>;
     nativeAxElementTree(element: AXElementRef, depth?: number): Promise<AXElementNode>;
-    nativeAxObserve(notifications: string[], pid: number): Promise<NativeAxObserveResponse>;
+    nativeAxObserve(pid: number, notifications?: string[]): Promise<NativeAxObserveResponse>;
     nativeAxPerformAction(action: string, element: AXElementRef): Promise<boolean>;
-    nativeAxReadAttributes(attributes: string[], element: AXElementRef): Promise<void>;
+    nativeAxReadAttributes(element: AXElementRef, attributes?: string[]): Promise<void>;
     nativeAxSetAttribute(attribute: string, element: AXElementRef, value: unknown): Promise<boolean>;
     nativeAxUnobserve(subscriptionId: string): Promise<boolean>;
-    nativeBatchIsTileable(windowIds: string[]): Promise<TileableEntry[]>;
-    nativeBatchSetFrames(frames: WindowFrame[], readback?: boolean): Promise<WindowFrame[]>;
+    nativeBatchIsTileable(windowIds?: string[]): Promise<TileableEntry[]>;
+    nativeBatchSetFrames(frames?: WindowFrame[], readback?: boolean): Promise<WindowFrame[]>;
     nativeBattery(): Promise<NativeBatteryResponse>;
     nativeBluetoothDevices(): Promise<BluetoothDevice[]>;
     nativeBorders(): Promise<void>;
     nativeBrightness(displayId?: unknown): Promise<NativeBrightnessResponse>;
     nativeCaptureWindow(windowId: string): Promise<NativeCaptureWindowResponse>;
-    nativeClickMenuItem(path: string[], pid: number): Promise<boolean>;
+    nativeClickMenuItem(pid: number, path?: string[]): Promise<boolean>;
     nativeClipboardChangeCount(): Promise<NativeClipboardChangeCountResponse>;
     nativeCloseWindow(windowId: string): Promise<void>;
     nativeColorAtPoint(x: number, y: number): Promise<NativeColorAtPointResponse>;
@@ -267,7 +267,7 @@ declare module "./plugin.js" {
     storeGet(name: string): Promise<StoreGetResponse>;
     storePush(data: unknown, name: string): Promise<void>;
     systemLaunchApp(bundleId: string, newInstance?: boolean): Promise<void>;
-    systemNotify(body: string, title: string): Promise<void>;
+    systemNotify(body: string, title: string, durationSecs?: unknown): Promise<void>;
     systemRunEval(command: string): Promise<SystemRunEvalResponse>;
     systemRunScript(path: string): Promise<SystemRunScriptResponse>;
     systemRunShell(command: string): Promise<void>;
@@ -289,12 +289,12 @@ Plugin.prototype.commandsDiscover = async function(activeTags?: unknown, require
   return result as CommandsDiscoverResponse;
 };
 
-Plugin.prototype.commandsHasPartial = async function(words: string[], activeTags?: unknown) {
+Plugin.prototype.commandsHasPartial = async function(activeTags?: unknown, words?: string[]) {
   const result = await this.call(
     MethodCommandsHasPartial,
     {
-      words,
       active_tags: activeTags,
+      words,
     },
   );
   return result as CommandsHasPartialResponse;
@@ -305,12 +305,12 @@ Plugin.prototype.commandsList = async function() {
   return result as CommandsListResponse;
 };
 
-Plugin.prototype.commandsMatch = async function(words: string[], activeTags?: unknown) {
+Plugin.prototype.commandsMatch = async function(activeTags?: unknown, words?: string[]) {
   const result = await this.call(
     MethodCommandsMatch,
     {
-      words,
       active_tags: activeTags,
+      words,
     },
   );
   return result as CommandsMatchResponse;
@@ -473,7 +473,7 @@ Plugin.prototype.inputClipboardWrite = async function(contentType: string, data:
   );
 };
 
-Plugin.prototype.inputClipboardWriteItems = async function(items: ClipboardWriteItem[]) {
+Plugin.prototype.inputClipboardWriteItems = async function(items?: ClipboardWriteItem[]) {
   const result = await this.call(
     MethodInputClipboardWriteItems,
     {
@@ -580,7 +580,7 @@ Plugin.prototype.inputTypeText = async function(text: string) {
   );
 };
 
-Plugin.prototype.keyNamesSet = async function(names: Record<string, number>) {
+Plugin.prototype.keyNamesSet = async function(names?: Record<string, number>) {
   const result = await this.call(
     MethodKeyNamesSet,
     {
@@ -701,12 +701,12 @@ Plugin.prototype.nativeAxElementTree = async function(element: AXElementRef, dep
   return result as AXElementNode;
 };
 
-Plugin.prototype.nativeAxObserve = async function(notifications: string[], pid: number) {
+Plugin.prototype.nativeAxObserve = async function(pid: number, notifications?: string[]) {
   const result = await this.call(
     MethodNativeAxObserve,
     {
-      notifications,
       pid,
+      notifications,
     },
   );
   return result as NativeAxObserveResponse;
@@ -723,12 +723,12 @@ Plugin.prototype.nativeAxPerformAction = async function(action: string, element:
   return (result as any).result;
 };
 
-Plugin.prototype.nativeAxReadAttributes = async function(attributes: string[], element: AXElementRef) {
+Plugin.prototype.nativeAxReadAttributes = async function(element: AXElementRef, attributes?: string[]) {
   const result = await this.call(
     MethodNativeAxReadAttributes,
     {
-      attributes,
       element,
+      attributes,
     },
   );
 };
@@ -755,7 +755,7 @@ Plugin.prototype.nativeAxUnobserve = async function(subscriptionId: string) {
   return (result as any).result;
 };
 
-Plugin.prototype.nativeBatchIsTileable = async function(windowIds: string[]) {
+Plugin.prototype.nativeBatchIsTileable = async function(windowIds?: string[]) {
   const result = await this.call(
     MethodNativeBatchIsTileable,
     {
@@ -765,7 +765,7 @@ Plugin.prototype.nativeBatchIsTileable = async function(windowIds: string[]) {
   return (result as any).results;
 };
 
-Plugin.prototype.nativeBatchSetFrames = async function(frames: WindowFrame[], readback?: boolean) {
+Plugin.prototype.nativeBatchSetFrames = async function(frames?: WindowFrame[], readback?: boolean) {
   const result = await this.call(
     MethodNativeBatchSetFrames,
     {
@@ -810,12 +810,12 @@ Plugin.prototype.nativeCaptureWindow = async function(windowId: string) {
   return result as NativeCaptureWindowResponse;
 };
 
-Plugin.prototype.nativeClickMenuItem = async function(path: string[], pid: number) {
+Plugin.prototype.nativeClickMenuItem = async function(pid: number, path?: string[]) {
   const result = await this.call(
     MethodNativeClickMenuItem,
     {
-      path,
       pid,
+      path,
     },
   );
   return (result as any).result;
@@ -1417,12 +1417,13 @@ Plugin.prototype.systemLaunchApp = async function(bundleId: string, newInstance?
   );
 };
 
-Plugin.prototype.systemNotify = async function(body: string, title: string) {
+Plugin.prototype.systemNotify = async function(body: string, title: string, durationSecs?: unknown) {
   const result = await this.call(
     MethodSystemNotify,
     {
       body,
       title,
+      duration_secs: durationSecs,
     },
   );
 };
