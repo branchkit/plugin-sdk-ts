@@ -4,34 +4,39 @@
 // ===== Shared types (from components/schemas) =====
 
 export interface AXElementInfo {
-  role: string;
-  subrole?: string;
-  title?: string;
-  value?: unknown;
-  description?: string;
-  position?: number[];
-  size?: number[];
-  enabled: boolean;
-  focused: boolean;
-  children_count: number;
   actions: string[];
   attributes: string[];
+  children_count: number;
+  description?: unknown;
+  enabled: boolean;
+  focused: boolean;
   path: AXPathSegment[];
+  position?: unknown;
+  role: string;
+  size?: unknown;
+  subrole?: unknown;
+  title?: unknown;
+  value?: unknown;
 }
 
 export interface AXElementNode {
-  element: AXElementInfo;
   children: AXElementNode[];
+  element: AXElementInfo;
 }
 
 export interface AXElementRef {
+  path: AXPathSegment[];
   pid: number;
-  path?: AXPathSegment[];
 }
 
 export interface AXPathSegment {
-  role: string;
   index: number;
+  role: string;
+}
+
+export interface ActiveSpace {
+  display_id: number;
+  space_id: number;
 }
 
 export interface AppData {
@@ -41,57 +46,82 @@ export interface AppData {
   enabled?: boolean;
 }
 
-export interface ApplescriptResult {
-  stdout: string;
-  stderr: string;
-  exit_code: number;
-}
-
 export interface AudioDevice {
   id: number;
-  uid: string;
-  name: string;
-  is_input: boolean;
-  is_output: boolean;
   is_default_input: boolean;
   is_default_output: boolean;
+  is_input: boolean;
+  is_output: boolean;
+  name: string;
+  uid: string;
 }
 
-export interface BoolResult {
-  result: boolean;
+export interface BluetoothDevice {
+  address: string;
+  device_type?: unknown;
+  is_connected: boolean;
+  is_paired: boolean;
+  name: string;
 }
 
 export interface ClipboardContents {
-  content_type: string;
-  text?: string;
-  file_urls?: string[];
-  image_base64?: string;
   available_types: string[];
+  content_type: string;
+  file_urls?: unknown;
+  image_base64?: unknown;
+  text?: unknown;
 }
 
-export interface Command {
-  phrase: unknown;
-  action: unknown;
-  requires_tags?: string[];
-  sets_tags?: string[];
-  clears_tags?: string[];
+export interface ClipboardWriteItem {
+  content_type: string;
+  file_urls?: unknown;
+  image_base64?: unknown;
+  text?: unknown;
 }
 
-export interface DiscoveryResult {
-  opened: boolean;
-  shell_action?: string;
+export interface DeliveredNotification {
+  body?: unknown;
+  delivered_at: string;
+  id: string;
+  title: string;
+}
+
+export interface DiscoverItem {
+  id: string;
+  subtitle?: unknown;
+  tag: string;
+  title: string;
 }
 
 export interface DisplayInfo {
-  id: number;
-  x: number;
-  y: number;
-  w: number;
   h: number;
+  id: number;
+  visible_h: number;
+  visible_w: number;
   visible_x: number;
   visible_y: number;
-  visible_w: number;
+  w: number;
+  x: number;
+  y: number;
+}
+
+export interface DisplayMetadata {
+  display_id: number;
+  h: number;
+  is_builtin: boolean;
+  is_primary: boolean;
+  name: string;
+  refresh_rate: number;
+  resolution_h: number;
+  resolution_w: number;
+  scale_factor: number;
   visible_h: number;
+  visible_w: number;
+  visible_x: number;
+  visible_y: number;
+  w: number;
+  x: number;
+  y: number;
 }
 
 export interface Frame {
@@ -121,66 +151,104 @@ export interface HudSection {
   items: HudItem[];
 }
 
-export interface MatchResult {
-  matched: boolean;
-  action?: unknown;
-  args?: string[];
-  consumed_count?: number;
-  sets_tags?: string[];
-  clears_tags?: string[];
-  requires_tags?: string[];
-  owner_plugin?: string;
+export interface InputSource {
+  id: string;
+  is_active: boolean;
+  name: string;
 }
 
-export interface Point {
+export interface ListCommandItem {
+  id: string;
+  subtitle?: unknown;
+  tag?: unknown;
+  title: string;
+}
+
+export interface ListCommandSection {
+  items: ListCommandItem[];
+  title: string;
+}
+
+export interface LoginItem {
+  bundle_id?: unknown;
+  hidden: boolean;
+  name: string;
+  path: string;
+}
+
+export interface MenuItem {
+  children: MenuItem[];
+  enabled: boolean;
+  index: number;
+  shortcut?: unknown;
+  title: string;
+}
+
+/**
+ * How contributions to a shared store are merged when read.
+ */
+export type MergeStrategy = "authoritative" | "collect" | "keyed";
+
+export interface RunningApp {
+  bundle_id?: unknown;
+  is_active: boolean;
+  is_hidden: boolean;
+  name: string;
+  pid: number;
+}
+
+export interface ScreenshotRegion {
+  h: number;
+  w: number;
   x: number;
   y: number;
 }
 
-export interface RunningApp {
-  pid: number;
-  bundle_id?: string;
-  name: string;
-  is_hidden: boolean;
-  is_active: boolean;
-}
-
-export interface UserSessionInfo {
-  username: string;
-  full_name: string;
-  home_directory: string;
-}
-
-export interface WindowDetail {
-  window_id: string;
-  title?: string;
-  subrole?: string;
-  is_minimized: boolean;
-  is_fullscreen: boolean;
-  is_focused: boolean;
-  alpha?: number;
-  bounds: unknown;
+export interface SpaceInfo {
   display_id: number;
+  is_active: boolean;
+  space_id: number;
+  space_type: string;
+}
+
+export interface SpotlightResult {
+  kind: string;
+  modified: string;
+  name: string;
+  path: string;
+  size?: unknown;
+}
+
+export interface TileableEntry {
+  tileable: boolean;
+  window_id: string;
+}
+
+export interface WindowBounds {
+  h: number;
+  w: number;
+  x: number;
+  y: number;
 }
 
 export interface WindowFrame {
+  h: number;
+  w: number;
   window_id: string;
   x: number;
   y: number;
-  w: number;
-  h: number;
 }
 
 export interface WindowInfo {
-  id: string;
   app_id: string;
   app_name: string;
+  h: number;
+  id: string;
+  source: string;
   title: string;
+  w: number;
   x: number;
   y: number;
-  w: number;
-  h: number;
-  source?: string;
 }
 
 export interface WorldModel {
@@ -192,122 +260,106 @@ export interface WorldModel {
 
 // ===== Plugin → Actuator request/response types =====
 
-export interface StorePushRequest {
-  name: string;
-  data: unknown;
+export interface CommandsDiscoverRequest {
+  active_tags?: unknown;
+  require_tag?: unknown;
+  words?: unknown;
 }
 
-export interface StorePushResponse {
-  ok: boolean;
-}
-
-export interface StoreGetRequest {
-  name: string;
-}
-
-export interface StoreGetResponse {
-  data?: unknown;
-}
-
-export interface TagsGetResponse {
-  tags: string[];
-}
-
-export interface TagsModifyRequest {
-  set?: string[];
-  clear?: string[];
-  clear_scoped?: boolean;
-}
-
-export interface TagsModifyResponse {
-  tags: string[];
-}
-
-export interface CommandsMatchRequest {
-  words: string[];
-  active_tags?: string[];
+export interface CommandsDiscoverResponse {
+  items: DiscoverItem[];
+  title: string;
 }
 
 export interface CommandsHasPartialRequest {
+  active_tags?: unknown;
   words: string[];
-  active_tags?: string[];
 }
 
 export interface CommandsHasPartialResponse {
   has_partial: boolean;
-  next_list?: string;
-}
-
-export interface CommandsDiscoverRequest {
-  words?: string[];
-  require_tag?: string;
-  active_tags?: string[];
-}
-
-export interface CommandsDiscoverResponse {
-  title: string;
-  items: unknown[];
+  next_list?: unknown;
 }
 
 export interface CommandsListResponse {
-  title: string;
   footer: string;
-  sections: unknown[];
+  sections: ListCommandSection[];
+  title: string;
+}
+
+export interface CommandsMatchRequest {
+  active_tags?: unknown;
+  words: string[];
+}
+
+export interface CommandsMatchResponse {
+  action?: unknown;
+  args: unknown[];
+  clears_tags: string[];
+  consumed_count: number;
+  matched: boolean;
+  owner_plugin?: unknown;
+  requires_tags: string[];
+  sets_tags: string[];
+}
+
+export interface ControlSignalRequest {
+  signal: string;
+}
+
+export interface ControlSignalResponse {
+  ok: boolean;
+}
+
+export interface EventsAppendRequest {
+  data?: unknown;
+  event_type: string;
+  session_id?: string;
+}
+
+export interface EventsAppendResponse {
+  ok: boolean;
+}
+
+export interface EventsEmitRequest {
+  correlation_id?: unknown;
+  data?: unknown;
+  event_type: string;
+}
+
+export interface EventsEmitResponse {
+  ok: boolean;
 }
 
 export interface ExecuteRequest {
-  action: Record<string, unknown>;
+  action: unknown;
 }
 
 export interface ExecuteResponse {
-  status?: string;
+  message?: unknown;
   shell_action?: unknown;
+  status: string;
 }
 
-export interface SettingsRulesCreateRequest {
-  newrulephrase: string;
-  newruleactiontype?: string;
+export interface GrammarPushRequest {
+  commands?: unknown;
 }
 
-export interface SettingsRulesCreateResponse {
+export interface GrammarPushResponse {
+  count: number;
   ok: boolean;
 }
 
-export interface SettingsRulesUpdateRequest {
-  canonical: string;
-  newrulephrase: string;
+export interface HUDCreateChannelRequest {
+  accepts_input?: boolean;
+  anchor?: unknown;
+  channel: string;
+  description?: string;
+  min_height?: number;
+  width?: number;
 }
 
-export interface SettingsRulesUpdateResponse {
-  ok: boolean;
-}
-
-export interface ListsGetRequest {
-  name: string;
-}
-
-export interface ListsGetResponse {
-  name?: string;
-  entries?: Record<string, unknown>;
-}
-
-export interface ListsUpdateRequest {
-  name: string;
-  entries: Record<string, unknown>;
-  merge?: boolean;
-  label?: string;
-}
-
-export interface ListsUpdateResponse {
-  name?: string;
-  entries?: Record<string, unknown>;
-}
-
-export interface ListsDeleteRequest {
-  name: string;
-}
-
-export interface ListsDeleteResponse {
+export interface HUDCreateChannelResponse {
   ok: boolean;
 }
 
@@ -321,25 +373,11 @@ export interface HUDHideResponse {
 
 export interface HUDPushRequest {
   channel: string;
-  fragments: unknown[];
+  fragments: unknown;
 }
 
 export interface HUDPushResponse {
   ok: boolean;
-}
-
-export interface HUDCreateChannelRequest {
-  channel: string;
-  anchor?: "top-left" | "top-right" | "bottom-left" | "bottom-right" | "center";
-  width?: number;
-  min_height?: number;
-  accepts_input?: boolean;
-  description?: string;
-}
-
-export interface HUDCreateChannelResponse {
-  ok: boolean;
-  error?: string;
 }
 
 export interface HUDRemoveChannelRequest {
@@ -348,7 +386,7 @@ export interface HUDRemoveChannelRequest {
 
 export interface HUDRemoveChannelResponse {
   ok: boolean;
-  removed?: boolean;
+  removed: boolean;
 }
 
 export interface HUDSetSizeRequest {
@@ -368,71 +406,141 @@ export interface HUDShowResponse {
   ok: boolean;
 }
 
-export interface SessionEndCleanupResponse {
-  ok?: boolean;
-  shell_action?: string;
-  reset_engine?: boolean;
+export interface InputClickRequest {
+  button?: string;
 }
 
-export interface EventsAppendRequest {
-  session_id?: string;
-  event_type: string;
-  data?: Record<string, unknown>;
-}
-
-export interface EventsAppendResponse {
+export interface InputClickResponse {
   ok: boolean;
 }
 
-export interface GrammarPushRequest {
-  commands: Command[];
+export interface InputClipboardActionRequest {
+  action: string;
+  text?: unknown;
 }
 
-export interface GrammarPushResponse {
-  ok: boolean;
-  count: number;
-}
-
-export interface SelectionSetRequest {
-  title?: string;
-  items?: HudItem[];
-}
-
-export interface SelectionSetResponse {
+export interface InputClipboardActionResponse {
   ok: boolean;
 }
 
-export interface SelectionPickRequest {
-  index: number;
+export interface InputClipboardReadRequest {
+  content_type: string;
 }
 
-export interface SelectionPickResponse {
-  ok?: boolean;
-  item_id?: string;
-  reset_engine?: boolean;
-  shell_action?: string;
+export interface InputClipboardReadResponse {
+  available_types: string[];
+  content_type: string;
+  file_urls?: unknown;
+  image_base64?: unknown;
+  text?: unknown;
 }
 
-export interface MatchAliasesSetRequest {
-  aliases: Record<string, string>;
+export interface InputClipboardReadAllResponse {
+  items: ClipboardContents[];
 }
 
-export interface MatchAliasesSetResponse {
-  ok?: boolean;
-  count?: number;
+export interface InputClipboardWriteRequest {
+  content_type: string;
+  data: string;
 }
 
-export interface MatchAliasesGetResponse {
-  aliases?: Record<string, string>;
-}
-
-export interface KeybindsRegisterRequest {
-  snapshot: Record<string, unknown>;
-}
-
-export interface KeybindsRegisterResponse {
+export interface InputClipboardWriteResponse {
   ok: boolean;
-  count?: number;
+}
+
+export interface InputClipboardWriteItemsRequest {
+  items: ClipboardWriteItem[];
+}
+
+export interface InputClipboardWriteItemsResponse {
+  ok: boolean;
+}
+
+export interface InputDoubleClickRequest {
+  x?: unknown;
+  y?: unknown;
+}
+
+export interface InputDoubleClickResponse {
+  ok: boolean;
+}
+
+export interface InputDragRequest {
+  duration_ms?: number;
+  from_x: number;
+  from_y: number;
+  to_x: number;
+  to_y: number;
+}
+
+export interface InputDragResponse {
+  ok: boolean;
+}
+
+export interface InputListInputSourcesResponse {
+  sources: InputSource[];
+}
+
+export interface InputMouseButtonRequest {
+  button?: string;
+  direction: string;
+}
+
+export interface InputMouseButtonResponse {
+  ok: boolean;
+}
+
+export interface InputPressKeyRequest {
+  code?: unknown;
+  modifiers?: string[];
+  name?: unknown;
+}
+
+export interface InputPressKeyResponse {
+  ok: boolean;
+}
+
+export interface InputRawKeyRequest {
+  code: number;
+  direction: string;
+}
+
+export interface InputRawKeyResponse {
+  ok: boolean;
+}
+
+export interface InputRightClickRequest {
+  x?: unknown;
+  y?: unknown;
+}
+
+export interface InputRightClickResponse {
+  ok: boolean;
+}
+
+export interface InputScrollRequest {
+  amount?: number;
+  direction: string;
+}
+
+export interface InputScrollResponse {
+  ok: boolean;
+}
+
+export interface InputSwitchInputSourceRequest {
+  source_id: string;
+}
+
+export interface InputSwitchInputSourceResponse {
+  result: boolean;
+}
+
+export interface InputTypeTextRequest {
+  text: string;
+}
+
+export interface InputTypeTextResponse {
+  ok: boolean;
 }
 
 export interface KeyNamesSetRequest {
@@ -440,12 +548,162 @@ export interface KeyNamesSetRequest {
 }
 
 export interface KeyNamesSetResponse {
+  count: number;
   ok: boolean;
-  count?: number;
 }
 
-export interface NativeWorldModelRequest {
-  on_screen?: boolean;
+export interface KeybindsRegisterRequest {
+  snapshot: unknown;
+}
+
+export interface KeybindsRegisterResponse {
+  count: number;
+  ok: boolean;
+}
+
+export interface ListsDeleteRequest {
+  name: string;
+}
+
+export interface ListsDeleteResponse {
+  ok: boolean;
+}
+
+export interface ListsGetRequest {
+  name: string;
+}
+
+export interface ListsGetResponse {
+  entries: unknown;
+  name: string;
+}
+
+export interface ListsUpdateRequest {
+  entries?: unknown;
+  label?: unknown;
+  merge?: boolean;
+  name: string;
+}
+
+export interface ListsUpdateResponse {
+  entries: unknown;
+  name: string;
+}
+
+export interface MatchAliasesGetResponse {
+  aliases: Record<string, string>;
+}
+
+export interface MatchAliasesSetRequest {
+  aliases?: Record<string, string>;
+}
+
+export interface MatchAliasesSetResponse {
+  count: number;
+  ok: boolean;
+}
+
+export interface NativeActivateAppRequest {
+  all_windows?: boolean;
+  bundle_id: string;
+}
+
+export interface NativeActivateAppResponse {
+  ok: boolean;
+}
+
+export interface NativeActiveSpaceResponse {
+  active: ActiveSpace[];
+}
+
+export interface NativeAppIconRequest {
+  bundle_id: string;
+  size?: number;
+}
+
+export interface NativeAppIconResponse {
+  format: string;
+  image_base64: string;
+}
+
+export interface NativeAudioDevicesResponse {
+  devices: AudioDevice[];
+}
+
+export interface NativeAxElementAtPointRequest {
+  pid: number;
+  x: number;
+  y: number;
+}
+
+export interface NativeAxElementAtPointResponse {
+  actions: string[];
+  attributes: string[];
+  children_count: number;
+  description?: unknown;
+  enabled: boolean;
+  focused: boolean;
+  path: AXPathSegment[];
+  position?: unknown;
+  role: string;
+  size?: unknown;
+  subrole?: unknown;
+  title?: unknown;
+  value?: unknown;
+}
+
+export interface NativeAxElementTreeRequest {
+  depth?: number;
+  element: AXElementRef;
+}
+
+export interface NativeAxObserveRequest {
+  notifications: string[];
+  pid: number;
+}
+
+export interface NativeAxObserveResponse {
+  subscription_id: string;
+}
+
+export interface NativeAxPerformActionRequest {
+  action: string;
+  element: AXElementRef;
+}
+
+export interface NativeAxPerformActionResponse {
+  result: boolean;
+}
+
+export interface NativeAxReadAttributesRequest {
+  attributes: string[];
+  element: AXElementRef;
+}
+
+export interface NativeAxSetAttributeRequest {
+  attribute: string;
+  element: AXElementRef;
+  value: unknown;
+}
+
+export interface NativeAxSetAttributeResponse {
+  result: boolean;
+}
+
+export interface NativeAxUnobserveRequest {
+  subscription_id: string;
+}
+
+export interface NativeAxUnobserveResponse {
+  result: boolean;
+}
+
+export interface NativeBatchIsTileableRequest {
+  window_ids: string[];
+}
+
+export interface NativeBatchIsTileableResponse {
+  results: TileableEntry[];
 }
 
 export interface NativeBatchSetFramesRequest {
@@ -457,25 +715,154 @@ export interface NativeBatchSetFramesResponse {
   results: WindowFrame[];
 }
 
-export interface NativeRaiseWindowRequest {
+export interface NativeBatteryResponse {
+  is_charging: boolean;
+  is_plugged_in: boolean;
+  is_present: boolean;
+  level: number;
+  time_remaining_minutes?: unknown;
+}
+
+export interface NativeBluetoothDevicesResponse {
+  devices: BluetoothDevice[];
+}
+
+export interface NativeBordersResponse {
+  ok: boolean;
+}
+
+export interface NativeBrightnessRequest {
+  display_id?: unknown;
+}
+
+export interface NativeBrightnessResponse {
+  brightness: number;
+}
+
+export interface NativeCaptureWindowRequest {
   window_id: string;
 }
 
-export interface NativeBatchIsTileableRequest {
-  window_ids: string[];
+export interface NativeCaptureWindowResponse {
+  format: string;
+  image_base64: string;
 }
 
-export interface NativeBatchIsTileableResponse {
-  results: unknown[];
+export interface NativeClickMenuItemRequest {
+  path: string[];
+  pid: number;
 }
 
-export interface NativeToggleFullscreenRequest {
+export interface NativeClickMenuItemResponse {
+  result: boolean;
+}
+
+export interface NativeClipboardChangeCountResponse {
+  count: number;
+}
+
+export interface NativeCloseWindowRequest {
   window_id: string;
 }
 
-export interface NativeWarpCursorRequest {
+export interface NativeCloseWindowResponse {
+  ok: boolean;
+}
+
+export interface NativeColorAtPointRequest {
   x: number;
   y: number;
+}
+
+export interface NativeColorAtPointResponse {
+  a: number;
+  b: number;
+  g: number;
+  hex: string;
+  r: number;
+}
+
+export interface NativeCurrentUserResponse {
+  full_name: string;
+  home_directory: string;
+  username: string;
+}
+
+export interface NativeCursorResponse {
+  x: number;
+  y: number;
+}
+
+export interface NativeCursorInfoResponse {
+  cursor_type: string;
+  x: number;
+  y: number;
+}
+
+export interface NativeDarkModeResponse {
+  is_dark: boolean;
+}
+
+export interface NativeDefaultBrowserResponse {
+  bundle_id: string;
+}
+
+export interface NativeDismissNotificationRequest {
+  id: string;
+}
+
+export interface NativeDismissNotificationResponse {
+  ok: boolean;
+}
+
+export interface NativeDisplaysResponse {
+  displays: DisplayMetadata[];
+}
+
+export interface NativeDndResponse {
+  enabled: boolean;
+  focus_name?: unknown;
+}
+
+export interface NativeFileTagsRequest {
+  path: string;
+  tags?: unknown;
+}
+
+export interface NativeForceQuitAppRequest {
+  bundle_id: string;
+}
+
+export interface NativeForceQuitAppResponse {
+  result: boolean;
+}
+
+export interface NativeFrontmostAppResponse {
+  app?: unknown;
+}
+
+export interface NativeGetWindowInfoRequest {
+  window_id: string;
+}
+
+export interface NativeGetWindowInfoResponse {
+  alpha?: unknown;
+  bounds: WindowBounds;
+  display_id: number;
+  is_focused: boolean;
+  is_fullscreen: boolean;
+  is_minimized: boolean;
+  subrole?: unknown;
+  title?: unknown;
+  window_id: string;
+}
+
+export interface NativeHideAppRequest {
+  bundle_id: string;
+}
+
+export interface NativeHideAppResponse {
+  ok: boolean;
 }
 
 export interface NativeIsAppHiddenRequest {
@@ -486,176 +873,31 @@ export interface NativeIsAppHiddenResponse {
   result: boolean;
 }
 
-export interface NativeUnhideAppRequest {
-  bundle_id: string;
-}
-
-export interface NativeBordersRequest {
-  frames: unknown;
-}
-
-export interface NativeRunApplescriptRequest {
-  script: string;
-}
-
-export interface NativeAudioDevicesResponse {
-  devices: AudioDevice[];
-}
-
-export interface NativeSetAudioDeviceRequest {
-  uid: string;
-  device_type: "input" | "output";
-}
-
 export interface NativeKeyboardLayoutResponse {
-  layout_id?: string;
-  layout_name?: string;
-  mappings?: Record<string, unknown>;
+  layout_id: string;
+  layout_name: string;
+  mappings: Record<string, string>;
 }
 
-export interface NativeRunningAppsResponse {
-  apps?: RunningApp[];
-}
-
-export interface NativeFrontmostAppResponse {
-  app?: RunningApp;
-}
-
-export interface NativeQuitAppRequest {
+export interface NativeLaunchAppRequest {
   bundle_id: string;
+  new_instance?: boolean;
 }
 
-export interface NativeQuitAppResponse {
-  result?: boolean;
+export interface NativeLaunchAppResponse {
+  ok: boolean;
 }
 
-export interface NativeForceQuitAppRequest {
-  bundle_id: string;
+export interface NativeListNotificationsResponse {
+  notifications: DeliveredNotification[];
 }
 
-export interface NativeForceQuitAppResponse {
-  result?: boolean;
+export interface NativeListSpacesResponse {
+  spaces: SpaceInfo[];
 }
 
-export interface NativeHideAppRequest {
-  bundle_id: string;
-}
-
-export interface NativeActivateAppRequest {
-  bundle_id: string;
-  all_windows?: boolean;
-}
-
-export interface NativeMinimizeWindowRequest {
-  window_id: string;
-}
-
-export interface NativeUnminimizeWindowRequest {
-  window_id: string;
-}
-
-export interface NativeCloseWindowRequest {
-  window_id: string;
-}
-
-export interface NativeGetWindowInfoRequest {
-  window_id: string;
-}
-
-export interface NativeVolumeResponse {
-  volume?: number;
-  is_muted?: boolean;
-}
-
-export interface NativeSetVolumeRequest {
-  volume: number;
-}
-
-export interface NativeMuteRequest {
-  muted: boolean;
-}
-
-export interface NativeDarkModeResponse {
-  is_dark?: boolean;
-}
-
-export interface NativeSetDarkModeRequest {
-  dark: boolean;
-}
-
-export interface InputDragRequest {
-  from_x: number;
-  from_y: number;
-  to_x: number;
-  to_y: number;
-  duration_ms?: number;
-}
-
-export interface InputClipboardReadRequest {
-  content_type: string;
-}
-
-export interface InputClipboardWriteRequest {
-  content_type: string;
-  data: string;
-}
-
-export interface InputClipboardWriteResponse {
-  ok?: boolean;
-}
-
-export interface NativeBatteryResponse {
-  level?: number;
-  is_charging?: boolean;
-  is_plugged_in?: boolean;
-  time_remaining_minutes?: number;
-  is_present?: boolean;
-}
-
-export interface NativeWifiResponse {
-  ssid?: string;
-  bssid?: string;
-  rssi?: number;
-  is_connected?: boolean;
-  is_enabled?: boolean;
-}
-
-export interface NativePlaySoundRequest {
-  name: string;
-}
-
-export interface NativeSpeakRequest {
-  text: string;
-  voice?: string;
-  rate?: number;
-}
-
-export interface NativeDisplaysResponse {
-  displays?: Record<string, unknown>[];
-}
-
-export interface NativeBrightnessRequest {
-  display_id?: number;
-}
-
-export interface NativeBrightnessResponse {
-  brightness?: number;
-}
-
-export interface NativeSetBrightnessRequest {
-  brightness: number;
-  display_id?: number;
-}
-
-export interface NativeScreenshotRequest {
-  window_id?: string;
-  display_id?: number;
-  region?: unknown;
-}
-
-export interface NativeScreenshotResponse {
-  image_base64?: string;
-  format?: string;
+export interface NativeLoginItemsResponse {
+  items: LoginItem[];
 }
 
 export interface NativeMenuBarRequest {
@@ -663,162 +905,89 @@ export interface NativeMenuBarRequest {
 }
 
 export interface NativeMenuBarResponse {
-  items?: Record<string, unknown>[];
+  items: MenuItem[];
 }
 
-export interface NativeClickMenuItemRequest {
-  pid: number;
-  path: string[];
-}
-
-export interface NativeClickMenuItemResponse {
-  result?: boolean;
-}
-
-export interface NativeListSpacesResponse {
-  spaces?: Record<string, unknown>[];
-}
-
-export interface NativeActiveSpaceResponse {
-  active?: Record<string, unknown>[];
-}
-
-export interface NativeMoveWindowToSpaceRequest {
+export interface NativeMinimizeWindowRequest {
   window_id: string;
-  space_id: number;
 }
 
-export interface NativeMoveWindowToSpaceResponse {
-  result?: boolean;
+export interface NativeMinimizeWindowResponse {
+  ok: boolean;
 }
 
 export interface NativeMoveWindowToDisplayRequest {
-  window_id: string;
   display_id: number;
-}
-
-export interface NativeCaptureWindowRequest {
   window_id: string;
 }
 
-export interface NativeCaptureWindowResponse {
-  image_base64?: string;
-  format?: string;
+export interface NativeMoveWindowToDisplayResponse {
+  ok: boolean;
 }
 
-export interface NativeSetWindowAlphaRequest {
+export interface NativeMoveWindowToSpaceRequest {
+  space_id: number;
   window_id: string;
-  alpha: number;
 }
 
-export interface NativeAppIconRequest {
-  bundle_id: string;
-  size?: number;
+export interface NativeMoveWindowToSpaceResponse {
+  result: boolean;
 }
 
-export interface NativeAppIconResponse {
-  image_base64?: string;
-  format?: string;
+export interface NativeMuteRequest {
+  muted: boolean;
 }
 
-export interface InputDoubleClickRequest {
-  x?: number;
-  y?: number;
+export interface NativeMuteResponse {
+  ok: boolean;
 }
 
-export interface InputRightClickRequest {
-  x?: number;
-  y?: number;
+export interface NativeNotifyRequest {
+  body?: unknown;
+  sound?: unknown;
+  subtitle?: unknown;
+  title: string;
 }
 
-export interface InputSwitchInputSourceRequest {
-  source_id: string;
+export interface NativeNotifyResponse {
+  id?: unknown;
 }
 
-export interface InputSwitchInputSourceResponse {
-  result?: boolean;
+export interface NativeObserveWindowsRequest {
+  pid: number;
 }
 
-export interface InputListInputSourcesResponse {
-  sources?: unknown[];
+export interface NativeObserveWindowsResponse {
+  subscription_id: string;
 }
 
-export interface NativeDndResponse {
-  enabled?: boolean;
-  focus_name?: string;
+export interface NativeOpenTargetRequest {
+  target: string;
 }
 
-export interface NativeSetDndRequest {
-  enabled: boolean;
+export interface NativeOpenTargetResponse {
+  ok: boolean;
 }
 
-export interface NativeBluetoothDevicesResponse {
-  devices?: Record<string, unknown>[];
+export interface NativePlaySoundRequest {
+  name: string;
+}
+
+export interface NativePlaySoundResponse {
+  ok: boolean;
+}
+
+export interface NativePollBurstResponse {
+  ok: boolean;
 }
 
 export interface NativePreventSleepRequest {
+  assertion_id?: unknown;
   reason?: string;
-  assertion_id?: string;
 }
 
 export interface NativePreventSleepResponse {
-  assertion_id?: string;
-}
-
-export interface NativeSystemUptimeResponse {
-  uptime_seconds?: number;
-  formatted?: string;
-}
-
-export interface NativeColorAtPointRequest {
-  x: number;
-  y: number;
-}
-
-export interface NativeColorAtPointResponse {
-  r?: number;
-  g?: number;
-  b?: number;
-  a?: number;
-  hex?: string;
-}
-
-export interface NativeCursorInfoResponse {
-  cursor_type?: string;
-  x?: number;
-  y?: number;
-}
-
-export interface NativeSpotlightRequest {
-  query: string;
-  scope?: string[];
-  limit?: number;
-}
-
-export interface NativeSpotlightResponse {
-  results?: Record<string, unknown>[];
-}
-
-export interface NativeTrashRequest {
-  path: string;
-}
-
-export interface NativeTrashResponse {
-  result?: boolean;
-}
-
-export interface NativeFileTagsRequest {
-  path: string;
-  tags?: string[];
-}
-
-export interface NativeFileTagsResponse {
-  path?: string;
-  tags?: string[];
-}
-
-export interface NativeRevealInFinderRequest {
-  path: string;
+  assertion_id: string;
 }
 
 export interface NativeQuickLookRequest {
@@ -827,161 +996,370 @@ export interface NativeQuickLookRequest {
 }
 
 export interface NativeQuickLookResponse {
-  image_base64?: string;
-  format?: string;
+  format: string;
+  image_base64: string;
+}
+
+export interface NativeQuitAppRequest {
+  bundle_id: string;
+}
+
+export interface NativeQuitAppResponse {
+  result: boolean;
+}
+
+export interface NativeRaiseWindowRequest {
+  window_id: string;
+}
+
+export interface NativeRaiseWindowResponse {
+  ok: boolean;
+}
+
+export interface NativeRevealInFinderRequest {
+  path: string;
+}
+
+export interface NativeRevealInFinderResponse {
+  ok: boolean;
+}
+
+export interface NativeRunApplescriptRequest {
+  script: string;
+}
+
+export interface NativeRunApplescriptResponse {
+  exit_code: number;
+  stderr: string;
+  stdout: string;
+}
+
+export interface NativeRunningAppsResponse {
+  apps: RunningApp[];
+}
+
+export interface NativeScreenLockResponse {
+  ok: boolean;
+}
+
+export interface NativeScreenshotRequest {
+  display_id?: unknown;
+  region?: unknown;
+  window_id?: unknown;
+}
+
+export interface NativeScreenshotResponse {
+  format: string;
+  image_base64: string;
 }
 
 export interface NativeSelectedFinderItemsResponse {
-  paths?: string[];
+  paths: string[];
 }
 
-export interface NativeNotifyRequest {
-  title: string;
-  body?: string;
-  subtitle?: string;
-  sound?: string;
+export interface NativeSetAudioDeviceRequest {
+  device_type: string;
+  uid: string;
 }
 
-export interface NativeNotifyResponse {
-  id?: string;
+export interface NativeSetAudioDeviceResponse {
+  ok: boolean;
 }
 
-export interface NativeListNotificationsResponse {
-  notifications?: Record<string, unknown>[];
+export interface NativeSetBrightnessRequest {
+  brightness: number;
+  display_id?: unknown;
 }
 
-export interface NativeDismissNotificationRequest {
-  id: string;
+export interface NativeSetBrightnessResponse {
+  ok: boolean;
 }
 
-export interface NativeDefaultBrowserResponse {
-  bundle_id?: string;
+export interface NativeSetDarkModeRequest {
+  dark: boolean;
 }
 
-export interface NativeLoginItemsResponse {
-  items?: unknown[];
+export interface NativeSetDarkModeResponse {
+  ok: boolean;
 }
 
-export interface NativeClipboardChangeCountResponse {
-  count?: number;
+export interface NativeSetDndRequest {
+  enabled: boolean;
 }
 
-export interface InputClipboardReadAllResponse {
-  items?: unknown[];
+export interface NativeSetDndResponse {
+  ok: boolean;
 }
 
-export interface InputClipboardWriteItemsRequest {
-  items: unknown[];
+export interface NativeSetVolumeRequest {
+  volume: number;
 }
 
-export interface NativeAxElementAtPointRequest {
-  pid: number;
-  x: number;
-  y: number;
+export interface NativeSetVolumeResponse {
+  ok: boolean;
 }
 
-export interface NativeAxElementTreeRequest {
-  element: AXElementRef;
-  depth?: number;
+export interface NativeSetWindowAlphaRequest {
+  alpha: number;
+  window_id: string;
 }
 
-export interface NativeAxReadAttributesRequest {
-  element: AXElementRef;
-  attributes: string[];
+export interface NativeSetWindowAlphaResponse {
+  ok: boolean;
 }
 
-export interface NativeAxSetAttributeRequest {
-  element: AXElementRef;
-  attribute: string;
-  value: unknown;
+export interface NativeSetWindowLevelRequest {
+  level: string;
+  window_id: string;
 }
 
-export interface NativeAxPerformActionRequest {
-  element: AXElementRef;
-  action: string;
+export interface NativeSetWindowLevelResponse {
+  result: boolean;
 }
 
-export interface NativeAxObserveRequest {
-  pid: number;
-  notifications: string[];
+export interface NativeSpeakRequest {
+  rate?: unknown;
+  text: string;
+  voice?: unknown;
 }
 
-export interface NativeAxObserveResponse {
-  subscription_id?: string;
+export interface NativeSpeakResponse {
+  ok: boolean;
 }
 
-export interface NativeAxUnobserveRequest {
-  subscription_id: string;
+export interface NativeSpotlightRequest {
+  limit?: number;
+  query: string;
+  scope?: unknown;
 }
 
-export interface NativeObserveWindowsRequest {
-  pid: number;
+export interface NativeSpotlightResponse {
+  results: SpotlightResult[];
 }
 
-export interface NativeObserveWindowsResponse {
-  subscription_id?: string;
+export interface NativeSystemUptimeResponse {
+  formatted: string;
+  uptime_seconds: number;
+}
+
+export interface NativeToggleFullscreenRequest {
+  window_id: string;
+}
+
+export interface NativeToggleFullscreenResponse {
+  ok: boolean;
+}
+
+export interface NativeTrashRequest {
+  path: string;
+}
+
+export interface NativeTrashResponse {
+  result: boolean;
+}
+
+export interface NativeUnhideAppRequest {
+  bundle_id: string;
+}
+
+export interface NativeUnhideAppResponse {
+  ok: boolean;
+}
+
+export interface NativeUnminimizeWindowRequest {
+  window_id: string;
+}
+
+export interface NativeUnminimizeWindowResponse {
+  ok: boolean;
 }
 
 export interface NativeUnobserveWindowsRequest {
   subscription_id: string;
 }
 
-export interface NativeSetWindowLevelRequest {
-  window_id: string;
-  level: "floating" | "normal" | "below";
+export interface NativeUnobserveWindowsResponse {
+  result: boolean;
 }
 
-export interface ControlSignalRequest {
-  signal: string;
+export interface NativeVolumeResponse {
+  is_muted: boolean;
+  volume: number;
 }
 
-export interface EventsEmitRequest {
-  event_type: string;
-  data?: unknown;
-  correlation_id?: string;
+export interface NativeWarpCursorRequest {
+  x: number;
+  y: number;
 }
 
-export interface InputTypeTextRequest {
-  text: string;
+export interface NativeWarpCursorResponse {
+  ok: boolean;
 }
 
-export interface InputPressKeyRequest {
-  code?: number;
-  name?: string;
-  modifiers?: string[];
+export interface NativeWifiResponse {
+  bssid?: unknown;
+  is_connected: boolean;
+  is_enabled: boolean;
+  rssi?: unknown;
+  ssid?: unknown;
 }
 
-export interface InputRawKeyRequest {
-  code: number;
-  direction: "press" | "release" | "click";
+export interface NativeWorldModelRequest {
+  on_screen?: boolean;
 }
 
-export interface InputClickRequest {
-  button?: "left" | "right" | "middle";
+export interface NativeWorldModelResponse {
+  active_app?: unknown;
+  active_window_id?: unknown;
+  displays?: DisplayInfo[];
+  keyboard_layout_id?: string;
+  windows?: WindowInfo[];
 }
 
-export interface InputScrollRequest {
-  direction: "up" | "down" | "left" | "right";
-  amount?: number;
+export interface SelectionPickRequest {
+  index: number;
 }
 
-export interface InputMouseButtonRequest {
-  button?: "left" | "right" | "middle";
-  direction: "press" | "release";
+export interface SelectionPickResponse {
+  item_id: string;
+  ok: boolean;
+  reset_engine: boolean;
+  shell_action: string;
 }
 
-export interface InputClipboardActionRequest {
-  action: "copy" | "paste" | "set";
-  text?: string;
+export interface SelectionSetRequest {
+  items?: unknown;
+  title?: unknown;
 }
 
-export interface NativeLaunchAppRequest {
+export interface SelectionSetResponse {
+  ok: boolean;
+}
+
+export interface SessionEndCleanupResponse {
+  ok: boolean;
+  reset_engine: boolean;
+  shell_action?: unknown;
+}
+
+export interface SettingsRulesCreateRequest {
+  newruleactionjson?: unknown;
+  newruleactiontype?: unknown;
+  newruleactionval?: unknown;
+  newrulecategory?: unknown;
+  newruleclearstags?: unknown;
+  newruledescription?: unknown;
+  newrulephrase?: unknown;
+  newrulerequirestags?: unknown;
+  newrulesetstags?: unknown;
+}
+
+export interface SettingsRulesCreateResponse {
+  ok: boolean;
+}
+
+export interface SettingsRulesUpdateRequest {
+  canonical: string;
+  newruleactionjson?: unknown;
+  newruleactiontype?: unknown;
+  newruleactionval?: unknown;
+  newrulecategory?: unknown;
+  newruleclearstags?: unknown;
+  newruledescription?: unknown;
+  newrulephrase?: unknown;
+  newrulerequirestags?: unknown;
+  newrulesetstags?: unknown;
+}
+
+export interface SettingsRulesUpdateResponse {
+  ok: boolean;
+}
+
+export interface StoreGetRequest {
+  name: string;
+}
+
+export interface StoreGetResponse {
+  data: unknown;
+  introducer: string;
+  merge: MergeStrategy;
+  store: string;
+}
+
+export interface StorePushRequest {
+  data: unknown;
+  name: string;
+}
+
+export interface StorePushResponse {
+  ok: boolean;
+}
+
+export interface SystemLaunchAppRequest {
   bundle_id: string;
   new_instance?: boolean;
 }
 
-export interface NativeOpenTargetRequest {
-  target: string;
+export interface SystemLaunchAppResponse {
+  ok: boolean;
+}
+
+export interface SystemNotifyRequest {
+  body: string;
+  title: string;
+}
+
+export interface SystemNotifyResponse {
+  ok: boolean;
+}
+
+export interface SystemRunEvalRequest {
+  command: string;
+}
+
+export interface SystemRunEvalResponse {
+  error: string;
+  ok: boolean;
+}
+
+export interface SystemRunScriptRequest {
+  path: string;
+}
+
+export interface SystemRunScriptResponse {
+  error: string;
+  ok: boolean;
+}
+
+export interface SystemRunShellRequest {
+  command: string;
+}
+
+export interface SystemRunShellResponse {
+  ok: boolean;
+}
+
+export interface SystemRunToolRequest {
+  name: string;
+  params?: Record<string, string>;
+}
+
+export interface SystemRunToolResponse {
+  ok: boolean;
+}
+
+export interface TagsGetResponse {
+  tags: string[];
+}
+
+export interface TagsModifyRequest {
+  clear?: string[];
+  clear_scoped?: boolean;
+  set?: string[];
+}
+
+export interface TagsModifyResponse {
+  tags: string[];
 }
 
 // ===== Actuator → Plugin request/response types =====
