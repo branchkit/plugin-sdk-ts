@@ -10,9 +10,9 @@ export const MethodCommandsHasPartial = "commands.has_partial" as const; // sinc
 export const MethodCommandsList = "commands.list" as const; // since 0.1.0
 export const MethodCommandsMatch = "commands.match" as const; // since 0.1.0
 export const MethodControlSignal = "control.signal" as const; // since 0.1.0
+export const MethodDispatch = "dispatch" as const; // since 0.1.0
 export const MethodEventsAppend = "events.append" as const; // since 0.1.0
 export const MethodEventsEmit = "events.emit" as const; // since 0.1.0
-export const MethodExecute = "execute" as const; // since 0.1.0
 export const MethodGrammarPush = "grammar.push" as const; // since 0.1.0
 export const MethodHudCreateChannel = "hud.create_channel" as const; // since 0.1.0
 export const MethodHudHide = "hud.hide" as const; // since 0.1.0
@@ -132,10 +132,7 @@ export const MethodStoreGet = "store.get" as const; // since 0.1.0
 export const MethodStorePush = "store.push" as const; // since 0.1.0
 export const MethodSystemLaunchApp = "system.launch_app" as const; // since 0.1.0
 export const MethodSystemNotify = "system.notify" as const; // since 0.1.0
-export const MethodSystemRunEval = "system.run_eval" as const; // since 0.1.0
-export const MethodSystemRunScript = "system.run_script" as const; // since 0.1.0
 export const MethodSystemRunShell = "system.run_shell" as const; // since 0.1.0
-export const MethodSystemRunTool = "system.run_tool" as const; // since 0.1.0
 export const MethodTagsGet = "tags.get" as const; // since 0.1.0
 export const MethodTagsModify = "tags.modify" as const; // since 0.1.0
 
@@ -165,6 +162,7 @@ export const EventWindowCreated = "_platform.window.created" as const;
 export const EventWindowFocused = "_platform.window.focused" as const;
 export const EventWindowFrameChanged = "_platform.window.frame_changed" as const;
 export const EventWindowTitleChanged = "_platform.window.title_changed" as const;
+export const EventWorkspaceChanged = "_platform.workspace.changed" as const;
 export const EventWorldUpdated = "_platform.world.updated" as const;
 
 // Tag namespace prefix and value constants.

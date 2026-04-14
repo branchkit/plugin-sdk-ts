@@ -2,16 +2,16 @@
 // Run: just contracts
 
 import { Plugin } from "./plugin.js";
-import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, DeliveredNotification, DisplayMetadata, ExecuteResponse, GrammarPushResponse, HUDRemoveChannelResponse, InputClipboardReadResponse, InputSource, KeyNamesSetResponse, KeybindsRegisterResponse, ListsGetResponse, ListsUpdateResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, StoreGetResponse, SystemRunEvalResponse, SystemRunScriptResponse, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
+import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, GrammarPushResponse, HUDRemoveChannelResponse, InputClipboardReadResponse, InputSource, KeyNamesSetResponse, KeybindsRegisterResponse, ListsGetResponse, ListsUpdateResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, StoreGetResponse, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
 import {
   MethodCommandsDiscover,
   MethodCommandsHasPartial,
   MethodCommandsList,
   MethodCommandsMatch,
   MethodControlSignal,
+  MethodDispatch,
   MethodEventsAppend,
   MethodEventsEmit,
-  MethodExecute,
   MethodGrammarPush,
   MethodHudCreateChannel,
   MethodHudHide,
@@ -131,10 +131,7 @@ import {
   MethodStorePush,
   MethodSystemLaunchApp,
   MethodSystemNotify,
-  MethodSystemRunEval,
-  MethodSystemRunScript,
   MethodSystemRunShell,
-  MethodSystemRunTool,
   MethodTagsGet,
   MethodTagsModify,
 } from "./contracts_gen.js";
@@ -146,9 +143,9 @@ declare module "./plugin.js" {
     commandsList(): Promise<CommandsListResponse>;
     commandsMatch(activeTags?: unknown, words?: string[]): Promise<CommandsMatchResponse>;
     controlSignal(signal: string): Promise<void>;
+    dispatch(action: unknown): Promise<DispatchResponse>;
     eventsAppend(eventType: string, data?: unknown, sessionId?: string): Promise<void>;
     eventsEmit(eventType: string, correlationId?: unknown, data?: unknown): Promise<void>;
-    execute(action: unknown): Promise<ExecuteResponse>;
     grammarPush(commands?: unknown): Promise<GrammarPushResponse>;
     hudCreateChannel(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, minHeight?: number, width?: number): Promise<void>;
     hudHide(channel: string): Promise<void>;
@@ -268,10 +265,7 @@ declare module "./plugin.js" {
     storePush(data: unknown, name: string): Promise<void>;
     systemLaunchApp(bundleId: string, newInstance?: boolean): Promise<void>;
     systemNotify(body: string, title: string, durationSecs?: unknown): Promise<void>;
-    systemRunEval(command: string): Promise<SystemRunEvalResponse>;
-    systemRunScript(path: string): Promise<SystemRunScriptResponse>;
     systemRunShell(command: string): Promise<void>;
-    systemRunTool(name: string, params?: Record<string, string>): Promise<void>;
     tagsGet(): Promise<string[]>;
     tagsModify(clear?: string[], clearScoped?: boolean, set?: string[]): Promise<string[]>;
   }
@@ -325,6 +319,16 @@ Plugin.prototype.controlSignal = async function(signal: string) {
   );
 };
 
+Plugin.prototype.dispatch = async function(action: unknown) {
+  const result = await this.call(
+    MethodDispatch,
+    {
+      action,
+    },
+  );
+  return result as DispatchResponse;
+};
+
 Plugin.prototype.eventsAppend = async function(eventType: string, data?: unknown, sessionId?: string) {
   const result = await this.call(
     MethodEventsAppend,
@@ -345,16 +349,6 @@ Plugin.prototype.eventsEmit = async function(eventType: string, correlationId?: 
       data,
     },
   );
-};
-
-Plugin.prototype.execute = async function(action: unknown) {
-  const result = await this.call(
-    MethodExecute,
-    {
-      action,
-    },
-  );
-  return result as ExecuteResponse;
 };
 
 Plugin.prototype.grammarPush = async function(commands?: unknown) {
@@ -1428,41 +1422,11 @@ Plugin.prototype.systemNotify = async function(body: string, title: string, dura
   );
 };
 
-Plugin.prototype.systemRunEval = async function(command: string) {
-  const result = await this.call(
-    MethodSystemRunEval,
-    {
-      command,
-    },
-  );
-  return result as SystemRunEvalResponse;
-};
-
-Plugin.prototype.systemRunScript = async function(path: string) {
-  const result = await this.call(
-    MethodSystemRunScript,
-    {
-      path,
-    },
-  );
-  return result as SystemRunScriptResponse;
-};
-
 Plugin.prototype.systemRunShell = async function(command: string) {
   const result = await this.call(
     MethodSystemRunShell,
     {
       command,
-    },
-  );
-};
-
-Plugin.prototype.systemRunTool = async function(name: string, params?: Record<string, string>) {
-  const result = await this.call(
-    MethodSystemRunTool,
-    {
-      name,
-      params,
     },
   );
 };

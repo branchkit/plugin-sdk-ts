@@ -318,6 +318,16 @@ export interface ControlSignalResponse {
   ok: boolean;
 }
 
+export interface DispatchRequest {
+  action: unknown;
+}
+
+export interface DispatchResponse {
+  control_message?: unknown;
+  message?: unknown;
+  status: string;
+}
+
 export interface EventsAppendRequest {
   data?: unknown;
   event_type: string;
@@ -336,16 +346,6 @@ export interface EventsEmitRequest {
 
 export interface EventsEmitResponse {
   ok: boolean;
-}
-
-export interface ExecuteRequest {
-  action: unknown;
-}
-
-export interface ExecuteResponse {
-  message?: unknown;
-  shell_action?: unknown;
-  status: string;
 }
 
 export interface GrammarPushRequest {
@@ -1220,10 +1220,10 @@ export interface SelectionPickRequest {
 }
 
 export interface SelectionPickResponse {
+  control_message: string;
   item_id: string;
   ok: boolean;
   reset_engine: boolean;
-  shell_action: string;
 }
 
 export interface SelectionSetRequest {
@@ -1236,9 +1236,9 @@ export interface SelectionSetResponse {
 }
 
 export interface SessionEndCleanupResponse {
+  control_message?: unknown;
   ok: boolean;
   reset_engine: boolean;
-  shell_action?: unknown;
 }
 
 export interface SettingsRulesCreateRequest {
@@ -1313,38 +1313,11 @@ export interface SystemNotifyResponse {
   ok: boolean;
 }
 
-export interface SystemRunEvalRequest {
-  command: string;
-}
-
-export interface SystemRunEvalResponse {
-  error: string;
-  ok: boolean;
-}
-
-export interface SystemRunScriptRequest {
-  path: string;
-}
-
-export interface SystemRunScriptResponse {
-  error: string;
-  ok: boolean;
-}
-
 export interface SystemRunShellRequest {
   command: string;
 }
 
 export interface SystemRunShellResponse {
-  ok: boolean;
-}
-
-export interface SystemRunToolRequest {
-  name: string;
-  params?: Record<string, string>;
-}
-
-export interface SystemRunToolResponse {
   ok: boolean;
 }
 
@@ -1391,7 +1364,6 @@ export interface OnActionRequest {
 
 export interface OnActionResponse {
   control_message?: string;
-  shell_action?: string;
   status: OnActionStatus;
 }
 
