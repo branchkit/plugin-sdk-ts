@@ -9,11 +9,11 @@ export const MethodCommandsDiscover = "commands.discover" as const; // since 0.1
 export const MethodCommandsHasPartial = "commands.has_partial" as const; // since 0.1.0
 export const MethodCommandsList = "commands.list" as const; // since 0.1.0
 export const MethodCommandsMatch = "commands.match" as const; // since 0.1.0
+export const MethodCommandsPush = "commands.push" as const; // since 0.1.0
 export const MethodControlSignal = "control.signal" as const; // since 0.1.0
 export const MethodDispatch = "dispatch" as const; // since 0.1.0
 export const MethodEventsAppend = "events.append" as const; // since 0.1.0
 export const MethodEventsEmit = "events.emit" as const; // since 0.1.0
-export const MethodGrammarPush = "grammar.push" as const; // since 0.1.0
 export const MethodHudCreateChannel = "hud.create_channel" as const; // since 0.1.0
 export const MethodHudHide = "hud.hide" as const; // since 0.1.0
 export const MethodHudPush = "hud.push" as const; // since 0.1.0
@@ -137,9 +137,9 @@ export const MethodTagsGet = "tags.get" as const; // since 0.1.0
 export const MethodTagsModify = "tags.modify" as const; // since 0.1.0
 
 // RPC method names: actuator → plugin (use with plugin.handle()).
-export const HookBuildCommandRegistry = "build_command_registry" as const; // since 0.1.0
 export const HookCalibrate = "calibrate" as const; // since 0.1.0
 export const HookOnAction = "on_action" as const; // since 0.1.0
+export const HookOnCommandsChanged = "on_commands_changed" as const; // since 0.1.0
 export const HookRenderHud = "render_hud" as const; // since 0.1.0
 export const HookRenderSettings = "render_settings" as const; // since 0.1.0
 export const HookSpeechOrchestrate = "speech_orchestrate" as const; // since 0.1.0

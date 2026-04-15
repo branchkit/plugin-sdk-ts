@@ -19,7 +19,7 @@ interface ContextFile {
 
 /**
  * Load commands.json and any context files from commands/,
- * then push them all to the actuator via grammar.push.
+ * then push them all to the actuator via commands.push.
  *
  * File layout:
  *
@@ -61,7 +61,7 @@ export async function PushCommands(plugin: Plugin): Promise<number> {
 
   if (allCommands.length === 0) return 0;
 
-  const resp = await plugin.call<{ count: number }>("grammar.push", {
+  const resp = await plugin.call<{ count: number }>("commands.push", {
     commands: allCommands,
   });
   return resp.count;

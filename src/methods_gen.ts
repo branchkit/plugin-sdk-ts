@@ -2,17 +2,17 @@
 // Run: just contracts
 
 import { Plugin } from "./plugin.js";
-import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, GrammarPushResponse, HUDRemoveChannelResponse, InputClipboardReadResponse, InputSource, KeyNamesSetResponse, KeybindsRegisterResponse, ListsGetResponse, ListsUpdateResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, StoreGetResponse, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
+import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, InputClipboardReadResponse, InputSource, KeyNamesSetResponse, KeybindsRegisterResponse, ListsGetResponse, ListsUpdateResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, StoreGetResponse, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
 import {
   MethodCommandsDiscover,
   MethodCommandsHasPartial,
   MethodCommandsList,
   MethodCommandsMatch,
+  MethodCommandsPush,
   MethodControlSignal,
   MethodDispatch,
   MethodEventsAppend,
   MethodEventsEmit,
-  MethodGrammarPush,
   MethodHudCreateChannel,
   MethodHudHide,
   MethodHudPush,
@@ -142,11 +142,11 @@ declare module "./plugin.js" {
     commandsHasPartial(activeTags?: unknown, words?: string[]): Promise<CommandsHasPartialResponse>;
     commandsList(): Promise<CommandsListResponse>;
     commandsMatch(activeTags?: unknown, words?: string[]): Promise<CommandsMatchResponse>;
+    commandsPush(commands?: unknown): Promise<CommandsPushResponse>;
     controlSignal(signal: string): Promise<void>;
     dispatch(action: unknown): Promise<DispatchResponse>;
     eventsAppend(eventType: string, data?: unknown, sessionId?: string): Promise<void>;
     eventsEmit(eventType: string, correlationId?: unknown, data?: unknown): Promise<void>;
-    grammarPush(commands?: unknown): Promise<GrammarPushResponse>;
     hudCreateChannel(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, minHeight?: number, width?: number): Promise<void>;
     hudHide(channel: string): Promise<void>;
     hudPush(channel: string, fragments: unknown): Promise<void>;
@@ -310,6 +310,16 @@ Plugin.prototype.commandsMatch = async function(activeTags?: unknown, words?: st
   return result as CommandsMatchResponse;
 };
 
+Plugin.prototype.commandsPush = async function(commands?: unknown) {
+  const result = await this.call(
+    MethodCommandsPush,
+    {
+      commands,
+    },
+  );
+  return result as CommandsPushResponse;
+};
+
 Plugin.prototype.controlSignal = async function(signal: string) {
   const result = await this.call(
     MethodControlSignal,
@@ -349,16 +359,6 @@ Plugin.prototype.eventsEmit = async function(eventType: string, correlationId?: 
       data,
     },
   );
-};
-
-Plugin.prototype.grammarPush = async function(commands?: unknown) {
-  const result = await this.call(
-    MethodGrammarPush,
-    {
-      commands,
-    },
-  );
-  return result as GrammarPushResponse;
 };
 
 Plugin.prototype.hudCreateChannel = async function(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, minHeight?: number, width?: number) {

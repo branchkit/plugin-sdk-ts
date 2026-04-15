@@ -310,6 +310,15 @@ export interface CommandsMatchResponse {
   sets_tags: string[];
 }
 
+export interface CommandsPushRequest {
+  commands?: unknown;
+}
+
+export interface CommandsPushResponse {
+  count: number;
+  ok: boolean;
+}
+
 export interface ControlSignalRequest {
   signal: string;
 }
@@ -345,15 +354,6 @@ export interface EventsEmitRequest {
 }
 
 export interface EventsEmitResponse {
-  ok: boolean;
-}
-
-export interface GrammarPushRequest {
-  commands?: unknown;
-}
-
-export interface GrammarPushResponse {
-  count: number;
   ok: boolean;
 }
 
@@ -1337,15 +1337,6 @@ export interface TagsModifyResponse {
 
 // ===== Actuator → Plugin request/response types =====
 
-export interface BuildCommandRegistryRequest {
-  commands_by_plugin: unknown;
-  user_commands?: unknown[];
-}
-
-export interface BuildCommandRegistryResponse {
-  phonetics_count: number;
-}
-
 export interface CalibrateRequest {
   action: CalibrateAction;
   words?: string[];
@@ -1365,6 +1356,15 @@ export interface OnActionRequest {
 export interface OnActionResponse {
   control_message?: string;
   status: OnActionStatus;
+}
+
+export interface OnCommandsChangedRequest {
+  commands_by_plugin: unknown;
+  user_commands?: unknown[];
+}
+
+export interface OnCommandsChangedResponse {
+  processed_count: number;
 }
 
 export interface RenderHUDRequest {
