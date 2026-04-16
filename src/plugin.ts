@@ -1,6 +1,7 @@
 import { createInterface } from "node:readline";
 import { Log } from "./log.js";
-import { APIVersion } from "./contracts_gen.js";
+import { APIVersion, HookOnAction } from "./contracts_gen.js";
+import type { OnActionRequest, OnActionResponse } from "./types_gen.js";
 
 // --- JSON-RPC 2.0 message types ---
 
@@ -22,6 +23,26 @@ interface RpcError {
 
 type HandlerFn = (params: unknown) => Promise<unknown>;
 type ListenerFn = (params: unknown) => void;
+
+/**
+ * A typed on_action request where the params field is narrowed to T.
+ * Use with handleAction&lt;T&gt;(action, fn) for compile-time typed params.
+ */
+export interface ActionRequest<T = unknown> {
+  action: string;
+  active_app?: string;
+  active_window_id?: string;
+  params: T;
+}
+
+/**
+ * Per-action handler. Returning undefined/null is shorthand for
+ * `{ status: "ok" }`. Returning an OnActionResponse passes it through.
+ * Any other return is sent back as the JSON-RPC result verbatim.
+ */
+export type ActionHandlerFn<T = unknown> = (
+  req: ActionRequest<T>,
+) => Promise<unknown> | unknown;
 
 // --- Pending call tracking ---
 
@@ -55,6 +76,8 @@ export class Plugin {
   private handlers = new Map<string, HandlerFn>();
   private listeners = new Map<string, ListenerFn[]>();
   private pending = new Map<number, PendingCall>();
+  // Lazily initialized when handleAction is first called.
+  private actionHandlers: Map<string, ActionHandlerFn> | null = null;
   private nextId = 1;
   private closed = false;
   private onSignal!: () => void;
@@ -92,6 +115,67 @@ export class Plugin {
    */
   handle(method: string, fn: HandlerFn): void {
     this.handlers.set(method, fn);
+  }
+
+  /**
+   * Register a handler for a single dispatched action type
+   * (e.g. "wm.snap", "voice.dictation_start"). The SDK installs an internal
+   * on_action handler that demuxes by req.action.
+   *
+   * handleAction is the only supported way to register action handlers.
+   * Calling handle("on_action", ...) directly is reserved for plugins with
+   * dynamic dispatch needs (e.g. browser, which forwards every browser.*
+   * action to SSE clients) — but mixing the two will throw, since each is
+   * installing the same handler key.
+   *
+   * Generic param T provides compile-time typing for req.params:
+   *
+   *     plugin.handleAction<{ position: string }>("wm.snap", async (req) =&gt; {
+   *       console.log(req.params.position);
+   *     });
+   *
+   * Return value semantics:
+   *   - return undefined / null → OnActionResponse{status: "ok"}
+   *   - return an OnActionResponse-shaped object → returned verbatim
+   *   - return any other value → marshaled as the JSON-RPC result
+   *   - throw → translated to a JSON-RPC error response
+   */
+  handleAction<T = unknown>(action: string, fn: ActionHandlerFn<T>): void {
+    if (this.actionHandlers === null) {
+      if (this.handlers.has(HookOnAction)) {
+        throw new Error(
+          'plugin-sdk-ts: cannot mix handle("on_action", ...) and handleAction(...) — pick one',
+        );
+      }
+      this.actionHandlers = new Map();
+      this.handlers.set(HookOnAction, (params) => this.dispatchAction(params));
+    }
+    this.actionHandlers.set(action, fn as ActionHandlerFn);
+  }
+
+  /**
+   * Returns the list of action types registered via handleAction.
+   * Useful for the (future) list_action_types RPC and for tests.
+   * Returns null if no per-action handlers have been registered.
+   */
+  registeredActionTypes(): string[] | null {
+    if (this.actionHandlers === null) return null;
+    return Array.from(this.actionHandlers.keys());
+  }
+
+  private async dispatchAction(params: unknown): Promise<unknown> {
+    const req = (params ?? {}) as OnActionRequest;
+    const handler = this.actionHandlers?.get(req.action);
+    if (handler) {
+      const result = await handler(req as ActionRequest);
+      if (result === undefined || result === null) {
+        const ok: OnActionResponse = { status: "ok" };
+        return ok;
+      }
+      return result;
+    }
+    const notHandled: OnActionResponse = { status: "not_handled" };
+    return notHandled;
   }
 
   /**
@@ -204,7 +288,7 @@ export class Plugin {
         return;
       }
 
-      this.dispatch(msg);
+      this.routeMessage(msg);
     });
 
     // Exit when stdin closes (L1)
@@ -214,7 +298,11 @@ export class Plugin {
     });
   }
 
-  private dispatch(msg: RpcMessage): void {
+  // Routes one parsed inbound message — response, request, or notification.
+  // Named `routeMessage` (not `dispatch`) because `dispatch` is the public
+  // generated RPC method that calls the actuator's dispatch endpoint
+  // (see methods_gen.ts) and would otherwise collide on Plugin.prototype.
+  private routeMessage(msg: RpcMessage): void {
     // Response to a pending call — has id + (result or error), no method
     if (msg.id !== undefined && !msg.method) {
       const pc = this.pending.get(msg.id);
