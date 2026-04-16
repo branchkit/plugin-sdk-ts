@@ -105,6 +105,14 @@ export class Plugin {
     process.on("SIGTERM", this.onSignal);
     process.on("SIGINT", this.onSignal);
 
+    // Built-in introspection: the actuator calls list_action_types after the
+    // plugin reaches readiness to validate that handlers match the manifest's
+    // `action_types` block. Registering here keeps plugins from having to
+    // wire it themselves.
+    this.handlers.set("list_action_types", () => ({
+      action_types: this.registeredActionTypes() ?? [],
+    }));
+
     Log(this.pluginId, "started (JSON-RPC over stdio)");
     this.startReadLoop();
   }
