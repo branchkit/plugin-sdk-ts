@@ -46,11 +46,23 @@ describe("handleAction", () => {
     expect(result.status).toBe("not_handled");
   });
 
-  it("throws when handle(\"on_action\", ...) is mixed with handleAction", () => {
+  // Mutual exclusion is enforced regardless of registration order — both
+  // handle and handleAction install a handler for the same RPC method
+  // (on_action), so allowing both would silently clobber the dispatcher.
+
+  it("throws when handleAction is registered after handle(\"on_action\", ...)", () => {
     const plugin = new Plugin();
     plugin.handle(HookOnAction, async () => ({ status: "ok" } as OnActionResponse));
     expect(() => {
       plugin.handleAction("wm.snap", async () => {});
+    }).toThrow(/cannot mix/);
+  });
+
+  it("throws when handle(\"on_action\", ...) is registered after handleAction", () => {
+    const plugin = new Plugin();
+    plugin.handleAction("wm.snap", async () => {});
+    expect(() => {
+      plugin.handle(HookOnAction, async () => ({ status: "ok" } as OnActionResponse));
     }).toThrow(/cannot mix/);
   });
 

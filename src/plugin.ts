@@ -112,8 +112,17 @@ export class Plugin {
   /**
    * Register a handler for actuator→plugin requests.
    * The handler receives params and returns a result (serialized as JSON) or throws.
+   *
+   * handle("on_action", ...) and handleAction(...) are mutually exclusive —
+   * both install a handler for the same RPC method. Calling either after the
+   * other has been registered throws, regardless of order.
    */
   handle(method: string, fn: HandlerFn): void {
+    if (method === HookOnAction && this.actionHandlers !== null) {
+      throw new Error(
+        'plugin-sdk-ts: cannot mix handle("on_action", ...) and handleAction(...) — pick one',
+      );
+    }
     this.handlers.set(method, fn);
   }
 
