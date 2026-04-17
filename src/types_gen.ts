@@ -64,8 +64,6 @@ export interface BluetoothDevice {
   name: string;
 }
 
-export type CalibrateAction = "start" | "speech" | "cancel";
-
 export interface ClipboardContents {
   available_types: string[];
   content_type: string;
@@ -214,8 +212,6 @@ export interface SpaceInfo {
   space_id: number;
   space_type: string;
 }
-
-export type SpeechPipelineAction = "pass" | "consume";
 
 export interface SpotlightResult {
   kind: string;
@@ -1337,15 +1333,6 @@ export interface TagsModifyResponse {
 
 // ===== Actuator → Plugin request/response types =====
 
-export interface CalibrateRequest {
-  action: CalibrateAction;
-  words?: string[];
-}
-
-export interface CalibrateResponse {
-  calibration_active: boolean;
-}
-
 export interface OnActionRequest {
   action: string;
   active_app?: string;
@@ -1385,24 +1372,4 @@ export interface RenderSettingsRequest {
 
 export interface RenderSettingsResponse {
   html: string;
-}
-
-export interface SpeechOrchestrateRequest {
-  transcript: string;
-  words: string[];
-}
-
-export interface SpeechOrchestrateResponse {
-  actions_to_execute?: unknown[];
-  result: string;
-}
-
-export interface SpeechPipelineRequest {
-  is_final: boolean;
-  mode: string;
-  transcript: string;
-}
-
-export interface SpeechPipelineResponse {
-  action: SpeechPipelineAction;
 }
