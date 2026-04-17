@@ -276,6 +276,36 @@ export interface WorldModel {
 
 // ===== Plugin → Actuator request/response types =====
 
+export interface CollectionDeleteRequest {
+  name: string;
+}
+
+export interface CollectionDeleteResponse {
+  ok: boolean;
+}
+
+export interface CollectionGetRequest {
+  name: string;
+}
+
+export interface CollectionGetResponse {
+  data: unknown;
+  entries?: unknown;
+  introducer: string;
+  merge: MergeStrategy;
+  name: string;
+}
+
+export interface CollectionPushRequest {
+  data: unknown;
+  label?: unknown;
+  name: string;
+}
+
+export interface CollectionPushResponse {
+  ok: boolean;
+}
+
 export interface CommandsDiscoverRequest {
   active_tags?: unknown;
   require_tag?: unknown;
@@ -575,35 +605,6 @@ export interface KeybindsRegisterRequest {
 export interface KeybindsRegisterResponse {
   count: number;
   ok: boolean;
-}
-
-export interface ListsDeleteRequest {
-  name: string;
-}
-
-export interface ListsDeleteResponse {
-  ok: boolean;
-}
-
-export interface ListsGetRequest {
-  name: string;
-}
-
-export interface ListsGetResponse {
-  entries: unknown;
-  name: string;
-}
-
-export interface ListsUpdateRequest {
-  entries?: unknown;
-  label?: unknown;
-  merge?: boolean;
-  name: string;
-}
-
-export interface ListsUpdateResponse {
-  entries: unknown;
-  name: string;
 }
 
 export interface MatchAliasesGetResponse {
@@ -1280,26 +1281,6 @@ export interface SettingsRulesUpdateRequest {
 }
 
 export interface SettingsRulesUpdateResponse {
-  ok: boolean;
-}
-
-export interface StoreGetRequest {
-  name: string;
-}
-
-export interface StoreGetResponse {
-  data: unknown;
-  introducer: string;
-  merge: MergeStrategy;
-  store: string;
-}
-
-export interface StorePushRequest {
-  data: unknown;
-  name: string;
-}
-
-export interface StorePushResponse {
   ok: boolean;
 }
 

@@ -5,6 +5,9 @@
 export const APIVersion = "0.1.0" as const;
 
 // RPC method names: plugin → actuator (use with plugin.call()).
+export const MethodCollectionDelete = "collection.delete" as const; // since 0.1.0
+export const MethodCollectionGet = "collection.get" as const; // since 0.1.0
+export const MethodCollectionPush = "collection.push" as const; // since 0.1.0
 export const MethodCommandsDiscover = "commands.discover" as const; // since 0.1.0
 export const MethodCommandsHasPartial = "commands.has_partial" as const; // since 0.1.0
 export const MethodCommandsList = "commands.list" as const; // since 0.1.0
@@ -38,9 +41,6 @@ export const MethodInputSwitchInputSource = "input.switch_input_source" as const
 export const MethodInputTypeText = "input.type_text" as const; // since 0.1.0
 export const MethodKeyNamesSet = "key_names.set" as const; // since 0.1.0
 export const MethodKeybindsRegister = "keybinds.register" as const; // since 0.1.0
-export const MethodListsDelete = "lists.delete" as const; // since 0.1.0
-export const MethodListsGet = "lists.get" as const; // since 0.1.0
-export const MethodListsUpdate = "lists.update" as const; // since 0.1.0
 export const MethodMatchAliasesGet = "match_aliases.get" as const; // since 0.1.0
 export const MethodMatchAliasesSet = "match_aliases.set" as const; // since 0.1.0
 export const MethodNativeActivateApp = "native.activate_app" as const; // since 0.1.0
@@ -128,8 +128,6 @@ export const MethodSelectionSet = "selection.set" as const; // since 0.1.0
 export const MethodSessionEndCleanup = "session.end_cleanup" as const; // since 0.1.0
 export const MethodSettingsRulesCreate = "settings.rules_create" as const; // since 0.1.0
 export const MethodSettingsRulesUpdate = "settings.rules_update" as const; // since 0.1.0
-export const MethodStoreGet = "store.get" as const; // since 0.1.0
-export const MethodStorePush = "store.push" as const; // since 0.1.0
 export const MethodSystemLaunchApp = "system.launch_app" as const; // since 0.1.0
 export const MethodSystemNotify = "system.notify" as const; // since 0.1.0
 export const MethodSystemRunShell = "system.run_shell" as const; // since 0.1.0
@@ -146,6 +144,7 @@ export const HookSpeechPipelineFull = "speech_pipeline_full" as const; // since 
 // Platform event type constants (use with plugin.on()).
 export const EventActionExecuted = "_platform.action.executed" as const;
 export const EventAppFocused = "_platform.app.focused" as const;
+export const EventCollectionUpdated = "_platform.collection.updated" as const;
 export const EventDisplayChanged = "_platform.display.changed" as const;
 export const EventInputSessionEnded = "_platform.input.session_ended" as const;
 export const EventKeyboardLayoutChanged = "_platform.keyboard.layout_changed" as const;
@@ -153,7 +152,6 @@ export const EventPluginDegraded = "_platform.plugin.degraded" as const;
 export const EventPluginDisabled = "_platform.plugin.disabled" as const;
 export const EventPluginEnabled = "_platform.plugin.enabled" as const;
 export const EventSelectionPicked = "_platform.selection.picked" as const;
-export const EventStoreUpdated = "_platform.store.updated" as const;
 export const EventTagsChanged = "_platform.tags.changed" as const;
 export const EventWindowClosed = "_platform.window.closed" as const;
 export const EventWindowCreated = "_platform.window.created" as const;

@@ -2,8 +2,11 @@
 // Run: just contracts
 
 import { Plugin } from "./plugin.js";
-import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, InputClipboardReadResponse, InputSource, KeyNamesSetResponse, KeybindsRegisterResponse, ListsGetResponse, ListsUpdateResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, StoreGetResponse, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
+import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionGetResponse, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, InputClipboardReadResponse, InputSource, KeyNamesSetResponse, KeybindsRegisterResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
 import {
+  MethodCollectionDelete,
+  MethodCollectionGet,
+  MethodCollectionPush,
   MethodCommandsDiscover,
   MethodCommandsHasPartial,
   MethodCommandsList,
@@ -37,9 +40,6 @@ import {
   MethodInputTypeText,
   MethodKeyNamesSet,
   MethodKeybindsRegister,
-  MethodListsDelete,
-  MethodListsGet,
-  MethodListsUpdate,
   MethodMatchAliasesGet,
   MethodMatchAliasesSet,
   MethodNativeActivateApp,
@@ -127,8 +127,6 @@ import {
   MethodSessionEndCleanup,
   MethodSettingsRulesCreate,
   MethodSettingsRulesUpdate,
-  MethodStoreGet,
-  MethodStorePush,
   MethodSystemLaunchApp,
   MethodSystemNotify,
   MethodSystemRunShell,
@@ -138,6 +136,9 @@ import {
 
 declare module "./plugin.js" {
   interface Plugin {
+    collectionDelete(name: string): Promise<void>;
+    collectionGet(name: string): Promise<CollectionGetResponse>;
+    collectionPush(data: unknown, name: string, label?: unknown): Promise<void>;
     commandsDiscover(activeTags?: unknown, requireTag?: unknown, words?: unknown): Promise<CommandsDiscoverResponse>;
     commandsHasPartial(activeTags?: unknown, words?: string[]): Promise<CommandsHasPartialResponse>;
     commandsList(): Promise<CommandsListResponse>;
@@ -171,9 +172,6 @@ declare module "./plugin.js" {
     inputTypeText(text: string): Promise<void>;
     keyNamesSet(names?: Record<string, number>): Promise<KeyNamesSetResponse>;
     keybindsRegister(snapshot: unknown): Promise<KeybindsRegisterResponse>;
-    listsDelete(name: string): Promise<void>;
-    listsGet(name: string): Promise<ListsGetResponse>;
-    listsUpdate(name: string, entries?: unknown, label?: unknown, merge?: boolean): Promise<ListsUpdateResponse>;
     matchAliasesGet(): Promise<MatchAliasesGetResponse>;
     matchAliasesSet(aliases?: Record<string, string>): Promise<MatchAliasesSetResponse>;
     nativeActivateApp(bundleId: string, allWindows?: boolean): Promise<void>;
@@ -261,8 +259,6 @@ declare module "./plugin.js" {
     sessionEndCleanup(): Promise<SessionEndCleanupResponse>;
     settingsRulesCreate(newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown): Promise<void>;
     settingsRulesUpdate(canonical: string, newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown): Promise<void>;
-    storeGet(name: string): Promise<StoreGetResponse>;
-    storePush(data: unknown, name: string): Promise<void>;
     systemLaunchApp(bundleId: string, newInstance?: boolean): Promise<void>;
     systemNotify(body: string, title: string, durationSecs?: unknown): Promise<void>;
     systemRunShell(command: string): Promise<void>;
@@ -270,6 +266,36 @@ declare module "./plugin.js" {
     tagsModify(clear?: string[], clearScoped?: boolean, set?: string[]): Promise<string[]>;
   }
 }
+
+Plugin.prototype.collectionDelete = async function(name: string) {
+  const result = await this.call(
+    MethodCollectionDelete,
+    {
+      name,
+    },
+  );
+};
+
+Plugin.prototype.collectionGet = async function(name: string) {
+  const result = await this.call(
+    MethodCollectionGet,
+    {
+      name,
+    },
+  );
+  return result as CollectionGetResponse;
+};
+
+Plugin.prototype.collectionPush = async function(data: unknown, name: string, label?: unknown) {
+  const result = await this.call(
+    MethodCollectionPush,
+    {
+      data,
+      name,
+      label,
+    },
+  );
+};
 
 Plugin.prototype.commandsDiscover = async function(activeTags?: unknown, requireTag?: unknown, words?: unknown) {
   const result = await this.call(
@@ -592,38 +618,6 @@ Plugin.prototype.keybindsRegister = async function(snapshot: unknown) {
     },
   );
   return result as KeybindsRegisterResponse;
-};
-
-Plugin.prototype.listsDelete = async function(name: string) {
-  const result = await this.call(
-    MethodListsDelete,
-    {
-      name,
-    },
-  );
-};
-
-Plugin.prototype.listsGet = async function(name: string) {
-  const result = await this.call(
-    MethodListsGet,
-    {
-      name,
-    },
-  );
-  return result as ListsGetResponse;
-};
-
-Plugin.prototype.listsUpdate = async function(name: string, entries?: unknown, label?: unknown, merge?: boolean) {
-  const result = await this.call(
-    MethodListsUpdate,
-    {
-      name,
-      entries,
-      label,
-      merge,
-    },
-  );
-  return result as ListsUpdateResponse;
 };
 
 Plugin.prototype.matchAliasesGet = async function() {
@@ -1377,26 +1371,6 @@ Plugin.prototype.settingsRulesUpdate = async function(canonical: string, newrule
       newrulephrase,
       newrulerequirestags,
       newrulesetstags,
-    },
-  );
-};
-
-Plugin.prototype.storeGet = async function(name: string) {
-  const result = await this.call(
-    MethodStoreGet,
-    {
-      name,
-    },
-  );
-  return result as StoreGetResponse;
-};
-
-Plugin.prototype.storePush = async function(data: unknown, name: string) {
-  const result = await this.call(
-    MethodStorePush,
-    {
-      data,
-      name,
     },
   );
 };
