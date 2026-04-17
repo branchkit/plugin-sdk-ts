@@ -141,6 +141,7 @@ export const HookOnAction = "on_action" as const; // since 0.1.0
 export const HookOnCommandsChanged = "on_commands_changed" as const; // since 0.1.0
 export const HookRenderHud = "render_hud" as const; // since 0.1.0
 export const HookRenderSettings = "render_settings" as const; // since 0.1.0
+export const HookSpeechPipelineFull = "speech_pipeline_full" as const; // since 0.1.0
 
 // Platform event type constants (use with plugin.on()).
 export const EventActionExecuted = "_platform.action.executed" as const;

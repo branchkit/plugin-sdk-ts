@@ -151,6 +151,14 @@ export interface HudSection {
   title: string;
 }
 
+export interface IngestSegmentSpec {
+  alternatives: string[];
+  duration: number;
+  id: number;
+  start: number;
+  text: string;
+}
+
 export interface InputSource {
   id: string;
   is_active: boolean;
@@ -204,6 +212,11 @@ export interface ScreenshotRegion {
   w: number;
   x: number;
   y: number;
+}
+
+export interface SelectionItemSpec {
+  id: string;
+  tag?: string;
 }
 
 export interface SpaceInfo {
@@ -1372,4 +1385,28 @@ export interface RenderSettingsRequest {
 
 export interface RenderSettingsResponse {
   html: string;
+}
+
+export interface SpeechPipelineFullRequest {
+  is_continuous?: boolean;
+  is_discovery_open?: boolean;
+  is_final: boolean;
+  is_hud_open?: boolean;
+  mute_matching?: boolean;
+  scoped_prefixes?: string[];
+  segments: IngestSegmentSpec[];
+  selection_active?: boolean;
+  selection_items?: SelectionItemSpec[];
+  session_end: boolean;
+  session_id?: unknown;
+  should_lift?: boolean;
+  tags?: string[];
+}
+
+export interface SpeechPipelineFullResponse {
+  control_message?: unknown;
+  is_hud_open?: boolean;
+  paste_text?: unknown;
+  reset_engine?: boolean;
+  status?: string;
 }
