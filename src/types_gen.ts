@@ -294,6 +294,17 @@ export interface CollectionGetResponse {
   name: string;
 }
 
+export interface CollectionOverrideRequest {
+  action: string;
+  collection: string;
+  fields?: unknown;
+  id?: unknown;
+}
+
+export interface CollectionOverrideResponse {
+  ok: boolean;
+}
+
 export interface CollectionPushRequest {
   data: unknown;
   label?: unknown;

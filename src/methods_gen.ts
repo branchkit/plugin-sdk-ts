@@ -6,6 +6,7 @@ import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BluetoothDe
 import {
   MethodCollectionDelete,
   MethodCollectionGet,
+  MethodCollectionOverride,
   MethodCollectionPush,
   MethodCommandsDiscover,
   MethodCommandsHasPartial,
@@ -139,6 +140,7 @@ declare module "./plugin.js" {
   interface Plugin {
     collectionDelete(name: string): Promise<void>;
     collectionGet(name: string): Promise<CollectionGetResponse>;
+    collectionOverride(action: string, collection: string, fields?: unknown, id?: unknown): Promise<void>;
     collectionPush(data: unknown, name: string, label?: unknown): Promise<void>;
     commandsDiscover(activeTags?: unknown, requireTag?: unknown, words?: unknown): Promise<CommandsDiscoverResponse>;
     commandsHasPartial(activeTags?: unknown, words?: string[]): Promise<CommandsHasPartialResponse>;
@@ -286,6 +288,18 @@ Plugin.prototype.collectionGet = async function(name: string) {
     },
   );
   return result as CollectionGetResponse;
+};
+
+Plugin.prototype.collectionOverride = async function(action: string, collection: string, fields?: unknown, id?: unknown) {
+  const result = await this.call(
+    MethodCollectionOverride,
+    {
+      action,
+      collection,
+      fields,
+      id,
+    },
+  );
 };
 
 Plugin.prototype.collectionPush = async function(data: unknown, name: string, label?: unknown) {
