@@ -2,7 +2,7 @@
 // Run: just contracts
 
 import { Plugin } from "./plugin.js";
-import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionGetResponse, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, InputClipboardReadResponse, InputSource, KeyNamesSetResponse, KeybindsRegisterResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
+import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionGetResponse, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
 import {
   MethodCollectionDelete,
   MethodCollectionGet,
@@ -77,6 +77,7 @@ import {
   MethodNativeFrontmostApp,
   MethodNativeGetWindowInfo,
   MethodNativeHideApp,
+  MethodNativeInstalledApps,
   MethodNativeIsAppHidden,
   MethodNativeKeyboardLayout,
   MethodNativeLaunchApp,
@@ -209,6 +210,7 @@ declare module "./plugin.js" {
     nativeFrontmostApp(): Promise<NativeFrontmostAppResponse>;
     nativeGetWindowInfo(windowId: string): Promise<NativeGetWindowInfoResponse>;
     nativeHideApp(bundleId: string): Promise<void>;
+    nativeInstalledApps(): Promise<InstalledApp[]>;
     nativeIsAppHidden(bundleId: string): Promise<boolean>;
     nativeKeyboardLayout(): Promise<NativeKeyboardLayoutResponse>;
     nativeLaunchApp(bundleId: string, newInstance?: boolean): Promise<void>;
@@ -920,6 +922,11 @@ Plugin.prototype.nativeHideApp = async function(bundleId: string) {
       bundle_id: bundleId,
     },
   );
+};
+
+Plugin.prototype.nativeInstalledApps = async function() {
+  const result = await this.call(MethodNativeInstalledApps);
+  return (result as any).apps;
 };
 
 Plugin.prototype.nativeIsAppHidden = async function(bundleId: string) {

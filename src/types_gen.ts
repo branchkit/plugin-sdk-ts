@@ -39,13 +39,6 @@ export interface ActiveSpace {
   space_id: number;
 }
 
-export interface AppData {
-  aliases: string[];
-  bundle_id: string;
-  enabled?: boolean;
-  name: string;
-}
-
 export interface AudioDevice {
   id: number;
   is_default_input: boolean;
@@ -162,6 +155,11 @@ export interface IngestSegmentSpec {
 export interface InputSource {
   id: string;
   is_active: boolean;
+  name: string;
+}
+
+export interface InstalledApp {
+  bundle_id: string;
   name: string;
 }
 
@@ -882,6 +880,10 @@ export interface NativeHideAppResponse {
   ok: boolean;
 }
 
+export interface NativeInstalledAppsResponse {
+  apps: InstalledApp[];
+}
+
 export interface NativeIsAppHiddenRequest {
   bundle_id: string;
 }
@@ -1349,7 +1351,6 @@ export interface OnCommandsChangedResponse {
 }
 
 export interface RenderHUDRequest {
-  apps?: AppData[];
   footer?: string;
   hud_mode: string;
   sections?: HudSection[];
@@ -1358,7 +1359,6 @@ export interface RenderHUDRequest {
 
 export interface RenderSettingsRequest {
   active_tags?: string[];
-  apps?: AppData[];
   commands?: unknown;
   search?: string;
   tab_key: string;

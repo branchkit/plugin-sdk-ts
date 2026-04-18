@@ -78,6 +78,7 @@ export const MethodNativeForceQuitApp = "native.force_quit_app" as const; // sin
 export const MethodNativeFrontmostApp = "native.frontmost_app" as const; // since 0.1.0
 export const MethodNativeGetWindowInfo = "native.get_window_info" as const; // since 0.1.0
 export const MethodNativeHideApp = "native.hide_app" as const; // since 0.1.0
+export const MethodNativeInstalledApps = "native.installed_apps" as const; // since 0.1.0
 export const MethodNativeIsAppHidden = "native.is_app_hidden" as const; // since 0.1.0
 export const MethodNativeKeyboardLayout = "native.keyboard_layout" as const; // since 0.1.0
 export const MethodNativeLaunchApp = "native.launch_app" as const; // since 0.1.0
