@@ -72,6 +72,20 @@ export interface ClipboardWriteItem {
   text?: unknown;
 }
 
+export interface CollectionsListItem {
+  id: string;
+  subtitle?: unknown;
+  title: string;
+}
+
+export interface CollectionsListSection {
+  entry_count: number;
+  items: CollectionsListItem[];
+  label: string;
+  name: string;
+  plugin: string;
+}
+
 export interface DeliveredNotification {
   body?: unknown;
   delivered_at: string;
@@ -315,6 +329,14 @@ export interface CollectionPushResponse {
   ok: boolean;
 }
 
+export interface CollectionsListRequest {
+  kind?: unknown;
+}
+
+export interface CollectionsListResponse {
+  sections: CollectionsListSection[];
+}
+
 export interface CommandsDiscoverRequest {
   active_tags?: unknown;
   require_tag?: unknown;
@@ -410,6 +432,7 @@ export interface HUDCreateChannelRequest {
   anchor?: unknown;
   channel: string;
   description?: string;
+  follows_focus?: boolean;
   min_height?: number;
   width?: number;
 }
@@ -1250,6 +1273,7 @@ export interface SelectionPickResponse {
 }
 
 export interface SelectionSetRequest {
+  channel?: unknown;
   items?: unknown;
   title?: unknown;
 }
@@ -1348,6 +1372,18 @@ export interface OnActionRequest {
 }
 
 export interface OnActionResponse {
+  control_message?: string;
+  status: OnActionStatus;
+}
+
+export interface OnChannelActionRequest {
+  action: string;
+  channel: string;
+  payload?: unknown;
+}
+
+export interface OnChannelActionResponse {
+  close_channel?: boolean;
   control_message?: string;
   status: OnActionStatus;
 }

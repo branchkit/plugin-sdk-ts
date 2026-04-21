@@ -9,6 +9,7 @@ export const MethodCollectionDelete = "collection.delete" as const; // since 0.1
 export const MethodCollectionGet = "collection.get" as const; // since 0.1.0
 export const MethodCollectionOverride = "collection.override" as const; // since 0.1.0
 export const MethodCollectionPush = "collection.push" as const; // since 0.1.0
+export const MethodCollectionsList = "collections.list" as const; // since 0.1.0
 export const MethodCommandsDiscover = "commands.discover" as const; // since 0.1.0
 export const MethodCommandsHasPartial = "commands.has_partial" as const; // since 0.1.0
 export const MethodCommandsList = "commands.list" as const; // since 0.1.0
@@ -138,6 +139,7 @@ export const MethodTagsModify = "tags.modify" as const; // since 0.1.0
 
 // RPC method names: actuator → plugin (use with plugin.handle()).
 export const HookOnAction = "on_action" as const; // since 0.1.0
+export const HookOnChannelAction = "on_channel_action" as const; // since 0.1.0
 export const HookOnCommandsChanged = "on_commands_changed" as const; // since 0.1.0
 export const HookRenderHud = "render_hud" as const; // since 0.1.0
 export const HookRenderSettings = "render_settings" as const; // since 0.1.0

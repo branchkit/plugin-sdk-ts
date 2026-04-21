@@ -2,12 +2,13 @@
 // Run: just contracts
 
 import { Plugin } from "./plugin.js";
-import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionGetResponse, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
+import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionGetResponse, CollectionsListSection, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
 import {
   MethodCollectionDelete,
   MethodCollectionGet,
   MethodCollectionOverride,
   MethodCollectionPush,
+  MethodCollectionsList,
   MethodCommandsDiscover,
   MethodCommandsHasPartial,
   MethodCommandsList,
@@ -142,6 +143,7 @@ declare module "./plugin.js" {
     collectionGet(name: string): Promise<CollectionGetResponse>;
     collectionOverride(action: string, collection: string, fields?: unknown, id?: unknown): Promise<void>;
     collectionPush(data: unknown, name: string, label?: unknown): Promise<void>;
+    collectionsList(kind?: unknown): Promise<CollectionsListSection[]>;
     commandsDiscover(activeTags?: unknown, requireTag?: unknown, words?: unknown): Promise<CommandsDiscoverResponse>;
     commandsHasPartial(activeTags?: unknown, words?: string[]): Promise<CommandsHasPartialResponse>;
     commandsList(): Promise<CommandsListResponse>;
@@ -151,7 +153,7 @@ declare module "./plugin.js" {
     dispatch(action: unknown): Promise<DispatchResponse>;
     eventsAppend(eventType: string, data?: unknown, sessionId?: string): Promise<void>;
     eventsEmit(eventType: string, correlationId?: unknown, data?: unknown): Promise<void>;
-    hudCreateChannel(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, minHeight?: number, width?: number): Promise<void>;
+    hudCreateChannel(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, followsFocus?: boolean, minHeight?: number, width?: number): Promise<void>;
     hudHide(channel: string): Promise<void>;
     hudPush(channel: string, fragments: unknown): Promise<void>;
     hudRemoveChannel(channel: string): Promise<HUDRemoveChannelResponse>;
@@ -259,7 +261,7 @@ declare module "./plugin.js" {
     nativeWifi(): Promise<NativeWifiResponse>;
     nativeWorldModel(onScreen?: boolean): Promise<WorldModel>;
     selectionPick(index: number): Promise<SelectionPickResponse>;
-    selectionSet(items?: unknown, title?: unknown): Promise<void>;
+    selectionSet(channel?: unknown, items?: unknown, title?: unknown): Promise<void>;
     sessionEndCleanup(): Promise<SessionEndCleanupResponse>;
     settingsRulesCreate(newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown): Promise<void>;
     settingsRulesUpdate(canonical: string, newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown): Promise<void>;
@@ -311,6 +313,16 @@ Plugin.prototype.collectionPush = async function(data: unknown, name: string, la
       label,
     },
   );
+};
+
+Plugin.prototype.collectionsList = async function(kind?: unknown) {
+  const result = await this.call(
+    MethodCollectionsList,
+    {
+      kind,
+    },
+  );
+  return (result as any).sections;
 };
 
 Plugin.prototype.commandsDiscover = async function(activeTags?: unknown, requireTag?: unknown, words?: unknown) {
@@ -403,7 +415,7 @@ Plugin.prototype.eventsEmit = async function(eventType: string, correlationId?: 
   );
 };
 
-Plugin.prototype.hudCreateChannel = async function(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, minHeight?: number, width?: number) {
+Plugin.prototype.hudCreateChannel = async function(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, followsFocus?: boolean, minHeight?: number, width?: number) {
   const result = await this.call(
     MethodHudCreateChannel,
     {
@@ -411,6 +423,7 @@ Plugin.prototype.hudCreateChannel = async function(channel: string, acceptsInput
       accepts_input: acceptsInput,
       anchor,
       description,
+      follows_focus: followsFocus,
       min_height: minHeight,
       width,
     },
@@ -1346,10 +1359,11 @@ Plugin.prototype.selectionPick = async function(index: number) {
   return result as SelectionPickResponse;
 };
 
-Plugin.prototype.selectionSet = async function(items?: unknown, title?: unknown) {
+Plugin.prototype.selectionSet = async function(channel?: unknown, items?: unknown, title?: unknown) {
   const result = await this.call(
     MethodSelectionSet,
     {
+      channel,
       items,
       title,
     },
