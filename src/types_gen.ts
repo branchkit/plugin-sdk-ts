@@ -74,6 +74,7 @@ export interface ClipboardWriteItem {
 
 export interface CollectionsListItem {
   id: string;
+  source: string;
   subtitle?: unknown;
   title: string;
 }
@@ -129,6 +130,11 @@ export interface DisplayMetadata {
   w: number;
   x: number;
   y: number;
+}
+
+export interface EntityEntry {
+  source: string;
+  value?: unknown;
 }
 
 export interface Frame {
