@@ -132,11 +132,6 @@ export interface DisplayMetadata {
   y: number;
 }
 
-export interface EntityEntry {
-  source: string;
-  value?: unknown;
-}
-
 export interface Frame {
   h: number;
   w: number;
@@ -308,7 +303,6 @@ export interface CollectionGetRequest {
 
 export interface CollectionGetResponse {
   data: unknown;
-  entries?: unknown;
   introducer: string;
   merge: MergeStrategy;
   name: string;
