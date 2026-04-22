@@ -1416,10 +1416,9 @@ export interface RenderSettingsResponse {
 }
 
 export interface SpeechPipelineFullRequest {
+  channel_visibility?: Record<string, boolean>;
   is_continuous?: boolean;
-  is_discovery_open?: boolean;
   is_final: boolean;
-  is_hud_open?: boolean;
   mute_matching?: boolean;
   scoped_prefixes?: string[];
   segments: IngestSegmentSpec[];
@@ -1433,7 +1432,6 @@ export interface SpeechPipelineFullRequest {
 
 export interface SpeechPipelineFullResponse {
   control_message?: unknown;
-  is_hud_open?: boolean;
   paste_text?: unknown;
   reset_engine?: boolean;
   status?: string;
