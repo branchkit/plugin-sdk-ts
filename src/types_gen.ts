@@ -1376,18 +1376,6 @@ export interface OnActionResponse {
   status: OnActionStatus;
 }
 
-export interface OnChannelActionRequest {
-  action: string;
-  channel: string;
-  payload?: unknown;
-}
-
-export interface OnChannelActionResponse {
-  close_channel?: boolean;
-  control_message?: string;
-  status: OnActionStatus;
-}
-
 export interface OnCommandsChangedRequest {
   commands_by_plugin: unknown;
   user_commands?: unknown[];
