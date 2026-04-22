@@ -303,6 +303,7 @@ export interface CollectionGetRequest {
 
 export interface CollectionGetResponse {
   data: unknown;
+  entries?: unknown;
   introducer: string;
   merge: MergeStrategy;
   name: string;
