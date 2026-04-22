@@ -409,6 +409,7 @@ export interface DispatchRequest {
 
 export interface DispatchResponse {
   control_message?: unknown;
+  handler?: unknown;
   message?: unknown;
   status: string;
 }
