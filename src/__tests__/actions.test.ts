@@ -19,7 +19,7 @@ describe("handleAction", () => {
     const plugin = new Plugin();
     let seen: { position?: string } = {};
 
-    plugin.handleAction<{ position: string }>("wm.snap", async (req) => {
+    plugin.handleAction<{ position: string }>("foo.snap", async (req) => {
       seen.position = req.params.position;
     });
 
@@ -27,7 +27,7 @@ describe("handleAction", () => {
     const onAction = (plugin as unknown as { handlers: Map<string, (p: unknown) => Promise<unknown>> })
       .handlers.get(HookOnAction)!;
     const result = (await onAction({
-      action: "wm.snap",
+      action: "foo.snap",
       params: { position: "left" },
     })) as OnActionResponse;
 
@@ -37,11 +37,11 @@ describe("handleAction", () => {
 
   it("returns not_handled for unknown actions when no fallback is set", async () => {
     const plugin = new Plugin();
-    plugin.handleAction("wm.snap", async () => {});
+    plugin.handleAction("foo.snap", async () => {});
 
     const onAction = (plugin as unknown as { handlers: Map<string, (p: unknown) => Promise<unknown>> })
       .handlers.get(HookOnAction)!;
-    const result = (await onAction({ action: "wm.unknown", params: {} })) as OnActionResponse;
+    const result = (await onAction({ action: "foo.unknown", params: {} })) as OnActionResponse;
 
     expect(result.status).toBe("not_handled");
   });
@@ -54,13 +54,13 @@ describe("handleAction", () => {
     const plugin = new Plugin();
     plugin.handle(HookOnAction, async () => ({ status: "ok" } as OnActionResponse));
     expect(() => {
-      plugin.handleAction("wm.snap", async () => {});
+      plugin.handleAction("foo.snap", async () => {});
     }).toThrow(/cannot mix/);
   });
 
   it("throws when handle(\"on_action\", ...) is registered after handleAction", () => {
     const plugin = new Plugin();
-    plugin.handleAction("wm.snap", async () => {});
+    plugin.handleAction("foo.snap", async () => {});
     expect(() => {
       plugin.handle(HookOnAction, async () => ({ status: "ok" } as OnActionResponse));
     }).toThrow(/cannot mix/);
@@ -71,7 +71,7 @@ describe("handleAction", () => {
     let seenApp: string | undefined;
     let seenWindow: string | undefined;
 
-    plugin.handleAction("wm.snap", async (req) => {
+    plugin.handleAction("foo.snap", async (req) => {
       seenApp = req.active_app;
       seenWindow = req.active_window_id;
     });
@@ -79,7 +79,7 @@ describe("handleAction", () => {
     const onAction = (plugin as unknown as { handlers: Map<string, (p: unknown) => Promise<unknown>> })
       .handlers.get(HookOnAction)!;
     await onAction({
-      action: "wm.snap",
+      action: "foo.snap",
       active_app: "com.apple.Safari",
       active_window_id: "window-42",
       params: {},
@@ -91,14 +91,14 @@ describe("handleAction", () => {
 
   it("passes through OnActionResponse return value verbatim", async () => {
     const plugin = new Plugin();
-    plugin.handleAction("voice.say", async () => {
+    plugin.handleAction("bar.say", async () => {
       const resp: OnActionResponse = { status: "ok", control_message: "hello" };
       return resp;
     });
 
     const onAction = (plugin as unknown as { handlers: Map<string, (p: unknown) => Promise<unknown>> })
       .handlers.get(HookOnAction)!;
-    const result = (await onAction({ action: "voice.say", params: {} })) as OnActionResponse;
+    const result = (await onAction({ action: "bar.say", params: {} })) as OnActionResponse;
 
     expect(result.status).toBe("ok");
     expect(result.control_message).toBe("hello");
@@ -108,24 +108,24 @@ describe("handleAction", () => {
     const plugin = new Plugin();
     expect(plugin.registeredActionTypes()).toBeNull();
 
-    plugin.handleAction("wm.snap", async () => {});
-    plugin.handleAction("wm.focus", async () => {});
+    plugin.handleAction("foo.snap", async () => {});
+    plugin.handleAction("foo.focus", async () => {});
 
     const types = plugin.registeredActionTypes();
     expect(types).not.toBeNull();
-    expect(new Set(types!)).toEqual(new Set(["wm.snap", "wm.focus"]));
+    expect(new Set(types!)).toEqual(new Set(["foo.snap", "foo.focus"]));
   });
 
   it("translates thrown errors into rejected promises", async () => {
     const plugin = new Plugin();
-    plugin.handleAction("wm.snap", async () => {
+    plugin.handleAction("foo.snap", async () => {
       throw new Error("snap failed");
     });
 
     const onAction = (plugin as unknown as { handlers: Map<string, (p: unknown) => Promise<unknown>> })
       .handlers.get(HookOnAction)!;
 
-    await expect(onAction({ action: "wm.snap", params: {} })).rejects.toThrow("snap failed");
+    await expect(onAction({ action: "foo.snap", params: {} })).rejects.toThrow("snap failed");
   });
 });
 

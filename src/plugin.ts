@@ -136,18 +136,18 @@ export class Plugin {
 
   /**
    * Register a handler for a single dispatched action type
-   * (e.g. "wm.snap", "voice.dictation_start"). The SDK installs an internal
+   * (e.g. "foo.snap", "bar.start"). The SDK installs an internal
    * on_action handler that demuxes by req.action.
    *
    * handleAction is the only supported way to register action handlers.
    * Calling handle("on_action", ...) directly is reserved for plugins with
-   * dynamic dispatch needs (e.g. browser, which forwards every browser.*
-   * action to SSE clients) — but mixing the two will throw, since each is
+   * dynamic dispatch needs (e.g. a plugin that forwards every prefix.*
+   * action to external clients) — but mixing the two will throw, since each is
    * installing the same handler key.
    *
    * Generic param T provides compile-time typing for req.params:
    *
-   *     plugin.handleAction<{ position: string }>("wm.snap", async (req) =&gt; {
+   *     plugin.handleAction<{ position: string }>("foo.snap", async (req) =&gt; {
    *       console.log(req.params.position);
    *     });
    *
