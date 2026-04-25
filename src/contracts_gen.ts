@@ -5,6 +5,7 @@
 export const APIVersion = "0.1.0" as const;
 
 // RPC method names: plugin → actuator (use with plugin.call()).
+export const MethodActionsList = "actions.list" as const; // since 0.1.0
 export const MethodCollectionDelete = "collection.delete" as const; // since 0.1.0
 export const MethodCollectionGet = "collection.get" as const; // since 0.1.0
 export const MethodCollectionOverride = "collection.override" as const; // since 0.1.0

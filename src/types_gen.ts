@@ -34,6 +34,21 @@ export interface AXPathSegment {
   role: string;
 }
 
+export interface ActionFieldSchema {
+  enum_values: string[];
+  field_type: FieldType;
+  fields: ActionFieldSchema[];
+  key: string;
+  label: string;
+  placeholder?: unknown;
+  required: boolean;
+}
+
+export interface ActionTypeSchema {
+  fields: ActionFieldSchema[];
+  label: string;
+}
+
 export interface ActiveSpace {
   display_id: number;
   space_id: number;
@@ -148,6 +163,17 @@ export interface DisplayMetadata {
   x: number;
   y: number;
 }
+
+/**
+ * The declared shape of a single action-type field. See `ActionFieldSchema`.
+ * 
+ * Wire format uses snake_case strings (`"string"`, `"int"`, `"enum"`, …).
+ * Unknown values fail deserialization — that's deliberate: a typo in
+ * `plugin.json` should surface at load time, not at dispatch. The `Json`
+ * variant is the documented escape hatch for shapes too dynamic to
+ * declare statically.
+ */
+export type FieldType = "string" | "int" | "number" | "boolean" | "string[]" | "enum" | "object" | "json";
 
 export interface Frame {
   h: number;
@@ -331,6 +357,10 @@ export interface WorldModel {
 
 // ===== Plugin → Actuator request/response types =====
 
+export interface ActionsListResponse {
+  actions: Record<string, ActionTypeSchema>;
+}
+
 export interface CollectionDeleteRequest {
   name: string;
 }
@@ -448,6 +478,7 @@ export interface DispatchResponse {
   control_message?: unknown;
   handler?: unknown;
   message?: unknown;
+  result?: unknown;
   status: string;
 }
 
@@ -1496,6 +1527,7 @@ export interface OnActionRequest {
 
 export interface OnActionResponse {
   control_message?: string;
+  result?: unknown;
   status: OnActionStatus;
 }
 

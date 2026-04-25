@@ -2,8 +2,9 @@
 // Run: just contracts
 
 import { Plugin } from "./plugin.js";
-import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BleService, BleWriteEntry, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionGetResponse, CollectionsListSection, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, HidDeviceEntry, HidElementEntry, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeResponse, NativeBleWriteResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeHidClaimResponse, NativeHidReleaseResponse, NativeHidSendReportResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
+import type { AXElementNode, AXElementRef, ActionsListResponse, ActiveSpace, AudioDevice, BleService, BleWriteEntry, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionGetResponse, CollectionsListSection, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, HidDeviceEntry, HidElementEntry, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeResponse, NativeBleWriteResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeHidClaimResponse, NativeHidReleaseResponse, NativeHidSendReportResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
 import {
+  MethodActionsList,
   MethodCollectionDelete,
   MethodCollectionGet,
   MethodCollectionOverride,
@@ -148,6 +149,7 @@ import {
 
 declare module "./plugin.js" {
   interface Plugin {
+    actionsList(): Promise<ActionsListResponse>;
     collectionDelete(name: string): Promise<void>;
     collectionGet(name: string): Promise<CollectionGetResponse>;
     collectionOverride(action: string, collection: string, fields?: unknown, id?: unknown): Promise<void>;
@@ -290,6 +292,11 @@ declare module "./plugin.js" {
     tagsModify(clear?: string[], clearScoped?: boolean, set?: string[]): Promise<string[]>;
   }
 }
+
+Plugin.prototype.actionsList = async function() {
+  const result = await this.call(MethodActionsList);
+  return result as ActionsListResponse;
+};
 
 Plugin.prototype.collectionDelete = async function(name: string) {
   const result = await this.call(
