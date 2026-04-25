@@ -163,8 +163,22 @@ export interface HidDeviceEntry {
   id: string;
   product: string;
   product_id: number;
+  seized: boolean;
   transport: string;
   vendor_id: number;
+}
+
+export interface HidElementEntry {
+  bit_offset: number;
+  byte_offset: number;
+  logical_max: number;
+  logical_min: number;
+  report_count: number;
+  report_id: number;
+  report_size: number;
+  type: string;
+  usage: number;
+  usage_page: number;
 }
 
 export interface HudItem {
@@ -976,8 +990,32 @@ export interface NativeGetWindowInfoResponse {
   window_id: string;
 }
 
+export interface NativeHidClaimRequest {
+  device_id: string;
+}
+
+export interface NativeHidClaimResponse {
+  success: boolean;
+}
+
 export interface NativeHidDevicesResponse {
   devices: HidDeviceEntry[];
+}
+
+export interface NativeHidElementsRequest {
+  device_id: string;
+}
+
+export interface NativeHidElementsResponse {
+  elements: HidElementEntry[];
+}
+
+export interface NativeHidReleaseRequest {
+  device_id: string;
+}
+
+export interface NativeHidReleaseResponse {
+  success: boolean;
 }
 
 export interface NativeHidSendReportRequest {
