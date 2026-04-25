@@ -2,7 +2,7 @@
 // Run: just contracts
 
 import { Plugin } from "./plugin.js";
-import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionGetResponse, CollectionsListSection, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
+import type { AXElementNode, AXElementRef, ActiveSpace, AudioDevice, BleService, BleWriteEntry, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionGetResponse, CollectionsListSection, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, HidDeviceEntry, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeResponse, NativeBleWriteResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeHidSendReportResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
 import {
   MethodCollectionDelete,
   MethodCollectionGet,
@@ -58,6 +58,10 @@ import {
   MethodNativeBatchIsTileable,
   MethodNativeBatchSetFrames,
   MethodNativeBattery,
+  MethodNativeBleDiscoverServices,
+  MethodNativeBleSubscribe,
+  MethodNativeBleSubscribeAllThenWrite,
+  MethodNativeBleWrite,
   MethodNativeBluetoothDevices,
   MethodNativeBorders,
   MethodNativeBrightness,
@@ -78,6 +82,8 @@ import {
   MethodNativeForceQuitApp,
   MethodNativeFrontmostApp,
   MethodNativeGetWindowInfo,
+  MethodNativeHidDevices,
+  MethodNativeHidSendReport,
   MethodNativeHideApp,
   MethodNativeInstalledApps,
   MethodNativeIsAppHidden,
@@ -193,6 +199,10 @@ declare module "./plugin.js" {
     nativeBatchIsTileable(windowIds?: string[]): Promise<TileableEntry[]>;
     nativeBatchSetFrames(frames?: WindowFrame[], readback?: boolean): Promise<WindowFrame[]>;
     nativeBattery(): Promise<NativeBatteryResponse>;
+    nativeBleDiscoverServices(deviceIdentifier: string): Promise<BleService[]>;
+    nativeBleSubscribe(characteristicUuid: string, deviceIdentifier: string, serviceUuid: string): Promise<NativeBleSubscribeResponse>;
+    nativeBleSubscribeAllThenWrite(deviceIdentifier: string, subscribeServices?: string[], writes?: BleWriteEntry[]): Promise<NativeBleSubscribeAllThenWriteResponse>;
+    nativeBleWrite(characteristicUuid: string, deviceIdentifier: string, serviceUuid: string, data?: number[], writeType?: string): Promise<NativeBleWriteResponse>;
     nativeBluetoothDevices(): Promise<BluetoothDevice[]>;
     nativeBorders(): Promise<void>;
     nativeBrightness(displayId?: unknown): Promise<NativeBrightnessResponse>;
@@ -213,6 +223,8 @@ declare module "./plugin.js" {
     nativeForceQuitApp(bundleId: string): Promise<boolean>;
     nativeFrontmostApp(): Promise<NativeFrontmostAppResponse>;
     nativeGetWindowInfo(windowId: string): Promise<NativeGetWindowInfoResponse>;
+    nativeHidDevices(): Promise<HidDeviceEntry[]>;
+    nativeHidSendReport(deviceId: string, reportId: number, reportType: string, data?: number[]): Promise<NativeHidSendReportResponse>;
     nativeHideApp(bundleId: string): Promise<void>;
     nativeInstalledApps(): Promise<InstalledApp[]>;
     nativeIsAppHidden(bundleId: string): Promise<boolean>;
@@ -798,6 +810,54 @@ Plugin.prototype.nativeBattery = async function() {
   return result as NativeBatteryResponse;
 };
 
+Plugin.prototype.nativeBleDiscoverServices = async function(deviceIdentifier: string) {
+  const result = await this.call(
+    MethodNativeBleDiscoverServices,
+    {
+      device_identifier: deviceIdentifier,
+    },
+  );
+  return (result as any).services;
+};
+
+Plugin.prototype.nativeBleSubscribe = async function(characteristicUuid: string, deviceIdentifier: string, serviceUuid: string) {
+  const result = await this.call(
+    MethodNativeBleSubscribe,
+    {
+      characteristic_uuid: characteristicUuid,
+      device_identifier: deviceIdentifier,
+      service_uuid: serviceUuid,
+    },
+  );
+  return result as NativeBleSubscribeResponse;
+};
+
+Plugin.prototype.nativeBleSubscribeAllThenWrite = async function(deviceIdentifier: string, subscribeServices?: string[], writes?: BleWriteEntry[]) {
+  const result = await this.call(
+    MethodNativeBleSubscribeAllThenWrite,
+    {
+      device_identifier: deviceIdentifier,
+      subscribe_services: subscribeServices,
+      writes,
+    },
+  );
+  return result as NativeBleSubscribeAllThenWriteResponse;
+};
+
+Plugin.prototype.nativeBleWrite = async function(characteristicUuid: string, deviceIdentifier: string, serviceUuid: string, data?: number[], writeType?: string) {
+  const result = await this.call(
+    MethodNativeBleWrite,
+    {
+      characteristic_uuid: characteristicUuid,
+      device_identifier: deviceIdentifier,
+      service_uuid: serviceUuid,
+      data,
+      write_type: writeType,
+    },
+  );
+  return result as NativeBleWriteResponse;
+};
+
 Plugin.prototype.nativeBluetoothDevices = async function() {
   const result = await this.call(MethodNativeBluetoothDevices);
   return (result as any).devices;
@@ -940,6 +1000,24 @@ Plugin.prototype.nativeGetWindowInfo = async function(windowId: string) {
     },
   );
   return result as NativeGetWindowInfoResponse;
+};
+
+Plugin.prototype.nativeHidDevices = async function() {
+  const result = await this.call(MethodNativeHidDevices);
+  return (result as any).devices;
+};
+
+Plugin.prototype.nativeHidSendReport = async function(deviceId: string, reportId: number, reportType: string, data?: number[]) {
+  const result = await this.call(
+    MethodNativeHidSendReport,
+    {
+      device_id: deviceId,
+      report_id: reportId,
+      report_type: reportType,
+      data,
+    },
+  );
+  return result as NativeHidSendReportResponse;
 };
 
 Plugin.prototype.nativeHideApp = async function(bundleId: string) {

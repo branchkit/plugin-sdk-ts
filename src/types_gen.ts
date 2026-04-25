@@ -49,6 +49,23 @@ export interface AudioDevice {
   uid: string;
 }
 
+export interface BleCharacteristic {
+  properties: string[];
+  uuid: string;
+}
+
+export interface BleService {
+  characteristics: BleCharacteristic[];
+  uuid: string;
+}
+
+export interface BleWriteEntry {
+  characteristic_uuid: string;
+  data: number[];
+  service_uuid: string;
+  write_type: string;
+}
+
 export interface BluetoothDevice {
   address: string;
   device_type?: unknown;
@@ -137,6 +154,17 @@ export interface Frame {
   w: number;
   x: number;
   y: number;
+}
+
+export interface HidDeviceEntry {
+  axes: number;
+  ble_uuid?: unknown;
+  buttons: number;
+  id: string;
+  product: string;
+  product_id: number;
+  transport: string;
+  vendor_id: number;
 }
 
 export interface HudItem {
@@ -774,6 +802,46 @@ export interface NativeBatteryResponse {
   time_remaining_minutes?: unknown;
 }
 
+export interface NativeBleDiscoverServicesRequest {
+  device_identifier: string;
+}
+
+export interface NativeBleDiscoverServicesResponse {
+  services: BleService[];
+}
+
+export interface NativeBleSubscribeRequest {
+  characteristic_uuid: string;
+  device_identifier: string;
+  service_uuid: string;
+}
+
+export interface NativeBleSubscribeResponse {
+  success: boolean;
+}
+
+export interface NativeBleSubscribeAllThenWriteRequest {
+  device_identifier: string;
+  subscribe_services?: string[];
+  writes?: BleWriteEntry[];
+}
+
+export interface NativeBleSubscribeAllThenWriteResponse {
+  success: boolean;
+}
+
+export interface NativeBleWriteRequest {
+  characteristic_uuid: string;
+  data?: number[];
+  device_identifier: string;
+  service_uuid: string;
+  write_type?: string;
+}
+
+export interface NativeBleWriteResponse {
+  success: boolean;
+}
+
 export interface NativeBluetoothDevicesResponse {
   devices: BluetoothDevice[];
 }
@@ -906,6 +974,21 @@ export interface NativeGetWindowInfoResponse {
   subrole?: unknown;
   title?: unknown;
   window_id: string;
+}
+
+export interface NativeHidDevicesResponse {
+  devices: HidDeviceEntry[];
+}
+
+export interface NativeHidSendReportRequest {
+  data?: number[];
+  device_id: string;
+  report_id: number;
+  report_type: string;
+}
+
+export interface NativeHidSendReportResponse {
+  success: boolean;
 }
 
 export interface NativeHideAppRequest {
