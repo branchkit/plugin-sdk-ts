@@ -119,6 +119,17 @@ export interface CollectionsListSection {
   plugin: string;
 }
 
+export interface CommandRowData {
+  action: string;
+  action_json?: unknown;
+  canonical: string;
+  category: string;
+  is_user: boolean;
+  pattern: string;
+  plugin_name: string;
+  tier: string;
+}
+
 export interface DeliveredNotification {
   body?: unknown;
   delivered_at: string;
@@ -298,6 +309,19 @@ export interface ScreenshotRegion {
 export interface SelectionItemSpec {
   id: string;
   tag?: string;
+}
+
+export interface SettingsListSchemaInfo {
+  description: string;
+  entry_count: number;
+  label: string;
+  source_plugin: string;
+}
+
+export interface SettingsTagSchemaInfo {
+  description: string;
+  label: string;
+  source_plugin: string;
 }
 
 export interface SpaceInfo {
@@ -1548,10 +1572,14 @@ export interface RenderHUDRequest {
 }
 
 export interface RenderSettingsRequest {
-  active_tags?: string[];
-  commands?: unknown;
-  search?: string;
+  action_type_schemas?: Record<string, ActionTypeSchema>;
+  collection_data?: Record<string, unknown>;
+  command_filter?: string;
+  commands?: CommandRowData[];
+  list_schemas?: Record<string, SettingsListSchemaInfo>;
+  search: string;
   tab_key: string;
+  tag_schemas?: Record<string, SettingsTagSchemaInfo>;
 }
 
 export interface RenderSettingsResponse {
