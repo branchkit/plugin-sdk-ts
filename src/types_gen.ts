@@ -1466,6 +1466,14 @@ export interface SessionEndCleanupResponse {
   reset_engine: boolean;
 }
 
+export interface SettingsPatchSignalsRequest {
+  signals: string;
+}
+
+export interface SettingsPatchSignalsResponse {
+  ok: boolean;
+}
+
 export interface SettingsRulesCreateRequest {
   newruleactionjson?: unknown;
   newruleactiontype?: unknown;

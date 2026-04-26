@@ -138,6 +138,7 @@ import {
   MethodSelectionPick,
   MethodSelectionSet,
   MethodSessionEndCleanup,
+  MethodSettingsPatchSignals,
   MethodSettingsRulesCreate,
   MethodSettingsRulesUpdate,
   MethodSystemLaunchApp,
@@ -283,6 +284,7 @@ declare module "./plugin.js" {
     selectionPick(index: number): Promise<SelectionPickResponse>;
     selectionSet(channel?: unknown, items?: unknown, title?: unknown): Promise<void>;
     sessionEndCleanup(): Promise<SessionEndCleanupResponse>;
+    settingsPatchSignals(signals: string): Promise<void>;
     settingsRulesCreate(newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown): Promise<void>;
     settingsRulesUpdate(canonical: string, newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown): Promise<void>;
     systemLaunchApp(bundleId: string, newInstance?: boolean): Promise<void>;
@@ -1494,6 +1496,15 @@ Plugin.prototype.selectionSet = async function(channel?: unknown, items?: unknow
 Plugin.prototype.sessionEndCleanup = async function() {
   const result = await this.call(MethodSessionEndCleanup);
   return result as SessionEndCleanupResponse;
+};
+
+Plugin.prototype.settingsPatchSignals = async function(signals: string) {
+  const result = await this.call(
+    MethodSettingsPatchSignals,
+    {
+      signals,
+    },
+  );
 };
 
 Plugin.prototype.settingsRulesCreate = async function(newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown) {

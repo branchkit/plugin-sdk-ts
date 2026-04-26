@@ -139,6 +139,7 @@ export const MethodNativeWorldModel = "native.world_model" as const; // since 0.
 export const MethodSelectionPick = "selection.pick" as const; // since 0.1.0
 export const MethodSelectionSet = "selection.set" as const; // since 0.1.0
 export const MethodSessionEndCleanup = "session.end_cleanup" as const; // since 0.1.0
+export const MethodSettingsPatchSignals = "settings.patch_signals" as const; // since 0.1.0
 export const MethodSettingsRulesCreate = "settings.rules_create" as const; // since 0.1.0
 export const MethodSettingsRulesUpdate = "settings.rules_update" as const; // since 0.1.0
 export const MethodSystemLaunchApp = "system.launch_app" as const; // since 0.1.0
