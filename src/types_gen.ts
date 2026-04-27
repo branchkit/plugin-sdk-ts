@@ -47,6 +47,7 @@ export interface ActionFieldSchema {
 export interface ActionTypeSchema {
   fields: ActionFieldSchema[];
   label: string;
+  modes: string[];
 }
 
 export interface ActiveSpace {
