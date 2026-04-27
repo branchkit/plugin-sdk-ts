@@ -496,6 +496,7 @@ export interface ControlSignalResponse {
 
 export interface DispatchRequest {
   action: unknown;
+  phase?: unknown;
 }
 
 export interface DispatchResponse {
@@ -698,6 +699,7 @@ export interface InputRightClickResponse {
 export interface InputScrollRequest {
   amount?: number;
   direction: string;
+  unit?: string;
 }
 
 export interface InputScrollResponse {
@@ -1474,6 +1476,10 @@ export interface SettingsPatchSignalsResponse {
   ok: boolean;
 }
 
+export interface SettingsRefreshResponse {
+  ok: boolean;
+}
+
 export interface SettingsRulesCreateRequest {
   newruleactionjson?: unknown;
   newruleactiontype?: unknown;
@@ -1555,6 +1561,7 @@ export interface OnActionRequest {
   active_app?: string;
   active_window_id?: string;
   params?: unknown;
+  phase?: string;
 }
 
 export interface OnActionResponse {

@@ -139,6 +139,7 @@ import {
   MethodSelectionSet,
   MethodSessionEndCleanup,
   MethodSettingsPatchSignals,
+  MethodSettingsRefresh,
   MethodSettingsRulesCreate,
   MethodSettingsRulesUpdate,
   MethodSystemLaunchApp,
@@ -162,7 +163,7 @@ declare module "./plugin.js" {
     commandsMatch(activeTags?: unknown, words?: string[]): Promise<CommandsMatchResponse>;
     commandsPush(commands?: unknown): Promise<CommandsPushResponse>;
     controlSignal(signal: string): Promise<void>;
-    dispatch(action: unknown): Promise<DispatchResponse>;
+    dispatch(action: unknown, phase?: unknown): Promise<DispatchResponse>;
     eventsAppend(eventType: string, data?: unknown, sessionId?: string): Promise<void>;
     eventsEmit(eventType: string, correlationId?: unknown, data?: unknown): Promise<void>;
     hudCreateChannel(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, followsFocus?: boolean, minHeight?: number, width?: number): Promise<void>;
@@ -184,7 +185,7 @@ declare module "./plugin.js" {
     inputPressKey(code?: unknown, modifiers?: string[], name?: unknown): Promise<void>;
     inputRawKey(code: number, direction: string): Promise<void>;
     inputRightClick(x?: unknown, y?: unknown): Promise<void>;
-    inputScroll(direction: string, amount?: number): Promise<void>;
+    inputScroll(direction: string, amount?: number, unit?: string): Promise<void>;
     inputSwitchInputSource(sourceId: string): Promise<boolean>;
     inputTypeText(text: string): Promise<void>;
     keyNamesSet(names?: Record<string, number>): Promise<KeyNamesSetResponse>;
@@ -285,6 +286,7 @@ declare module "./plugin.js" {
     selectionSet(channel?: unknown, items?: unknown, title?: unknown): Promise<void>;
     sessionEndCleanup(): Promise<SessionEndCleanupResponse>;
     settingsPatchSignals(signals: string): Promise<void>;
+    settingsRefresh(): Promise<void>;
     settingsRulesCreate(newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown): Promise<void>;
     settingsRulesUpdate(canonical: string, newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown): Promise<void>;
     systemLaunchApp(bundleId: string, newInstance?: boolean): Promise<void>;
@@ -410,11 +412,12 @@ Plugin.prototype.controlSignal = async function(signal: string) {
   );
 };
 
-Plugin.prototype.dispatch = async function(action: unknown) {
+Plugin.prototype.dispatch = async function(action: unknown, phase?: unknown) {
   const result = await this.call(
     MethodDispatch,
     {
       action,
+      phase,
     },
   );
   return result as DispatchResponse;
@@ -627,12 +630,13 @@ Plugin.prototype.inputRightClick = async function(x?: unknown, y?: unknown) {
   );
 };
 
-Plugin.prototype.inputScroll = async function(direction: string, amount?: number) {
+Plugin.prototype.inputScroll = async function(direction: string, amount?: number, unit?: string) {
   const result = await this.call(
     MethodInputScroll,
     {
       direction,
       amount,
+      unit,
     },
   );
 };
@@ -1505,6 +1509,10 @@ Plugin.prototype.settingsPatchSignals = async function(signals: string) {
       signals,
     },
   );
+};
+
+Plugin.prototype.settingsRefresh = async function() {
+  const result = await this.call(MethodSettingsRefresh);
 };
 
 Plugin.prototype.settingsRulesCreate = async function(newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown) {
