@@ -497,7 +497,6 @@ export interface ControlSignalResponse {
 
 export interface DispatchRequest {
   action: unknown;
-  phase?: unknown;
 }
 
 export interface DispatchResponse {

@@ -163,7 +163,7 @@ declare module "./plugin.js" {
     commandsMatch(activeTags?: unknown, words?: string[]): Promise<CommandsMatchResponse>;
     commandsPush(commands?: unknown): Promise<CommandsPushResponse>;
     controlSignal(signal: string): Promise<void>;
-    dispatch(action: unknown, phase?: unknown): Promise<DispatchResponse>;
+    dispatch(action: unknown): Promise<DispatchResponse>;
     eventsAppend(eventType: string, data?: unknown, sessionId?: string): Promise<void>;
     eventsEmit(eventType: string, correlationId?: unknown, data?: unknown): Promise<void>;
     hudCreateChannel(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, followsFocus?: boolean, minHeight?: number, width?: number): Promise<void>;
@@ -412,12 +412,11 @@ Plugin.prototype.controlSignal = async function(signal: string) {
   );
 };
 
-Plugin.prototype.dispatch = async function(action: unknown, phase?: unknown) {
+Plugin.prototype.dispatch = async function(action: unknown) {
   const result = await this.call(
     MethodDispatch,
     {
       action,
-      phase,
     },
   );
   return result as DispatchResponse;
