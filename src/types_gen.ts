@@ -35,6 +35,7 @@ export interface AXPathSegment {
 }
 
 export interface ActionFieldSchema {
+  display?: unknown;
   enum_values: string[];
   field_type: FieldType;
   fields: ActionFieldSchema[];
@@ -175,6 +176,15 @@ export interface DisplayMetadata {
   x: number;
   y: number;
 }
+
+/**
+ * Where a field appears in generic UI rendering. Currently used by
+ * `kind: "log"` collections in the Collections tab to drive the timeline
+ * row summary line. Extending this enum is how new generic display roles
+ * get added (detail-only, hidden, etc.) without smuggling presentation
+ * hints into freeform strings.
+ */
+export type FieldDisplay = "summary";
 
 /**
  * The declared shape of a single action-type field. See `ActionFieldSchema`.
