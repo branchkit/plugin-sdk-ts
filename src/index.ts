@@ -6,3 +6,5 @@ export { UpstreamClient } from "./upstream.js";
 export * from "./contracts_gen.js";
 export * from "./types_gen.js";
 import "./methods_gen.js"; // module augmentation — side-effect import
+import "./collection_log.js"; // module augmentation — log-kind helpers
+export { RecordingDisabledError, logListOpts } from "./collection_log.js";
