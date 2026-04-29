@@ -280,6 +280,19 @@ export interface ListCommandSection {
   title: string;
 }
 
+export interface LogEntry {
+  id: string;
+  payload?: unknown;
+  timestamp_ms: number;
+}
+
+export interface LogListOpts {
+  cursor?: unknown;
+  limit?: unknown;
+  since_ms?: unknown;
+  until_ms?: unknown;
+}
+
 export interface LoginItem {
   bundle_id?: unknown;
   hidden: boolean;
@@ -396,12 +409,30 @@ export interface ActionsListResponse {
   actions: Record<string, ActionTypeSchema>;
 }
 
+export interface CollectionAppendRequest {
+  name: string;
+  payload: unknown;
+}
+
+export interface CollectionAppendResponse {
+  entry: LogEntry;
+}
+
 export interface CollectionDeleteRequest {
   name: string;
 }
 
 export interface CollectionDeleteResponse {
   ok: boolean;
+}
+
+export interface CollectionDeleteLogEntryRequest {
+  id: string;
+  name: string;
+}
+
+export interface CollectionDeleteLogEntryResponse {
+  deleted: boolean;
 }
 
 export interface CollectionGetRequest {
@@ -414,6 +445,33 @@ export interface CollectionGetResponse {
   introducer: string;
   merge: MergeStrategy;
   name: string;
+}
+
+export interface CollectionGetLogEntryRequest {
+  id: string;
+  name: string;
+}
+
+export interface CollectionGetLogEntryResponse {
+  entry?: unknown;
+}
+
+export interface CollectionGetRecordingRequest {
+  name: string;
+}
+
+export interface CollectionGetRecordingResponse {
+  enabled: boolean;
+}
+
+export interface CollectionListLogRequest {
+  name: string;
+  opts?: LogListOpts;
+}
+
+export interface CollectionListLogResponse {
+  entries: LogEntry[];
+  total: number;
 }
 
 export interface CollectionOverrideRequest {
@@ -434,6 +492,15 @@ export interface CollectionPushRequest {
 }
 
 export interface CollectionPushResponse {
+  ok: boolean;
+}
+
+export interface CollectionSetRecordingRequest {
+  enabled: boolean;
+  name: string;
+}
+
+export interface CollectionSetRecordingResponse {
   ok: boolean;
 }
 

@@ -2,13 +2,19 @@
 // Run: just contracts
 
 import { Plugin } from "./plugin.js";
-import type { AXElementNode, AXElementRef, ActionsListResponse, ActiveSpace, AudioDevice, BleService, BleWriteEntry, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionGetResponse, CollectionsListSection, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, HidDeviceEntry, HidElementEntry, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeResponse, NativeBleWriteResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeHidClaimResponse, NativeHidReleaseResponse, NativeHidSendReportResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
+import type { AXElementNode, AXElementRef, ActionsListResponse, ActiveSpace, AudioDevice, BleService, BleWriteEntry, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionDeleteLogEntryResponse, CollectionGetLogEntryResponse, CollectionGetRecordingResponse, CollectionGetResponse, CollectionListLogResponse, CollectionsListSection, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, HidDeviceEntry, HidElementEntry, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, LogEntry, LogListOpts, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeResponse, NativeBleWriteResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeHidClaimResponse, NativeHidReleaseResponse, NativeHidSendReportResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
 import {
   MethodActionsList,
+  MethodCollectionAppend,
   MethodCollectionDelete,
+  MethodCollectionDeleteLogEntry,
   MethodCollectionGet,
+  MethodCollectionGetLogEntry,
+  MethodCollectionGetRecording,
+  MethodCollectionListLog,
   MethodCollectionOverride,
   MethodCollectionPush,
+  MethodCollectionSetRecording,
   MethodCollectionsList,
   MethodCommandsDiscover,
   MethodCommandsHasPartial,
@@ -152,10 +158,16 @@ import {
 declare module "./plugin.js" {
   interface Plugin {
     actionsList(): Promise<ActionsListResponse>;
+    collectionAppend(name: string, payload: unknown): Promise<LogEntry | undefined>;
     collectionDelete(name: string): Promise<void>;
+    collectionDeleteLogEntry(id: string, name: string): Promise<CollectionDeleteLogEntryResponse>;
     collectionGet(name: string): Promise<CollectionGetResponse>;
+    collectionGetLogEntry(id: string, name: string): Promise<CollectionGetLogEntryResponse>;
+    collectionGetRecording(name: string): Promise<CollectionGetRecordingResponse>;
+    collectionListLog(name: string, opts?: LogListOpts): Promise<CollectionListLogResponse>;
     collectionOverride(action: string, collection: string, fields?: unknown, id?: unknown): Promise<void>;
     collectionPush(data: unknown, name: string, label?: unknown): Promise<void>;
+    collectionSetRecording(enabled: boolean, name: string): Promise<void>;
     collectionsList(kind?: unknown): Promise<CollectionsListSection[]>;
     commandsDiscover(activeTags?: unknown, requireTag?: unknown, words?: unknown): Promise<CommandsDiscoverResponse>;
     commandsHasPartial(activeTags?: unknown, words?: string[]): Promise<CommandsHasPartialResponse>;
@@ -302,6 +314,17 @@ Plugin.prototype.actionsList = async function() {
   return result as ActionsListResponse;
 };
 
+Plugin.prototype.collectionAppend = async function(name: string, payload: unknown) {
+  const result = await this.call(
+    MethodCollectionAppend,
+    {
+      name,
+      payload,
+    },
+  );
+  return (result as any).entry;
+};
+
 Plugin.prototype.collectionDelete = async function(name: string) {
   const result = await this.call(
     MethodCollectionDelete,
@@ -309,6 +332,17 @@ Plugin.prototype.collectionDelete = async function(name: string) {
       name,
     },
   );
+};
+
+Plugin.prototype.collectionDeleteLogEntry = async function(id: string, name: string) {
+  const result = await this.call(
+    MethodCollectionDeleteLogEntry,
+    {
+      id,
+      name,
+    },
+  );
+  return result as CollectionDeleteLogEntryResponse;
 };
 
 Plugin.prototype.collectionGet = async function(name: string) {
@@ -319,6 +353,38 @@ Plugin.prototype.collectionGet = async function(name: string) {
     },
   );
   return result as CollectionGetResponse;
+};
+
+Plugin.prototype.collectionGetLogEntry = async function(id: string, name: string) {
+  const result = await this.call(
+    MethodCollectionGetLogEntry,
+    {
+      id,
+      name,
+    },
+  );
+  return result as CollectionGetLogEntryResponse;
+};
+
+Plugin.prototype.collectionGetRecording = async function(name: string) {
+  const result = await this.call(
+    MethodCollectionGetRecording,
+    {
+      name,
+    },
+  );
+  return result as CollectionGetRecordingResponse;
+};
+
+Plugin.prototype.collectionListLog = async function(name: string, opts?: LogListOpts) {
+  const result = await this.call(
+    MethodCollectionListLog,
+    {
+      name,
+      opts,
+    },
+  );
+  return result as CollectionListLogResponse;
 };
 
 Plugin.prototype.collectionOverride = async function(action: string, collection: string, fields?: unknown, id?: unknown) {
@@ -340,6 +406,16 @@ Plugin.prototype.collectionPush = async function(data: unknown, name: string, la
       data,
       name,
       label,
+    },
+  );
+};
+
+Plugin.prototype.collectionSetRecording = async function(enabled: boolean, name: string) {
+  const result = await this.call(
+    MethodCollectionSetRecording,
+    {
+      enabled,
+      name,
     },
   );
 };
