@@ -122,7 +122,7 @@ describe("collection substrate helpers", () => {
     p.subscribe("things", (evt) => seen.push(evt));
 
     // Drive the on() listener directly; the actuator side is exercised
-    // by the conformance harness in C.4.
+    // by the conformance harness.
     // @ts-expect-error — handleNotification is private
     p.handleNotification(EventCollectionUpdated, { collection: "things", writer: "voice" });
     // @ts-expect-error

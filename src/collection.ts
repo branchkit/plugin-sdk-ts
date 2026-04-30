@@ -1,21 +1,8 @@
-// Helpers for the substrate collection ops — the eight uniform verbs the
-// platform promises every collection forever (DESIGN_PLATFORM_SUBSTRATE.md
-// §3.2). Append / log helpers live in collection_log.ts; the helpers below
-// cover get, list, count, put, patch, delete, and subscribe.
-//
-// The auto-generated methods (collectionFetch, collectionList, ...) carry
-// the wire shapes verbatim. These hand-written wrappers add typed payload
-// surfaces, the listOpts builder, and the subscribe sugar over
-// on(_platform.collection.updated, ...).
-
 import { EventCollectionUpdated } from "./contracts_gen.js";
 import { Plugin } from "./plugin.js";
 import type { ListOpts, CollectionRecord } from "./types_gen.js";
 
-/**
- * Payload of `_platform.collection.updated` notifications. Carries the
- * name of the collection that changed and the plugin that wrote it.
- */
+/** Payload of `_platform.collection.updated` notifications. */
 export interface CollectionChangedEvent {
   collection: string;
   writer: string;
@@ -23,51 +10,36 @@ export interface CollectionChangedEvent {
 
 declare module "./plugin.js" {
   interface Plugin {
-    /**
-     * Fetch one record from a collection by id. Returns undefined if no
-     * record with that id exists.
-     */
+    /** Returns undefined if no record with that id exists. */
     get(name: string, id: string): Promise<CollectionRecord | undefined>;
 
-    /**
-     * Return records from a collection. Pass undefined for default options
-     * (every record, default ordering).
-     */
     list(name: string, opts?: ListOpts): Promise<CollectionRecord[]>;
 
-    /**
-     * Like {@link Plugin.list} but also returns the unfiltered total
-     * count for paginated UIs.
-     */
+    /** Like {@link Plugin.list} but also returns the unfiltered total. */
     listPage(
       name: string,
       opts?: ListOpts,
     ): Promise<{ records: CollectionRecord[]; total: number }>;
 
-    /** Total record count for a collection. */
     count(name: string): Promise<number>;
 
-    /** Upsert a record at the given id. Payload is JSON-marshaled. */
     put(name: string, id: string, payload: unknown): Promise<void>;
 
     /**
-     * Merge fields into an existing record. Errors with NOT_FOUND if no
-     * record with that id exists, or OPERATION_NOT_PERMITTED on
-     * collections the substrate forbids patching (e.g., log-shaped, or
-     * gate-feed during the substrate transition).
+     * Errors with NOT_FOUND if no record with that id exists, or
+     * OPERATION_NOT_PERMITTED on collections the substrate forbids
+     * patching (e.g., log-shaped, or gate-feed during the substrate
+     * transition).
      */
     patch(name: string, id: string, fields: unknown): Promise<void>;
 
-    /** Remove one record by id. Returns whether it existed. */
+    /** Returns whether the record existed. */
     delete(name: string, id: string): Promise<boolean>;
 
     /**
-     * Subscribe to mutation notifications on the named collection. Sugar
-     * over on(_platform.collection.updated) with a name filter — the
-     * substrate spec lists `subscribe` as a verb, but it's not a separate
-     * wire op; the actuator emits collection.updated on every mutation
-     * and the SDK filters client-side. Multiple subscriptions on the
-     * same name run independently.
+     * Multiple subscriptions on the same name run independently. There
+     * is no Unsubscribe today; subscriptions live for the plugin
+     * process's lifetime.
      */
     subscribe(name: string, fn: (evt: CollectionChangedEvent) => void): void;
   }
@@ -78,9 +50,8 @@ Plugin.prototype.get = async function (
   id: string,
 ): Promise<CollectionRecord | undefined> {
   const res = await this.collectionFetch(id, name);
-  // res.record is `unknown` because the Rust type is Option<Record> and
-  // the TS emitter routes Option<T> through unknown. null/undefined →
-  // record not found.
+  // res.record is `unknown` because the Rust type is Option<CollectionRecord>
+  // and the TS emitter routes Option<T> through unknown.
   if (!res || res.record == null) return undefined;
   return res.record as CollectionRecord;
 };
