@@ -280,6 +280,13 @@ export interface ListCommandSection {
   title: string;
 }
 
+export interface ListOpts {
+  cursor?: unknown;
+  limit?: unknown;
+  since_ms?: unknown;
+  until_ms?: unknown;
+}
+
 export interface LogEntry {
   id: string;
   payload?: unknown;
@@ -314,6 +321,11 @@ export interface MenuItem {
 export type MergeStrategy = "authoritative" | "collect" | "keyed";
 
 export type OnActionStatus = "ok" | "error" | "not_handled";
+
+export interface Record {
+  id: string;
+  payload?: unknown;
+}
 
 export interface RunningApp {
   bundle_id?: unknown;
@@ -418,6 +430,14 @@ export interface CollectionAppendResponse {
   entry: LogEntry;
 }
 
+export interface CollectionCountRequest {
+  name: string;
+}
+
+export interface CollectionCountResponse {
+  count: number;
+}
+
 export interface CollectionDeleteRequest {
   name: string;
 }
@@ -433,6 +453,24 @@ export interface CollectionDeleteLogEntryRequest {
 
 export interface CollectionDeleteLogEntryResponse {
   deleted: boolean;
+}
+
+export interface CollectionDeleteRecordRequest {
+  id: string;
+  name: string;
+}
+
+export interface CollectionDeleteRecordResponse {
+  deleted: boolean;
+}
+
+export interface CollectionFetchRequest {
+  id: string;
+  name: string;
+}
+
+export interface CollectionFetchResponse {
+  record?: unknown;
 }
 
 export interface CollectionGetRequest {
@@ -464,6 +502,16 @@ export interface CollectionGetRecordingResponse {
   enabled: boolean;
 }
 
+export interface CollectionListRequest {
+  name: string;
+  opts?: ListOpts;
+}
+
+export interface CollectionListResponse {
+  records: Record[];
+  total: number;
+}
+
 export interface CollectionListLogRequest {
   name: string;
   opts?: LogListOpts;
@@ -485,6 +533,16 @@ export interface CollectionOverrideResponse {
   ok: boolean;
 }
 
+export interface CollectionPatchRequest {
+  fields: unknown;
+  id: string;
+  name: string;
+}
+
+export interface CollectionPatchResponse {
+  ok: boolean;
+}
+
 export interface CollectionPushRequest {
   data: unknown;
   label?: unknown;
@@ -492,6 +550,16 @@ export interface CollectionPushRequest {
 }
 
 export interface CollectionPushResponse {
+  ok: boolean;
+}
+
+export interface CollectionPutRequest {
+  id: string;
+  name: string;
+  payload: unknown;
+}
+
+export interface CollectionPutResponse {
   ok: boolean;
 }
 

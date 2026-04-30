@@ -2,18 +2,24 @@
 // Run: just contracts
 
 import { Plugin } from "./plugin.js";
-import type { AXElementNode, AXElementRef, ActionsListResponse, ActiveSpace, AudioDevice, BleService, BleWriteEntry, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionDeleteLogEntryResponse, CollectionGetLogEntryResponse, CollectionGetRecordingResponse, CollectionGetResponse, CollectionListLogResponse, CollectionsListSection, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, HidDeviceEntry, HidElementEntry, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, LogEntry, LogListOpts, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeResponse, NativeBleWriteResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeHidClaimResponse, NativeHidReleaseResponse, NativeHidSendReportResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
+import type { AXElementNode, AXElementRef, ActionsListResponse, ActiveSpace, AudioDevice, BleService, BleWriteEntry, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionCountResponse, CollectionDeleteLogEntryResponse, CollectionDeleteRecordResponse, CollectionFetchResponse, CollectionGetLogEntryResponse, CollectionGetRecordingResponse, CollectionGetResponse, CollectionListLogResponse, CollectionListResponse, CollectionsListSection, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, HidDeviceEntry, HidElementEntry, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, ListOpts, LogEntry, LogListOpts, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeResponse, NativeBleWriteResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeHidClaimResponse, NativeHidReleaseResponse, NativeHidSendReportResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
 import {
   MethodActionsList,
   MethodCollectionAppend,
+  MethodCollectionCount,
   MethodCollectionDelete,
   MethodCollectionDeleteLogEntry,
+  MethodCollectionDeleteRecord,
+  MethodCollectionFetch,
   MethodCollectionGet,
   MethodCollectionGetLogEntry,
   MethodCollectionGetRecording,
+  MethodCollectionList,
   MethodCollectionListLog,
   MethodCollectionOverride,
+  MethodCollectionPatch,
   MethodCollectionPush,
+  MethodCollectionPut,
   MethodCollectionSetRecording,
   MethodCollectionsList,
   MethodCommandsDiscover,
@@ -159,14 +165,20 @@ declare module "./plugin.js" {
   interface Plugin {
     actionsList(): Promise<ActionsListResponse>;
     collectionAppend(name: string, payload: unknown): Promise<LogEntry | undefined>;
+    collectionCount(name: string): Promise<CollectionCountResponse>;
     collectionDelete(name: string): Promise<void>;
     collectionDeleteLogEntry(id: string, name: string): Promise<CollectionDeleteLogEntryResponse>;
+    collectionDeleteRecord(id: string, name: string): Promise<CollectionDeleteRecordResponse>;
+    collectionFetch(id: string, name: string): Promise<CollectionFetchResponse>;
     collectionGet(name: string): Promise<CollectionGetResponse>;
     collectionGetLogEntry(id: string, name: string): Promise<CollectionGetLogEntryResponse>;
     collectionGetRecording(name: string): Promise<CollectionGetRecordingResponse>;
+    collectionList(name: string, opts?: ListOpts): Promise<CollectionListResponse>;
     collectionListLog(name: string, opts?: LogListOpts): Promise<CollectionListLogResponse>;
     collectionOverride(action: string, collection: string, fields?: unknown, id?: unknown): Promise<void>;
+    collectionPatch(fields: unknown, id: string, name: string): Promise<void>;
     collectionPush(data: unknown, name: string, label?: unknown): Promise<void>;
+    collectionPut(id: string, name: string, payload: unknown): Promise<void>;
     collectionSetRecording(enabled: boolean, name: string): Promise<void>;
     collectionsList(kind?: unknown): Promise<CollectionsListSection[]>;
     commandsDiscover(activeTags?: unknown, requireTag?: unknown, words?: unknown): Promise<CommandsDiscoverResponse>;
@@ -325,6 +337,16 @@ Plugin.prototype.collectionAppend = async function(name: string, payload: unknow
   return (result as any).entry;
 };
 
+Plugin.prototype.collectionCount = async function(name: string) {
+  const result = await this.call(
+    MethodCollectionCount,
+    {
+      name,
+    },
+  );
+  return result as CollectionCountResponse;
+};
+
 Plugin.prototype.collectionDelete = async function(name: string) {
   const result = await this.call(
     MethodCollectionDelete,
@@ -343,6 +365,28 @@ Plugin.prototype.collectionDeleteLogEntry = async function(id: string, name: str
     },
   );
   return result as CollectionDeleteLogEntryResponse;
+};
+
+Plugin.prototype.collectionDeleteRecord = async function(id: string, name: string) {
+  const result = await this.call(
+    MethodCollectionDeleteRecord,
+    {
+      id,
+      name,
+    },
+  );
+  return result as CollectionDeleteRecordResponse;
+};
+
+Plugin.prototype.collectionFetch = async function(id: string, name: string) {
+  const result = await this.call(
+    MethodCollectionFetch,
+    {
+      id,
+      name,
+    },
+  );
+  return result as CollectionFetchResponse;
 };
 
 Plugin.prototype.collectionGet = async function(name: string) {
@@ -376,6 +420,17 @@ Plugin.prototype.collectionGetRecording = async function(name: string) {
   return result as CollectionGetRecordingResponse;
 };
 
+Plugin.prototype.collectionList = async function(name: string, opts?: ListOpts) {
+  const result = await this.call(
+    MethodCollectionList,
+    {
+      name,
+      opts,
+    },
+  );
+  return result as CollectionListResponse;
+};
+
 Plugin.prototype.collectionListLog = async function(name: string, opts?: LogListOpts) {
   const result = await this.call(
     MethodCollectionListLog,
@@ -399,6 +454,17 @@ Plugin.prototype.collectionOverride = async function(action: string, collection:
   );
 };
 
+Plugin.prototype.collectionPatch = async function(fields: unknown, id: string, name: string) {
+  const result = await this.call(
+    MethodCollectionPatch,
+    {
+      fields,
+      id,
+      name,
+    },
+  );
+};
+
 Plugin.prototype.collectionPush = async function(data: unknown, name: string, label?: unknown) {
   const result = await this.call(
     MethodCollectionPush,
@@ -406,6 +472,17 @@ Plugin.prototype.collectionPush = async function(data: unknown, name: string, la
       data,
       name,
       label,
+    },
+  );
+};
+
+Plugin.prototype.collectionPut = async function(id: string, name: string, payload: unknown) {
+  const result = await this.call(
+    MethodCollectionPut,
+    {
+      id,
+      name,
+      payload,
     },
   );
 };
