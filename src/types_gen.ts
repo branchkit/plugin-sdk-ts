@@ -209,6 +209,13 @@ export interface Frame {
   y: number;
 }
 
+export interface GateWrite {
+  collection: string;
+  id: string;
+  payload?: unknown;
+  tag: string;
+}
+
 export interface HidDeviceEntry {
   axes: number;
   ble_uuid?: unknown;
@@ -615,11 +622,13 @@ export interface CommandsMatchRequest {
 export interface CommandsMatchResponse {
   action?: unknown;
   args: unknown[];
+  clears_tag_writes?: GateWrite[];
   clears_tags: string[];
   consumed_count: number;
   matched: boolean;
   owner_plugin?: unknown;
   requires_tags: string[];
+  sets_tag_writes?: GateWrite[];
   sets_tags: string[];
 }
 
