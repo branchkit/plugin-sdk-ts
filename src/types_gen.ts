@@ -106,6 +106,11 @@ export interface ClipboardWriteItem {
   text?: unknown;
 }
 
+export interface CollectionRecord {
+  id: string;
+  payload?: unknown;
+}
+
 export interface CollectionsListItem {
   id: string;
   source: string;
@@ -322,11 +327,6 @@ export type MergeStrategy = "authoritative" | "collect" | "keyed";
 
 export type OnActionStatus = "ok" | "error" | "not_handled";
 
-export interface Record {
-  id: string;
-  payload?: unknown;
-}
-
 export interface RunningApp {
   bundle_id?: unknown;
   is_active: boolean;
@@ -508,7 +508,7 @@ export interface CollectionListRequest {
 }
 
 export interface CollectionListResponse {
-  records: Record[];
+  records: CollectionRecord[];
   total: number;
 }
 
