@@ -28,6 +28,7 @@ import {
   MethodCommandsMatch,
   MethodCommandsPush,
   MethodControlSignal,
+  MethodDiscoveryClosed,
   MethodDispatch,
   MethodEventsAppend,
   MethodEventsEmit,
@@ -187,6 +188,7 @@ declare module "./plugin.js" {
     commandsMatch(activeTags?: unknown, words?: string[]): Promise<CommandsMatchResponse>;
     commandsPush(commands?: unknown): Promise<CommandsPushResponse>;
     controlSignal(signal: string): Promise<void>;
+    discoveryClosed(): Promise<void>;
     dispatch(action: unknown): Promise<DispatchResponse>;
     eventsAppend(eventType: string, data?: unknown, sessionId?: string): Promise<void>;
     eventsEmit(eventType: string, correlationId?: unknown, data?: unknown): Promise<void>;
@@ -563,6 +565,10 @@ Plugin.prototype.controlSignal = async function(signal: string) {
       signal,
     },
   );
+};
+
+Plugin.prototype.discoveryClosed = async function() {
+  const result = await this.call(MethodDiscoveryClosed);
 };
 
 Plugin.prototype.dispatch = async function(action: unknown) {

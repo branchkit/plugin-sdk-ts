@@ -649,6 +649,10 @@ export interface ControlSignalResponse {
   ok: boolean;
 }
 
+export interface DiscoveryClosedResponse {
+  ok: boolean;
+}
+
 export interface DispatchRequest {
   action: unknown;
 }
