@@ -665,6 +665,34 @@ export interface DispatchResponse {
   status: string;
 }
 
+export interface EffectsAssertRequest {
+  name: string;
+}
+
+export interface EffectsAssertResponse {
+  already_held: boolean;
+  displaced?: unknown;
+  granted: boolean;
+}
+
+export interface EffectsIsActiveRequest {
+  name: string;
+}
+
+export interface EffectsIsActiveResponse {
+  active: boolean;
+  current_owner?: unknown;
+}
+
+export interface EffectsRetractRequest {
+  name: string;
+}
+
+export interface EffectsRetractResponse {
+  new_owner?: unknown;
+  retracted: boolean;
+}
+
 export interface EventsAppendRequest {
   data?: unknown;
   event_type: string;

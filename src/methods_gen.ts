@@ -2,7 +2,7 @@
 // Run: just contracts
 
 import { Plugin } from "./plugin.js";
-import type { AXElementNode, AXElementRef, ActionsListResponse, ActiveSpace, AudioDevice, BleService, BleWriteEntry, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionCountResponse, CollectionDeleteLogEntryResponse, CollectionDeleteRecordResponse, CollectionFetchResponse, CollectionGetLogEntryResponse, CollectionGetRecordingResponse, CollectionGetResponse, CollectionListLogResponse, CollectionListResponse, CollectionsListSection, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, HUDRemoveChannelResponse, HidDeviceEntry, HidElementEntry, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, ListOpts, LogEntry, LogListOpts, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeResponse, NativeBleWriteResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeHidClaimResponse, NativeHidReleaseResponse, NativeHidSendReportResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
+import type { AXElementNode, AXElementRef, ActionsListResponse, ActiveSpace, AudioDevice, BleService, BleWriteEntry, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionCountResponse, CollectionDeleteLogEntryResponse, CollectionDeleteRecordResponse, CollectionFetchResponse, CollectionGetLogEntryResponse, CollectionGetRecordingResponse, CollectionGetResponse, CollectionListLogResponse, CollectionListResponse, CollectionsListSection, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, EffectsAssertResponse, EffectsIsActiveResponse, EffectsRetractResponse, HUDRemoveChannelResponse, HidDeviceEntry, HidElementEntry, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, ListOpts, LogEntry, LogListOpts, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeResponse, NativeBleWriteResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeHidClaimResponse, NativeHidReleaseResponse, NativeHidSendReportResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
 import {
   MethodActionsList,
   MethodCollectionAppend,
@@ -30,6 +30,9 @@ import {
   MethodControlSignal,
   MethodDiscoveryClosed,
   MethodDispatch,
+  MethodEffectsAssert,
+  MethodEffectsIsActive,
+  MethodEffectsRetract,
   MethodEventsAppend,
   MethodEventsEmit,
   MethodHudCreateChannel,
@@ -188,6 +191,9 @@ declare module "./plugin.js" {
     controlSignal(signal: string): Promise<void>;
     discoveryClosed(): Promise<void>;
     dispatch(action: unknown): Promise<DispatchResponse>;
+    effectsAssert(name: string): Promise<EffectsAssertResponse>;
+    effectsIsActive(name: string): Promise<EffectsIsActiveResponse>;
+    effectsRetract(name: string): Promise<EffectsRetractResponse>;
     eventsAppend(eventType: string, data?: unknown, sessionId?: string): Promise<void>;
     eventsEmit(eventType: string, correlationId?: unknown, data?: unknown): Promise<void>;
     hudCreateChannel(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, followsFocus?: boolean, minHeight?: number, width?: number): Promise<void>;
@@ -575,6 +581,36 @@ Plugin.prototype.dispatch = async function(action: unknown) {
     },
   );
   return result as DispatchResponse;
+};
+
+Plugin.prototype.effectsAssert = async function(name: string) {
+  const result = await this.call(
+    MethodEffectsAssert,
+    {
+      name,
+    },
+  );
+  return result as EffectsAssertResponse;
+};
+
+Plugin.prototype.effectsIsActive = async function(name: string) {
+  const result = await this.call(
+    MethodEffectsIsActive,
+    {
+      name,
+    },
+  );
+  return result as EffectsIsActiveResponse;
+};
+
+Plugin.prototype.effectsRetract = async function(name: string) {
+  const result = await this.call(
+    MethodEffectsRetract,
+    {
+      name,
+    },
+  );
+  return result as EffectsRetractResponse;
 };
 
 Plugin.prototype.eventsAppend = async function(eventType: string, data?: unknown, sessionId?: string) {

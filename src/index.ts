@@ -8,5 +8,12 @@ export * from "./types_gen.js";
 import "./methods_gen.js"; // module augmentation — side-effect import
 import "./collection_log.js"; // module augmentation — log-kind helpers
 import "./collection.js"; // module augmentation — state uniform helpers
+import "./effects.js"; // module augmentation — capability-mechanism helpers
 export { RecordingDisabledError, logListOpts } from "./collection_log.js";
 export { listOpts, type CollectionChangedEvent } from "./collection.js";
+export {
+  type AssertEffectResult,
+  type RetractEffectResult,
+  type IsEffectActiveResult,
+  type EffectDisplacedEvent,
+} from "./effects.js";
