@@ -159,8 +159,6 @@ export const MethodSettingsRulesUpdate = "settings.rules_update" as const; // si
 export const MethodSystemLaunchApp = "system.launch_app" as const; // since 0.1.0
 export const MethodSystemNotify = "system.notify" as const; // since 0.1.0
 export const MethodSystemRunShell = "system.run_shell" as const; // since 0.1.0
-export const MethodTagsGet = "tags.get" as const; // since 0.1.0
-export const MethodTagsModify = "tags.modify" as const; // since 0.1.0
 
 // RPC method names: actuator → plugin (use with plugin.handle()).
 export const HookOnAction = "on_action" as const; // since 0.1.0
@@ -186,7 +184,6 @@ export const EventPluginDegraded = "_platform.plugin.degraded" as const;
 export const EventPluginDisabled = "_platform.plugin.disabled" as const;
 export const EventPluginEnabled = "_platform.plugin.enabled" as const;
 export const EventSelectionPicked = "_platform.selection.picked" as const;
-export const EventTagsChanged = "_platform.tags.changed" as const;
 export const EventWindowClosed = "_platform.window.closed" as const;
 export const EventWindowCreated = "_platform.window.created" as const;
 export const EventWindowFocused = "_platform.window.focused" as const;
@@ -198,5 +195,3 @@ export const EventWorldUpdated = "_platform.world.updated" as const;
 // Tag namespace prefix and value constants.
 export const TagPrefixApp = "app." as const;
 export const TagPrefixPlugin = "plugin." as const;
-export const TagInputActive = "_platform.input.active" as const;
-export const TagInputLiftKeys = "_platform.input.lift_keys" as const;

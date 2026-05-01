@@ -1698,20 +1698,6 @@ export interface SystemRunShellResponse {
   ok: boolean;
 }
 
-export interface TagsGetResponse {
-  tags: string[];
-}
-
-export interface TagsModifyRequest {
-  clear?: string[];
-  clear_scoped?: boolean;
-  set?: string[];
-}
-
-export interface TagsModifyResponse {
-  tags: string[];
-}
-
 // ===== Actuator → Plugin request/response types =====
 
 export interface OnActionRequest {

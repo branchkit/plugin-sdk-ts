@@ -158,8 +158,6 @@ import {
   MethodSystemLaunchApp,
   MethodSystemNotify,
   MethodSystemRunShell,
-  MethodTagsGet,
-  MethodTagsModify,
 } from "./contracts_gen.js";
 
 declare module "./plugin.js" {
@@ -318,8 +316,6 @@ declare module "./plugin.js" {
     systemLaunchApp(bundleId: string, newInstance?: boolean): Promise<void>;
     systemNotify(body: string, title: string, durationSecs?: unknown): Promise<void>;
     systemRunShell(command: string): Promise<void>;
-    tagsGet(): Promise<string[]>;
-    tagsModify(clear?: string[], clearScoped?: boolean, set?: string[]): Promise<string[]>;
   }
 }
 
@@ -1736,21 +1732,4 @@ Plugin.prototype.systemRunShell = async function(command: string) {
       command,
     },
   );
-};
-
-Plugin.prototype.tagsGet = async function() {
-  const result = await this.call(MethodTagsGet);
-  return (result as any).tags;
-};
-
-Plugin.prototype.tagsModify = async function(clear?: string[], clearScoped?: boolean, set?: string[]) {
-  const result = await this.call(
-    MethodTagsModify,
-    {
-      clear,
-      clear_scoped: clearScoped,
-      set,
-    },
-  );
-  return (result as any).tags;
 };
