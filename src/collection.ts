@@ -27,8 +27,8 @@ declare module "./plugin.js" {
 
     /**
      * Errors with NOT_FOUND if no record with that id exists, or
-     * OPERATION_NOT_PERMITTED on collections the substrate forbids
-     * patching (e.g., log-shaped, or gate-feed during the substrate
+     * OPERATION_NOT_PERMITTED on collections the state forbids
+     * patching (e.g., log-shaped, or gate-feed during the state
      * transition).
      */
     patch(name: string, id: string, fields: unknown): Promise<void>;

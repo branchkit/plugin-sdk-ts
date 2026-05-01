@@ -7,7 +7,7 @@ import "../collection.js";
 
 /**
  * Build a Plugin with `call` stubbed. Mirrors collection_log.test.ts
- * fixture so the substrate helper tests use the same fake transport.
+ * fixture so the state helper tests use the same fake transport.
  */
 function fakePlugin(
   respond: (method: string, params: unknown) => unknown,
@@ -24,7 +24,7 @@ function fakePlugin(
   return { plugin: p, inbox };
 }
 
-describe("collection substrate helpers", () => {
+describe("collection state helpers", () => {
   test("get returns undefined when record absent", async () => {
     const { plugin } = fakePlugin((method) => {
       expect(method).toBe("collection.fetch");
