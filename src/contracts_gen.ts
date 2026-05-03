@@ -6,6 +6,7 @@ export const APIVersion = "0.1.0" as const;
 
 // RPC method names: plugin → actuator (use with plugin.call()).
 export const MethodActionsList = "actions.list" as const; // since 0.1.0
+export const MethodBridgeEmitObservabilityEvent = "bridge.emit_observability_event" as const; // since 0.1.0
 export const MethodCollectionAppend = "collection.append" as const; // since 0.1.0
 export const MethodCollectionCount = "collection.count" as const; // since 0.1.0
 export const MethodCollectionDelete = "collection.delete" as const; // since 0.1.0

@@ -428,6 +428,15 @@ export interface ActionsListResponse {
   actions: Record<string, ActionTypeSchema>;
 }
 
+export interface BridgeEmitObservabilityEventRequest {
+  event_type: string;
+  params: unknown;
+}
+
+export interface BridgeEmitObservabilityEventResponse {
+  ok: boolean;
+}
+
 export interface CollectionAppendRequest {
   name: string;
   payload: unknown;

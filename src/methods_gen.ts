@@ -5,6 +5,7 @@ import { Plugin } from "./plugin.js";
 import type { AXElementNode, AXElementRef, ActionsListResponse, ActiveSpace, AudioDevice, BleService, BleWriteEntry, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionCountResponse, CollectionDeleteLogEntryResponse, CollectionDeleteRecordResponse, CollectionFetchResponse, CollectionGetLogEntryResponse, CollectionGetRecordingResponse, CollectionGetResponse, CollectionListLogResponse, CollectionListResponse, CollectionsListSection, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, EffectsAssertResponse, EffectsIsActiveResponse, EffectsRetractResponse, HUDRemoveChannelResponse, HidDeviceEntry, HidElementEntry, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, ListOpts, LogEntry, LogListOpts, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeResponse, NativeBleWriteResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeHidClaimResponse, NativeHidReleaseResponse, NativeHidSendReportResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
 import {
   MethodActionsList,
+  MethodBridgeEmitObservabilityEvent,
   MethodCollectionAppend,
   MethodCollectionCount,
   MethodCollectionDelete,
@@ -166,6 +167,7 @@ import {
 declare module "./plugin.js" {
   interface Plugin {
     actionsList(): Promise<ActionsListResponse>;
+    bridgeEmitObservabilityEvent(eventType: string, params: unknown): Promise<void>;
     collectionAppend(name: string, payload: unknown): Promise<LogEntry | undefined>;
     collectionCount(name: string): Promise<CollectionCountResponse>;
     collectionDelete(name: string): Promise<void>;
@@ -328,6 +330,16 @@ declare module "./plugin.js" {
 Plugin.prototype.actionsList = async function() {
   const result = await this.call(MethodActionsList);
   return result as ActionsListResponse;
+};
+
+Plugin.prototype.bridgeEmitObservabilityEvent = async function(eventType: string, params: unknown) {
+  const result = await this.call(
+    MethodBridgeEmitObservabilityEvent,
+    {
+      event_type: eventType,
+      params,
+    },
+  );
 };
 
 Plugin.prototype.collectionAppend = async function(name: string, payload: unknown) {
