@@ -2,7 +2,7 @@
 // Run: just contracts
 
 import { Plugin } from "./plugin.js";
-import type { AXElementNode, AXElementRef, ActionsListResponse, ActiveSpace, AudioDevice, BleService, BleWriteEntry, BluetoothDevice, ClipboardContents, ClipboardWriteItem, CollectionCountResponse, CollectionDeleteLogEntryResponse, CollectionDeleteRecordResponse, CollectionFetchResponse, CollectionGetLogEntryResponse, CollectionGetRecordingResponse, CollectionGetResponse, CollectionListLogResponse, CollectionListResponse, CollectionsListSection, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, DeliveredNotification, DispatchResponse, DisplayMetadata, EffectsAssertResponse, EffectsIsActiveResponse, EffectsRetractResponse, HUDRemoveChannelResponse, HidDeviceEntry, HidElementEntry, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, ListOpts, LogEntry, LogListOpts, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAppIconResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryResponse, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeResponse, NativeBleWriteResponse, NativeBrightnessResponse, NativeCaptureWindowResponse, NativeClipboardChangeCountResponse, NativeColorAtPointResponse, NativeCurrentUserResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeDarkModeResponse, NativeDefaultBrowserResponse, NativeDndResponse, NativeFrontmostAppResponse, NativeGetWindowInfoResponse, NativeHidClaimResponse, NativeHidReleaseResponse, NativeHidSendReportResponse, NativeKeyboardLayoutResponse, NativeNotifyResponse, NativeObserveWindowsResponse, NativePreventSleepResponse, NativeQuickLookResponse, NativeRunApplescriptResponse, NativeScreenshotResponse, NativeSystemUptimeResponse, NativeVolumeResponse, NativeWifiResponse, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, SpaceInfo, SpotlightResult, TileableEntry, WindowFrame, WorldModel } from "./types_gen.js";
+import type { AXElementNode, AXElementRef, ActionsListResponse, ActiveSpace, AudioDevice, BarcodeResult, BleService, BleWriteEntry, BluetoothDevice, CalendarEvent, CameraDevice, ClipboardContents, ClipboardWriteItem, CollectionCountResponse, CollectionDeleteLogEntryResponse, CollectionDeleteRecordResponse, CollectionFetchResponse, CollectionGetLogEntryResponse, CollectionGetRecordingResponse, CollectionGetResponse, CollectionListLogResponse, CollectionListResponse, CollectionsListSection, CommandsDiscoverResponse, CommandsHasPartialResponse, CommandsListResponse, CommandsMatchResponse, CommandsPushResponse, ContactInfo, DeliveredNotification, DirectoryEntry, DispatchResponse, DisplayColorProfile, DisplayMetadata, DisplayRotation, EffectsAssertResponse, EffectsIsActiveResponse, EffectsRetractResponse, ExternalDisk, HUDRemoveChannelResponse, HidDeviceEntry, HidElementEntry, InputClipboardReadFormatResponse, InputClipboardReadResponse, InputSource, InstalledApp, KeyNamesSetResponse, KeybindsRegisterResponse, ListOpts, ListeningPort, LogEntry, LogListOpts, LoginItem, MatchAliasesGetResponse, MatchAliasesSetResponse, MenuItem, NativeAccentColorResponse, NativeAccessibilityDisplayInvertResponse, NativeAccessibilityEnabledResponse, NativeActiveNetworkServiceResponse, NativeAirdropEnabledResponse, NativeAirportPowerResponse, NativeAlertSoundResponse, NativeApfsSnapshotsResponse, NativeAppBundlePathResponse, NativeAppIconResponse, NativeAppIsAgentResponse, NativeAppIsRunningResponse, NativeAppLaunchAtLoginResponse, NativeAppMetadataResponse, NativeAppSupportDirectoryResponse, NativeAudioDeviceVolumeResponse, NativeAudioInputDeviceResponse, NativeAudioOutputDeviceResponse, NativeAutoBrightnessResponse, NativeAutoRearrangeSpacesResponse, NativeAutoTimezoneResponse, NativeAutocorrectEnabledResponse, NativeAutomaticLoginUserResponse, NativeAutomationPermissionResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryHealthResponse, NativeBatteryResponse, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeResponse, NativeBleWriteResponse, NativeBluetoothPowerResponse, NativeBoldTextEnabledResponse, NativeBootVolumeResponse, NativeBrightnessResponse, NativeCalendarPermissionResponse, NativeCameraPermissionResponse, NativeCapsLockStateResponse, NativeCaptureWindowResponse, NativeCheckPermissionResponse, NativeClipboardChangeCountResponse, NativeClipboardFileUrlsResponse, NativeClipboardHTMLResponse, NativeClipboardHasImageResponse, NativeClipboardHasTextResponse, NativeClipboardImageDimensionsResponse, NativeClipboardRichTextResponse, NativeColorAtPointResponse, NativeComputerNameResponse, NativeContactsPermissionResponse, NativeCpuInfoResponse, NativeCurrencyCodeResponse, NativeCurrentDatetimeResponse, NativeCurrentUserAdminResponse, NativeCurrentUserResponse, NativeCurrentWallpaperResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeCursorShakeToLocateResponse, NativeDarkModeResponse, NativeDateFormatResponse, NativeDefaultAppForUtiResponse, NativeDefaultBrowserResponse, NativeDefaultEmailClientResponse, NativeDefaultPrinterResponse, NativeDesktopDirectoryResponse, NativeDictationEnabledResponse, NativeDifferentiateWithoutColorResponse, NativeDiskSpaceResponse, NativeDiskUsageResponse, NativeDisplayCountResponse, NativeDisplayMirroringResponse, NativeDisplaySerialNumberResponse, NativeDndResponse, NativeDockAutoHideResponse, NativeDockMagnificationResponse, NativeDockMinimizeEffectResponse, NativeDockMinimizeToAppResponse, NativeDockPositionResponse, NativeDockShowIndicatorsResponse, NativeDockShowRecentsResponse, NativeDocumentsDirectoryResponse, NativeDownloadsDirectoryResponse, NativeEnvVarResponse, NativeEpochTimeResponse, NativeFanSpeedsResponse, NativeFastUserSwitchingResponse, NativeFileExistsResponse, NativeFileHashResponse, NativeFileMetadataResponse, NativeFileOwnerResponse, NativeFileQuarantineResponse, NativeFileSharingEnabledResponse, NativeFileTypeResponse, NativeFilevaultStatusResponse, NativeFinderDefaultViewResponse, NativeFinderNewWindowTargetResponse, NativeFinderShowExtensionsResponse, NativeFinderShowHiddenResponse, NativeFinderShowPathBarResponse, NativeFinderShowStatusBarResponse, NativeFinderWindowPathResponse, NativeFirewallEnabledResponse, NativeFnKeyFunctionResponse, NativeFocusModesResponse, NativeFocusedElementResponse, NativeFocusedWindowIDResponse, NativeFontSmoothingResponse, NativeFrontmostAppResponse, NativeFullDiskAccessResponse, NativeFunctionKeysStandardResponse, NativeGatekeeperStatusResponse, NativeGatewayAddressResponse, NativeGetWindowInfoResponse, NativeGpuInfoResponse, NativeGrayscaleEnabledResponse, NativeGroupWindowsByAppResponse, NativeHandoffEnabledResponse, NativeHardwareModelResponse, NativeHardwareUuidResponse, NativeHidClaimResponse, NativeHidReleaseResponse, NativeHidSendReportResponse, NativeHighlightColorResponse, NativeHomeDirectoryResponse, NativeHomebrewPrefixResponse, NativeHostnameResponse, NativeHotCornersResponse, NativeIcloudDesktopSyncResponse, NativeIcloudDrivePathResponse, NativeIcloudSignedInResponse, NativeIncreaseContrastResponse, NativeInterfaceStyleSwitcherResponse, NativeIpv6AddressResponse, NativeIsDirectoryResponse, NativeIsFileHiddenResponse, NativeKernelVersionResponse, NativeKeyboardLayoutResponse, NativeKeychainReadResponse, NativeLastRebootResponse, NativeLiveTextEnabledResponse, NativeLocalIPResponse, NativeLocaleResponse, NativeLocationEnabledResponse, NativeLowPowerModeResponse, NativeMacAddressResponse, NativeMeasurementSystemResponse, NativeMemoryInfoResponse, NativeMemoryPressureResponse, NativeMenuBarAutoHideResponse, NativeMenuBarBatteryPercentResponse, NativeMenuBarClockFormatResponse, NativeMicrophonePermissionResponse, NativeModelNameResponse, NativeNetworkBandwidthResponse, NativeNetworkDnsDomainResponse, NativeNetworkProxyEnabledResponse, NativeNetworkQualityResponse, NativeNetworkReachableResponse, NativeNetworkSsidResponse, NativeNightShiftResponse, NativeNotificationSoundEnabledResponse, NativeNotifyResponse, NativeNowPlayingResponse, NativeNumberFormatDecimalResponse, NativeObserveWindowsResponse, NativeOptimizedChargingResponse, NativePinchToZoomResponse, NativePlayFeedbackWhenVolumeChangedResponse, NativePowerAdapterConnectedResponse, NativePowerSourceResponse, NativePressAndHoldEnabledResponse, NativePreventSleepResponse, NativePrimaryDisplayIDResponse, NativePrimaryDisplayResponse, NativePrinterSharingEnabledResponse, NativeProcessCountResponse, NativeProcessExistsResponse, NativeProcessInfoResponse, NativeProxySettingsResponse, NativePublicIPResponse, NativeQuickLookResponse, NativeRandomUuidResponse, NativeReadFileBinaryResponse, NativeReadFileResponse, NativeReduceMotionResponse, NativeReduceTransparencyResponse, NativeRemoteLoginEnabledResponse, NativeRequestScreenCaptureResponse, NativeResourceUsageResponse, NativeRosettaInstalledResponse, NativeRunApplescriptResponse, NativeRunJxaResponse, NativeRunShortcutResponse, NativeScreenCapturePermissionResponse, NativeScreenCountResponse, NativeScreenLockedResponse, NativeScreenResolutionResponse, NativeScreenSaverAskPasswordResponse, NativeScreenSaverStatusResponse, NativeScreenSharingEnabledResponse, NativeScreenshotFormatResponse, NativeScreenshotIncludeShadowResponse, NativeScreenshotLocationResponse, NativeScreenshotResponse, NativeScreenshotShowThumbnailResponse, NativeScrollDirectionNaturalResponse, NativeScrollDirectionResponse, NativeSecureInputEnabledResponse, NativeSelectedTextResponse, NativeSerialNumberResponse, NativeSharingNameResponse, NativeShowScrollBarsResponse, NativeSidebarIconSizeResponse, NativeSipStatusResponse, NativeSiriEnabledResponse, NativeSlowKeysResponse, NativeSmartQuotesEnabledResponse, NativeSmartZoomResponse, NativeSoundEffectsEnabledResponse, NativeSpacesSpanDisplaysResponse, NativeSpeechRecognitionAvailableResponse, NativeSpellingLanguageResponse, NativeStageManagerEnabledResponse, NativeStartupDiskResponse, NativeStartupSoundEnabledResponse, NativeStickyKeysResponse, NativeSwipeBetweenPagesResponse, NativeSwitchSpaceWhenSwitchingAppResponse, NativeSystemAppearanceResponse, NativeSystemInfoResponse, NativeSystemIntegrityInfoResponse, NativeSystemLanguageResponse, NativeSystemRegionResponse, NativeSystemUptimeResponse, NativeSystemUptimeSecondsResponse, NativeTapToClickResponse, NativeTempDirectoryResponse, NativeTemperatureUnitResponse, NativeTextReplacementsResponse, NativeThermalStateResponse, NativeThreeFingerDragResponse, NativeThunderboltDevicesResponse, NativeTimeFormatResponse, NativeTimeMachineLastBackupResponse, NativeTimeMachineStatusResponse, NativeTimezoneResponse, NativeTouchIDAvailableResponse, NativeTrueToneResponse, NativeTwentyFourHourClockResponse, NativeURLSchemeHandlerResponse, NativeUserAvatarResponse, NativeUserNameResponse, NativeUserShellResponse, NativeVoiceoverEnabledResponse, NativeVolumeResponse, NativeVpnStatusResponse, NativeWifiResponse, NativeWindowBoundsResponse, NativeWindowIsFullscreenResponse, NativeWindowIsMinimizedResponse, NativeXcodePathResponse, NativeXcodeVersionResponse, NativeZoomEnabledResponse, NetworkInterface, OcrRegion, PipelinesRunResponse, PipelinesStatusResponse, PipelinesStopResponse, PrinterInfo, ProcessInfo, ReminderItem, RunningApp, SelectionPickResponse, SessionEndCleanupResponse, ShortcutInfo, SpaceInfo, SpeechLocale, SpotlightResult, TileableEntry, TtsVoice, UsbDevice, WindowDetail, WindowFrame, WorldModel } from "./types_gen.js";
 import {
   MethodActionsList,
   MethodBridgeEmitObservabilityEvent,
@@ -44,8 +44,10 @@ import {
   MethodHudShow,
   MethodInputClick,
   MethodInputClipboardAction,
+  MethodInputClipboardHistory,
   MethodInputClipboardRead,
   MethodInputClipboardReadAll,
+  MethodInputClipboardReadFormat,
   MethodInputClipboardWrite,
   MethodInputClipboardWriteItems,
   MethodInputDoubleClick,
@@ -56,16 +58,52 @@ import {
   MethodInputRawKey,
   MethodInputRightClick,
   MethodInputScroll,
+  MethodInputSelectAll,
   MethodInputSwitchInputSource,
+  MethodInputTripleClick,
   MethodInputTypeText,
   MethodKeyNamesSet,
   MethodKeybindsRegister,
   MethodMatchAliasesGet,
   MethodMatchAliasesSet,
+  MethodNativeAccentColor,
+  MethodNativeAccessibilityDisplayInvert,
+  MethodNativeAccessibilityEnabled,
   MethodNativeActivateApp,
+  MethodNativeActiveNetworkService,
+  MethodNativeActivePorts,
   MethodNativeActiveSpace,
+  MethodNativeAirdropEnabled,
+  MethodNativeAirportPower,
+  MethodNativeAlertSound,
+  MethodNativeAlertVolume,
+  MethodNativeAllWindowIds,
+  MethodNativeApfsSnapshots,
+  MethodNativeAppBundlePath,
+  MethodNativeAppFocusedWindowId,
   MethodNativeAppIcon,
+  MethodNativeAppIconPath,
+  MethodNativeAppIsAgent,
+  MethodNativeAppIsRunning,
+  MethodNativeAppLaunchAtLogin,
+  MethodNativeAppMetadata,
+  MethodNativeAppPath,
+  MethodNativeAppPid,
+  MethodNativeAppSupportDirectory,
+  MethodNativeAppVersion,
+  MethodNativeAppWindows,
+  MethodNativeAppWindowsCount,
+  MethodNativeAudioDeviceVolume,
   MethodNativeAudioDevices,
+  MethodNativeAudioInputDevice,
+  MethodNativeAudioInputLevel,
+  MethodNativeAudioOutputDevice,
+  MethodNativeAutoBrightness,
+  MethodNativeAutoRearrangeSpaces,
+  MethodNativeAutoTimezone,
+  MethodNativeAutocorrectEnabled,
+  MethodNativeAutomaticLoginUser,
+  MethodNativeAutomationPermission,
   MethodNativeAxElementAtPoint,
   MethodNativeAxElementTree,
   MethodNativeAxObserve,
@@ -76,82 +114,466 @@ import {
   MethodNativeBatchIsTileable,
   MethodNativeBatchSetFrames,
   MethodNativeBattery,
+  MethodNativeBatteryCycleCount,
+  MethodNativeBatteryHealth,
+  MethodNativeBatteryMaxCapacity,
   MethodNativeBleDiscoverServices,
   MethodNativeBleSubscribe,
   MethodNativeBleSubscribeAllThenWrite,
   MethodNativeBleWrite,
   MethodNativeBluetoothDevices,
+  MethodNativeBluetoothPower,
+  MethodNativeBoldTextEnabled,
+  MethodNativeBootVolume,
   MethodNativeBorders,
   MethodNativeBrightness,
+  MethodNativeCalendarEventsRange,
+  MethodNativeCalendarEventsToday,
+  MethodNativeCalendarPermission,
+  MethodNativeCameraPermission,
+  MethodNativeCameras,
+  MethodNativeCapsLockState,
   MethodNativeCaptureWindow,
+  MethodNativeCascadeWindows,
+  MethodNativeCenterWindow,
+  MethodNativeCheckPermission,
+  MethodNativeClearFileQuarantine,
+  MethodNativeClearNotifications,
   MethodNativeClickMenuItem,
   MethodNativeClipboardChangeCount,
+  MethodNativeClipboardFileUrls,
+  MethodNativeClipboardHasImage,
+  MethodNativeClipboardHasText,
+  MethodNativeClipboardHtml,
+  MethodNativeClipboardImageDimensions,
+  MethodNativeClipboardRichText,
+  MethodNativeClipboardSetHtml,
+  MethodNativeClipboardSetText,
+  MethodNativeClipboardTypes,
   MethodNativeCloseWindow,
   MethodNativeColorAtPoint,
+  MethodNativeComputerName,
+  MethodNativeComputerSleepTime,
+  MethodNativeContactsPermission,
+  MethodNativeCopyFile,
+  MethodNativeCpuInfo,
+  MethodNativeCpuTemperature,
+  MethodNativeCpuUsage,
+  MethodNativeCreateDirectory,
+  MethodNativeCronJobs,
+  MethodNativeCurrencyCode,
+  MethodNativeCurrentDatetime,
   MethodNativeCurrentUser,
+  MethodNativeCurrentUserAdmin,
+  MethodNativeCurrentWallpaper,
   MethodNativeCursor,
   MethodNativeCursorInfo,
+  MethodNativeCursorShakeToLocate,
   MethodNativeDarkMode,
+  MethodNativeDateFormat,
+  MethodNativeDefaultAppForUti,
   MethodNativeDefaultBrowser,
+  MethodNativeDefaultEmailClient,
+  MethodNativeDefaultPrinter,
+  MethodNativeDeleteFile,
+  MethodNativeDesktopDirectory,
+  MethodNativeDetectBarcodes,
+  MethodNativeDetectBarcodesFile,
+  MethodNativeDictationEnabled,
+  MethodNativeDifferentiateWithoutColor,
+  MethodNativeDirectoryContents,
+  MethodNativeDiskSpace,
+  MethodNativeDiskUsage,
   MethodNativeDismissNotification,
+  MethodNativeDisplayBrightness,
+  MethodNativeDisplayColorProfiles,
+  MethodNativeDisplayCount,
+  MethodNativeDisplayMirroring,
+  MethodNativeDisplayRefreshRate,
+  MethodNativeDisplayRotation,
+  MethodNativeDisplayScaleFactor,
+  MethodNativeDisplaySerialNumber,
+  MethodNativeDisplaySleepTime,
   MethodNativeDisplays,
   MethodNativeDnd,
+  MethodNativeDnsServers,
+  MethodNativeDockAutoHide,
+  MethodNativeDockMagnification,
+  MethodNativeDockMinimizeEffect,
+  MethodNativeDockMinimizeToApp,
+  MethodNativeDockPosition,
+  MethodNativeDockShowIndicators,
+  MethodNativeDockShowRecents,
+  MethodNativeDockSize,
+  MethodNativeDocumentsDirectory,
+  MethodNativeDownloadsDirectory,
+  MethodNativeEjectDisk,
+  MethodNativeEmptyTrash,
+  MethodNativeEnvVar,
+  MethodNativeEpochTime,
+  MethodNativeExtendedAttributes,
+  MethodNativeExternalDisks,
+  MethodNativeExternalDisplayNames,
+  MethodNativeFanSpeeds,
+  MethodNativeFastUserSwitching,
+  MethodNativeFileAcl,
+  MethodNativeFileCreationDate,
+  MethodNativeFileExists,
+  MethodNativeFileExtendedAttributes,
+  MethodNativeFileHash,
+  MethodNativeFileMetadata,
+  MethodNativeFileModificationDate,
+  MethodNativeFileOwner,
+  MethodNativeFileQuarantine,
+  MethodNativeFileSharingEnabled,
+  MethodNativeFileSize,
   MethodNativeFileTags,
+  MethodNativeFileType,
+  MethodNativeFileUti,
+  MethodNativeFilevaultStatus,
+  MethodNativeFinderDefaultView,
+  MethodNativeFinderNewWindowTarget,
+  MethodNativeFinderSelection,
+  MethodNativeFinderShowExtensions,
+  MethodNativeFinderShowHidden,
+  MethodNativeFinderShowPathBar,
+  MethodNativeFinderShowStatusBar,
+  MethodNativeFinderWindowPath,
+  MethodNativeFirewallEnabled,
+  MethodNativeFirstDayOfWeek,
+  MethodNativeFlushDns,
+  MethodNativeFnKeyFunction,
+  MethodNativeFocusModes,
+  MethodNativeFocusedElement,
+  MethodNativeFocusedWindowId,
+  MethodNativeFontSmoothing,
   MethodNativeForceQuitApp,
   MethodNativeFrontmostApp,
+  MethodNativeFullDiskAccess,
+  MethodNativeFunctionKeysStandard,
+  MethodNativeGatekeeperStatus,
+  MethodNativeGatewayAddress,
+  MethodNativeGeneratePdf,
   MethodNativeGetWindowInfo,
+  MethodNativeGlobFiles,
+  MethodNativeGpuInfo,
+  MethodNativeGrayscaleEnabled,
+  MethodNativeGroupWindowsByApp,
+  MethodNativeHandoffEnabled,
+  MethodNativeHardwareModel,
+  MethodNativeHardwareUuid,
   MethodNativeHidClaim,
   MethodNativeHidDevices,
   MethodNativeHidElements,
   MethodNativeHidRelease,
   MethodNativeHidSendReport,
   MethodNativeHideApp,
+  MethodNativeHighlightColor,
+  MethodNativeHomeDirectory,
+  MethodNativeHomebrewPrefix,
+  MethodNativeHostname,
+  MethodNativeHostnameResolve,
+  MethodNativeHotCorners,
+  MethodNativeIcloudDesktopSync,
+  MethodNativeIcloudDrivePath,
+  MethodNativeIcloudSignedIn,
+  MethodNativeIncreaseContrast,
+  MethodNativeInputSources,
   MethodNativeInstalledApps,
+  MethodNativeInterfaceStyleSwitcher,
+  MethodNativeIpv6Address,
   MethodNativeIsAppHidden,
+  MethodNativeIsDirectory,
+  MethodNativeIsFileHidden,
+  MethodNativeKernelVersion,
+  MethodNativeKeyRepeatDelay,
+  MethodNativeKeyRepeatRate,
+  MethodNativeKeyboardBrightness,
   MethodNativeKeyboardLayout,
+  MethodNativeKeychainDelete,
+  MethodNativeKeychainRead,
+  MethodNativeKeychainWrite,
+  MethodNativeKillProcess,
+  MethodNativeLastReboot,
   MethodNativeLaunchApp,
+  MethodNativeLaunchdAgents,
+  MethodNativeLaunchdDaemons,
+  MethodNativeListAudioInputDevices,
+  MethodNativeListAudioOutputDevices,
   MethodNativeListNotifications,
+  MethodNativeListShortcuts,
   MethodNativeListSpaces,
+  MethodNativeLiveTextEnabled,
+  MethodNativeLocalIp,
+  MethodNativeLocale,
+  MethodNativeLocationEnabled,
+  MethodNativeLogOut,
+  MethodNativeLoggedInUsers,
   MethodNativeLoginItems,
+  MethodNativeLoginItemsModern,
+  MethodNativeLowPowerMode,
+  MethodNativeMacAddress,
+  MethodNativeMaximizeWindow,
+  MethodNativeMeasurementSystem,
+  MethodNativeMediaNextTrack,
+  MethodNativeMediaPlayPause,
+  MethodNativeMediaPreviousTrack,
+  MethodNativeMemoryInfo,
+  MethodNativeMemoryPressure,
   MethodNativeMenuBar,
+  MethodNativeMenuBarAutoHide,
+  MethodNativeMenuBarBatteryPercent,
+  MethodNativeMenuBarClockFormat,
+  MethodNativeMicrophonePermission,
   MethodNativeMinimizeWindow,
+  MethodNativeModelName,
+  MethodNativeMountPoints,
+  MethodNativeMouseButtonClick,
+  MethodNativeMouseSpeed,
+  MethodNativeMoveFile,
   MethodNativeMoveWindowToDisplay,
   MethodNativeMoveWindowToSpace,
   MethodNativeMute,
+  MethodNativeNetworkBandwidth,
+  MethodNativeNetworkDnsDomain,
+  MethodNativeNetworkInterfaces,
+  MethodNativeNetworkProxyEnabled,
+  MethodNativeNetworkQuality,
+  MethodNativeNetworkReachable,
+  MethodNativeNetworkSignalStrength,
+  MethodNativeNetworkSsid,
+  MethodNativeNightShift,
+  MethodNativeNotificationSoundEnabled,
   MethodNativeNotify,
+  MethodNativeNowPlaying,
+  MethodNativeNumberFormatDecimal,
   MethodNativeObserveWindows,
+  MethodNativeOcrClipboard,
+  MethodNativeOcrFile,
+  MethodNativeOcrScreen,
+  MethodNativeOcrScreenRegion,
+  MethodNativeOcrWindow,
+  MethodNativeOpenAppSettings,
+  MethodNativeOpenFinderWindow,
+  MethodNativeOpenSystemSettings,
   MethodNativeOpenTarget,
+  MethodNativeOpenUrl,
+  MethodNativeOpenWithApp,
+  MethodNativeOptimizedCharging,
+  MethodNativePdfExtractText,
+  MethodNativePdfPageCount,
+  MethodNativePinWindowAbove,
+  MethodNativePinchToZoom,
+  MethodNativePing,
+  MethodNativePlayFeedbackWhenVolumeChanged,
   MethodNativePlaySound,
   MethodNativePollBurst,
+  MethodNativePowerAdapterConnected,
+  MethodNativePowerSource,
+  MethodNativePressAndHoldEnabled,
   MethodNativePreventSleep,
+  MethodNativePrimaryDisplay,
+  MethodNativePrimaryDisplayId,
+  MethodNativePrinterSharingEnabled,
+  MethodNativePrinters,
+  MethodNativeProcessCount,
+  MethodNativeProcessCpuUsage,
+  MethodNativeProcessExists,
+  MethodNativeProcessInfo,
+  MethodNativeProcessList,
+  MethodNativeProcessMemoryUsage,
+  MethodNativeProcessName,
+  MethodNativeProcessParentPid,
+  MethodNativeProcessPath,
+  MethodNativeProcessStartTime,
+  MethodNativeProxySettings,
+  MethodNativePublicIp,
+  MethodNativePurgeMemory,
+  MethodNativePurgeableSpace,
   MethodNativeQuickLook,
   MethodNativeQuitApp,
   MethodNativeRaiseWindow,
+  MethodNativeRandomUuid,
+  MethodNativeReadAppPreference,
+  MethodNativeReadFile,
+  MethodNativeReadFileBinary,
+  MethodNativeReadPlist,
+  MethodNativeRecentDocuments,
+  MethodNativeReduceMotion,
+  MethodNativeReduceTransparency,
+  MethodNativeRemindersIncomplete,
+  MethodNativeRemoteLoginEnabled,
+  MethodNativeRenameFile,
+  MethodNativeRequestScreenCapture,
+  MethodNativeResourceUsage,
+  MethodNativeRestartApp,
   MethodNativeRevealInFinder,
+  MethodNativeRosettaInstalled,
   MethodNativeRunApplescript,
+  MethodNativeRunJxa,
+  MethodNativeRunShortcut,
   MethodNativeRunningApps,
+  MethodNativeScreenCapturePermission,
+  MethodNativeScreenCount,
   MethodNativeScreenLock,
+  MethodNativeScreenLocked,
+  MethodNativeScreenResolution,
+  MethodNativeScreenSaverAskPassword,
+  MethodNativeScreenSaverDelay,
+  MethodNativeScreenSaverStart,
+  MethodNativeScreenSaverStatus,
+  MethodNativeScreenSharingEnabled,
   MethodNativeScreenshot,
+  MethodNativeScreenshotFormat,
+  MethodNativeScreenshotIncludeShadow,
+  MethodNativeScreenshotLocation,
+  MethodNativeScreenshotShowThumbnail,
+  MethodNativeScrollDirection,
+  MethodNativeScrollDirectionNatural,
+  MethodNativeSearchContacts,
+  MethodNativeSecureInputEnabled,
   MethodNativeSelectedFinderItems,
+  MethodNativeSelectedText,
+  MethodNativeSerialNumber,
+  MethodNativeSetAirportPower,
+  MethodNativeSetAppHidden,
   MethodNativeSetAudioDevice,
+  MethodNativeSetAudioDeviceVolume,
+  MethodNativeSetAudioInputDevice,
+  MethodNativeSetAudioOutputDevice,
+  MethodNativeSetAutoRearrangeSpaces,
+  MethodNativeSetBluetoothPower,
   MethodNativeSetBrightness,
+  MethodNativeSetComputerName,
   MethodNativeSetDarkMode,
   MethodNativeSetDnd,
+  MethodNativeSetDockAutoHide,
+  MethodNativeSetDockMagnification,
+  MethodNativeSetDockMinimizeEffect,
+  MethodNativeSetDockPosition,
+  MethodNativeSetDockShowRecents,
+  MethodNativeSetDockSize,
+  MethodNativeSetExtendedAttribute,
+  MethodNativeSetFileHidden,
+  MethodNativeSetFilePermissions,
+  MethodNativeSetFinderShowExtensions,
+  MethodNativeSetFinderShowHidden,
+  MethodNativeSetHighlightColor,
+  MethodNativeSetHotCorner,
+  MethodNativeSetInputSource,
+  MethodNativeSetKeyRepeatDelay,
+  MethodNativeSetKeyRepeatRate,
+  MethodNativeSetMenuBarAutoHide,
+  MethodNativeSetMouseSpeed,
+  MethodNativeSetNightShift,
+  MethodNativeSetScreenshotFormat,
+  MethodNativeSetScreenshotIncludeShadow,
+  MethodNativeSetScreenshotLocation,
+  MethodNativeSetScrollDirectionNatural,
+  MethodNativeSetSidebarIconSize,
+  MethodNativeSetStageManager,
+  MethodNativeSetTapToClick,
+  MethodNativeSetTrackpadSpeed,
+  MethodNativeSetUrlSchemeHandler,
   MethodNativeSetVolume,
+  MethodNativeSetWallpaper,
   MethodNativeSetWindowAlpha,
   MethodNativeSetWindowLevel,
+  MethodNativeSetWindowPosition,
+  MethodNativeSetWindowShadow,
+  MethodNativeSetWindowSize,
+  MethodNativeSetWindowSticky,
+  MethodNativeSharingName,
+  MethodNativeShowScrollBars,
+  MethodNativeSidebarIconSize,
+  MethodNativeSipStatus,
+  MethodNativeSiriEnabled,
+  MethodNativeSleepNow,
+  MethodNativeSlowKeys,
+  MethodNativeSmartQuotesEnabled,
+  MethodNativeSmartZoom,
+  MethodNativeSoundEffectsEnabled,
+  MethodNativeSpacesSpanDisplays,
   MethodNativeSpeak,
+  MethodNativeSpeechLocales,
+  MethodNativeSpeechRecognitionAvailable,
+  MethodNativeSpeechRecognizeFile,
+  MethodNativeSpellingLanguage,
   MethodNativeSpotlight,
+  MethodNativeStageManagerEnabled,
+  MethodNativeStartupDisk,
+  MethodNativeStartupSoundEnabled,
+  MethodNativeStickyKeys,
+  MethodNativeSwipeBetweenPages,
+  MethodNativeSwitchSpace,
+  MethodNativeSwitchSpaceWhenSwitchingApp,
+  MethodNativeSymlink,
+  MethodNativeSystemAppearance,
+  MethodNativeSystemInfo,
+  MethodNativeSystemIntegrityInfo,
+  MethodNativeSystemLanguage,
+  MethodNativeSystemRegion,
+  MethodNativeSystemSounds,
   MethodNativeSystemUptime,
+  MethodNativeSystemUptimeSeconds,
+  MethodNativeTapToClick,
+  MethodNativeTempDirectory,
+  MethodNativeTemperatureUnit,
+  MethodNativeTextReplacements,
+  MethodNativeThermalState,
+  MethodNativeThreeFingerDrag,
+  MethodNativeThunderboltDevices,
+  MethodNativeTimeFormat,
+  MethodNativeTimeMachineLastBackup,
+  MethodNativeTimeMachineStatus,
+  MethodNativeTimeOnBattery,
+  MethodNativeTimezone,
+  MethodNativeToggleBluetooth,
   MethodNativeToggleFullscreen,
+  MethodNativeToggleWifi,
+  MethodNativeTouchIdAvailable,
+  MethodNativeTrackpadSpeed,
+  MethodNativeTransparencyConsent,
   MethodNativeTrash,
+  MethodNativeTrueTone,
+  MethodNativeTtsVoices,
+  MethodNativeTwentyFourHourClock,
   MethodNativeUnhideApp,
   MethodNativeUnminimizeWindow,
   MethodNativeUnobserveWindows,
+  MethodNativeUnzip,
+  MethodNativeUrlSchemeHandler,
+  MethodNativeUsbDevices,
+  MethodNativeUserAvatar,
+  MethodNativeUserName,
+  MethodNativeUserShell,
+  MethodNativeVoiceoverEnabled,
   MethodNativeVolume,
+  MethodNativeVpnStatus,
   MethodNativeWarpCursor,
   MethodNativeWifi,
+  MethodNativeWifiNetworks,
+  MethodNativeWindowApp,
+  MethodNativeWindowBounds,
+  MethodNativeWindowDisplayId,
+  MethodNativeWindowIsFullscreen,
+  MethodNativeWindowIsMinimized,
+  MethodNativeWindowLayer,
+  MethodNativeWindowScreenshot,
+  MethodNativeWindowSubrole,
+  MethodNativeWindowTitle,
+  MethodNativeWindowsOnSpace,
   MethodNativeWorldModel,
+  MethodNativeWriteAppPreference,
+  MethodNativeWriteFile,
+  MethodNativeXcodePath,
+  MethodNativeXcodeVersion,
+  MethodNativeZip,
+  MethodNativeZoomEnabled,
+  MethodPipelinesGrammar,
+  MethodPipelinesRun,
+  MethodPipelinesStatus,
+  MethodPipelinesStop,
   MethodSelectionPick,
   MethodSelectionSet,
   MethodSessionEndCleanup,
@@ -206,8 +628,10 @@ declare module "./plugin.js" {
     hudShow(channel: string): Promise<void>;
     inputClick(button?: string): Promise<void>;
     inputClipboardAction(action: string, text?: unknown): Promise<void>;
+    inputClipboardHistory(): Promise<string[]>;
     inputClipboardRead(contentType: string): Promise<InputClipboardReadResponse>;
     inputClipboardReadAll(): Promise<ClipboardContents[]>;
+    inputClipboardReadFormat(format: string): Promise<InputClipboardReadFormatResponse>;
     inputClipboardWrite(contentType: string, data: string): Promise<void>;
     inputClipboardWriteItems(items?: ClipboardWriteItem[]): Promise<void>;
     inputDoubleClick(x?: unknown, y?: unknown): Promise<void>;
@@ -218,16 +642,52 @@ declare module "./plugin.js" {
     inputRawKey(code: number, direction: string): Promise<void>;
     inputRightClick(x?: unknown, y?: unknown): Promise<void>;
     inputScroll(direction: string, amount?: number, unit?: string): Promise<void>;
+    inputSelectAll(): Promise<void>;
     inputSwitchInputSource(sourceId: string): Promise<boolean>;
+    inputTripleClick(x?: unknown, y?: unknown): Promise<void>;
     inputTypeText(text: string): Promise<void>;
     keyNamesSet(names?: Record<string, number>): Promise<KeyNamesSetResponse>;
     keybindsRegister(snapshot: unknown): Promise<KeybindsRegisterResponse>;
     matchAliasesGet(): Promise<MatchAliasesGetResponse>;
     matchAliasesSet(aliases?: Record<string, string>): Promise<MatchAliasesSetResponse>;
+    nativeAccentColor(): Promise<NativeAccentColorResponse>;
+    nativeAccessibilityDisplayInvert(): Promise<NativeAccessibilityDisplayInvertResponse>;
+    nativeAccessibilityEnabled(): Promise<NativeAccessibilityEnabledResponse>;
     nativeActivateApp(bundleId: string, allWindows?: boolean): Promise<void>;
+    nativeActiveNetworkService(): Promise<NativeActiveNetworkServiceResponse>;
+    nativeActivePorts(): Promise<ListeningPort[]>;
     nativeActiveSpace(): Promise<ActiveSpace[]>;
+    nativeAirdropEnabled(): Promise<NativeAirdropEnabledResponse>;
+    nativeAirportPower(): Promise<NativeAirportPowerResponse>;
+    nativeAlertSound(): Promise<NativeAlertSoundResponse>;
+    nativeAlertVolume(): Promise<void>;
+    nativeAllWindowIds(): Promise<string[]>;
+    nativeApfsSnapshots(): Promise<NativeApfsSnapshotsResponse>;
+    nativeAppBundlePath(bundleId: string): Promise<NativeAppBundlePathResponse>;
+    nativeAppFocusedWindowID(bundleId: string): Promise<void>;
     nativeAppIcon(bundleId: string, size?: number): Promise<NativeAppIconResponse>;
+    nativeAppIconPath(bundleId: string): Promise<void>;
+    nativeAppIsAgent(bundleId: string): Promise<NativeAppIsAgentResponse>;
+    nativeAppIsRunning(bundleId: string): Promise<NativeAppIsRunningResponse>;
+    nativeAppLaunchAtLogin(bundleId: string): Promise<NativeAppLaunchAtLoginResponse>;
+    nativeAppMetadata(bundleId: string): Promise<NativeAppMetadataResponse>;
+    nativeAppPath(bundleId: string): Promise<void>;
+    nativeAppPid(bundleId: string): Promise<void>;
+    nativeAppSupportDirectory(): Promise<NativeAppSupportDirectoryResponse>;
+    nativeAppVersion(bundleId: string): Promise<void>;
+    nativeAppWindows(bundleId: string): Promise<WindowDetail[]>;
+    nativeAppWindowsCount(bundleId: string): Promise<void>;
+    nativeAudioDeviceVolume(deviceUid: string): Promise<NativeAudioDeviceVolumeResponse>;
     nativeAudioDevices(): Promise<AudioDevice[]>;
+    nativeAudioInputDevice(): Promise<NativeAudioInputDeviceResponse>;
+    nativeAudioInputLevel(): Promise<void>;
+    nativeAudioOutputDevice(): Promise<NativeAudioOutputDeviceResponse>;
+    nativeAutoBrightness(): Promise<NativeAutoBrightnessResponse>;
+    nativeAutoRearrangeSpaces(): Promise<NativeAutoRearrangeSpacesResponse>;
+    nativeAutoTimezone(): Promise<NativeAutoTimezoneResponse>;
+    nativeAutocorrectEnabled(): Promise<NativeAutocorrectEnabledResponse>;
+    nativeAutomaticLoginUser(): Promise<NativeAutomaticLoginUserResponse>;
+    nativeAutomationPermission(bundleId: string): Promise<NativeAutomationPermissionResponse>;
     nativeAxElementAtPoint(pid: number, x: number, y: number): Promise<NativeAxElementAtPointResponse>;
     nativeAxElementTree(element: AXElementRef, depth?: number): Promise<AXElementNode>;
     nativeAxObserve(pid: number, notifications?: string[]): Promise<NativeAxObserveResponse>;
@@ -238,82 +698,466 @@ declare module "./plugin.js" {
     nativeBatchIsTileable(windowIds?: string[]): Promise<TileableEntry[]>;
     nativeBatchSetFrames(frames?: WindowFrame[], readback?: boolean): Promise<WindowFrame[]>;
     nativeBattery(): Promise<NativeBatteryResponse>;
+    nativeBatteryCycleCount(): Promise<void>;
+    nativeBatteryHealth(): Promise<NativeBatteryHealthResponse>;
+    nativeBatteryMaxCapacity(): Promise<void>;
     nativeBleDiscoverServices(deviceIdentifier: string): Promise<BleService[]>;
     nativeBleSubscribe(characteristicUuid: string, deviceIdentifier: string, serviceUuid: string): Promise<NativeBleSubscribeResponse>;
     nativeBleSubscribeAllThenWrite(deviceIdentifier: string, subscribeServices?: string[], writes?: BleWriteEntry[]): Promise<NativeBleSubscribeAllThenWriteResponse>;
     nativeBleWrite(characteristicUuid: string, deviceIdentifier: string, serviceUuid: string, data?: number[], writeType?: string): Promise<NativeBleWriteResponse>;
     nativeBluetoothDevices(): Promise<BluetoothDevice[]>;
+    nativeBluetoothPower(): Promise<NativeBluetoothPowerResponse>;
+    nativeBoldTextEnabled(): Promise<NativeBoldTextEnabledResponse>;
+    nativeBootVolume(): Promise<NativeBootVolumeResponse>;
     nativeBorders(): Promise<void>;
     nativeBrightness(displayId?: unknown): Promise<NativeBrightnessResponse>;
+    nativeCalendarEventsRange(end: string, start: string): Promise<CalendarEvent[]>;
+    nativeCalendarEventsToday(): Promise<CalendarEvent[]>;
+    nativeCalendarPermission(): Promise<NativeCalendarPermissionResponse>;
+    nativeCameraPermission(): Promise<NativeCameraPermissionResponse>;
+    nativeCameras(): Promise<CameraDevice[]>;
+    nativeCapsLockState(): Promise<NativeCapsLockStateResponse>;
     nativeCaptureWindow(windowId: string): Promise<NativeCaptureWindowResponse>;
+    nativeCascadeWindows(bundleId: string): Promise<void>;
+    nativeCenterWindow(windowId: string): Promise<void>;
+    nativeCheckPermission(permission: string): Promise<NativeCheckPermissionResponse>;
+    nativeClearFileQuarantine(path: string): Promise<void>;
+    nativeClearNotifications(bundleId: string): Promise<void>;
     nativeClickMenuItem(pid: number, path?: string[]): Promise<boolean>;
     nativeClipboardChangeCount(): Promise<NativeClipboardChangeCountResponse>;
+    nativeClipboardFileUrls(): Promise<NativeClipboardFileUrlsResponse>;
+    nativeClipboardHasImage(): Promise<NativeClipboardHasImageResponse>;
+    nativeClipboardHasText(): Promise<NativeClipboardHasTextResponse>;
+    nativeClipboardHTML(): Promise<NativeClipboardHTMLResponse>;
+    nativeClipboardImageDimensions(): Promise<NativeClipboardImageDimensionsResponse>;
+    nativeClipboardRichText(): Promise<NativeClipboardRichTextResponse>;
+    nativeClipboardSetHTML(html: string): Promise<void>;
+    nativeClipboardSetText(text: string): Promise<void>;
+    nativeClipboardTypes(pasteboard?: string): Promise<string[]>;
     nativeCloseWindow(windowId: string): Promise<void>;
     nativeColorAtPoint(x: number, y: number): Promise<NativeColorAtPointResponse>;
+    nativeComputerName(): Promise<NativeComputerNameResponse>;
+    nativeComputerSleepTime(): Promise<void>;
+    nativeContactsPermission(): Promise<NativeContactsPermissionResponse>;
+    nativeCopyFile(destination: string, source: string): Promise<void>;
+    nativeCpuInfo(): Promise<NativeCpuInfoResponse>;
+    nativeCpuTemperature(): Promise<void>;
+    nativeCpuUsage(): Promise<void>;
+    nativeCreateDirectory(path: string): Promise<void>;
+    nativeCronJobs(): Promise<string[]>;
+    nativeCurrencyCode(): Promise<NativeCurrencyCodeResponse>;
+    nativeCurrentDatetime(): Promise<NativeCurrentDatetimeResponse>;
     nativeCurrentUser(): Promise<NativeCurrentUserResponse>;
+    nativeCurrentUserAdmin(): Promise<NativeCurrentUserAdminResponse>;
+    nativeCurrentWallpaper(): Promise<NativeCurrentWallpaperResponse>;
     nativeCursor(): Promise<NativeCursorResponse>;
     nativeCursorInfo(): Promise<NativeCursorInfoResponse>;
+    nativeCursorShakeToLocate(): Promise<NativeCursorShakeToLocateResponse>;
     nativeDarkMode(): Promise<NativeDarkModeResponse>;
+    nativeDateFormat(): Promise<NativeDateFormatResponse>;
+    nativeDefaultAppForUti(uti: string): Promise<NativeDefaultAppForUtiResponse>;
     nativeDefaultBrowser(): Promise<NativeDefaultBrowserResponse>;
+    nativeDefaultEmailClient(): Promise<NativeDefaultEmailClientResponse>;
+    nativeDefaultPrinter(): Promise<NativeDefaultPrinterResponse>;
+    nativeDeleteFile(path: string): Promise<void>;
+    nativeDesktopDirectory(): Promise<NativeDesktopDirectoryResponse>;
+    nativeDetectBarcodes(): Promise<BarcodeResult[]>;
+    nativeDetectBarcodesFile(path: string): Promise<BarcodeResult[]>;
+    nativeDictationEnabled(): Promise<NativeDictationEnabledResponse>;
+    nativeDifferentiateWithoutColor(): Promise<NativeDifferentiateWithoutColorResponse>;
+    nativeDirectoryContents(path: string, includeHidden?: boolean): Promise<DirectoryEntry[]>;
+    nativeDiskSpace(path?: string): Promise<NativeDiskSpaceResponse>;
+    nativeDiskUsage(path: string): Promise<NativeDiskUsageResponse>;
     nativeDismissNotification(id: string): Promise<void>;
+    nativeDisplayBrightness(): Promise<void>;
+    nativeDisplayColorProfiles(): Promise<DisplayColorProfile[]>;
+    nativeDisplayCount(): Promise<NativeDisplayCountResponse>;
+    nativeDisplayMirroring(): Promise<NativeDisplayMirroringResponse>;
+    nativeDisplayRefreshRate(displayId: number): Promise<void>;
+    nativeDisplayRotation(): Promise<DisplayRotation[]>;
+    nativeDisplayScaleFactor(displayId: number): Promise<void>;
+    nativeDisplaySerialNumber(): Promise<NativeDisplaySerialNumberResponse>;
+    nativeDisplaySleepTime(): Promise<void>;
     nativeDisplays(): Promise<DisplayMetadata[]>;
     nativeDnd(): Promise<NativeDndResponse>;
+    nativeDnsServers(): Promise<string[]>;
+    nativeDockAutoHide(): Promise<NativeDockAutoHideResponse>;
+    nativeDockMagnification(): Promise<NativeDockMagnificationResponse>;
+    nativeDockMinimizeEffect(): Promise<NativeDockMinimizeEffectResponse>;
+    nativeDockMinimizeToApp(): Promise<NativeDockMinimizeToAppResponse>;
+    nativeDockPosition(): Promise<NativeDockPositionResponse>;
+    nativeDockShowIndicators(): Promise<NativeDockShowIndicatorsResponse>;
+    nativeDockShowRecents(): Promise<NativeDockShowRecentsResponse>;
+    nativeDockSize(): Promise<void>;
+    nativeDocumentsDirectory(): Promise<NativeDocumentsDirectoryResponse>;
+    nativeDownloadsDirectory(): Promise<NativeDownloadsDirectoryResponse>;
+    nativeEjectDisk(mountPoint: string): Promise<void>;
+    nativeEmptyTrash(): Promise<void>;
+    nativeEnvVar(name: string): Promise<NativeEnvVarResponse>;
+    nativeEpochTime(): Promise<NativeEpochTimeResponse>;
+    nativeExtendedAttributes(path: string): Promise<void>;
+    nativeExternalDisks(): Promise<ExternalDisk[]>;
+    nativeExternalDisplayNames(): Promise<string[]>;
+    nativeFanSpeeds(): Promise<NativeFanSpeedsResponse>;
+    nativeFastUserSwitching(): Promise<NativeFastUserSwitchingResponse>;
+    nativeFileAcl(path: string): Promise<void>;
+    nativeFileCreationDate(path: string): Promise<void>;
+    nativeFileExists(path: string): Promise<NativeFileExistsResponse>;
+    nativeFileExtendedAttributes(path: string): Promise<string[]>;
+    nativeFileHash(path: string, algorithm?: string): Promise<NativeFileHashResponse>;
+    nativeFileMetadata(path: string): Promise<NativeFileMetadataResponse>;
+    nativeFileModificationDate(path: string): Promise<void>;
+    nativeFileOwner(path: string): Promise<NativeFileOwnerResponse>;
+    nativeFileQuarantine(path: string): Promise<NativeFileQuarantineResponse>;
+    nativeFileSharingEnabled(): Promise<NativeFileSharingEnabledResponse>;
+    nativeFileSize(path: string): Promise<void>;
     nativeFileTags(path: string, tags?: unknown): Promise<void>;
+    nativeFileType(path: string): Promise<NativeFileTypeResponse>;
+    nativeFileUti(path: string): Promise<void>;
+    nativeFilevaultStatus(): Promise<NativeFilevaultStatusResponse>;
+    nativeFinderDefaultView(): Promise<NativeFinderDefaultViewResponse>;
+    nativeFinderNewWindowTarget(): Promise<NativeFinderNewWindowTargetResponse>;
+    nativeFinderSelection(): Promise<string[]>;
+    nativeFinderShowExtensions(): Promise<NativeFinderShowExtensionsResponse>;
+    nativeFinderShowHidden(): Promise<NativeFinderShowHiddenResponse>;
+    nativeFinderShowPathBar(): Promise<NativeFinderShowPathBarResponse>;
+    nativeFinderShowStatusBar(): Promise<NativeFinderShowStatusBarResponse>;
+    nativeFinderWindowPath(): Promise<NativeFinderWindowPathResponse>;
+    nativeFirewallEnabled(): Promise<NativeFirewallEnabledResponse>;
+    nativeFirstDayOfWeek(): Promise<void>;
+    nativeFlushDns(): Promise<void>;
+    nativeFnKeyFunction(): Promise<NativeFnKeyFunctionResponse>;
+    nativeFocusModes(): Promise<NativeFocusModesResponse>;
+    nativeFocusedElement(): Promise<NativeFocusedElementResponse>;
+    nativeFocusedWindowID(): Promise<NativeFocusedWindowIDResponse>;
+    nativeFontSmoothing(): Promise<NativeFontSmoothingResponse>;
     nativeForceQuitApp(bundleId: string): Promise<boolean>;
     nativeFrontmostApp(): Promise<NativeFrontmostAppResponse>;
+    nativeFullDiskAccess(): Promise<NativeFullDiskAccessResponse>;
+    nativeFunctionKeysStandard(): Promise<NativeFunctionKeysStandardResponse>;
+    nativeGatekeeperStatus(): Promise<NativeGatekeeperStatusResponse>;
+    nativeGatewayAddress(): Promise<NativeGatewayAddressResponse>;
+    nativeGeneratePdf(html: string, outputPath: string): Promise<void>;
     nativeGetWindowInfo(windowId: string): Promise<NativeGetWindowInfoResponse>;
+    nativeGlobFiles(pattern: string, maxResults?: number): Promise<string[]>;
+    nativeGpuInfo(): Promise<NativeGpuInfoResponse>;
+    nativeGrayscaleEnabled(): Promise<NativeGrayscaleEnabledResponse>;
+    nativeGroupWindowsByApp(): Promise<NativeGroupWindowsByAppResponse>;
+    nativeHandoffEnabled(): Promise<NativeHandoffEnabledResponse>;
+    nativeHardwareModel(): Promise<NativeHardwareModelResponse>;
+    nativeHardwareUuid(): Promise<NativeHardwareUuidResponse>;
     nativeHidClaim(deviceId: string): Promise<NativeHidClaimResponse>;
     nativeHidDevices(): Promise<HidDeviceEntry[]>;
     nativeHidElements(deviceId: string): Promise<HidElementEntry[]>;
     nativeHidRelease(deviceId: string): Promise<NativeHidReleaseResponse>;
     nativeHidSendReport(deviceId: string, reportId: number, reportType: string, data?: number[]): Promise<NativeHidSendReportResponse>;
     nativeHideApp(bundleId: string): Promise<void>;
+    nativeHighlightColor(): Promise<NativeHighlightColorResponse>;
+    nativeHomeDirectory(): Promise<NativeHomeDirectoryResponse>;
+    nativeHomebrewPrefix(): Promise<NativeHomebrewPrefixResponse>;
+    nativeHostname(): Promise<NativeHostnameResponse>;
+    nativeHostnameResolve(hostname: string): Promise<string[]>;
+    nativeHotCorners(): Promise<NativeHotCornersResponse>;
+    nativeIcloudDesktopSync(): Promise<NativeIcloudDesktopSyncResponse>;
+    nativeIcloudDrivePath(): Promise<NativeIcloudDrivePathResponse>;
+    nativeIcloudSignedIn(): Promise<NativeIcloudSignedInResponse>;
+    nativeIncreaseContrast(): Promise<NativeIncreaseContrastResponse>;
+    nativeInputSources(): Promise<InputSource[]>;
     nativeInstalledApps(): Promise<InstalledApp[]>;
+    nativeInterfaceStyleSwitcher(): Promise<NativeInterfaceStyleSwitcherResponse>;
+    nativeIpv6Address(): Promise<NativeIpv6AddressResponse>;
     nativeIsAppHidden(bundleId: string): Promise<boolean>;
+    nativeIsDirectory(path: string): Promise<NativeIsDirectoryResponse>;
+    nativeIsFileHidden(path: string): Promise<NativeIsFileHiddenResponse>;
+    nativeKernelVersion(): Promise<NativeKernelVersionResponse>;
+    nativeKeyRepeatDelay(): Promise<void>;
+    nativeKeyRepeatRate(): Promise<void>;
+    nativeKeyboardBrightness(): Promise<void>;
     nativeKeyboardLayout(): Promise<NativeKeyboardLayoutResponse>;
+    nativeKeychainDelete(account: string, service: string): Promise<void>;
+    nativeKeychainRead(account: string, service: string): Promise<NativeKeychainReadResponse>;
+    nativeKeychainWrite(account: string, password: string, service: string): Promise<void>;
+    nativeKillProcess(pid: number, signal?: number): Promise<void>;
+    nativeLastReboot(): Promise<NativeLastRebootResponse>;
     nativeLaunchApp(bundleId: string, newInstance?: boolean): Promise<void>;
+    nativeLaunchdAgents(): Promise<string[]>;
+    nativeLaunchdDaemons(): Promise<string[]>;
+    nativeListAudioInputDevices(): Promise<string[]>;
+    nativeListAudioOutputDevices(): Promise<string[]>;
     nativeListNotifications(): Promise<DeliveredNotification[]>;
+    nativeListShortcuts(): Promise<ShortcutInfo[]>;
     nativeListSpaces(): Promise<SpaceInfo[]>;
+    nativeLiveTextEnabled(): Promise<NativeLiveTextEnabledResponse>;
+    nativeLocalIP(): Promise<NativeLocalIPResponse>;
+    nativeLocale(): Promise<NativeLocaleResponse>;
+    nativeLocationEnabled(): Promise<NativeLocationEnabledResponse>;
+    nativeLogOut(): Promise<void>;
+    nativeLoggedInUsers(): Promise<string[]>;
     nativeLoginItems(): Promise<LoginItem[]>;
+    nativeLoginItemsModern(): Promise<string[]>;
+    nativeLowPowerMode(): Promise<NativeLowPowerModeResponse>;
+    nativeMacAddress(): Promise<NativeMacAddressResponse>;
+    nativeMaximizeWindow(windowId: string): Promise<void>;
+    nativeMeasurementSystem(): Promise<NativeMeasurementSystemResponse>;
+    nativeMediaNextTrack(): Promise<void>;
+    nativeMediaPlayPause(): Promise<void>;
+    nativeMediaPreviousTrack(): Promise<void>;
+    nativeMemoryInfo(): Promise<NativeMemoryInfoResponse>;
+    nativeMemoryPressure(): Promise<NativeMemoryPressureResponse>;
     nativeMenuBar(pid: number): Promise<MenuItem[]>;
+    nativeMenuBarAutoHide(): Promise<NativeMenuBarAutoHideResponse>;
+    nativeMenuBarBatteryPercent(): Promise<NativeMenuBarBatteryPercentResponse>;
+    nativeMenuBarClockFormat(): Promise<NativeMenuBarClockFormatResponse>;
+    nativeMicrophonePermission(): Promise<NativeMicrophonePermissionResponse>;
     nativeMinimizeWindow(windowId: string): Promise<void>;
+    nativeModelName(): Promise<NativeModelNameResponse>;
+    nativeMountPoints(): Promise<string[]>;
+    nativeMouseButtonClick(button: number, x?: unknown, y?: unknown): Promise<void>;
+    nativeMouseSpeed(): Promise<void>;
+    nativeMoveFile(destination: string, source: string): Promise<void>;
     nativeMoveWindowToDisplay(displayId: number, windowId: string): Promise<void>;
     nativeMoveWindowToSpace(spaceId: number, windowId: string): Promise<boolean>;
     nativeMute(muted: boolean): Promise<void>;
+    nativeNetworkBandwidth(): Promise<NativeNetworkBandwidthResponse>;
+    nativeNetworkDnsDomain(): Promise<NativeNetworkDnsDomainResponse>;
+    nativeNetworkInterfaces(): Promise<NetworkInterface[]>;
+    nativeNetworkProxyEnabled(): Promise<NativeNetworkProxyEnabledResponse>;
+    nativeNetworkQuality(): Promise<NativeNetworkQualityResponse>;
+    nativeNetworkReachable(host: string): Promise<NativeNetworkReachableResponse>;
+    nativeNetworkSignalStrength(): Promise<void>;
+    nativeNetworkSsid(): Promise<NativeNetworkSsidResponse>;
+    nativeNightShift(): Promise<NativeNightShiftResponse>;
+    nativeNotificationSoundEnabled(): Promise<NativeNotificationSoundEnabledResponse>;
     nativeNotify(title: string, body?: unknown, sound?: unknown, subtitle?: unknown): Promise<NativeNotifyResponse>;
+    nativeNowPlaying(): Promise<NativeNowPlayingResponse>;
+    nativeNumberFormatDecimal(): Promise<NativeNumberFormatDecimalResponse>;
     nativeObserveWindows(pid: number): Promise<NativeObserveWindowsResponse>;
+    nativeOcrClipboard(): Promise<OcrRegion[]>;
+    nativeOcrFile(path: string): Promise<OcrRegion[]>;
+    nativeOcrScreen(): Promise<OcrRegion[]>;
+    nativeOcrScreenRegion(height: number, width: number, x: number, y: number): Promise<OcrRegion[]>;
+    nativeOcrWindow(windowId: number): Promise<OcrRegion[]>;
+    nativeOpenAppSettings(bundleId: string): Promise<void>;
+    nativeOpenFinderWindow(path: string): Promise<void>;
+    nativeOpenSystemSettings(pane?: unknown): Promise<void>;
     nativeOpenTarget(target: string): Promise<void>;
+    nativeOpenURL(url: string): Promise<void>;
+    nativeOpenWithApp(bundleId: string, target: string): Promise<void>;
+    nativeOptimizedCharging(): Promise<NativeOptimizedChargingResponse>;
+    nativePdfExtractText(path: string, page?: number): Promise<void>;
+    nativePdfPageCount(path: string): Promise<void>;
+    nativePinWindowAbove(pinned: boolean, windowId: string): Promise<void>;
+    nativePinchToZoom(): Promise<NativePinchToZoomResponse>;
+    nativePing(host: string): Promise<void>;
+    nativePlayFeedbackWhenVolumeChanged(): Promise<NativePlayFeedbackWhenVolumeChangedResponse>;
     nativePlaySound(name: string): Promise<void>;
     nativePollBurst(): Promise<void>;
+    nativePowerAdapterConnected(): Promise<NativePowerAdapterConnectedResponse>;
+    nativePowerSource(): Promise<NativePowerSourceResponse>;
+    nativePressAndHoldEnabled(): Promise<NativePressAndHoldEnabledResponse>;
     nativePreventSleep(assertionId?: unknown, reason?: string): Promise<NativePreventSleepResponse>;
+    nativePrimaryDisplay(): Promise<NativePrimaryDisplayResponse>;
+    nativePrimaryDisplayID(): Promise<NativePrimaryDisplayIDResponse>;
+    nativePrinterSharingEnabled(): Promise<NativePrinterSharingEnabledResponse>;
+    nativePrinters(): Promise<PrinterInfo[]>;
+    nativeProcessCount(): Promise<NativeProcessCountResponse>;
+    nativeProcessCpuUsage(pid: number): Promise<void>;
+    nativeProcessExists(pid: number): Promise<NativeProcessExistsResponse>;
+    nativeProcessInfo(pid: number): Promise<NativeProcessInfoResponse>;
+    nativeProcessList(): Promise<ProcessInfo[]>;
+    nativeProcessMemoryUsage(pid: number): Promise<void>;
+    nativeProcessName(pid: number): Promise<void>;
+    nativeProcessParentPid(pid: number): Promise<void>;
+    nativeProcessPath(pid: number): Promise<void>;
+    nativeProcessStartTime(pid: number): Promise<void>;
+    nativeProxySettings(): Promise<NativeProxySettingsResponse>;
+    nativePublicIP(): Promise<NativePublicIPResponse>;
+    nativePurgeMemory(): Promise<void>;
+    nativePurgeableSpace(): Promise<void>;
     nativeQuickLook(path: string, size?: number): Promise<NativeQuickLookResponse>;
     nativeQuitApp(bundleId: string): Promise<boolean>;
     nativeRaiseWindow(windowId: string): Promise<void>;
+    nativeRandomUuid(): Promise<NativeRandomUuidResponse>;
+    nativeReadAppPreference(domain: string, key: string): Promise<void>;
+    nativeReadFile(path: string): Promise<NativeReadFileResponse>;
+    nativeReadFileBinary(path: string, maxBytes?: unknown): Promise<NativeReadFileBinaryResponse>;
+    nativeReadPlist(path: string): Promise<void>;
+    nativeRecentDocuments(bundleId: string): Promise<string[]>;
+    nativeReduceMotion(): Promise<NativeReduceMotionResponse>;
+    nativeReduceTransparency(): Promise<NativeReduceTransparencyResponse>;
+    nativeRemindersIncomplete(): Promise<ReminderItem[]>;
+    nativeRemoteLoginEnabled(): Promise<NativeRemoteLoginEnabledResponse>;
+    nativeRenameFile(newName: string, path: string): Promise<void>;
+    nativeRequestScreenCapture(): Promise<NativeRequestScreenCaptureResponse>;
+    nativeResourceUsage(): Promise<NativeResourceUsageResponse>;
+    nativeRestartApp(bundleId: string): Promise<void>;
     nativeRevealInFinder(path: string): Promise<void>;
+    nativeRosettaInstalled(): Promise<NativeRosettaInstalledResponse>;
     nativeRunApplescript(script: string): Promise<NativeRunApplescriptResponse>;
+    nativeRunJxa(script: string): Promise<NativeRunJxaResponse>;
+    nativeRunShortcut(name: string, input?: unknown): Promise<NativeRunShortcutResponse>;
     nativeRunningApps(): Promise<RunningApp[]>;
+    nativeScreenCapturePermission(): Promise<NativeScreenCapturePermissionResponse>;
+    nativeScreenCount(): Promise<NativeScreenCountResponse>;
     nativeScreenLock(): Promise<void>;
+    nativeScreenLocked(): Promise<NativeScreenLockedResponse>;
+    nativeScreenResolution(): Promise<NativeScreenResolutionResponse>;
+    nativeScreenSaverAskPassword(): Promise<NativeScreenSaverAskPasswordResponse>;
+    nativeScreenSaverDelay(): Promise<void>;
+    nativeScreenSaverStart(): Promise<void>;
+    nativeScreenSaverStatus(): Promise<NativeScreenSaverStatusResponse>;
+    nativeScreenSharingEnabled(): Promise<NativeScreenSharingEnabledResponse>;
     nativeScreenshot(displayId?: unknown, region?: unknown, windowId?: unknown): Promise<NativeScreenshotResponse>;
+    nativeScreenshotFormat(): Promise<NativeScreenshotFormatResponse>;
+    nativeScreenshotIncludeShadow(): Promise<NativeScreenshotIncludeShadowResponse>;
+    nativeScreenshotLocation(): Promise<NativeScreenshotLocationResponse>;
+    nativeScreenshotShowThumbnail(): Promise<NativeScreenshotShowThumbnailResponse>;
+    nativeScrollDirection(): Promise<NativeScrollDirectionResponse>;
+    nativeScrollDirectionNatural(): Promise<NativeScrollDirectionNaturalResponse>;
+    nativeSearchContacts(query: string): Promise<ContactInfo[]>;
+    nativeSecureInputEnabled(): Promise<NativeSecureInputEnabledResponse>;
     nativeSelectedFinderItems(): Promise<string[]>;
+    nativeSelectedText(): Promise<NativeSelectedTextResponse>;
+    nativeSerialNumber(): Promise<NativeSerialNumberResponse>;
+    nativeSetAirportPower(on: boolean): Promise<void>;
+    nativeSetAppHidden(bundleId: string, hidden: boolean): Promise<void>;
     nativeSetAudioDevice(deviceType: string, uid: string): Promise<void>;
+    nativeSetAudioDeviceVolume(deviceUid: string, volume: number): Promise<void>;
+    nativeSetAudioInputDevice(name: string): Promise<void>;
+    nativeSetAudioOutputDevice(name: string): Promise<void>;
+    nativeSetAutoRearrangeSpaces(enabled: boolean): Promise<void>;
+    nativeSetBluetoothPower(on: boolean): Promise<void>;
     nativeSetBrightness(brightness: number, displayId?: unknown): Promise<void>;
+    nativeSetComputerName(name: string): Promise<void>;
     nativeSetDarkMode(dark: boolean): Promise<void>;
     nativeSetDnd(enabled: boolean): Promise<void>;
+    nativeSetDockAutoHide(enabled: boolean): Promise<void>;
+    nativeSetDockMagnification(enabled: boolean): Promise<void>;
+    nativeSetDockMinimizeEffect(effect: string): Promise<void>;
+    nativeSetDockPosition(position: string): Promise<void>;
+    nativeSetDockShowRecents(enabled: boolean): Promise<void>;
+    nativeSetDockSize(size: number): Promise<void>;
+    nativeSetExtendedAttribute(name: string, path: string, value: string): Promise<void>;
+    nativeSetFileHidden(hidden: boolean, path: string): Promise<void>;
+    nativeSetFilePermissions(mode: string, path: string): Promise<void>;
+    nativeSetFinderShowExtensions(enabled: boolean): Promise<void>;
+    nativeSetFinderShowHidden(enabled: boolean): Promise<void>;
+    nativeSetHighlightColor(color: string): Promise<void>;
+    nativeSetHotCorner(action: number, corner: string): Promise<void>;
+    nativeSetInputSource(sourceId: string): Promise<void>;
+    nativeSetKeyRepeatDelay(delay: number): Promise<void>;
+    nativeSetKeyRepeatRate(rate: number): Promise<void>;
+    nativeSetMenuBarAutoHide(enabled: boolean): Promise<void>;
+    nativeSetMouseSpeed(speed: number): Promise<void>;
+    nativeSetNightShift(enabled: boolean): Promise<void>;
+    nativeSetScreenshotFormat(format: string): Promise<void>;
+    nativeSetScreenshotIncludeShadow(enabled: boolean): Promise<void>;
+    nativeSetScreenshotLocation(path: string): Promise<void>;
+    nativeSetScrollDirectionNatural(enabled: boolean): Promise<void>;
+    nativeSetSidebarIconSize(size: number): Promise<void>;
+    nativeSetStageManager(enabled: boolean): Promise<void>;
+    nativeSetTapToClick(enabled: boolean): Promise<void>;
+    nativeSetTrackpadSpeed(speed: number): Promise<void>;
+    nativeSetURLSchemeHandler(bundleId: string, scheme: string): Promise<void>;
     nativeSetVolume(volume: number): Promise<void>;
+    nativeSetWallpaper(path: string): Promise<void>;
     nativeSetWindowAlpha(alpha: number, windowId: string): Promise<void>;
     nativeSetWindowLevel(level: string, windowId: string): Promise<boolean>;
+    nativeSetWindowPosition(windowId: string, x: number, y: number): Promise<void>;
+    nativeSetWindowShadow(enabled: boolean, windowId: string): Promise<void>;
+    nativeSetWindowSize(h: number, w: number, windowId: string): Promise<void>;
+    nativeSetWindowSticky(sticky: boolean, windowId: string): Promise<void>;
+    nativeSharingName(): Promise<NativeSharingNameResponse>;
+    nativeShowScrollBars(): Promise<NativeShowScrollBarsResponse>;
+    nativeSidebarIconSize(): Promise<NativeSidebarIconSizeResponse>;
+    nativeSipStatus(): Promise<NativeSipStatusResponse>;
+    nativeSiriEnabled(): Promise<NativeSiriEnabledResponse>;
+    nativeSleepNow(): Promise<void>;
+    nativeSlowKeys(): Promise<NativeSlowKeysResponse>;
+    nativeSmartQuotesEnabled(): Promise<NativeSmartQuotesEnabledResponse>;
+    nativeSmartZoom(): Promise<NativeSmartZoomResponse>;
+    nativeSoundEffectsEnabled(): Promise<NativeSoundEffectsEnabledResponse>;
+    nativeSpacesSpanDisplays(): Promise<NativeSpacesSpanDisplaysResponse>;
     nativeSpeak(text: string, rate?: unknown, voice?: unknown): Promise<void>;
+    nativeSpeechLocales(): Promise<SpeechLocale[]>;
+    nativeSpeechRecognitionAvailable(): Promise<NativeSpeechRecognitionAvailableResponse>;
+    nativeSpeechRecognizeFile(path: string, locale?: string): Promise<void>;
+    nativeSpellingLanguage(): Promise<NativeSpellingLanguageResponse>;
     nativeSpotlight(query: string, limit?: number, scope?: unknown): Promise<SpotlightResult[]>;
+    nativeStageManagerEnabled(): Promise<NativeStageManagerEnabledResponse>;
+    nativeStartupDisk(): Promise<NativeStartupDiskResponse>;
+    nativeStartupSoundEnabled(): Promise<NativeStartupSoundEnabledResponse>;
+    nativeStickyKeys(): Promise<NativeStickyKeysResponse>;
+    nativeSwipeBetweenPages(): Promise<NativeSwipeBetweenPagesResponse>;
+    nativeSwitchSpace(spaceId: number): Promise<void>;
+    nativeSwitchSpaceWhenSwitchingApp(): Promise<NativeSwitchSpaceWhenSwitchingAppResponse>;
+    nativeSymlink(link: string, source: string): Promise<void>;
+    nativeSystemAppearance(): Promise<NativeSystemAppearanceResponse>;
+    nativeSystemInfo(): Promise<NativeSystemInfoResponse>;
+    nativeSystemIntegrityInfo(): Promise<NativeSystemIntegrityInfoResponse>;
+    nativeSystemLanguage(): Promise<NativeSystemLanguageResponse>;
+    nativeSystemRegion(): Promise<NativeSystemRegionResponse>;
+    nativeSystemSounds(): Promise<string[]>;
     nativeSystemUptime(): Promise<NativeSystemUptimeResponse>;
+    nativeSystemUptimeSeconds(): Promise<NativeSystemUptimeSecondsResponse>;
+    nativeTapToClick(): Promise<NativeTapToClickResponse>;
+    nativeTempDirectory(): Promise<NativeTempDirectoryResponse>;
+    nativeTemperatureUnit(): Promise<NativeTemperatureUnitResponse>;
+    nativeTextReplacements(): Promise<NativeTextReplacementsResponse>;
+    nativeThermalState(): Promise<NativeThermalStateResponse>;
+    nativeThreeFingerDrag(): Promise<NativeThreeFingerDragResponse>;
+    nativeThunderboltDevices(): Promise<NativeThunderboltDevicesResponse>;
+    nativeTimeFormat(): Promise<NativeTimeFormatResponse>;
+    nativeTimeMachineLastBackup(): Promise<NativeTimeMachineLastBackupResponse>;
+    nativeTimeMachineStatus(): Promise<NativeTimeMachineStatusResponse>;
+    nativeTimeOnBattery(): Promise<void>;
+    nativeTimezone(): Promise<NativeTimezoneResponse>;
+    nativeToggleBluetooth(enabled: boolean): Promise<void>;
     nativeToggleFullscreen(windowId: string): Promise<void>;
+    nativeToggleWifi(enabled: boolean): Promise<void>;
+    nativeTouchIDAvailable(): Promise<NativeTouchIDAvailableResponse>;
+    nativeTrackpadSpeed(): Promise<void>;
+    nativeTransparencyConsent(service: string): Promise<void>;
     nativeTrash(path: string): Promise<boolean>;
+    nativeTrueTone(): Promise<NativeTrueToneResponse>;
+    nativeTtsVoices(): Promise<TtsVoice[]>;
+    nativeTwentyFourHourClock(): Promise<NativeTwentyFourHourClockResponse>;
     nativeUnhideApp(bundleId: string): Promise<void>;
     nativeUnminimizeWindow(windowId: string): Promise<void>;
     nativeUnobserveWindows(subscriptionId: string): Promise<boolean>;
+    nativeUnzip(destination: string, source: string): Promise<void>;
+    nativeURLSchemeHandler(scheme: string): Promise<NativeURLSchemeHandlerResponse>;
+    nativeUsbDevices(): Promise<UsbDevice[]>;
+    nativeUserAvatar(): Promise<NativeUserAvatarResponse>;
+    nativeUserName(): Promise<NativeUserNameResponse>;
+    nativeUserShell(): Promise<NativeUserShellResponse>;
+    nativeVoiceoverEnabled(): Promise<NativeVoiceoverEnabledResponse>;
     nativeVolume(): Promise<NativeVolumeResponse>;
+    nativeVpnStatus(): Promise<NativeVpnStatusResponse>;
     nativeWarpCursor(x: number, y: number): Promise<void>;
     nativeWifi(): Promise<NativeWifiResponse>;
+    nativeWifiNetworks(): Promise<string[]>;
+    nativeWindowApp(windowId: string): Promise<void>;
+    nativeWindowBounds(windowId: string): Promise<NativeWindowBoundsResponse>;
+    nativeWindowDisplayID(windowId: string): Promise<void>;
+    nativeWindowIsFullscreen(windowId: string): Promise<NativeWindowIsFullscreenResponse>;
+    nativeWindowIsMinimized(windowId: string): Promise<NativeWindowIsMinimizedResponse>;
+    nativeWindowLayer(windowId: string): Promise<void>;
+    nativeWindowScreenshot(windowId: number): Promise<void>;
+    nativeWindowSubrole(windowId: string): Promise<void>;
+    nativeWindowTitle(windowId: string): Promise<void>;
+    nativeWindowsOnSpace(spaceId: number): Promise<string[]>;
     nativeWorldModel(onScreen?: boolean): Promise<WorldModel>;
+    nativeWriteAppPreference(domain: string, key: string, value: unknown): Promise<void>;
+    nativeWriteFile(contents: string, path: string): Promise<void>;
+    nativeXcodePath(): Promise<NativeXcodePathResponse>;
+    nativeXcodeVersion(): Promise<NativeXcodeVersionResponse>;
+    nativeZip(destination: string, source: string): Promise<void>;
+    nativeZoomEnabled(): Promise<NativeZoomEnabledResponse>;
+    pipelinesGrammar(): Promise<string[]>;
+    pipelinesRun(name: string, ephemeral?: boolean): Promise<PipelinesRunResponse>;
+    pipelinesStatus(): Promise<PipelinesStatusResponse>;
+    pipelinesStop(name: string): Promise<PipelinesStopResponse>;
     selectionPick(index: number): Promise<SelectionPickResponse>;
     selectionSet(channel?: unknown, items?: unknown, title?: unknown): Promise<void>;
     sessionEndCleanup(): Promise<SessionEndCleanupResponse>;
@@ -729,6 +1573,11 @@ Plugin.prototype.inputClipboardAction = async function(action: string, text?: un
   );
 };
 
+Plugin.prototype.inputClipboardHistory = async function() {
+  const result = await this.call(MethodInputClipboardHistory);
+  return (result as any).entries;
+};
+
 Plugin.prototype.inputClipboardRead = async function(contentType: string) {
   const result = await this.call(
     MethodInputClipboardRead,
@@ -742,6 +1591,16 @@ Plugin.prototype.inputClipboardRead = async function(contentType: string) {
 Plugin.prototype.inputClipboardReadAll = async function() {
   const result = await this.call(MethodInputClipboardReadAll);
   return (result as any).items;
+};
+
+Plugin.prototype.inputClipboardReadFormat = async function(format: string) {
+  const result = await this.call(
+    MethodInputClipboardReadFormat,
+    {
+      format,
+    },
+  );
+  return result as InputClipboardReadFormatResponse;
 };
 
 Plugin.prototype.inputClipboardWrite = async function(contentType: string, data: string) {
@@ -843,6 +1702,10 @@ Plugin.prototype.inputScroll = async function(direction: string, amount?: number
   );
 };
 
+Plugin.prototype.inputSelectAll = async function() {
+  const result = await this.call(MethodInputSelectAll);
+};
+
 Plugin.prototype.inputSwitchInputSource = async function(sourceId: string) {
   const result = await this.call(
     MethodInputSwitchInputSource,
@@ -851,6 +1714,16 @@ Plugin.prototype.inputSwitchInputSource = async function(sourceId: string) {
     },
   );
   return (result as any).result;
+};
+
+Plugin.prototype.inputTripleClick = async function(x?: unknown, y?: unknown) {
+  const result = await this.call(
+    MethodInputTripleClick,
+    {
+      x,
+      y,
+    },
+  );
 };
 
 Plugin.prototype.inputTypeText = async function(text: string) {
@@ -897,6 +1770,21 @@ Plugin.prototype.matchAliasesSet = async function(aliases?: Record<string, strin
   return result as MatchAliasesSetResponse;
 };
 
+Plugin.prototype.nativeAccentColor = async function() {
+  const result = await this.call(MethodNativeAccentColor);
+  return result as NativeAccentColorResponse;
+};
+
+Plugin.prototype.nativeAccessibilityDisplayInvert = async function() {
+  const result = await this.call(MethodNativeAccessibilityDisplayInvert);
+  return result as NativeAccessibilityDisplayInvertResponse;
+};
+
+Plugin.prototype.nativeAccessibilityEnabled = async function() {
+  const result = await this.call(MethodNativeAccessibilityEnabled);
+  return result as NativeAccessibilityEnabledResponse;
+};
+
 Plugin.prototype.nativeActivateApp = async function(bundleId: string, allWindows?: boolean) {
   const result = await this.call(
     MethodNativeActivateApp,
@@ -907,9 +1795,67 @@ Plugin.prototype.nativeActivateApp = async function(bundleId: string, allWindows
   );
 };
 
+Plugin.prototype.nativeActiveNetworkService = async function() {
+  const result = await this.call(MethodNativeActiveNetworkService);
+  return result as NativeActiveNetworkServiceResponse;
+};
+
+Plugin.prototype.nativeActivePorts = async function() {
+  const result = await this.call(MethodNativeActivePorts);
+  return (result as any).ports;
+};
+
 Plugin.prototype.nativeActiveSpace = async function() {
   const result = await this.call(MethodNativeActiveSpace);
   return (result as any).active;
+};
+
+Plugin.prototype.nativeAirdropEnabled = async function() {
+  const result = await this.call(MethodNativeAirdropEnabled);
+  return result as NativeAirdropEnabledResponse;
+};
+
+Plugin.prototype.nativeAirportPower = async function() {
+  const result = await this.call(MethodNativeAirportPower);
+  return result as NativeAirportPowerResponse;
+};
+
+Plugin.prototype.nativeAlertSound = async function() {
+  const result = await this.call(MethodNativeAlertSound);
+  return result as NativeAlertSoundResponse;
+};
+
+Plugin.prototype.nativeAlertVolume = async function() {
+  const result = await this.call(MethodNativeAlertVolume);
+};
+
+Plugin.prototype.nativeAllWindowIds = async function() {
+  const result = await this.call(MethodNativeAllWindowIds);
+  return (result as any).window_ids;
+};
+
+Plugin.prototype.nativeApfsSnapshots = async function() {
+  const result = await this.call(MethodNativeApfsSnapshots);
+  return result as NativeApfsSnapshotsResponse;
+};
+
+Plugin.prototype.nativeAppBundlePath = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeAppBundlePath,
+    {
+      bundle_id: bundleId,
+    },
+  );
+  return result as NativeAppBundlePathResponse;
+};
+
+Plugin.prototype.nativeAppFocusedWindowID = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeAppFocusedWindowId,
+    {
+      bundle_id: bundleId,
+    },
+  );
 };
 
 Plugin.prototype.nativeAppIcon = async function(bundleId: string, size?: number) {
@@ -923,9 +1869,168 @@ Plugin.prototype.nativeAppIcon = async function(bundleId: string, size?: number)
   return result as NativeAppIconResponse;
 };
 
+Plugin.prototype.nativeAppIconPath = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeAppIconPath,
+    {
+      bundle_id: bundleId,
+    },
+  );
+};
+
+Plugin.prototype.nativeAppIsAgent = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeAppIsAgent,
+    {
+      bundle_id: bundleId,
+    },
+  );
+  return result as NativeAppIsAgentResponse;
+};
+
+Plugin.prototype.nativeAppIsRunning = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeAppIsRunning,
+    {
+      bundle_id: bundleId,
+    },
+  );
+  return result as NativeAppIsRunningResponse;
+};
+
+Plugin.prototype.nativeAppLaunchAtLogin = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeAppLaunchAtLogin,
+    {
+      bundle_id: bundleId,
+    },
+  );
+  return result as NativeAppLaunchAtLoginResponse;
+};
+
+Plugin.prototype.nativeAppMetadata = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeAppMetadata,
+    {
+      bundle_id: bundleId,
+    },
+  );
+  return result as NativeAppMetadataResponse;
+};
+
+Plugin.prototype.nativeAppPath = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeAppPath,
+    {
+      bundle_id: bundleId,
+    },
+  );
+};
+
+Plugin.prototype.nativeAppPid = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeAppPid,
+    {
+      bundle_id: bundleId,
+    },
+  );
+};
+
+Plugin.prototype.nativeAppSupportDirectory = async function() {
+  const result = await this.call(MethodNativeAppSupportDirectory);
+  return result as NativeAppSupportDirectoryResponse;
+};
+
+Plugin.prototype.nativeAppVersion = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeAppVersion,
+    {
+      bundle_id: bundleId,
+    },
+  );
+};
+
+Plugin.prototype.nativeAppWindows = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeAppWindows,
+    {
+      bundle_id: bundleId,
+    },
+  );
+  return (result as any).windows;
+};
+
+Plugin.prototype.nativeAppWindowsCount = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeAppWindowsCount,
+    {
+      bundle_id: bundleId,
+    },
+  );
+};
+
+Plugin.prototype.nativeAudioDeviceVolume = async function(deviceUid: string) {
+  const result = await this.call(
+    MethodNativeAudioDeviceVolume,
+    {
+      device_uid: deviceUid,
+    },
+  );
+  return result as NativeAudioDeviceVolumeResponse;
+};
+
 Plugin.prototype.nativeAudioDevices = async function() {
   const result = await this.call(MethodNativeAudioDevices);
   return (result as any).devices;
+};
+
+Plugin.prototype.nativeAudioInputDevice = async function() {
+  const result = await this.call(MethodNativeAudioInputDevice);
+  return result as NativeAudioInputDeviceResponse;
+};
+
+Plugin.prototype.nativeAudioInputLevel = async function() {
+  const result = await this.call(MethodNativeAudioInputLevel);
+};
+
+Plugin.prototype.nativeAudioOutputDevice = async function() {
+  const result = await this.call(MethodNativeAudioOutputDevice);
+  return result as NativeAudioOutputDeviceResponse;
+};
+
+Plugin.prototype.nativeAutoBrightness = async function() {
+  const result = await this.call(MethodNativeAutoBrightness);
+  return result as NativeAutoBrightnessResponse;
+};
+
+Plugin.prototype.nativeAutoRearrangeSpaces = async function() {
+  const result = await this.call(MethodNativeAutoRearrangeSpaces);
+  return result as NativeAutoRearrangeSpacesResponse;
+};
+
+Plugin.prototype.nativeAutoTimezone = async function() {
+  const result = await this.call(MethodNativeAutoTimezone);
+  return result as NativeAutoTimezoneResponse;
+};
+
+Plugin.prototype.nativeAutocorrectEnabled = async function() {
+  const result = await this.call(MethodNativeAutocorrectEnabled);
+  return result as NativeAutocorrectEnabledResponse;
+};
+
+Plugin.prototype.nativeAutomaticLoginUser = async function() {
+  const result = await this.call(MethodNativeAutomaticLoginUser);
+  return result as NativeAutomaticLoginUserResponse;
+};
+
+Plugin.prototype.nativeAutomationPermission = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeAutomationPermission,
+    {
+      bundle_id: bundleId,
+    },
+  );
+  return result as NativeAutomationPermissionResponse;
 };
 
 Plugin.prototype.nativeAxElementAtPoint = async function(pid: number, x: number, y: number) {
@@ -1031,6 +2136,19 @@ Plugin.prototype.nativeBattery = async function() {
   return result as NativeBatteryResponse;
 };
 
+Plugin.prototype.nativeBatteryCycleCount = async function() {
+  const result = await this.call(MethodNativeBatteryCycleCount);
+};
+
+Plugin.prototype.nativeBatteryHealth = async function() {
+  const result = await this.call(MethodNativeBatteryHealth);
+  return result as NativeBatteryHealthResponse;
+};
+
+Plugin.prototype.nativeBatteryMaxCapacity = async function() {
+  const result = await this.call(MethodNativeBatteryMaxCapacity);
+};
+
 Plugin.prototype.nativeBleDiscoverServices = async function(deviceIdentifier: string) {
   const result = await this.call(
     MethodNativeBleDiscoverServices,
@@ -1084,6 +2202,21 @@ Plugin.prototype.nativeBluetoothDevices = async function() {
   return (result as any).devices;
 };
 
+Plugin.prototype.nativeBluetoothPower = async function() {
+  const result = await this.call(MethodNativeBluetoothPower);
+  return result as NativeBluetoothPowerResponse;
+};
+
+Plugin.prototype.nativeBoldTextEnabled = async function() {
+  const result = await this.call(MethodNativeBoldTextEnabled);
+  return result as NativeBoldTextEnabledResponse;
+};
+
+Plugin.prototype.nativeBootVolume = async function() {
+  const result = await this.call(MethodNativeBootVolume);
+  return result as NativeBootVolumeResponse;
+};
+
 Plugin.prototype.nativeBorders = async function() {
   const result = await this.call(MethodNativeBorders);
 };
@@ -1098,6 +2231,42 @@ Plugin.prototype.nativeBrightness = async function(displayId?: unknown) {
   return result as NativeBrightnessResponse;
 };
 
+Plugin.prototype.nativeCalendarEventsRange = async function(end: string, start: string) {
+  const result = await this.call(
+    MethodNativeCalendarEventsRange,
+    {
+      end,
+      start,
+    },
+  );
+  return (result as any).events;
+};
+
+Plugin.prototype.nativeCalendarEventsToday = async function() {
+  const result = await this.call(MethodNativeCalendarEventsToday);
+  return (result as any).events;
+};
+
+Plugin.prototype.nativeCalendarPermission = async function() {
+  const result = await this.call(MethodNativeCalendarPermission);
+  return result as NativeCalendarPermissionResponse;
+};
+
+Plugin.prototype.nativeCameraPermission = async function() {
+  const result = await this.call(MethodNativeCameraPermission);
+  return result as NativeCameraPermissionResponse;
+};
+
+Plugin.prototype.nativeCameras = async function() {
+  const result = await this.call(MethodNativeCameras);
+  return (result as any).cameras;
+};
+
+Plugin.prototype.nativeCapsLockState = async function() {
+  const result = await this.call(MethodNativeCapsLockState);
+  return result as NativeCapsLockStateResponse;
+};
+
 Plugin.prototype.nativeCaptureWindow = async function(windowId: string) {
   const result = await this.call(
     MethodNativeCaptureWindow,
@@ -1106,6 +2275,52 @@ Plugin.prototype.nativeCaptureWindow = async function(windowId: string) {
     },
   );
   return result as NativeCaptureWindowResponse;
+};
+
+Plugin.prototype.nativeCascadeWindows = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeCascadeWindows,
+    {
+      bundle_id: bundleId,
+    },
+  );
+};
+
+Plugin.prototype.nativeCenterWindow = async function(windowId: string) {
+  const result = await this.call(
+    MethodNativeCenterWindow,
+    {
+      window_id: windowId,
+    },
+  );
+};
+
+Plugin.prototype.nativeCheckPermission = async function(permission: string) {
+  const result = await this.call(
+    MethodNativeCheckPermission,
+    {
+      permission,
+    },
+  );
+  return result as NativeCheckPermissionResponse;
+};
+
+Plugin.prototype.nativeClearFileQuarantine = async function(path: string) {
+  const result = await this.call(
+    MethodNativeClearFileQuarantine,
+    {
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativeClearNotifications = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeClearNotifications,
+    {
+      bundle_id: bundleId,
+    },
+  );
 };
 
 Plugin.prototype.nativeClickMenuItem = async function(pid: number, path?: string[]) {
@@ -1122,6 +2337,64 @@ Plugin.prototype.nativeClickMenuItem = async function(pid: number, path?: string
 Plugin.prototype.nativeClipboardChangeCount = async function() {
   const result = await this.call(MethodNativeClipboardChangeCount);
   return result as NativeClipboardChangeCountResponse;
+};
+
+Plugin.prototype.nativeClipboardFileUrls = async function() {
+  const result = await this.call(MethodNativeClipboardFileUrls);
+  return result as NativeClipboardFileUrlsResponse;
+};
+
+Plugin.prototype.nativeClipboardHasImage = async function() {
+  const result = await this.call(MethodNativeClipboardHasImage);
+  return result as NativeClipboardHasImageResponse;
+};
+
+Plugin.prototype.nativeClipboardHasText = async function() {
+  const result = await this.call(MethodNativeClipboardHasText);
+  return result as NativeClipboardHasTextResponse;
+};
+
+Plugin.prototype.nativeClipboardHTML = async function() {
+  const result = await this.call(MethodNativeClipboardHtml);
+  return result as NativeClipboardHTMLResponse;
+};
+
+Plugin.prototype.nativeClipboardImageDimensions = async function() {
+  const result = await this.call(MethodNativeClipboardImageDimensions);
+  return result as NativeClipboardImageDimensionsResponse;
+};
+
+Plugin.prototype.nativeClipboardRichText = async function() {
+  const result = await this.call(MethodNativeClipboardRichText);
+  return result as NativeClipboardRichTextResponse;
+};
+
+Plugin.prototype.nativeClipboardSetHTML = async function(html: string) {
+  const result = await this.call(
+    MethodNativeClipboardSetHtml,
+    {
+      html,
+    },
+  );
+};
+
+Plugin.prototype.nativeClipboardSetText = async function(text: string) {
+  const result = await this.call(
+    MethodNativeClipboardSetText,
+    {
+      text,
+    },
+  );
+};
+
+Plugin.prototype.nativeClipboardTypes = async function(pasteboard?: string) {
+  const result = await this.call(
+    MethodNativeClipboardTypes,
+    {
+      pasteboard,
+    },
+  );
+  return (result as any).types;
 };
 
 Plugin.prototype.nativeCloseWindow = async function(windowId: string) {
@@ -1144,9 +2417,80 @@ Plugin.prototype.nativeColorAtPoint = async function(x: number, y: number) {
   return result as NativeColorAtPointResponse;
 };
 
+Plugin.prototype.nativeComputerName = async function() {
+  const result = await this.call(MethodNativeComputerName);
+  return result as NativeComputerNameResponse;
+};
+
+Plugin.prototype.nativeComputerSleepTime = async function() {
+  const result = await this.call(MethodNativeComputerSleepTime);
+};
+
+Plugin.prototype.nativeContactsPermission = async function() {
+  const result = await this.call(MethodNativeContactsPermission);
+  return result as NativeContactsPermissionResponse;
+};
+
+Plugin.prototype.nativeCopyFile = async function(destination: string, source: string) {
+  const result = await this.call(
+    MethodNativeCopyFile,
+    {
+      destination,
+      source,
+    },
+  );
+};
+
+Plugin.prototype.nativeCpuInfo = async function() {
+  const result = await this.call(MethodNativeCpuInfo);
+  return result as NativeCpuInfoResponse;
+};
+
+Plugin.prototype.nativeCpuTemperature = async function() {
+  const result = await this.call(MethodNativeCpuTemperature);
+};
+
+Plugin.prototype.nativeCpuUsage = async function() {
+  const result = await this.call(MethodNativeCpuUsage);
+};
+
+Plugin.prototype.nativeCreateDirectory = async function(path: string) {
+  const result = await this.call(
+    MethodNativeCreateDirectory,
+    {
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativeCronJobs = async function() {
+  const result = await this.call(MethodNativeCronJobs);
+  return (result as any).jobs;
+};
+
+Plugin.prototype.nativeCurrencyCode = async function() {
+  const result = await this.call(MethodNativeCurrencyCode);
+  return result as NativeCurrencyCodeResponse;
+};
+
+Plugin.prototype.nativeCurrentDatetime = async function() {
+  const result = await this.call(MethodNativeCurrentDatetime);
+  return result as NativeCurrentDatetimeResponse;
+};
+
 Plugin.prototype.nativeCurrentUser = async function() {
   const result = await this.call(MethodNativeCurrentUser);
   return result as NativeCurrentUserResponse;
+};
+
+Plugin.prototype.nativeCurrentUserAdmin = async function() {
+  const result = await this.call(MethodNativeCurrentUserAdmin);
+  return result as NativeCurrentUserAdminResponse;
+};
+
+Plugin.prototype.nativeCurrentWallpaper = async function() {
+  const result = await this.call(MethodNativeCurrentWallpaper);
+  return result as NativeCurrentWallpaperResponse;
 };
 
 Plugin.prototype.nativeCursor = async function() {
@@ -1159,14 +2503,114 @@ Plugin.prototype.nativeCursorInfo = async function() {
   return result as NativeCursorInfoResponse;
 };
 
+Plugin.prototype.nativeCursorShakeToLocate = async function() {
+  const result = await this.call(MethodNativeCursorShakeToLocate);
+  return result as NativeCursorShakeToLocateResponse;
+};
+
 Plugin.prototype.nativeDarkMode = async function() {
   const result = await this.call(MethodNativeDarkMode);
   return result as NativeDarkModeResponse;
 };
 
+Plugin.prototype.nativeDateFormat = async function() {
+  const result = await this.call(MethodNativeDateFormat);
+  return result as NativeDateFormatResponse;
+};
+
+Plugin.prototype.nativeDefaultAppForUti = async function(uti: string) {
+  const result = await this.call(
+    MethodNativeDefaultAppForUti,
+    {
+      uti,
+    },
+  );
+  return result as NativeDefaultAppForUtiResponse;
+};
+
 Plugin.prototype.nativeDefaultBrowser = async function() {
   const result = await this.call(MethodNativeDefaultBrowser);
   return result as NativeDefaultBrowserResponse;
+};
+
+Plugin.prototype.nativeDefaultEmailClient = async function() {
+  const result = await this.call(MethodNativeDefaultEmailClient);
+  return result as NativeDefaultEmailClientResponse;
+};
+
+Plugin.prototype.nativeDefaultPrinter = async function() {
+  const result = await this.call(MethodNativeDefaultPrinter);
+  return result as NativeDefaultPrinterResponse;
+};
+
+Plugin.prototype.nativeDeleteFile = async function(path: string) {
+  const result = await this.call(
+    MethodNativeDeleteFile,
+    {
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativeDesktopDirectory = async function() {
+  const result = await this.call(MethodNativeDesktopDirectory);
+  return result as NativeDesktopDirectoryResponse;
+};
+
+Plugin.prototype.nativeDetectBarcodes = async function() {
+  const result = await this.call(MethodNativeDetectBarcodes);
+  return (result as any).barcodes;
+};
+
+Plugin.prototype.nativeDetectBarcodesFile = async function(path: string) {
+  const result = await this.call(
+    MethodNativeDetectBarcodesFile,
+    {
+      path,
+    },
+  );
+  return (result as any).barcodes;
+};
+
+Plugin.prototype.nativeDictationEnabled = async function() {
+  const result = await this.call(MethodNativeDictationEnabled);
+  return result as NativeDictationEnabledResponse;
+};
+
+Plugin.prototype.nativeDifferentiateWithoutColor = async function() {
+  const result = await this.call(MethodNativeDifferentiateWithoutColor);
+  return result as NativeDifferentiateWithoutColorResponse;
+};
+
+Plugin.prototype.nativeDirectoryContents = async function(path: string, includeHidden?: boolean) {
+  const result = await this.call(
+    MethodNativeDirectoryContents,
+    {
+      path,
+      include_hidden: includeHidden,
+    },
+  );
+  return (result as any).entries;
+};
+
+Plugin.prototype.nativeDiskSpace = async function(path?: string) {
+  const result = await this.call(
+    MethodNativeDiskSpace,
+    {
+      path,
+    },
+  );
+  return result as NativeDiskSpaceResponse;
+};
+
+Plugin.prototype.nativeDiskUsage = async function(path: string) {
+  const result = await this.call(
+    MethodNativeDiskUsage,
+    {
+      path,
+    },
+  );
+  return result as NativeDiskUsageResponse;
 };
 
 Plugin.prototype.nativeDismissNotification = async function(id: string) {
@@ -1176,6 +2620,57 @@ Plugin.prototype.nativeDismissNotification = async function(id: string) {
       id,
     },
   );
+};
+
+Plugin.prototype.nativeDisplayBrightness = async function() {
+  const result = await this.call(MethodNativeDisplayBrightness);
+};
+
+Plugin.prototype.nativeDisplayColorProfiles = async function() {
+  const result = await this.call(MethodNativeDisplayColorProfiles);
+  return (result as any).profiles;
+};
+
+Plugin.prototype.nativeDisplayCount = async function() {
+  const result = await this.call(MethodNativeDisplayCount);
+  return result as NativeDisplayCountResponse;
+};
+
+Plugin.prototype.nativeDisplayMirroring = async function() {
+  const result = await this.call(MethodNativeDisplayMirroring);
+  return result as NativeDisplayMirroringResponse;
+};
+
+Plugin.prototype.nativeDisplayRefreshRate = async function(displayId: number) {
+  const result = await this.call(
+    MethodNativeDisplayRefreshRate,
+    {
+      display_id: displayId,
+    },
+  );
+};
+
+Plugin.prototype.nativeDisplayRotation = async function() {
+  const result = await this.call(MethodNativeDisplayRotation);
+  return (result as any).rotations;
+};
+
+Plugin.prototype.nativeDisplayScaleFactor = async function(displayId: number) {
+  const result = await this.call(
+    MethodNativeDisplayScaleFactor,
+    {
+      display_id: displayId,
+    },
+  );
+};
+
+Plugin.prototype.nativeDisplaySerialNumber = async function() {
+  const result = await this.call(MethodNativeDisplaySerialNumber);
+  return result as NativeDisplaySerialNumberResponse;
+};
+
+Plugin.prototype.nativeDisplaySleepTime = async function() {
+  const result = await this.call(MethodNativeDisplaySleepTime);
 };
 
 Plugin.prototype.nativeDisplays = async function() {
@@ -1188,6 +2683,219 @@ Plugin.prototype.nativeDnd = async function() {
   return result as NativeDndResponse;
 };
 
+Plugin.prototype.nativeDnsServers = async function() {
+  const result = await this.call(MethodNativeDnsServers);
+  return (result as any).servers;
+};
+
+Plugin.prototype.nativeDockAutoHide = async function() {
+  const result = await this.call(MethodNativeDockAutoHide);
+  return result as NativeDockAutoHideResponse;
+};
+
+Plugin.prototype.nativeDockMagnification = async function() {
+  const result = await this.call(MethodNativeDockMagnification);
+  return result as NativeDockMagnificationResponse;
+};
+
+Plugin.prototype.nativeDockMinimizeEffect = async function() {
+  const result = await this.call(MethodNativeDockMinimizeEffect);
+  return result as NativeDockMinimizeEffectResponse;
+};
+
+Plugin.prototype.nativeDockMinimizeToApp = async function() {
+  const result = await this.call(MethodNativeDockMinimizeToApp);
+  return result as NativeDockMinimizeToAppResponse;
+};
+
+Plugin.prototype.nativeDockPosition = async function() {
+  const result = await this.call(MethodNativeDockPosition);
+  return result as NativeDockPositionResponse;
+};
+
+Plugin.prototype.nativeDockShowIndicators = async function() {
+  const result = await this.call(MethodNativeDockShowIndicators);
+  return result as NativeDockShowIndicatorsResponse;
+};
+
+Plugin.prototype.nativeDockShowRecents = async function() {
+  const result = await this.call(MethodNativeDockShowRecents);
+  return result as NativeDockShowRecentsResponse;
+};
+
+Plugin.prototype.nativeDockSize = async function() {
+  const result = await this.call(MethodNativeDockSize);
+};
+
+Plugin.prototype.nativeDocumentsDirectory = async function() {
+  const result = await this.call(MethodNativeDocumentsDirectory);
+  return result as NativeDocumentsDirectoryResponse;
+};
+
+Plugin.prototype.nativeDownloadsDirectory = async function() {
+  const result = await this.call(MethodNativeDownloadsDirectory);
+  return result as NativeDownloadsDirectoryResponse;
+};
+
+Plugin.prototype.nativeEjectDisk = async function(mountPoint: string) {
+  const result = await this.call(
+    MethodNativeEjectDisk,
+    {
+      mount_point: mountPoint,
+    },
+  );
+};
+
+Plugin.prototype.nativeEmptyTrash = async function() {
+  const result = await this.call(MethodNativeEmptyTrash);
+};
+
+Plugin.prototype.nativeEnvVar = async function(name: string) {
+  const result = await this.call(
+    MethodNativeEnvVar,
+    {
+      name,
+    },
+  );
+  return result as NativeEnvVarResponse;
+};
+
+Plugin.prototype.nativeEpochTime = async function() {
+  const result = await this.call(MethodNativeEpochTime);
+  return result as NativeEpochTimeResponse;
+};
+
+Plugin.prototype.nativeExtendedAttributes = async function(path: string) {
+  const result = await this.call(
+    MethodNativeExtendedAttributes,
+    {
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativeExternalDisks = async function() {
+  const result = await this.call(MethodNativeExternalDisks);
+  return (result as any).disks;
+};
+
+Plugin.prototype.nativeExternalDisplayNames = async function() {
+  const result = await this.call(MethodNativeExternalDisplayNames);
+  return (result as any).names;
+};
+
+Plugin.prototype.nativeFanSpeeds = async function() {
+  const result = await this.call(MethodNativeFanSpeeds);
+  return result as NativeFanSpeedsResponse;
+};
+
+Plugin.prototype.nativeFastUserSwitching = async function() {
+  const result = await this.call(MethodNativeFastUserSwitching);
+  return result as NativeFastUserSwitchingResponse;
+};
+
+Plugin.prototype.nativeFileAcl = async function(path: string) {
+  const result = await this.call(
+    MethodNativeFileAcl,
+    {
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativeFileCreationDate = async function(path: string) {
+  const result = await this.call(
+    MethodNativeFileCreationDate,
+    {
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativeFileExists = async function(path: string) {
+  const result = await this.call(
+    MethodNativeFileExists,
+    {
+      path,
+    },
+  );
+  return result as NativeFileExistsResponse;
+};
+
+Plugin.prototype.nativeFileExtendedAttributes = async function(path: string) {
+  const result = await this.call(
+    MethodNativeFileExtendedAttributes,
+    {
+      path,
+    },
+  );
+  return (result as any).attributes;
+};
+
+Plugin.prototype.nativeFileHash = async function(path: string, algorithm?: string) {
+  const result = await this.call(
+    MethodNativeFileHash,
+    {
+      path,
+      algorithm,
+    },
+  );
+  return result as NativeFileHashResponse;
+};
+
+Plugin.prototype.nativeFileMetadata = async function(path: string) {
+  const result = await this.call(
+    MethodNativeFileMetadata,
+    {
+      path,
+    },
+  );
+  return result as NativeFileMetadataResponse;
+};
+
+Plugin.prototype.nativeFileModificationDate = async function(path: string) {
+  const result = await this.call(
+    MethodNativeFileModificationDate,
+    {
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativeFileOwner = async function(path: string) {
+  const result = await this.call(
+    MethodNativeFileOwner,
+    {
+      path,
+    },
+  );
+  return result as NativeFileOwnerResponse;
+};
+
+Plugin.prototype.nativeFileQuarantine = async function(path: string) {
+  const result = await this.call(
+    MethodNativeFileQuarantine,
+    {
+      path,
+    },
+  );
+  return result as NativeFileQuarantineResponse;
+};
+
+Plugin.prototype.nativeFileSharingEnabled = async function() {
+  const result = await this.call(MethodNativeFileSharingEnabled);
+  return result as NativeFileSharingEnabledResponse;
+};
+
+Plugin.prototype.nativeFileSize = async function(path: string) {
+  const result = await this.call(
+    MethodNativeFileSize,
+    {
+      path,
+    },
+  );
+};
+
 Plugin.prototype.nativeFileTags = async function(path: string, tags?: unknown) {
   const result = await this.call(
     MethodNativeFileTags,
@@ -1196,6 +2904,108 @@ Plugin.prototype.nativeFileTags = async function(path: string, tags?: unknown) {
       tags,
     },
   );
+};
+
+Plugin.prototype.nativeFileType = async function(path: string) {
+  const result = await this.call(
+    MethodNativeFileType,
+    {
+      path,
+    },
+  );
+  return result as NativeFileTypeResponse;
+};
+
+Plugin.prototype.nativeFileUti = async function(path: string) {
+  const result = await this.call(
+    MethodNativeFileUti,
+    {
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativeFilevaultStatus = async function() {
+  const result = await this.call(MethodNativeFilevaultStatus);
+  return result as NativeFilevaultStatusResponse;
+};
+
+Plugin.prototype.nativeFinderDefaultView = async function() {
+  const result = await this.call(MethodNativeFinderDefaultView);
+  return result as NativeFinderDefaultViewResponse;
+};
+
+Plugin.prototype.nativeFinderNewWindowTarget = async function() {
+  const result = await this.call(MethodNativeFinderNewWindowTarget);
+  return result as NativeFinderNewWindowTargetResponse;
+};
+
+Plugin.prototype.nativeFinderSelection = async function() {
+  const result = await this.call(MethodNativeFinderSelection);
+  return (result as any).paths;
+};
+
+Plugin.prototype.nativeFinderShowExtensions = async function() {
+  const result = await this.call(MethodNativeFinderShowExtensions);
+  return result as NativeFinderShowExtensionsResponse;
+};
+
+Plugin.prototype.nativeFinderShowHidden = async function() {
+  const result = await this.call(MethodNativeFinderShowHidden);
+  return result as NativeFinderShowHiddenResponse;
+};
+
+Plugin.prototype.nativeFinderShowPathBar = async function() {
+  const result = await this.call(MethodNativeFinderShowPathBar);
+  return result as NativeFinderShowPathBarResponse;
+};
+
+Plugin.prototype.nativeFinderShowStatusBar = async function() {
+  const result = await this.call(MethodNativeFinderShowStatusBar);
+  return result as NativeFinderShowStatusBarResponse;
+};
+
+Plugin.prototype.nativeFinderWindowPath = async function() {
+  const result = await this.call(MethodNativeFinderWindowPath);
+  return result as NativeFinderWindowPathResponse;
+};
+
+Plugin.prototype.nativeFirewallEnabled = async function() {
+  const result = await this.call(MethodNativeFirewallEnabled);
+  return result as NativeFirewallEnabledResponse;
+};
+
+Plugin.prototype.nativeFirstDayOfWeek = async function() {
+  const result = await this.call(MethodNativeFirstDayOfWeek);
+};
+
+Plugin.prototype.nativeFlushDns = async function() {
+  const result = await this.call(MethodNativeFlushDns);
+};
+
+Plugin.prototype.nativeFnKeyFunction = async function() {
+  const result = await this.call(MethodNativeFnKeyFunction);
+  return result as NativeFnKeyFunctionResponse;
+};
+
+Plugin.prototype.nativeFocusModes = async function() {
+  const result = await this.call(MethodNativeFocusModes);
+  return result as NativeFocusModesResponse;
+};
+
+Plugin.prototype.nativeFocusedElement = async function() {
+  const result = await this.call(MethodNativeFocusedElement);
+  return result as NativeFocusedElementResponse;
+};
+
+Plugin.prototype.nativeFocusedWindowID = async function() {
+  const result = await this.call(MethodNativeFocusedWindowId);
+  return result as NativeFocusedWindowIDResponse;
+};
+
+Plugin.prototype.nativeFontSmoothing = async function() {
+  const result = await this.call(MethodNativeFontSmoothing);
+  return result as NativeFontSmoothingResponse;
 };
 
 Plugin.prototype.nativeForceQuitApp = async function(bundleId: string) {
@@ -1213,6 +3023,36 @@ Plugin.prototype.nativeFrontmostApp = async function() {
   return result as NativeFrontmostAppResponse;
 };
 
+Plugin.prototype.nativeFullDiskAccess = async function() {
+  const result = await this.call(MethodNativeFullDiskAccess);
+  return result as NativeFullDiskAccessResponse;
+};
+
+Plugin.prototype.nativeFunctionKeysStandard = async function() {
+  const result = await this.call(MethodNativeFunctionKeysStandard);
+  return result as NativeFunctionKeysStandardResponse;
+};
+
+Plugin.prototype.nativeGatekeeperStatus = async function() {
+  const result = await this.call(MethodNativeGatekeeperStatus);
+  return result as NativeGatekeeperStatusResponse;
+};
+
+Plugin.prototype.nativeGatewayAddress = async function() {
+  const result = await this.call(MethodNativeGatewayAddress);
+  return result as NativeGatewayAddressResponse;
+};
+
+Plugin.prototype.nativeGeneratePdf = async function(html: string, outputPath: string) {
+  const result = await this.call(
+    MethodNativeGeneratePdf,
+    {
+      html,
+      output_path: outputPath,
+    },
+  );
+};
+
 Plugin.prototype.nativeGetWindowInfo = async function(windowId: string) {
   const result = await this.call(
     MethodNativeGetWindowInfo,
@@ -1221,6 +3061,47 @@ Plugin.prototype.nativeGetWindowInfo = async function(windowId: string) {
     },
   );
   return result as NativeGetWindowInfoResponse;
+};
+
+Plugin.prototype.nativeGlobFiles = async function(pattern: string, maxResults?: number) {
+  const result = await this.call(
+    MethodNativeGlobFiles,
+    {
+      pattern,
+      max_results: maxResults,
+    },
+  );
+  return (result as any).paths;
+};
+
+Plugin.prototype.nativeGpuInfo = async function() {
+  const result = await this.call(MethodNativeGpuInfo);
+  return result as NativeGpuInfoResponse;
+};
+
+Plugin.prototype.nativeGrayscaleEnabled = async function() {
+  const result = await this.call(MethodNativeGrayscaleEnabled);
+  return result as NativeGrayscaleEnabledResponse;
+};
+
+Plugin.prototype.nativeGroupWindowsByApp = async function() {
+  const result = await this.call(MethodNativeGroupWindowsByApp);
+  return result as NativeGroupWindowsByAppResponse;
+};
+
+Plugin.prototype.nativeHandoffEnabled = async function() {
+  const result = await this.call(MethodNativeHandoffEnabled);
+  return result as NativeHandoffEnabledResponse;
+};
+
+Plugin.prototype.nativeHardwareModel = async function() {
+  const result = await this.call(MethodNativeHardwareModel);
+  return result as NativeHardwareModelResponse;
+};
+
+Plugin.prototype.nativeHardwareUuid = async function() {
+  const result = await this.call(MethodNativeHardwareUuid);
+  return result as NativeHardwareUuidResponse;
 };
 
 Plugin.prototype.nativeHidClaim = async function(deviceId: string) {
@@ -1280,9 +3161,79 @@ Plugin.prototype.nativeHideApp = async function(bundleId: string) {
   );
 };
 
+Plugin.prototype.nativeHighlightColor = async function() {
+  const result = await this.call(MethodNativeHighlightColor);
+  return result as NativeHighlightColorResponse;
+};
+
+Plugin.prototype.nativeHomeDirectory = async function() {
+  const result = await this.call(MethodNativeHomeDirectory);
+  return result as NativeHomeDirectoryResponse;
+};
+
+Plugin.prototype.nativeHomebrewPrefix = async function() {
+  const result = await this.call(MethodNativeHomebrewPrefix);
+  return result as NativeHomebrewPrefixResponse;
+};
+
+Plugin.prototype.nativeHostname = async function() {
+  const result = await this.call(MethodNativeHostname);
+  return result as NativeHostnameResponse;
+};
+
+Plugin.prototype.nativeHostnameResolve = async function(hostname: string) {
+  const result = await this.call(
+    MethodNativeHostnameResolve,
+    {
+      hostname,
+    },
+  );
+  return (result as any).addresses;
+};
+
+Plugin.prototype.nativeHotCorners = async function() {
+  const result = await this.call(MethodNativeHotCorners);
+  return result as NativeHotCornersResponse;
+};
+
+Plugin.prototype.nativeIcloudDesktopSync = async function() {
+  const result = await this.call(MethodNativeIcloudDesktopSync);
+  return result as NativeIcloudDesktopSyncResponse;
+};
+
+Plugin.prototype.nativeIcloudDrivePath = async function() {
+  const result = await this.call(MethodNativeIcloudDrivePath);
+  return result as NativeIcloudDrivePathResponse;
+};
+
+Plugin.prototype.nativeIcloudSignedIn = async function() {
+  const result = await this.call(MethodNativeIcloudSignedIn);
+  return result as NativeIcloudSignedInResponse;
+};
+
+Plugin.prototype.nativeIncreaseContrast = async function() {
+  const result = await this.call(MethodNativeIncreaseContrast);
+  return result as NativeIncreaseContrastResponse;
+};
+
+Plugin.prototype.nativeInputSources = async function() {
+  const result = await this.call(MethodNativeInputSources);
+  return (result as any).sources;
+};
+
 Plugin.prototype.nativeInstalledApps = async function() {
   const result = await this.call(MethodNativeInstalledApps);
   return (result as any).apps;
+};
+
+Plugin.prototype.nativeInterfaceStyleSwitcher = async function() {
+  const result = await this.call(MethodNativeInterfaceStyleSwitcher);
+  return result as NativeInterfaceStyleSwitcherResponse;
+};
+
+Plugin.prototype.nativeIpv6Address = async function() {
+  const result = await this.call(MethodNativeIpv6Address);
+  return result as NativeIpv6AddressResponse;
 };
 
 Plugin.prototype.nativeIsAppHidden = async function(bundleId: string) {
@@ -1295,9 +3246,93 @@ Plugin.prototype.nativeIsAppHidden = async function(bundleId: string) {
   return (result as any).result;
 };
 
+Plugin.prototype.nativeIsDirectory = async function(path: string) {
+  const result = await this.call(
+    MethodNativeIsDirectory,
+    {
+      path,
+    },
+  );
+  return result as NativeIsDirectoryResponse;
+};
+
+Plugin.prototype.nativeIsFileHidden = async function(path: string) {
+  const result = await this.call(
+    MethodNativeIsFileHidden,
+    {
+      path,
+    },
+  );
+  return result as NativeIsFileHiddenResponse;
+};
+
+Plugin.prototype.nativeKernelVersion = async function() {
+  const result = await this.call(MethodNativeKernelVersion);
+  return result as NativeKernelVersionResponse;
+};
+
+Plugin.prototype.nativeKeyRepeatDelay = async function() {
+  const result = await this.call(MethodNativeKeyRepeatDelay);
+};
+
+Plugin.prototype.nativeKeyRepeatRate = async function() {
+  const result = await this.call(MethodNativeKeyRepeatRate);
+};
+
+Plugin.prototype.nativeKeyboardBrightness = async function() {
+  const result = await this.call(MethodNativeKeyboardBrightness);
+};
+
 Plugin.prototype.nativeKeyboardLayout = async function() {
   const result = await this.call(MethodNativeKeyboardLayout);
   return result as NativeKeyboardLayoutResponse;
+};
+
+Plugin.prototype.nativeKeychainDelete = async function(account: string, service: string) {
+  const result = await this.call(
+    MethodNativeKeychainDelete,
+    {
+      account,
+      service,
+    },
+  );
+};
+
+Plugin.prototype.nativeKeychainRead = async function(account: string, service: string) {
+  const result = await this.call(
+    MethodNativeKeychainRead,
+    {
+      account,
+      service,
+    },
+  );
+  return result as NativeKeychainReadResponse;
+};
+
+Plugin.prototype.nativeKeychainWrite = async function(account: string, password: string, service: string) {
+  const result = await this.call(
+    MethodNativeKeychainWrite,
+    {
+      account,
+      password,
+      service,
+    },
+  );
+};
+
+Plugin.prototype.nativeKillProcess = async function(pid: number, signal?: number) {
+  const result = await this.call(
+    MethodNativeKillProcess,
+    {
+      pid,
+      signal,
+    },
+  );
+};
+
+Plugin.prototype.nativeLastReboot = async function() {
+  const result = await this.call(MethodNativeLastReboot);
+  return result as NativeLastRebootResponse;
 };
 
 Plugin.prototype.nativeLaunchApp = async function(bundleId: string, newInstance?: boolean) {
@@ -1310,9 +3345,34 @@ Plugin.prototype.nativeLaunchApp = async function(bundleId: string, newInstance?
   );
 };
 
+Plugin.prototype.nativeLaunchdAgents = async function() {
+  const result = await this.call(MethodNativeLaunchdAgents);
+  return (result as any).agents;
+};
+
+Plugin.prototype.nativeLaunchdDaemons = async function() {
+  const result = await this.call(MethodNativeLaunchdDaemons);
+  return (result as any).daemons;
+};
+
+Plugin.prototype.nativeListAudioInputDevices = async function() {
+  const result = await this.call(MethodNativeListAudioInputDevices);
+  return (result as any).devices;
+};
+
+Plugin.prototype.nativeListAudioOutputDevices = async function() {
+  const result = await this.call(MethodNativeListAudioOutputDevices);
+  return (result as any).devices;
+};
+
 Plugin.prototype.nativeListNotifications = async function() {
   const result = await this.call(MethodNativeListNotifications);
   return (result as any).notifications;
+};
+
+Plugin.prototype.nativeListShortcuts = async function() {
+  const result = await this.call(MethodNativeListShortcuts);
+  return (result as any).shortcuts;
 };
 
 Plugin.prototype.nativeListSpaces = async function() {
@@ -1320,9 +3380,89 @@ Plugin.prototype.nativeListSpaces = async function() {
   return (result as any).spaces;
 };
 
+Plugin.prototype.nativeLiveTextEnabled = async function() {
+  const result = await this.call(MethodNativeLiveTextEnabled);
+  return result as NativeLiveTextEnabledResponse;
+};
+
+Plugin.prototype.nativeLocalIP = async function() {
+  const result = await this.call(MethodNativeLocalIp);
+  return result as NativeLocalIPResponse;
+};
+
+Plugin.prototype.nativeLocale = async function() {
+  const result = await this.call(MethodNativeLocale);
+  return result as NativeLocaleResponse;
+};
+
+Plugin.prototype.nativeLocationEnabled = async function() {
+  const result = await this.call(MethodNativeLocationEnabled);
+  return result as NativeLocationEnabledResponse;
+};
+
+Plugin.prototype.nativeLogOut = async function() {
+  const result = await this.call(MethodNativeLogOut);
+};
+
+Plugin.prototype.nativeLoggedInUsers = async function() {
+  const result = await this.call(MethodNativeLoggedInUsers);
+  return (result as any).users;
+};
+
 Plugin.prototype.nativeLoginItems = async function() {
   const result = await this.call(MethodNativeLoginItems);
   return (result as any).items;
+};
+
+Plugin.prototype.nativeLoginItemsModern = async function() {
+  const result = await this.call(MethodNativeLoginItemsModern);
+  return (result as any).items;
+};
+
+Plugin.prototype.nativeLowPowerMode = async function() {
+  const result = await this.call(MethodNativeLowPowerMode);
+  return result as NativeLowPowerModeResponse;
+};
+
+Plugin.prototype.nativeMacAddress = async function() {
+  const result = await this.call(MethodNativeMacAddress);
+  return result as NativeMacAddressResponse;
+};
+
+Plugin.prototype.nativeMaximizeWindow = async function(windowId: string) {
+  const result = await this.call(
+    MethodNativeMaximizeWindow,
+    {
+      window_id: windowId,
+    },
+  );
+};
+
+Plugin.prototype.nativeMeasurementSystem = async function() {
+  const result = await this.call(MethodNativeMeasurementSystem);
+  return result as NativeMeasurementSystemResponse;
+};
+
+Plugin.prototype.nativeMediaNextTrack = async function() {
+  const result = await this.call(MethodNativeMediaNextTrack);
+};
+
+Plugin.prototype.nativeMediaPlayPause = async function() {
+  const result = await this.call(MethodNativeMediaPlayPause);
+};
+
+Plugin.prototype.nativeMediaPreviousTrack = async function() {
+  const result = await this.call(MethodNativeMediaPreviousTrack);
+};
+
+Plugin.prototype.nativeMemoryInfo = async function() {
+  const result = await this.call(MethodNativeMemoryInfo);
+  return result as NativeMemoryInfoResponse;
+};
+
+Plugin.prototype.nativeMemoryPressure = async function() {
+  const result = await this.call(MethodNativeMemoryPressure);
+  return result as NativeMemoryPressureResponse;
 };
 
 Plugin.prototype.nativeMenuBar = async function(pid: number) {
@@ -1335,11 +3475,66 @@ Plugin.prototype.nativeMenuBar = async function(pid: number) {
   return (result as any).items;
 };
 
+Plugin.prototype.nativeMenuBarAutoHide = async function() {
+  const result = await this.call(MethodNativeMenuBarAutoHide);
+  return result as NativeMenuBarAutoHideResponse;
+};
+
+Plugin.prototype.nativeMenuBarBatteryPercent = async function() {
+  const result = await this.call(MethodNativeMenuBarBatteryPercent);
+  return result as NativeMenuBarBatteryPercentResponse;
+};
+
+Plugin.prototype.nativeMenuBarClockFormat = async function() {
+  const result = await this.call(MethodNativeMenuBarClockFormat);
+  return result as NativeMenuBarClockFormatResponse;
+};
+
+Plugin.prototype.nativeMicrophonePermission = async function() {
+  const result = await this.call(MethodNativeMicrophonePermission);
+  return result as NativeMicrophonePermissionResponse;
+};
+
 Plugin.prototype.nativeMinimizeWindow = async function(windowId: string) {
   const result = await this.call(
     MethodNativeMinimizeWindow,
     {
       window_id: windowId,
+    },
+  );
+};
+
+Plugin.prototype.nativeModelName = async function() {
+  const result = await this.call(MethodNativeModelName);
+  return result as NativeModelNameResponse;
+};
+
+Plugin.prototype.nativeMountPoints = async function() {
+  const result = await this.call(MethodNativeMountPoints);
+  return (result as any).volumes;
+};
+
+Plugin.prototype.nativeMouseButtonClick = async function(button: number, x?: unknown, y?: unknown) {
+  const result = await this.call(
+    MethodNativeMouseButtonClick,
+    {
+      button,
+      x,
+      y,
+    },
+  );
+};
+
+Plugin.prototype.nativeMouseSpeed = async function() {
+  const result = await this.call(MethodNativeMouseSpeed);
+};
+
+Plugin.prototype.nativeMoveFile = async function(destination: string, source: string) {
+  const result = await this.call(
+    MethodNativeMoveFile,
+    {
+      destination,
+      source,
     },
   );
 };
@@ -1374,6 +3569,60 @@ Plugin.prototype.nativeMute = async function(muted: boolean) {
   );
 };
 
+Plugin.prototype.nativeNetworkBandwidth = async function() {
+  const result = await this.call(MethodNativeNetworkBandwidth);
+  return result as NativeNetworkBandwidthResponse;
+};
+
+Plugin.prototype.nativeNetworkDnsDomain = async function() {
+  const result = await this.call(MethodNativeNetworkDnsDomain);
+  return result as NativeNetworkDnsDomainResponse;
+};
+
+Plugin.prototype.nativeNetworkInterfaces = async function() {
+  const result = await this.call(MethodNativeNetworkInterfaces);
+  return (result as any).interfaces;
+};
+
+Plugin.prototype.nativeNetworkProxyEnabled = async function() {
+  const result = await this.call(MethodNativeNetworkProxyEnabled);
+  return result as NativeNetworkProxyEnabledResponse;
+};
+
+Plugin.prototype.nativeNetworkQuality = async function() {
+  const result = await this.call(MethodNativeNetworkQuality);
+  return result as NativeNetworkQualityResponse;
+};
+
+Plugin.prototype.nativeNetworkReachable = async function(host: string) {
+  const result = await this.call(
+    MethodNativeNetworkReachable,
+    {
+      host,
+    },
+  );
+  return result as NativeNetworkReachableResponse;
+};
+
+Plugin.prototype.nativeNetworkSignalStrength = async function() {
+  const result = await this.call(MethodNativeNetworkSignalStrength);
+};
+
+Plugin.prototype.nativeNetworkSsid = async function() {
+  const result = await this.call(MethodNativeNetworkSsid);
+  return result as NativeNetworkSsidResponse;
+};
+
+Plugin.prototype.nativeNightShift = async function() {
+  const result = await this.call(MethodNativeNightShift);
+  return result as NativeNightShiftResponse;
+};
+
+Plugin.prototype.nativeNotificationSoundEnabled = async function() {
+  const result = await this.call(MethodNativeNotificationSoundEnabled);
+  return result as NativeNotificationSoundEnabledResponse;
+};
+
 Plugin.prototype.nativeNotify = async function(title: string, body?: unknown, sound?: unknown, subtitle?: unknown) {
   const result = await this.call(
     MethodNativeNotify,
@@ -1387,6 +3636,16 @@ Plugin.prototype.nativeNotify = async function(title: string, body?: unknown, so
   return result as NativeNotifyResponse;
 };
 
+Plugin.prototype.nativeNowPlaying = async function() {
+  const result = await this.call(MethodNativeNowPlaying);
+  return result as NativeNowPlayingResponse;
+};
+
+Plugin.prototype.nativeNumberFormatDecimal = async function() {
+  const result = await this.call(MethodNativeNumberFormatDecimal);
+  return result as NativeNumberFormatDecimalResponse;
+};
+
 Plugin.prototype.nativeObserveWindows = async function(pid: number) {
   const result = await this.call(
     MethodNativeObserveWindows,
@@ -1397,6 +3656,76 @@ Plugin.prototype.nativeObserveWindows = async function(pid: number) {
   return result as NativeObserveWindowsResponse;
 };
 
+Plugin.prototype.nativeOcrClipboard = async function() {
+  const result = await this.call(MethodNativeOcrClipboard);
+  return (result as any).regions;
+};
+
+Plugin.prototype.nativeOcrFile = async function(path: string) {
+  const result = await this.call(
+    MethodNativeOcrFile,
+    {
+      path,
+    },
+  );
+  return (result as any).regions;
+};
+
+Plugin.prototype.nativeOcrScreen = async function() {
+  const result = await this.call(MethodNativeOcrScreen);
+  return (result as any).regions;
+};
+
+Plugin.prototype.nativeOcrScreenRegion = async function(height: number, width: number, x: number, y: number) {
+  const result = await this.call(
+    MethodNativeOcrScreenRegion,
+    {
+      height,
+      width,
+      x,
+      y,
+    },
+  );
+  return (result as any).regions;
+};
+
+Plugin.prototype.nativeOcrWindow = async function(windowId: number) {
+  const result = await this.call(
+    MethodNativeOcrWindow,
+    {
+      window_id: windowId,
+    },
+  );
+  return (result as any).regions;
+};
+
+Plugin.prototype.nativeOpenAppSettings = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeOpenAppSettings,
+    {
+      bundle_id: bundleId,
+    },
+  );
+};
+
+Plugin.prototype.nativeOpenFinderWindow = async function(path: string) {
+  const result = await this.call(
+    MethodNativeOpenFinderWindow,
+    {
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativeOpenSystemSettings = async function(pane?: unknown) {
+  const result = await this.call(
+    MethodNativeOpenSystemSettings,
+    {
+      pane,
+    },
+  );
+};
+
 Plugin.prototype.nativeOpenTarget = async function(target: string) {
   const result = await this.call(
     MethodNativeOpenTarget,
@@ -1404,6 +3733,78 @@ Plugin.prototype.nativeOpenTarget = async function(target: string) {
       target,
     },
   );
+};
+
+Plugin.prototype.nativeOpenURL = async function(url: string) {
+  const result = await this.call(
+    MethodNativeOpenUrl,
+    {
+      url,
+    },
+  );
+};
+
+Plugin.prototype.nativeOpenWithApp = async function(bundleId: string, target: string) {
+  const result = await this.call(
+    MethodNativeOpenWithApp,
+    {
+      bundle_id: bundleId,
+      target,
+    },
+  );
+};
+
+Plugin.prototype.nativeOptimizedCharging = async function() {
+  const result = await this.call(MethodNativeOptimizedCharging);
+  return result as NativeOptimizedChargingResponse;
+};
+
+Plugin.prototype.nativePdfExtractText = async function(path: string, page?: number) {
+  const result = await this.call(
+    MethodNativePdfExtractText,
+    {
+      path,
+      page,
+    },
+  );
+};
+
+Plugin.prototype.nativePdfPageCount = async function(path: string) {
+  const result = await this.call(
+    MethodNativePdfPageCount,
+    {
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativePinWindowAbove = async function(pinned: boolean, windowId: string) {
+  const result = await this.call(
+    MethodNativePinWindowAbove,
+    {
+      pinned,
+      window_id: windowId,
+    },
+  );
+};
+
+Plugin.prototype.nativePinchToZoom = async function() {
+  const result = await this.call(MethodNativePinchToZoom);
+  return result as NativePinchToZoomResponse;
+};
+
+Plugin.prototype.nativePing = async function(host: string) {
+  const result = await this.call(
+    MethodNativePing,
+    {
+      host,
+    },
+  );
+};
+
+Plugin.prototype.nativePlayFeedbackWhenVolumeChanged = async function() {
+  const result = await this.call(MethodNativePlayFeedbackWhenVolumeChanged);
+  return result as NativePlayFeedbackWhenVolumeChangedResponse;
 };
 
 Plugin.prototype.nativePlaySound = async function(name: string) {
@@ -1419,6 +3820,21 @@ Plugin.prototype.nativePollBurst = async function() {
   const result = await this.call(MethodNativePollBurst);
 };
 
+Plugin.prototype.nativePowerAdapterConnected = async function() {
+  const result = await this.call(MethodNativePowerAdapterConnected);
+  return result as NativePowerAdapterConnectedResponse;
+};
+
+Plugin.prototype.nativePowerSource = async function() {
+  const result = await this.call(MethodNativePowerSource);
+  return result as NativePowerSourceResponse;
+};
+
+Plugin.prototype.nativePressAndHoldEnabled = async function() {
+  const result = await this.call(MethodNativePressAndHoldEnabled);
+  return result as NativePressAndHoldEnabledResponse;
+};
+
 Plugin.prototype.nativePreventSleep = async function(assertionId?: unknown, reason?: string) {
   const result = await this.call(
     MethodNativePreventSleep,
@@ -1428,6 +3844,128 @@ Plugin.prototype.nativePreventSleep = async function(assertionId?: unknown, reas
     },
   );
   return result as NativePreventSleepResponse;
+};
+
+Plugin.prototype.nativePrimaryDisplay = async function() {
+  const result = await this.call(MethodNativePrimaryDisplay);
+  return result as NativePrimaryDisplayResponse;
+};
+
+Plugin.prototype.nativePrimaryDisplayID = async function() {
+  const result = await this.call(MethodNativePrimaryDisplayId);
+  return result as NativePrimaryDisplayIDResponse;
+};
+
+Plugin.prototype.nativePrinterSharingEnabled = async function() {
+  const result = await this.call(MethodNativePrinterSharingEnabled);
+  return result as NativePrinterSharingEnabledResponse;
+};
+
+Plugin.prototype.nativePrinters = async function() {
+  const result = await this.call(MethodNativePrinters);
+  return (result as any).printers;
+};
+
+Plugin.prototype.nativeProcessCount = async function() {
+  const result = await this.call(MethodNativeProcessCount);
+  return result as NativeProcessCountResponse;
+};
+
+Plugin.prototype.nativeProcessCpuUsage = async function(pid: number) {
+  const result = await this.call(
+    MethodNativeProcessCpuUsage,
+    {
+      pid,
+    },
+  );
+};
+
+Plugin.prototype.nativeProcessExists = async function(pid: number) {
+  const result = await this.call(
+    MethodNativeProcessExists,
+    {
+      pid,
+    },
+  );
+  return result as NativeProcessExistsResponse;
+};
+
+Plugin.prototype.nativeProcessInfo = async function(pid: number) {
+  const result = await this.call(
+    MethodNativeProcessInfo,
+    {
+      pid,
+    },
+  );
+  return result as NativeProcessInfoResponse;
+};
+
+Plugin.prototype.nativeProcessList = async function() {
+  const result = await this.call(MethodNativeProcessList);
+  return (result as any).processes;
+};
+
+Plugin.prototype.nativeProcessMemoryUsage = async function(pid: number) {
+  const result = await this.call(
+    MethodNativeProcessMemoryUsage,
+    {
+      pid,
+    },
+  );
+};
+
+Plugin.prototype.nativeProcessName = async function(pid: number) {
+  const result = await this.call(
+    MethodNativeProcessName,
+    {
+      pid,
+    },
+  );
+};
+
+Plugin.prototype.nativeProcessParentPid = async function(pid: number) {
+  const result = await this.call(
+    MethodNativeProcessParentPid,
+    {
+      pid,
+    },
+  );
+};
+
+Plugin.prototype.nativeProcessPath = async function(pid: number) {
+  const result = await this.call(
+    MethodNativeProcessPath,
+    {
+      pid,
+    },
+  );
+};
+
+Plugin.prototype.nativeProcessStartTime = async function(pid: number) {
+  const result = await this.call(
+    MethodNativeProcessStartTime,
+    {
+      pid,
+    },
+  );
+};
+
+Plugin.prototype.nativeProxySettings = async function() {
+  const result = await this.call(MethodNativeProxySettings);
+  return result as NativeProxySettingsResponse;
+};
+
+Plugin.prototype.nativePublicIP = async function() {
+  const result = await this.call(MethodNativePublicIp);
+  return result as NativePublicIPResponse;
+};
+
+Plugin.prototype.nativePurgeMemory = async function() {
+  const result = await this.call(MethodNativePurgeMemory);
+};
+
+Plugin.prototype.nativePurgeableSpace = async function() {
+  const result = await this.call(MethodNativePurgeableSpace);
 };
 
 Plugin.prototype.nativeQuickLook = async function(path: string, size?: number) {
@@ -1460,6 +3998,110 @@ Plugin.prototype.nativeRaiseWindow = async function(windowId: string) {
   );
 };
 
+Plugin.prototype.nativeRandomUuid = async function() {
+  const result = await this.call(MethodNativeRandomUuid);
+  return result as NativeRandomUuidResponse;
+};
+
+Plugin.prototype.nativeReadAppPreference = async function(domain: string, key: string) {
+  const result = await this.call(
+    MethodNativeReadAppPreference,
+    {
+      domain,
+      key,
+    },
+  );
+};
+
+Plugin.prototype.nativeReadFile = async function(path: string) {
+  const result = await this.call(
+    MethodNativeReadFile,
+    {
+      path,
+    },
+  );
+  return result as NativeReadFileResponse;
+};
+
+Plugin.prototype.nativeReadFileBinary = async function(path: string, maxBytes?: unknown) {
+  const result = await this.call(
+    MethodNativeReadFileBinary,
+    {
+      path,
+      max_bytes: maxBytes,
+    },
+  );
+  return result as NativeReadFileBinaryResponse;
+};
+
+Plugin.prototype.nativeReadPlist = async function(path: string) {
+  const result = await this.call(
+    MethodNativeReadPlist,
+    {
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativeRecentDocuments = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeRecentDocuments,
+    {
+      bundle_id: bundleId,
+    },
+  );
+  return (result as any).paths;
+};
+
+Plugin.prototype.nativeReduceMotion = async function() {
+  const result = await this.call(MethodNativeReduceMotion);
+  return result as NativeReduceMotionResponse;
+};
+
+Plugin.prototype.nativeReduceTransparency = async function() {
+  const result = await this.call(MethodNativeReduceTransparency);
+  return result as NativeReduceTransparencyResponse;
+};
+
+Plugin.prototype.nativeRemindersIncomplete = async function() {
+  const result = await this.call(MethodNativeRemindersIncomplete);
+  return (result as any).reminders;
+};
+
+Plugin.prototype.nativeRemoteLoginEnabled = async function() {
+  const result = await this.call(MethodNativeRemoteLoginEnabled);
+  return result as NativeRemoteLoginEnabledResponse;
+};
+
+Plugin.prototype.nativeRenameFile = async function(newName: string, path: string) {
+  const result = await this.call(
+    MethodNativeRenameFile,
+    {
+      new_name: newName,
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativeRequestScreenCapture = async function() {
+  const result = await this.call(MethodNativeRequestScreenCapture);
+  return result as NativeRequestScreenCaptureResponse;
+};
+
+Plugin.prototype.nativeResourceUsage = async function() {
+  const result = await this.call(MethodNativeResourceUsage);
+  return result as NativeResourceUsageResponse;
+};
+
+Plugin.prototype.nativeRestartApp = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeRestartApp,
+    {
+      bundle_id: bundleId,
+    },
+  );
+};
+
 Plugin.prototype.nativeRevealInFinder = async function(path: string) {
   const result = await this.call(
     MethodNativeRevealInFinder,
@@ -1467,6 +4109,11 @@ Plugin.prototype.nativeRevealInFinder = async function(path: string) {
       path,
     },
   );
+};
+
+Plugin.prototype.nativeRosettaInstalled = async function() {
+  const result = await this.call(MethodNativeRosettaInstalled);
+  return result as NativeRosettaInstalledResponse;
 };
 
 Plugin.prototype.nativeRunApplescript = async function(script: string) {
@@ -1479,13 +4126,77 @@ Plugin.prototype.nativeRunApplescript = async function(script: string) {
   return result as NativeRunApplescriptResponse;
 };
 
+Plugin.prototype.nativeRunJxa = async function(script: string) {
+  const result = await this.call(
+    MethodNativeRunJxa,
+    {
+      script,
+    },
+  );
+  return result as NativeRunJxaResponse;
+};
+
+Plugin.prototype.nativeRunShortcut = async function(name: string, input?: unknown) {
+  const result = await this.call(
+    MethodNativeRunShortcut,
+    {
+      name,
+      input,
+    },
+  );
+  return result as NativeRunShortcutResponse;
+};
+
 Plugin.prototype.nativeRunningApps = async function() {
   const result = await this.call(MethodNativeRunningApps);
   return (result as any).apps;
 };
 
+Plugin.prototype.nativeScreenCapturePermission = async function() {
+  const result = await this.call(MethodNativeScreenCapturePermission);
+  return result as NativeScreenCapturePermissionResponse;
+};
+
+Plugin.prototype.nativeScreenCount = async function() {
+  const result = await this.call(MethodNativeScreenCount);
+  return result as NativeScreenCountResponse;
+};
+
 Plugin.prototype.nativeScreenLock = async function() {
   const result = await this.call(MethodNativeScreenLock);
+};
+
+Plugin.prototype.nativeScreenLocked = async function() {
+  const result = await this.call(MethodNativeScreenLocked);
+  return result as NativeScreenLockedResponse;
+};
+
+Plugin.prototype.nativeScreenResolution = async function() {
+  const result = await this.call(MethodNativeScreenResolution);
+  return result as NativeScreenResolutionResponse;
+};
+
+Plugin.prototype.nativeScreenSaverAskPassword = async function() {
+  const result = await this.call(MethodNativeScreenSaverAskPassword);
+  return result as NativeScreenSaverAskPasswordResponse;
+};
+
+Plugin.prototype.nativeScreenSaverDelay = async function() {
+  const result = await this.call(MethodNativeScreenSaverDelay);
+};
+
+Plugin.prototype.nativeScreenSaverStart = async function() {
+  const result = await this.call(MethodNativeScreenSaverStart);
+};
+
+Plugin.prototype.nativeScreenSaverStatus = async function() {
+  const result = await this.call(MethodNativeScreenSaverStatus);
+  return result as NativeScreenSaverStatusResponse;
+};
+
+Plugin.prototype.nativeScreenSharingEnabled = async function() {
+  const result = await this.call(MethodNativeScreenSharingEnabled);
+  return result as NativeScreenSharingEnabledResponse;
 };
 
 Plugin.prototype.nativeScreenshot = async function(displayId?: unknown, region?: unknown, windowId?: unknown) {
@@ -1500,9 +4211,83 @@ Plugin.prototype.nativeScreenshot = async function(displayId?: unknown, region?:
   return result as NativeScreenshotResponse;
 };
 
+Plugin.prototype.nativeScreenshotFormat = async function() {
+  const result = await this.call(MethodNativeScreenshotFormat);
+  return result as NativeScreenshotFormatResponse;
+};
+
+Plugin.prototype.nativeScreenshotIncludeShadow = async function() {
+  const result = await this.call(MethodNativeScreenshotIncludeShadow);
+  return result as NativeScreenshotIncludeShadowResponse;
+};
+
+Plugin.prototype.nativeScreenshotLocation = async function() {
+  const result = await this.call(MethodNativeScreenshotLocation);
+  return result as NativeScreenshotLocationResponse;
+};
+
+Plugin.prototype.nativeScreenshotShowThumbnail = async function() {
+  const result = await this.call(MethodNativeScreenshotShowThumbnail);
+  return result as NativeScreenshotShowThumbnailResponse;
+};
+
+Plugin.prototype.nativeScrollDirection = async function() {
+  const result = await this.call(MethodNativeScrollDirection);
+  return result as NativeScrollDirectionResponse;
+};
+
+Plugin.prototype.nativeScrollDirectionNatural = async function() {
+  const result = await this.call(MethodNativeScrollDirectionNatural);
+  return result as NativeScrollDirectionNaturalResponse;
+};
+
+Plugin.prototype.nativeSearchContacts = async function(query: string) {
+  const result = await this.call(
+    MethodNativeSearchContacts,
+    {
+      query,
+    },
+  );
+  return (result as any).contacts;
+};
+
+Plugin.prototype.nativeSecureInputEnabled = async function() {
+  const result = await this.call(MethodNativeSecureInputEnabled);
+  return result as NativeSecureInputEnabledResponse;
+};
+
 Plugin.prototype.nativeSelectedFinderItems = async function() {
   const result = await this.call(MethodNativeSelectedFinderItems);
   return (result as any).paths;
+};
+
+Plugin.prototype.nativeSelectedText = async function() {
+  const result = await this.call(MethodNativeSelectedText);
+  return result as NativeSelectedTextResponse;
+};
+
+Plugin.prototype.nativeSerialNumber = async function() {
+  const result = await this.call(MethodNativeSerialNumber);
+  return result as NativeSerialNumberResponse;
+};
+
+Plugin.prototype.nativeSetAirportPower = async function(on: boolean) {
+  const result = await this.call(
+    MethodNativeSetAirportPower,
+    {
+      on,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetAppHidden = async function(bundleId: string, hidden: boolean) {
+  const result = await this.call(
+    MethodNativeSetAppHidden,
+    {
+      bundle_id: bundleId,
+      hidden,
+    },
+  );
 };
 
 Plugin.prototype.nativeSetAudioDevice = async function(deviceType: string, uid: string) {
@@ -1515,12 +4300,67 @@ Plugin.prototype.nativeSetAudioDevice = async function(deviceType: string, uid: 
   );
 };
 
+Plugin.prototype.nativeSetAudioDeviceVolume = async function(deviceUid: string, volume: number) {
+  const result = await this.call(
+    MethodNativeSetAudioDeviceVolume,
+    {
+      device_uid: deviceUid,
+      volume,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetAudioInputDevice = async function(name: string) {
+  const result = await this.call(
+    MethodNativeSetAudioInputDevice,
+    {
+      name,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetAudioOutputDevice = async function(name: string) {
+  const result = await this.call(
+    MethodNativeSetAudioOutputDevice,
+    {
+      name,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetAutoRearrangeSpaces = async function(enabled: boolean) {
+  const result = await this.call(
+    MethodNativeSetAutoRearrangeSpaces,
+    {
+      enabled,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetBluetoothPower = async function(on: boolean) {
+  const result = await this.call(
+    MethodNativeSetBluetoothPower,
+    {
+      on,
+    },
+  );
+};
+
 Plugin.prototype.nativeSetBrightness = async function(brightness: number, displayId?: unknown) {
   const result = await this.call(
     MethodNativeSetBrightness,
     {
       brightness,
       display_id: displayId,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetComputerName = async function(name: string) {
+  const result = await this.call(
+    MethodNativeSetComputerName,
+    {
+      name,
     },
   );
 };
@@ -1543,11 +4383,278 @@ Plugin.prototype.nativeSetDnd = async function(enabled: boolean) {
   );
 };
 
+Plugin.prototype.nativeSetDockAutoHide = async function(enabled: boolean) {
+  const result = await this.call(
+    MethodNativeSetDockAutoHide,
+    {
+      enabled,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetDockMagnification = async function(enabled: boolean) {
+  const result = await this.call(
+    MethodNativeSetDockMagnification,
+    {
+      enabled,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetDockMinimizeEffect = async function(effect: string) {
+  const result = await this.call(
+    MethodNativeSetDockMinimizeEffect,
+    {
+      effect,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetDockPosition = async function(position: string) {
+  const result = await this.call(
+    MethodNativeSetDockPosition,
+    {
+      position,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetDockShowRecents = async function(enabled: boolean) {
+  const result = await this.call(
+    MethodNativeSetDockShowRecents,
+    {
+      enabled,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetDockSize = async function(size: number) {
+  const result = await this.call(
+    MethodNativeSetDockSize,
+    {
+      size,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetExtendedAttribute = async function(name: string, path: string, value: string) {
+  const result = await this.call(
+    MethodNativeSetExtendedAttribute,
+    {
+      name,
+      path,
+      value,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetFileHidden = async function(hidden: boolean, path: string) {
+  const result = await this.call(
+    MethodNativeSetFileHidden,
+    {
+      hidden,
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetFilePermissions = async function(mode: string, path: string) {
+  const result = await this.call(
+    MethodNativeSetFilePermissions,
+    {
+      mode,
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetFinderShowExtensions = async function(enabled: boolean) {
+  const result = await this.call(
+    MethodNativeSetFinderShowExtensions,
+    {
+      enabled,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetFinderShowHidden = async function(enabled: boolean) {
+  const result = await this.call(
+    MethodNativeSetFinderShowHidden,
+    {
+      enabled,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetHighlightColor = async function(color: string) {
+  const result = await this.call(
+    MethodNativeSetHighlightColor,
+    {
+      color,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetHotCorner = async function(action: number, corner: string) {
+  const result = await this.call(
+    MethodNativeSetHotCorner,
+    {
+      action,
+      corner,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetInputSource = async function(sourceId: string) {
+  const result = await this.call(
+    MethodNativeSetInputSource,
+    {
+      source_id: sourceId,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetKeyRepeatDelay = async function(delay: number) {
+  const result = await this.call(
+    MethodNativeSetKeyRepeatDelay,
+    {
+      delay,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetKeyRepeatRate = async function(rate: number) {
+  const result = await this.call(
+    MethodNativeSetKeyRepeatRate,
+    {
+      rate,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetMenuBarAutoHide = async function(enabled: boolean) {
+  const result = await this.call(
+    MethodNativeSetMenuBarAutoHide,
+    {
+      enabled,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetMouseSpeed = async function(speed: number) {
+  const result = await this.call(
+    MethodNativeSetMouseSpeed,
+    {
+      speed,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetNightShift = async function(enabled: boolean) {
+  const result = await this.call(
+    MethodNativeSetNightShift,
+    {
+      enabled,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetScreenshotFormat = async function(format: string) {
+  const result = await this.call(
+    MethodNativeSetScreenshotFormat,
+    {
+      format,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetScreenshotIncludeShadow = async function(enabled: boolean) {
+  const result = await this.call(
+    MethodNativeSetScreenshotIncludeShadow,
+    {
+      enabled,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetScreenshotLocation = async function(path: string) {
+  const result = await this.call(
+    MethodNativeSetScreenshotLocation,
+    {
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetScrollDirectionNatural = async function(enabled: boolean) {
+  const result = await this.call(
+    MethodNativeSetScrollDirectionNatural,
+    {
+      enabled,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetSidebarIconSize = async function(size: number) {
+  const result = await this.call(
+    MethodNativeSetSidebarIconSize,
+    {
+      size,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetStageManager = async function(enabled: boolean) {
+  const result = await this.call(
+    MethodNativeSetStageManager,
+    {
+      enabled,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetTapToClick = async function(enabled: boolean) {
+  const result = await this.call(
+    MethodNativeSetTapToClick,
+    {
+      enabled,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetTrackpadSpeed = async function(speed: number) {
+  const result = await this.call(
+    MethodNativeSetTrackpadSpeed,
+    {
+      speed,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetURLSchemeHandler = async function(bundleId: string, scheme: string) {
+  const result = await this.call(
+    MethodNativeSetUrlSchemeHandler,
+    {
+      bundle_id: bundleId,
+      scheme,
+    },
+  );
+};
+
 Plugin.prototype.nativeSetVolume = async function(volume: number) {
   const result = await this.call(
     MethodNativeSetVolume,
     {
       volume,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetWallpaper = async function(path: string) {
+  const result = await this.call(
+    MethodNativeSetWallpaper,
+    {
+      path,
     },
   );
 };
@@ -1573,6 +4680,102 @@ Plugin.prototype.nativeSetWindowLevel = async function(level: string, windowId: 
   return (result as any).result;
 };
 
+Plugin.prototype.nativeSetWindowPosition = async function(windowId: string, x: number, y: number) {
+  const result = await this.call(
+    MethodNativeSetWindowPosition,
+    {
+      window_id: windowId,
+      x,
+      y,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetWindowShadow = async function(enabled: boolean, windowId: string) {
+  const result = await this.call(
+    MethodNativeSetWindowShadow,
+    {
+      enabled,
+      window_id: windowId,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetWindowSize = async function(h: number, w: number, windowId: string) {
+  const result = await this.call(
+    MethodNativeSetWindowSize,
+    {
+      h,
+      w,
+      window_id: windowId,
+    },
+  );
+};
+
+Plugin.prototype.nativeSetWindowSticky = async function(sticky: boolean, windowId: string) {
+  const result = await this.call(
+    MethodNativeSetWindowSticky,
+    {
+      sticky,
+      window_id: windowId,
+    },
+  );
+};
+
+Plugin.prototype.nativeSharingName = async function() {
+  const result = await this.call(MethodNativeSharingName);
+  return result as NativeSharingNameResponse;
+};
+
+Plugin.prototype.nativeShowScrollBars = async function() {
+  const result = await this.call(MethodNativeShowScrollBars);
+  return result as NativeShowScrollBarsResponse;
+};
+
+Plugin.prototype.nativeSidebarIconSize = async function() {
+  const result = await this.call(MethodNativeSidebarIconSize);
+  return result as NativeSidebarIconSizeResponse;
+};
+
+Plugin.prototype.nativeSipStatus = async function() {
+  const result = await this.call(MethodNativeSipStatus);
+  return result as NativeSipStatusResponse;
+};
+
+Plugin.prototype.nativeSiriEnabled = async function() {
+  const result = await this.call(MethodNativeSiriEnabled);
+  return result as NativeSiriEnabledResponse;
+};
+
+Plugin.prototype.nativeSleepNow = async function() {
+  const result = await this.call(MethodNativeSleepNow);
+};
+
+Plugin.prototype.nativeSlowKeys = async function() {
+  const result = await this.call(MethodNativeSlowKeys);
+  return result as NativeSlowKeysResponse;
+};
+
+Plugin.prototype.nativeSmartQuotesEnabled = async function() {
+  const result = await this.call(MethodNativeSmartQuotesEnabled);
+  return result as NativeSmartQuotesEnabledResponse;
+};
+
+Plugin.prototype.nativeSmartZoom = async function() {
+  const result = await this.call(MethodNativeSmartZoom);
+  return result as NativeSmartZoomResponse;
+};
+
+Plugin.prototype.nativeSoundEffectsEnabled = async function() {
+  const result = await this.call(MethodNativeSoundEffectsEnabled);
+  return result as NativeSoundEffectsEnabledResponse;
+};
+
+Plugin.prototype.nativeSpacesSpanDisplays = async function() {
+  const result = await this.call(MethodNativeSpacesSpanDisplays);
+  return result as NativeSpacesSpanDisplaysResponse;
+};
+
 Plugin.prototype.nativeSpeak = async function(text: string, rate?: unknown, voice?: unknown) {
   const result = await this.call(
     MethodNativeSpeak,
@@ -1582,6 +4785,31 @@ Plugin.prototype.nativeSpeak = async function(text: string, rate?: unknown, voic
       voice,
     },
   );
+};
+
+Plugin.prototype.nativeSpeechLocales = async function() {
+  const result = await this.call(MethodNativeSpeechLocales);
+  return (result as any).locales;
+};
+
+Plugin.prototype.nativeSpeechRecognitionAvailable = async function() {
+  const result = await this.call(MethodNativeSpeechRecognitionAvailable);
+  return result as NativeSpeechRecognitionAvailableResponse;
+};
+
+Plugin.prototype.nativeSpeechRecognizeFile = async function(path: string, locale?: string) {
+  const result = await this.call(
+    MethodNativeSpeechRecognizeFile,
+    {
+      path,
+      locale,
+    },
+  );
+};
+
+Plugin.prototype.nativeSpellingLanguage = async function() {
+  const result = await this.call(MethodNativeSpellingLanguage);
+  return result as NativeSpellingLanguageResponse;
 };
 
 Plugin.prototype.nativeSpotlight = async function(query: string, limit?: number, scope?: unknown) {
@@ -1596,9 +4824,161 @@ Plugin.prototype.nativeSpotlight = async function(query: string, limit?: number,
   return (result as any).results;
 };
 
+Plugin.prototype.nativeStageManagerEnabled = async function() {
+  const result = await this.call(MethodNativeStageManagerEnabled);
+  return result as NativeStageManagerEnabledResponse;
+};
+
+Plugin.prototype.nativeStartupDisk = async function() {
+  const result = await this.call(MethodNativeStartupDisk);
+  return result as NativeStartupDiskResponse;
+};
+
+Plugin.prototype.nativeStartupSoundEnabled = async function() {
+  const result = await this.call(MethodNativeStartupSoundEnabled);
+  return result as NativeStartupSoundEnabledResponse;
+};
+
+Plugin.prototype.nativeStickyKeys = async function() {
+  const result = await this.call(MethodNativeStickyKeys);
+  return result as NativeStickyKeysResponse;
+};
+
+Plugin.prototype.nativeSwipeBetweenPages = async function() {
+  const result = await this.call(MethodNativeSwipeBetweenPages);
+  return result as NativeSwipeBetweenPagesResponse;
+};
+
+Plugin.prototype.nativeSwitchSpace = async function(spaceId: number) {
+  const result = await this.call(
+    MethodNativeSwitchSpace,
+    {
+      space_id: spaceId,
+    },
+  );
+};
+
+Plugin.prototype.nativeSwitchSpaceWhenSwitchingApp = async function() {
+  const result = await this.call(MethodNativeSwitchSpaceWhenSwitchingApp);
+  return result as NativeSwitchSpaceWhenSwitchingAppResponse;
+};
+
+Plugin.prototype.nativeSymlink = async function(link: string, source: string) {
+  const result = await this.call(
+    MethodNativeSymlink,
+    {
+      link,
+      source,
+    },
+  );
+};
+
+Plugin.prototype.nativeSystemAppearance = async function() {
+  const result = await this.call(MethodNativeSystemAppearance);
+  return result as NativeSystemAppearanceResponse;
+};
+
+Plugin.prototype.nativeSystemInfo = async function() {
+  const result = await this.call(MethodNativeSystemInfo);
+  return result as NativeSystemInfoResponse;
+};
+
+Plugin.prototype.nativeSystemIntegrityInfo = async function() {
+  const result = await this.call(MethodNativeSystemIntegrityInfo);
+  return result as NativeSystemIntegrityInfoResponse;
+};
+
+Plugin.prototype.nativeSystemLanguage = async function() {
+  const result = await this.call(MethodNativeSystemLanguage);
+  return result as NativeSystemLanguageResponse;
+};
+
+Plugin.prototype.nativeSystemRegion = async function() {
+  const result = await this.call(MethodNativeSystemRegion);
+  return result as NativeSystemRegionResponse;
+};
+
+Plugin.prototype.nativeSystemSounds = async function() {
+  const result = await this.call(MethodNativeSystemSounds);
+  return (result as any).sounds;
+};
+
 Plugin.prototype.nativeSystemUptime = async function() {
   const result = await this.call(MethodNativeSystemUptime);
   return result as NativeSystemUptimeResponse;
+};
+
+Plugin.prototype.nativeSystemUptimeSeconds = async function() {
+  const result = await this.call(MethodNativeSystemUptimeSeconds);
+  return result as NativeSystemUptimeSecondsResponse;
+};
+
+Plugin.prototype.nativeTapToClick = async function() {
+  const result = await this.call(MethodNativeTapToClick);
+  return result as NativeTapToClickResponse;
+};
+
+Plugin.prototype.nativeTempDirectory = async function() {
+  const result = await this.call(MethodNativeTempDirectory);
+  return result as NativeTempDirectoryResponse;
+};
+
+Plugin.prototype.nativeTemperatureUnit = async function() {
+  const result = await this.call(MethodNativeTemperatureUnit);
+  return result as NativeTemperatureUnitResponse;
+};
+
+Plugin.prototype.nativeTextReplacements = async function() {
+  const result = await this.call(MethodNativeTextReplacements);
+  return result as NativeTextReplacementsResponse;
+};
+
+Plugin.prototype.nativeThermalState = async function() {
+  const result = await this.call(MethodNativeThermalState);
+  return result as NativeThermalStateResponse;
+};
+
+Plugin.prototype.nativeThreeFingerDrag = async function() {
+  const result = await this.call(MethodNativeThreeFingerDrag);
+  return result as NativeThreeFingerDragResponse;
+};
+
+Plugin.prototype.nativeThunderboltDevices = async function() {
+  const result = await this.call(MethodNativeThunderboltDevices);
+  return result as NativeThunderboltDevicesResponse;
+};
+
+Plugin.prototype.nativeTimeFormat = async function() {
+  const result = await this.call(MethodNativeTimeFormat);
+  return result as NativeTimeFormatResponse;
+};
+
+Plugin.prototype.nativeTimeMachineLastBackup = async function() {
+  const result = await this.call(MethodNativeTimeMachineLastBackup);
+  return result as NativeTimeMachineLastBackupResponse;
+};
+
+Plugin.prototype.nativeTimeMachineStatus = async function() {
+  const result = await this.call(MethodNativeTimeMachineStatus);
+  return result as NativeTimeMachineStatusResponse;
+};
+
+Plugin.prototype.nativeTimeOnBattery = async function() {
+  const result = await this.call(MethodNativeTimeOnBattery);
+};
+
+Plugin.prototype.nativeTimezone = async function() {
+  const result = await this.call(MethodNativeTimezone);
+  return result as NativeTimezoneResponse;
+};
+
+Plugin.prototype.nativeToggleBluetooth = async function(enabled: boolean) {
+  const result = await this.call(
+    MethodNativeToggleBluetooth,
+    {
+      enabled,
+    },
+  );
 };
 
 Plugin.prototype.nativeToggleFullscreen = async function(windowId: string) {
@@ -1606,6 +4986,33 @@ Plugin.prototype.nativeToggleFullscreen = async function(windowId: string) {
     MethodNativeToggleFullscreen,
     {
       window_id: windowId,
+    },
+  );
+};
+
+Plugin.prototype.nativeToggleWifi = async function(enabled: boolean) {
+  const result = await this.call(
+    MethodNativeToggleWifi,
+    {
+      enabled,
+    },
+  );
+};
+
+Plugin.prototype.nativeTouchIDAvailable = async function() {
+  const result = await this.call(MethodNativeTouchIdAvailable);
+  return result as NativeTouchIDAvailableResponse;
+};
+
+Plugin.prototype.nativeTrackpadSpeed = async function() {
+  const result = await this.call(MethodNativeTrackpadSpeed);
+};
+
+Plugin.prototype.nativeTransparencyConsent = async function(service: string) {
+  const result = await this.call(
+    MethodNativeTransparencyConsent,
+    {
+      service,
     },
   );
 };
@@ -1618,6 +5025,21 @@ Plugin.prototype.nativeTrash = async function(path: string) {
     },
   );
   return (result as any).result;
+};
+
+Plugin.prototype.nativeTrueTone = async function() {
+  const result = await this.call(MethodNativeTrueTone);
+  return result as NativeTrueToneResponse;
+};
+
+Plugin.prototype.nativeTtsVoices = async function() {
+  const result = await this.call(MethodNativeTtsVoices);
+  return (result as any).voices;
+};
+
+Plugin.prototype.nativeTwentyFourHourClock = async function() {
+  const result = await this.call(MethodNativeTwentyFourHourClock);
+  return result as NativeTwentyFourHourClockResponse;
 };
 
 Plugin.prototype.nativeUnhideApp = async function(bundleId: string) {
@@ -1648,9 +5070,59 @@ Plugin.prototype.nativeUnobserveWindows = async function(subscriptionId: string)
   return (result as any).result;
 };
 
+Plugin.prototype.nativeUnzip = async function(destination: string, source: string) {
+  const result = await this.call(
+    MethodNativeUnzip,
+    {
+      destination,
+      source,
+    },
+  );
+};
+
+Plugin.prototype.nativeURLSchemeHandler = async function(scheme: string) {
+  const result = await this.call(
+    MethodNativeUrlSchemeHandler,
+    {
+      scheme,
+    },
+  );
+  return result as NativeURLSchemeHandlerResponse;
+};
+
+Plugin.prototype.nativeUsbDevices = async function() {
+  const result = await this.call(MethodNativeUsbDevices);
+  return (result as any).devices;
+};
+
+Plugin.prototype.nativeUserAvatar = async function() {
+  const result = await this.call(MethodNativeUserAvatar);
+  return result as NativeUserAvatarResponse;
+};
+
+Plugin.prototype.nativeUserName = async function() {
+  const result = await this.call(MethodNativeUserName);
+  return result as NativeUserNameResponse;
+};
+
+Plugin.prototype.nativeUserShell = async function() {
+  const result = await this.call(MethodNativeUserShell);
+  return result as NativeUserShellResponse;
+};
+
+Plugin.prototype.nativeVoiceoverEnabled = async function() {
+  const result = await this.call(MethodNativeVoiceoverEnabled);
+  return result as NativeVoiceoverEnabledResponse;
+};
+
 Plugin.prototype.nativeVolume = async function() {
   const result = await this.call(MethodNativeVolume);
   return result as NativeVolumeResponse;
+};
+
+Plugin.prototype.nativeVpnStatus = async function() {
+  const result = await this.call(MethodNativeVpnStatus);
+  return result as NativeVpnStatusResponse;
 };
 
 Plugin.prototype.nativeWarpCursor = async function(x: number, y: number) {
@@ -1668,6 +5140,105 @@ Plugin.prototype.nativeWifi = async function() {
   return result as NativeWifiResponse;
 };
 
+Plugin.prototype.nativeWifiNetworks = async function() {
+  const result = await this.call(MethodNativeWifiNetworks);
+  return (result as any).networks;
+};
+
+Plugin.prototype.nativeWindowApp = async function(windowId: string) {
+  const result = await this.call(
+    MethodNativeWindowApp,
+    {
+      window_id: windowId,
+    },
+  );
+};
+
+Plugin.prototype.nativeWindowBounds = async function(windowId: string) {
+  const result = await this.call(
+    MethodNativeWindowBounds,
+    {
+      window_id: windowId,
+    },
+  );
+  return result as NativeWindowBoundsResponse;
+};
+
+Plugin.prototype.nativeWindowDisplayID = async function(windowId: string) {
+  const result = await this.call(
+    MethodNativeWindowDisplayId,
+    {
+      window_id: windowId,
+    },
+  );
+};
+
+Plugin.prototype.nativeWindowIsFullscreen = async function(windowId: string) {
+  const result = await this.call(
+    MethodNativeWindowIsFullscreen,
+    {
+      window_id: windowId,
+    },
+  );
+  return result as NativeWindowIsFullscreenResponse;
+};
+
+Plugin.prototype.nativeWindowIsMinimized = async function(windowId: string) {
+  const result = await this.call(
+    MethodNativeWindowIsMinimized,
+    {
+      window_id: windowId,
+    },
+  );
+  return result as NativeWindowIsMinimizedResponse;
+};
+
+Plugin.prototype.nativeWindowLayer = async function(windowId: string) {
+  const result = await this.call(
+    MethodNativeWindowLayer,
+    {
+      window_id: windowId,
+    },
+  );
+};
+
+Plugin.prototype.nativeWindowScreenshot = async function(windowId: number) {
+  const result = await this.call(
+    MethodNativeWindowScreenshot,
+    {
+      window_id: windowId,
+    },
+  );
+};
+
+Plugin.prototype.nativeWindowSubrole = async function(windowId: string) {
+  const result = await this.call(
+    MethodNativeWindowSubrole,
+    {
+      window_id: windowId,
+    },
+  );
+};
+
+Plugin.prototype.nativeWindowTitle = async function(windowId: string) {
+  const result = await this.call(
+    MethodNativeWindowTitle,
+    {
+      window_id: windowId,
+    },
+  );
+};
+
+Plugin.prototype.nativeWindowsOnSpace = async function(spaceId: number) {
+  const result = await this.call(
+    MethodNativeWindowsOnSpace,
+    {
+      space_id: spaceId,
+    },
+  );
+  return (result as any).window_ids;
+};
+
 Plugin.prototype.nativeWorldModel = async function(onScreen?: boolean) {
   const result = await this.call(
     MethodNativeWorldModel,
@@ -1676,6 +5247,83 @@ Plugin.prototype.nativeWorldModel = async function(onScreen?: boolean) {
     },
   );
   return result as WorldModel;
+};
+
+Plugin.prototype.nativeWriteAppPreference = async function(domain: string, key: string, value: unknown) {
+  const result = await this.call(
+    MethodNativeWriteAppPreference,
+    {
+      domain,
+      key,
+      value,
+    },
+  );
+};
+
+Plugin.prototype.nativeWriteFile = async function(contents: string, path: string) {
+  const result = await this.call(
+    MethodNativeWriteFile,
+    {
+      contents,
+      path,
+    },
+  );
+};
+
+Plugin.prototype.nativeXcodePath = async function() {
+  const result = await this.call(MethodNativeXcodePath);
+  return result as NativeXcodePathResponse;
+};
+
+Plugin.prototype.nativeXcodeVersion = async function() {
+  const result = await this.call(MethodNativeXcodeVersion);
+  return result as NativeXcodeVersionResponse;
+};
+
+Plugin.prototype.nativeZip = async function(destination: string, source: string) {
+  const result = await this.call(
+    MethodNativeZip,
+    {
+      destination,
+      source,
+    },
+  );
+};
+
+Plugin.prototype.nativeZoomEnabled = async function() {
+  const result = await this.call(MethodNativeZoomEnabled);
+  return result as NativeZoomEnabledResponse;
+};
+
+Plugin.prototype.pipelinesGrammar = async function() {
+  const result = await this.call(MethodPipelinesGrammar);
+  return (result as any).words;
+};
+
+Plugin.prototype.pipelinesRun = async function(name: string, ephemeral?: boolean) {
+  const result = await this.call(
+    MethodPipelinesRun,
+    {
+      name,
+      ephemeral,
+    },
+  );
+  return result as PipelinesRunResponse;
+};
+
+Plugin.prototype.pipelinesStatus = async function() {
+  const result = await this.call(MethodPipelinesStatus);
+  return result as PipelinesStatusResponse;
+};
+
+Plugin.prototype.pipelinesStop = async function(name: string) {
+  const result = await this.call(
+    MethodPipelinesStop,
+    {
+      name,
+    },
+  );
+  return result as PipelinesStopResponse;
 };
 
 Plugin.prototype.selectionPick = async function(index: number) {

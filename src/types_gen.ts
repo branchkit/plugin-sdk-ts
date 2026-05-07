@@ -66,6 +66,15 @@ export interface AudioDevice {
   uid: string;
 }
 
+export interface BarcodeResult {
+  height: number;
+  payload: string;
+  symbology: string;
+  width: number;
+  x: number;
+  y: number;
+}
+
 export interface BleCharacteristic {
   properties: string[];
   uuid: string;
@@ -89,6 +98,22 @@ export interface BluetoothDevice {
   is_connected: boolean;
   is_paired: boolean;
   name: string;
+}
+
+export interface CalendarEvent {
+  calendar?: unknown;
+  end?: unknown;
+  is_all_day: boolean;
+  location?: unknown;
+  start?: unknown;
+  title: string;
+}
+
+export interface CameraDevice {
+  is_connected: boolean;
+  model_id: string;
+  name: string;
+  unique_id: string;
 }
 
 export interface ClipboardContents {
@@ -137,6 +162,21 @@ export interface CommandRowData {
   tier: string;
 }
 
+export interface ContactInfo {
+  email?: unknown;
+  name: string;
+  organization?: unknown;
+  phone?: unknown;
+}
+
+export interface CpuInfo {
+  architecture: string;
+  chip: string;
+  core_count: number;
+  efficiency_cores?: unknown;
+  performance_cores?: unknown;
+}
+
 export interface DeliveredNotification {
   body?: unknown;
   delivered_at: string;
@@ -144,11 +184,25 @@ export interface DeliveredNotification {
   title: string;
 }
 
+export interface DirectoryEntry {
+  is_dir: boolean;
+  is_symlink: boolean;
+  name: string;
+  path: string;
+  size: number;
+}
+
 export interface DiscoverItem {
   id: string;
   subtitle?: unknown;
   tag: string;
   title: string;
+}
+
+export interface DisplayColorProfile {
+  color_space: string;
+  display_id: number;
+  profile_name: string;
 }
 
 export interface DisplayInfo {
@@ -180,6 +234,20 @@ export interface DisplayMetadata {
   w: number;
   x: number;
   y: number;
+}
+
+export interface DisplayRotation {
+  degrees: number;
+  display_id: number;
+}
+
+export interface ExternalDisk {
+  file_system?: unknown;
+  free_bytes: number;
+  is_removable: boolean;
+  mount_point: string;
+  name: string;
+  total_bytes: number;
 }
 
 /**
@@ -261,14 +329,6 @@ export interface HudSection {
   title: string;
 }
 
-export interface IngestSegmentSpec {
-  alternatives: string[];
-  duration: number;
-  id: number;
-  start: number;
-  text: string;
-}
-
 export interface InputSource {
   id: string;
   is_active: boolean;
@@ -299,6 +359,13 @@ export interface ListOpts {
   until_ms?: unknown;
 }
 
+export interface ListeningPort {
+  pid?: unknown;
+  port: number;
+  process_name?: unknown;
+  protocol: string;
+}
+
 export interface LogEntry {
   id: string;
   payload?: unknown;
@@ -319,6 +386,14 @@ export interface LoginItem {
   path: string;
 }
 
+export interface MemoryInfo {
+  available_bytes: number;
+  swap_total_bytes: number;
+  swap_used_bytes: number;
+  total_bytes: number;
+  used_bytes: number;
+}
+
 export interface MenuItem {
   children: MenuItem[];
   enabled: boolean;
@@ -332,7 +407,64 @@ export interface MenuItem {
  */
 export type MergeStrategy = "authoritative" | "collect" | "keyed";
 
+export interface NetworkInterface {
+  display_name: string;
+  ipv4?: unknown;
+  ipv6?: unknown;
+  is_loopback: boolean;
+  is_up: boolean;
+  mac_address?: unknown;
+  name: string;
+}
+
+export interface NowPlayingInfo {
+  album?: unknown;
+  app_bundle_id?: unknown;
+  artist?: unknown;
+  duration?: unknown;
+  elapsed?: unknown;
+  is_playing: boolean;
+  title?: unknown;
+}
+
+export interface OcrRegion {
+  confidence: number;
+  height: number;
+  text: string;
+  width: number;
+  x: number;
+  y: number;
+}
+
 export type OnActionStatus = "ok" | "error" | "not_handled";
+
+export interface PipelineStatusEntry {
+  ephemeral: boolean;
+  name: string;
+}
+
+export interface PrinterInfo {
+  is_default: boolean;
+  name: string;
+  state: string;
+}
+
+export interface ProcessInfo {
+  cpu_percent?: unknown;
+  memory_bytes?: unknown;
+  name: string;
+  path?: unknown;
+  pid: number;
+  user?: unknown;
+}
+
+export interface ReminderItem {
+  due_date?: unknown;
+  is_completed: boolean;
+  list_name?: unknown;
+  priority: number;
+  title: string;
+}
 
 export interface RunningApp {
   bundle_id?: unknown;
@@ -349,11 +481,6 @@ export interface ScreenshotRegion {
   y: number;
 }
 
-export interface SelectionItemSpec {
-  id: string;
-  tag?: string;
-}
-
 export interface SettingsListSchemaInfo {
   description: string;
   entry_count: number;
@@ -367,11 +494,22 @@ export interface SettingsTagSchemaInfo {
   source_plugin: string;
 }
 
+export interface ShortcutInfo {
+  folder?: unknown;
+  name: string;
+}
+
 export interface SpaceInfo {
   display_id: number;
   is_active: boolean;
   space_id: number;
   space_type: string;
+}
+
+export interface SpeechLocale {
+  identifier: string;
+  is_available: boolean;
+  language: string;
 }
 
 export interface SpotlightResult {
@@ -382,9 +520,32 @@ export interface SpotlightResult {
   size?: unknown;
 }
 
+export interface SystemAppearance {
+  accent_color?: unknown;
+  highlight_color?: unknown;
+  increase_contrast: boolean;
+  reduce_motion: boolean;
+  reduce_transparency: boolean;
+}
+
 export interface TileableEntry {
   tileable: boolean;
   window_id: string;
+}
+
+export interface TtsVoice {
+  identifier: string;
+  language: string;
+  name: string;
+  quality: string;
+}
+
+export interface UsbDevice {
+  manufacturer?: unknown;
+  name: string;
+  product_id?: unknown;
+  serial_number?: unknown;
+  vendor_id?: unknown;
 }
 
 export interface WindowBounds {
@@ -392,6 +553,18 @@ export interface WindowBounds {
   w: number;
   x: number;
   y: number;
+}
+
+export interface WindowDetail {
+  alpha?: unknown;
+  bounds: WindowBounds;
+  display_id: number;
+  is_focused: boolean;
+  is_fullscreen: boolean;
+  is_minimized: boolean;
+  subrole?: unknown;
+  title?: unknown;
+  window_id: string;
 }
 
 export interface WindowFrame {
@@ -796,6 +969,10 @@ export interface InputClipboardActionResponse {
   ok: boolean;
 }
 
+export interface InputClipboardHistoryResponse {
+  entries: string[];
+}
+
 export interface InputClipboardReadRequest {
   content_type: string;
 }
@@ -810,6 +987,14 @@ export interface InputClipboardReadResponse {
 
 export interface InputClipboardReadAllResponse {
   items: ClipboardContents[];
+}
+
+export interface InputClipboardReadFormatRequest {
+  format: string;
+}
+
+export interface InputClipboardReadFormatResponse {
+  data: string;
 }
 
 export interface InputClipboardWriteRequest {
@@ -901,12 +1086,25 @@ export interface InputScrollResponse {
   ok: boolean;
 }
 
+export interface InputSelectAllResponse {
+  ok: boolean;
+}
+
 export interface InputSwitchInputSourceRequest {
   source_id: string;
 }
 
 export interface InputSwitchInputSourceResponse {
   result: boolean;
+}
+
+export interface InputTripleClickRequest {
+  x?: unknown;
+  y?: unknown;
+}
+
+export interface InputTripleClickResponse {
+  ok: boolean;
 }
 
 export interface InputTypeTextRequest {
@@ -948,6 +1146,18 @@ export interface MatchAliasesSetResponse {
   ok: boolean;
 }
 
+export interface NativeAccentColorResponse {
+  color: string;
+}
+
+export interface NativeAccessibilityDisplayInvertResponse {
+  inverted: boolean;
+}
+
+export interface NativeAccessibilityEnabledResponse {
+  enabled: boolean;
+}
+
 export interface NativeActivateAppRequest {
   all_windows?: boolean;
   bundle_id: string;
@@ -957,8 +1167,48 @@ export interface NativeActivateAppResponse {
   ok: boolean;
 }
 
+export interface NativeActiveNetworkServiceResponse {
+  service: string;
+}
+
+export interface NativeActivePortsResponse {
+  ports: ListeningPort[];
+}
+
 export interface NativeActiveSpaceResponse {
   active: ActiveSpace[];
+}
+
+export interface NativeAirdropEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeAirportPowerResponse {
+  on: boolean;
+}
+
+export interface NativeAlertSoundResponse {
+  name: string;
+}
+
+export interface NativeAllWindowIdsResponse {
+  window_ids: string[];
+}
+
+export interface NativeApfsSnapshotsResponse {
+  value: string;
+}
+
+export interface NativeAppBundlePathRequest {
+  bundle_id: string;
+}
+
+export interface NativeAppBundlePathResponse {
+  path: string;
+}
+
+export interface NativeAppFocusedWindowIDRequest {
+  bundle_id: string;
 }
 
 export interface NativeAppIconRequest {
@@ -971,8 +1221,123 @@ export interface NativeAppIconResponse {
   image_base64: string;
 }
 
+export interface NativeAppIconPathRequest {
+  bundle_id: string;
+}
+
+export interface NativeAppIsAgentRequest {
+  bundle_id: string;
+}
+
+export interface NativeAppIsAgentResponse {
+  enabled: boolean;
+}
+
+export interface NativeAppIsRunningRequest {
+  bundle_id: string;
+}
+
+export interface NativeAppIsRunningResponse {
+  running: boolean;
+}
+
+export interface NativeAppLaunchAtLoginRequest {
+  bundle_id: string;
+}
+
+export interface NativeAppLaunchAtLoginResponse {
+  enabled: boolean;
+}
+
+export interface NativeAppMetadataRequest {
+  bundle_id: string;
+}
+
+export interface NativeAppMetadataResponse {
+  build?: unknown;
+  bundle_id: string;
+  category?: unknown;
+  min_os_version?: unknown;
+  name: string;
+  path: string;
+  version?: unknown;
+}
+
+export interface NativeAppPathRequest {
+  bundle_id: string;
+}
+
+export interface NativeAppPidRequest {
+  bundle_id: string;
+}
+
+export interface NativeAppSupportDirectoryResponse {
+  path: string;
+}
+
+export interface NativeAppVersionRequest {
+  bundle_id: string;
+}
+
+export interface NativeAppWindowsRequest {
+  bundle_id: string;
+}
+
+export interface NativeAppWindowsResponse {
+  windows: WindowDetail[];
+}
+
+export interface NativeAppWindowsCountRequest {
+  bundle_id: string;
+}
+
+export interface NativeAudioDeviceVolumeRequest {
+  device_uid: string;
+}
+
+export interface NativeAudioDeviceVolumeResponse {
+  is_muted: boolean;
+  volume: number;
+}
+
 export interface NativeAudioDevicesResponse {
   devices: AudioDevice[];
+}
+
+export interface NativeAudioInputDeviceResponse {
+  device: string;
+}
+
+export interface NativeAudioOutputDeviceResponse {
+  device: string;
+}
+
+export interface NativeAutoBrightnessResponse {
+  enabled: boolean;
+}
+
+export interface NativeAutoRearrangeSpacesResponse {
+  enabled: boolean;
+}
+
+export interface NativeAutoTimezoneResponse {
+  enabled: boolean;
+}
+
+export interface NativeAutocorrectEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeAutomaticLoginUserResponse {
+  value: string;
+}
+
+export interface NativeAutomationPermissionRequest {
+  bundle_id: string;
+}
+
+export interface NativeAutomationPermissionResponse {
+  enabled: boolean;
 }
 
 export interface NativeAxElementAtPointRequest {
@@ -1068,6 +1433,10 @@ export interface NativeBatteryResponse {
   time_remaining_minutes?: unknown;
 }
 
+export interface NativeBatteryHealthResponse {
+  value: string;
+}
+
 export interface NativeBleDiscoverServicesRequest {
   device_identifier: string;
 }
@@ -1112,6 +1481,18 @@ export interface NativeBluetoothDevicesResponse {
   devices: BluetoothDevice[];
 }
 
+export interface NativeBluetoothPowerResponse {
+  on: boolean;
+}
+
+export interface NativeBoldTextEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeBootVolumeResponse {
+  name: string;
+}
+
 export interface NativeBordersResponse {
   ok: boolean;
 }
@@ -1124,6 +1505,35 @@ export interface NativeBrightnessResponse {
   brightness: number;
 }
 
+export interface NativeCalendarEventsRangeRequest {
+  end: string;
+  start: string;
+}
+
+export interface NativeCalendarEventsRangeResponse {
+  events: CalendarEvent[];
+}
+
+export interface NativeCalendarEventsTodayResponse {
+  events: CalendarEvent[];
+}
+
+export interface NativeCalendarPermissionResponse {
+  enabled: boolean;
+}
+
+export interface NativeCameraPermissionResponse {
+  enabled: boolean;
+}
+
+export interface NativeCamerasResponse {
+  cameras: CameraDevice[];
+}
+
+export interface NativeCapsLockStateResponse {
+  on: boolean;
+}
+
 export interface NativeCaptureWindowRequest {
   window_id: string;
 }
@@ -1131,6 +1541,47 @@ export interface NativeCaptureWindowRequest {
 export interface NativeCaptureWindowResponse {
   format: string;
   image_base64: string;
+}
+
+export interface NativeCascadeWindowsRequest {
+  bundle_id: string;
+}
+
+export interface NativeCascadeWindowsResponse {
+  ok: boolean;
+}
+
+export interface NativeCenterWindowRequest {
+  window_id: string;
+}
+
+export interface NativeCenterWindowResponse {
+  ok: boolean;
+}
+
+export interface NativeCheckPermissionRequest {
+  permission: string;
+}
+
+export interface NativeCheckPermissionResponse {
+  permission: string;
+  status: string;
+}
+
+export interface NativeClearFileQuarantineRequest {
+  path: string;
+}
+
+export interface NativeClearFileQuarantineResponse {
+  ok: boolean;
+}
+
+export interface NativeClearNotificationsRequest {
+  bundle_id: string;
+}
+
+export interface NativeClearNotificationsResponse {
+  ok: boolean;
 }
 
 export interface NativeClickMenuItemRequest {
@@ -1144,6 +1595,54 @@ export interface NativeClickMenuItemResponse {
 
 export interface NativeClipboardChangeCountResponse {
   count: number;
+}
+
+export interface NativeClipboardFileUrlsResponse {
+  value: string;
+}
+
+export interface NativeClipboardHasImageResponse {
+  has_image: boolean;
+}
+
+export interface NativeClipboardHasTextResponse {
+  has_text: boolean;
+}
+
+export interface NativeClipboardHTMLResponse {
+  value: string;
+}
+
+export interface NativeClipboardImageDimensionsResponse {
+  value: string;
+}
+
+export interface NativeClipboardRichTextResponse {
+  value: string;
+}
+
+export interface NativeClipboardSetHTMLRequest {
+  html: string;
+}
+
+export interface NativeClipboardSetHTMLResponse {
+  ok: boolean;
+}
+
+export interface NativeClipboardSetTextRequest {
+  text: string;
+}
+
+export interface NativeClipboardSetTextResponse {
+  ok: boolean;
+}
+
+export interface NativeClipboardTypesRequest {
+  pasteboard?: string;
+}
+
+export interface NativeClipboardTypesResponse {
+  types: string[];
 }
 
 export interface NativeCloseWindowRequest {
@@ -1167,10 +1666,59 @@ export interface NativeColorAtPointResponse {
   r: number;
 }
 
+export interface NativeComputerNameResponse {
+  name: string;
+}
+
+export interface NativeContactsPermissionResponse {
+  enabled: boolean;
+}
+
+export interface NativeCopyFileRequest {
+  destination: string;
+  source: string;
+}
+
+export interface NativeCopyFileResponse {
+  ok: boolean;
+}
+
+export interface NativeCpuInfoResponse {
+  cpu?: unknown;
+}
+
+export interface NativeCreateDirectoryRequest {
+  path: string;
+}
+
+export interface NativeCreateDirectoryResponse {
+  ok: boolean;
+}
+
+export interface NativeCronJobsResponse {
+  jobs: string[];
+}
+
+export interface NativeCurrencyCodeResponse {
+  code: string;
+}
+
+export interface NativeCurrentDatetimeResponse {
+  datetime: string;
+}
+
 export interface NativeCurrentUserResponse {
   full_name: string;
   home_directory: string;
   username: string;
+}
+
+export interface NativeCurrentUserAdminResponse {
+  admin: boolean;
+}
+
+export interface NativeCurrentWallpaperResponse {
+  path: string;
 }
 
 export interface NativeCursorResponse {
@@ -1184,12 +1732,96 @@ export interface NativeCursorInfoResponse {
   y: number;
 }
 
+export interface NativeCursorShakeToLocateResponse {
+  enabled: boolean;
+}
+
 export interface NativeDarkModeResponse {
   is_dark: boolean;
 }
 
+export interface NativeDateFormatResponse {
+  value: string;
+}
+
+export interface NativeDefaultAppForUtiRequest {
+  uti: string;
+}
+
+export interface NativeDefaultAppForUtiResponse {
+  bundle_id: string;
+}
+
 export interface NativeDefaultBrowserResponse {
   bundle_id: string;
+}
+
+export interface NativeDefaultEmailClientResponse {
+  bundle_id: string;
+}
+
+export interface NativeDefaultPrinterResponse {
+  name: string;
+}
+
+export interface NativeDeleteFileRequest {
+  path: string;
+}
+
+export interface NativeDeleteFileResponse {
+  ok: boolean;
+}
+
+export interface NativeDesktopDirectoryResponse {
+  path: string;
+}
+
+export interface NativeDetectBarcodesResponse {
+  barcodes: BarcodeResult[];
+}
+
+export interface NativeDetectBarcodesFileRequest {
+  path: string;
+}
+
+export interface NativeDetectBarcodesFileResponse {
+  barcodes: BarcodeResult[];
+}
+
+export interface NativeDictationEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeDifferentiateWithoutColorResponse {
+  enabled: boolean;
+}
+
+export interface NativeDirectoryContentsRequest {
+  include_hidden?: boolean;
+  path: string;
+}
+
+export interface NativeDirectoryContentsResponse {
+  entries: DirectoryEntry[];
+}
+
+export interface NativeDiskSpaceRequest {
+  path?: string;
+}
+
+export interface NativeDiskSpaceResponse {
+  available_bytes: number;
+  mount_point: string;
+  total_bytes: number;
+  used_bytes: number;
+}
+
+export interface NativeDiskUsageRequest {
+  path: string;
+}
+
+export interface NativeDiskUsageResponse {
+  size: string;
 }
 
 export interface NativeDismissNotificationRequest {
@@ -1198,6 +1830,34 @@ export interface NativeDismissNotificationRequest {
 
 export interface NativeDismissNotificationResponse {
   ok: boolean;
+}
+
+export interface NativeDisplayColorProfilesResponse {
+  profiles: DisplayColorProfile[];
+}
+
+export interface NativeDisplayCountResponse {
+  count: number;
+}
+
+export interface NativeDisplayMirroringResponse {
+  mirrored: boolean;
+}
+
+export interface NativeDisplayRefreshRateRequest {
+  display_id: number;
+}
+
+export interface NativeDisplayRotationResponse {
+  rotations: DisplayRotation[];
+}
+
+export interface NativeDisplayScaleFactorRequest {
+  display_id: number;
+}
+
+export interface NativeDisplaySerialNumberResponse {
+  value: string;
 }
 
 export interface NativeDisplaysResponse {
@@ -1209,9 +1869,244 @@ export interface NativeDndResponse {
   focus_name?: unknown;
 }
 
+export interface NativeDnsServersResponse {
+  servers: string[];
+}
+
+export interface NativeDockAutoHideResponse {
+  enabled: boolean;
+}
+
+export interface NativeDockMagnificationResponse {
+  enabled: boolean;
+}
+
+export interface NativeDockMinimizeEffectResponse {
+  value: string;
+}
+
+export interface NativeDockMinimizeToAppResponse {
+  enabled: boolean;
+}
+
+export interface NativeDockPositionResponse {
+  position: string;
+}
+
+export interface NativeDockShowIndicatorsResponse {
+  enabled: boolean;
+}
+
+export interface NativeDockShowRecentsResponse {
+  enabled: boolean;
+}
+
+export interface NativeDocumentsDirectoryResponse {
+  path: string;
+}
+
+export interface NativeDownloadsDirectoryResponse {
+  path: string;
+}
+
+export interface NativeEjectDiskRequest {
+  mount_point: string;
+}
+
+export interface NativeEjectDiskResponse {
+  ok: boolean;
+}
+
+export interface NativeEmptyTrashResponse {
+  ok: boolean;
+}
+
+export interface NativeEnvVarRequest {
+  name: string;
+}
+
+export interface NativeEnvVarResponse {
+  value: string;
+}
+
+export interface NativeEpochTimeResponse {
+  seconds: number;
+}
+
+export interface NativeExtendedAttributesRequest {
+  path: string;
+}
+
+export interface NativeExternalDisksResponse {
+  disks: ExternalDisk[];
+}
+
+export interface NativeExternalDisplayNamesResponse {
+  names: string[];
+}
+
+export interface NativeFanSpeedsResponse {
+  value: string;
+}
+
+export interface NativeFastUserSwitchingResponse {
+  enabled: boolean;
+}
+
+export interface NativeFileAclRequest {
+  path: string;
+}
+
+export interface NativeFileCreationDateRequest {
+  path: string;
+}
+
+export interface NativeFileExistsRequest {
+  path: string;
+}
+
+export interface NativeFileExistsResponse {
+  exists: boolean;
+}
+
+export interface NativeFileExtendedAttributesRequest {
+  path: string;
+}
+
+export interface NativeFileExtendedAttributesResponse {
+  attributes: string[];
+}
+
+export interface NativeFileHashRequest {
+  algorithm?: string;
+  path: string;
+}
+
+export interface NativeFileHashResponse {
+  hash: string;
+}
+
+export interface NativeFileMetadataRequest {
+  path: string;
+}
+
+export interface NativeFileMetadataResponse {
+  accessed?: unknown;
+  created?: unknown;
+  is_dir: boolean;
+  is_symlink: boolean;
+  modified?: unknown;
+  readonly: boolean;
+  size: number;
+}
+
+export interface NativeFileModificationDateRequest {
+  path: string;
+}
+
+export interface NativeFileOwnerRequest {
+  path: string;
+}
+
+export interface NativeFileOwnerResponse {
+  owner: string;
+}
+
+export interface NativeFileQuarantineRequest {
+  path: string;
+}
+
+export interface NativeFileQuarantineResponse {
+  quarantined: boolean;
+}
+
+export interface NativeFileSharingEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeFileSizeRequest {
+  path: string;
+}
+
 export interface NativeFileTagsRequest {
   path: string;
   tags?: unknown;
+}
+
+export interface NativeFileTypeRequest {
+  path: string;
+}
+
+export interface NativeFileTypeResponse {
+  uti: string;
+}
+
+export interface NativeFileUtiRequest {
+  path: string;
+}
+
+export interface NativeFilevaultStatusResponse {
+  enabled: boolean;
+}
+
+export interface NativeFinderDefaultViewResponse {
+  value: string;
+}
+
+export interface NativeFinderNewWindowTargetResponse {
+  value: string;
+}
+
+export interface NativeFinderSelectionResponse {
+  paths: string[];
+}
+
+export interface NativeFinderShowExtensionsResponse {
+  enabled: boolean;
+}
+
+export interface NativeFinderShowHiddenResponse {
+  enabled: boolean;
+}
+
+export interface NativeFinderShowPathBarResponse {
+  enabled: boolean;
+}
+
+export interface NativeFinderShowStatusBarResponse {
+  enabled: boolean;
+}
+
+export interface NativeFinderWindowPathResponse {
+  path: string;
+}
+
+export interface NativeFirewallEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeFlushDnsResponse {
+  ok: boolean;
+}
+
+export interface NativeFnKeyFunctionResponse {
+  value: string;
+}
+
+export interface NativeFocusModesResponse {
+  value: string;
+}
+
+export interface NativeFocusedElementResponse {
+  element?: unknown;
+}
+
+export interface NativeFocusedWindowIDResponse {
+  window_id: string;
+}
+
+export interface NativeFontSmoothingResponse {
+  enabled: boolean;
 }
 
 export interface NativeForceQuitAppRequest {
@@ -1224,6 +2119,31 @@ export interface NativeForceQuitAppResponse {
 
 export interface NativeFrontmostAppResponse {
   app?: unknown;
+}
+
+export interface NativeFullDiskAccessResponse {
+  enabled: boolean;
+}
+
+export interface NativeFunctionKeysStandardResponse {
+  standard: boolean;
+}
+
+export interface NativeGatekeeperStatusResponse {
+  enabled: boolean;
+}
+
+export interface NativeGatewayAddressResponse {
+  address: string;
+}
+
+export interface NativeGeneratePdfRequest {
+  html: string;
+  output_path: string;
+}
+
+export interface NativeGeneratePdfResponse {
+  ok: boolean;
 }
 
 export interface NativeGetWindowInfoRequest {
@@ -1240,6 +2160,39 @@ export interface NativeGetWindowInfoResponse {
   subrole?: unknown;
   title?: unknown;
   window_id: string;
+}
+
+export interface NativeGlobFilesRequest {
+  max_results?: number;
+  pattern: string;
+}
+
+export interface NativeGlobFilesResponse {
+  paths: string[];
+}
+
+export interface NativeGpuInfoResponse {
+  info: string;
+}
+
+export interface NativeGrayscaleEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeGroupWindowsByAppResponse {
+  enabled: boolean;
+}
+
+export interface NativeHandoffEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeHardwareModelResponse {
+  model: string;
+}
+
+export interface NativeHardwareUuidResponse {
+  uuid: string;
 }
 
 export interface NativeHidClaimRequest {
@@ -1289,8 +2242,64 @@ export interface NativeHideAppResponse {
   ok: boolean;
 }
 
+export interface NativeHighlightColorResponse {
+  color: string;
+}
+
+export interface NativeHomeDirectoryResponse {
+  path: string;
+}
+
+export interface NativeHomebrewPrefixResponse {
+  prefix: string;
+}
+
+export interface NativeHostnameResponse {
+  hostname: string;
+}
+
+export interface NativeHostnameResolveRequest {
+  hostname: string;
+}
+
+export interface NativeHostnameResolveResponse {
+  addresses: string[];
+}
+
+export interface NativeHotCornersResponse {
+  corners: string;
+}
+
+export interface NativeIcloudDesktopSyncResponse {
+  enabled: boolean;
+}
+
+export interface NativeIcloudDrivePathResponse {
+  path: string;
+}
+
+export interface NativeIcloudSignedInResponse {
+  signed_in: boolean;
+}
+
+export interface NativeIncreaseContrastResponse {
+  enabled: boolean;
+}
+
+export interface NativeInputSourcesResponse {
+  sources: InputSource[];
+}
+
 export interface NativeInstalledAppsResponse {
   apps: InstalledApp[];
+}
+
+export interface NativeInterfaceStyleSwitcherResponse {
+  value: string;
+}
+
+export interface NativeIpv6AddressResponse {
+  value: string;
 }
 
 export interface NativeIsAppHiddenRequest {
@@ -1301,10 +2310,71 @@ export interface NativeIsAppHiddenResponse {
   result: boolean;
 }
 
+export interface NativeIsDirectoryRequest {
+  path: string;
+}
+
+export interface NativeIsDirectoryResponse {
+  is_dir: boolean;
+}
+
+export interface NativeIsFileHiddenRequest {
+  path: string;
+}
+
+export interface NativeIsFileHiddenResponse {
+  enabled: boolean;
+}
+
+export interface NativeKernelVersionResponse {
+  version: string;
+}
+
 export interface NativeKeyboardLayoutResponse {
   layout_id: string;
   layout_name: string;
   mappings: Record<string, string>;
+}
+
+export interface NativeKeychainDeleteRequest {
+  account: string;
+  service: string;
+}
+
+export interface NativeKeychainDeleteResponse {
+  ok: boolean;
+}
+
+export interface NativeKeychainReadRequest {
+  account: string;
+  service: string;
+}
+
+export interface NativeKeychainReadResponse {
+  password: string;
+}
+
+export interface NativeKeychainWriteRequest {
+  account: string;
+  password: string;
+  service: string;
+}
+
+export interface NativeKeychainWriteResponse {
+  ok: boolean;
+}
+
+export interface NativeKillProcessRequest {
+  pid: number;
+  signal?: number;
+}
+
+export interface NativeKillProcessResponse {
+  ok: boolean;
+}
+
+export interface NativeLastRebootResponse {
+  date: string;
 }
 
 export interface NativeLaunchAppRequest {
@@ -1316,16 +2386,104 @@ export interface NativeLaunchAppResponse {
   ok: boolean;
 }
 
+export interface NativeLaunchdAgentsResponse {
+  agents: string[];
+}
+
+export interface NativeLaunchdDaemonsResponse {
+  daemons: string[];
+}
+
+export interface NativeListAudioInputDevicesResponse {
+  devices: string[];
+}
+
+export interface NativeListAudioOutputDevicesResponse {
+  devices: string[];
+}
+
 export interface NativeListNotificationsResponse {
   notifications: DeliveredNotification[];
+}
+
+export interface NativeListShortcutsResponse {
+  shortcuts: ShortcutInfo[];
 }
 
 export interface NativeListSpacesResponse {
   spaces: SpaceInfo[];
 }
 
+export interface NativeLiveTextEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeLocalIPResponse {
+  ip: string;
+}
+
+export interface NativeLocaleResponse {
+  locale: string;
+}
+
+export interface NativeLocationEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeLogOutResponse {
+  ok: boolean;
+}
+
+export interface NativeLoggedInUsersResponse {
+  users: string[];
+}
+
 export interface NativeLoginItemsResponse {
   items: LoginItem[];
+}
+
+export interface NativeLoginItemsModernResponse {
+  items: string[];
+}
+
+export interface NativeLowPowerModeResponse {
+  enabled: boolean;
+}
+
+export interface NativeMacAddressResponse {
+  value: string;
+}
+
+export interface NativeMaximizeWindowRequest {
+  window_id: string;
+}
+
+export interface NativeMaximizeWindowResponse {
+  ok: boolean;
+}
+
+export interface NativeMeasurementSystemResponse {
+  system: string;
+}
+
+export interface NativeMediaNextTrackResponse {
+  ok: boolean;
+}
+
+export interface NativeMediaPlayPauseResponse {
+  ok: boolean;
+}
+
+export interface NativeMediaPreviousTrackResponse {
+  ok: boolean;
+}
+
+export interface NativeMemoryInfoResponse {
+  memory?: unknown;
+}
+
+export interface NativeMemoryPressureResponse {
+  value: string;
 }
 
 export interface NativeMenuBarRequest {
@@ -1336,11 +2494,54 @@ export interface NativeMenuBarResponse {
   items: MenuItem[];
 }
 
+export interface NativeMenuBarAutoHideResponse {
+  enabled: boolean;
+}
+
+export interface NativeMenuBarBatteryPercentResponse {
+  enabled: boolean;
+}
+
+export interface NativeMenuBarClockFormatResponse {
+  value: string;
+}
+
+export interface NativeMicrophonePermissionResponse {
+  enabled: boolean;
+}
+
 export interface NativeMinimizeWindowRequest {
   window_id: string;
 }
 
 export interface NativeMinimizeWindowResponse {
+  ok: boolean;
+}
+
+export interface NativeModelNameResponse {
+  model: string;
+}
+
+export interface NativeMountPointsResponse {
+  volumes: string[];
+}
+
+export interface NativeMouseButtonClickRequest {
+  button: number;
+  x?: unknown;
+  y?: unknown;
+}
+
+export interface NativeMouseButtonClickResponse {
+  ok: boolean;
+}
+
+export interface NativeMoveFileRequest {
+  destination: string;
+  source: string;
+}
+
+export interface NativeMoveFileResponse {
   ok: boolean;
 }
 
@@ -1370,6 +2571,46 @@ export interface NativeMuteResponse {
   ok: boolean;
 }
 
+export interface NativeNetworkBandwidthResponse {
+  value: string;
+}
+
+export interface NativeNetworkDnsDomainResponse {
+  value: string;
+}
+
+export interface NativeNetworkInterfacesResponse {
+  interfaces: NetworkInterface[];
+}
+
+export interface NativeNetworkProxyEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeNetworkQualityResponse {
+  summary: string;
+}
+
+export interface NativeNetworkReachableRequest {
+  host: string;
+}
+
+export interface NativeNetworkReachableResponse {
+  reachable: boolean;
+}
+
+export interface NativeNetworkSsidResponse {
+  value: string;
+}
+
+export interface NativeNightShiftResponse {
+  enabled: boolean;
+}
+
+export interface NativeNotificationSoundEnabledResponse {
+  enabled: boolean;
+}
+
 export interface NativeNotifyRequest {
   body?: unknown;
   sound?: unknown;
@@ -1381,6 +2622,14 @@ export interface NativeNotifyResponse {
   id?: unknown;
 }
 
+export interface NativeNowPlayingResponse {
+  info?: unknown;
+}
+
+export interface NativeNumberFormatDecimalResponse {
+  value: string;
+}
+
 export interface NativeObserveWindowsRequest {
   pid: number;
 }
@@ -1389,12 +2638,122 @@ export interface NativeObserveWindowsResponse {
   subscription_id: string;
 }
 
+export interface NativeOcrClipboardResponse {
+  regions: OcrRegion[];
+}
+
+export interface NativeOcrFileRequest {
+  path: string;
+}
+
+export interface NativeOcrFileResponse {
+  regions: OcrRegion[];
+}
+
+export interface NativeOcrScreenResponse {
+  regions: OcrRegion[];
+}
+
+export interface NativeOcrScreenRegionRequest {
+  height: number;
+  width: number;
+  x: number;
+  y: number;
+}
+
+export interface NativeOcrScreenRegionResponse {
+  regions: OcrRegion[];
+}
+
+export interface NativeOcrWindowRequest {
+  window_id: number;
+}
+
+export interface NativeOcrWindowResponse {
+  regions: OcrRegion[];
+}
+
+export interface NativeOpenAppSettingsRequest {
+  bundle_id: string;
+}
+
+export interface NativeOpenAppSettingsResponse {
+  ok: boolean;
+}
+
+export interface NativeOpenFinderWindowRequest {
+  path: string;
+}
+
+export interface NativeOpenFinderWindowResponse {
+  ok: boolean;
+}
+
+export interface NativeOpenSystemSettingsRequest {
+  pane?: unknown;
+}
+
+export interface NativeOpenSystemSettingsResponse {
+  ok: boolean;
+}
+
 export interface NativeOpenTargetRequest {
   target: string;
 }
 
 export interface NativeOpenTargetResponse {
   ok: boolean;
+}
+
+export interface NativeOpenURLRequest {
+  url: string;
+}
+
+export interface NativeOpenURLResponse {
+  ok: boolean;
+}
+
+export interface NativeOpenWithAppRequest {
+  bundle_id: string;
+  target: string;
+}
+
+export interface NativeOpenWithAppResponse {
+  ok: boolean;
+}
+
+export interface NativeOptimizedChargingResponse {
+  enabled: boolean;
+}
+
+export interface NativePdfExtractTextRequest {
+  page?: number;
+  path: string;
+}
+
+export interface NativePdfPageCountRequest {
+  path: string;
+}
+
+export interface NativePinWindowAboveRequest {
+  pinned: boolean;
+  window_id: string;
+}
+
+export interface NativePinWindowAboveResponse {
+  ok: boolean;
+}
+
+export interface NativePinchToZoomResponse {
+  enabled: boolean;
+}
+
+export interface NativePingRequest {
+  host: string;
+}
+
+export interface NativePlayFeedbackWhenVolumeChangedResponse {
+  enabled: boolean;
 }
 
 export interface NativePlaySoundRequest {
@@ -1409,6 +2768,18 @@ export interface NativePollBurstResponse {
   ok: boolean;
 }
 
+export interface NativePowerAdapterConnectedResponse {
+  enabled: boolean;
+}
+
+export interface NativePowerSourceResponse {
+  source: string;
+}
+
+export interface NativePressAndHoldEnabledResponse {
+  enabled: boolean;
+}
+
 export interface NativePreventSleepRequest {
   assertion_id?: unknown;
   reason?: string;
@@ -1416,6 +2787,87 @@ export interface NativePreventSleepRequest {
 
 export interface NativePreventSleepResponse {
   assertion_id: string;
+}
+
+export interface NativePrimaryDisplayResponse {
+  display?: unknown;
+}
+
+export interface NativePrimaryDisplayIDResponse {
+  value: number;
+}
+
+export interface NativePrinterSharingEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativePrintersResponse {
+  printers: PrinterInfo[];
+}
+
+export interface NativeProcessCountResponse {
+  count: number;
+}
+
+export interface NativeProcessCpuUsageRequest {
+  pid: number;
+}
+
+export interface NativeProcessExistsRequest {
+  pid: number;
+}
+
+export interface NativeProcessExistsResponse {
+  exists: boolean;
+}
+
+export interface NativeProcessInfoRequest {
+  pid: number;
+}
+
+export interface NativeProcessInfoResponse {
+  cpu_percent?: unknown;
+  memory_bytes?: unknown;
+  name: string;
+  path?: unknown;
+  pid: number;
+  user?: unknown;
+}
+
+export interface NativeProcessListResponse {
+  processes: ProcessInfo[];
+}
+
+export interface NativeProcessMemoryUsageRequest {
+  pid: number;
+}
+
+export interface NativeProcessNameRequest {
+  pid: number;
+}
+
+export interface NativeProcessParentPidRequest {
+  pid: number;
+}
+
+export interface NativeProcessPathRequest {
+  pid: number;
+}
+
+export interface NativeProcessStartTimeRequest {
+  pid: number;
+}
+
+export interface NativeProxySettingsResponse {
+  config: string;
+}
+
+export interface NativePublicIPResponse {
+  ip: string;
+}
+
+export interface NativePurgeMemoryResponse {
+  ok: boolean;
 }
 
 export interface NativeQuickLookRequest {
@@ -1444,12 +2896,98 @@ export interface NativeRaiseWindowResponse {
   ok: boolean;
 }
 
+export interface NativeRandomUuidResponse {
+  uuid: string;
+}
+
+export interface NativeReadAppPreferenceRequest {
+  domain: string;
+  key: string;
+}
+
+export interface NativeReadFileRequest {
+  path: string;
+}
+
+export interface NativeReadFileResponse {
+  contents: string;
+}
+
+export interface NativeReadFileBinaryRequest {
+  max_bytes?: unknown;
+  path: string;
+}
+
+export interface NativeReadFileBinaryResponse {
+  data: string;
+}
+
+export interface NativeReadPlistRequest {
+  path: string;
+}
+
+export interface NativeRecentDocumentsRequest {
+  bundle_id: string;
+}
+
+export interface NativeRecentDocumentsResponse {
+  paths: string[];
+}
+
+export interface NativeReduceMotionResponse {
+  enabled: boolean;
+}
+
+export interface NativeReduceTransparencyResponse {
+  enabled: boolean;
+}
+
+export interface NativeRemindersIncompleteResponse {
+  reminders: ReminderItem[];
+}
+
+export interface NativeRemoteLoginEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeRenameFileRequest {
+  new_name: string;
+  path: string;
+}
+
+export interface NativeRenameFileResponse {
+  ok: boolean;
+}
+
+export interface NativeRequestScreenCaptureResponse {
+  prompted: boolean;
+}
+
+export interface NativeResourceUsageResponse {
+  cpu_usage_percent: number;
+  memory_pressure_percent: number;
+  memory_total_bytes: number;
+  memory_used_bytes: number;
+}
+
+export interface NativeRestartAppRequest {
+  bundle_id: string;
+}
+
+export interface NativeRestartAppResponse {
+  ok: boolean;
+}
+
 export interface NativeRevealInFinderRequest {
   path: string;
 }
 
 export interface NativeRevealInFinderResponse {
   ok: boolean;
+}
+
+export interface NativeRosettaInstalledResponse {
+  installed: boolean;
 }
 
 export interface NativeRunApplescriptRequest {
@@ -1462,12 +3000,61 @@ export interface NativeRunApplescriptResponse {
   stdout: string;
 }
 
+export interface NativeRunJxaRequest {
+  script: string;
+}
+
+export interface NativeRunJxaResponse {
+  output: string;
+}
+
+export interface NativeRunShortcutRequest {
+  input?: unknown;
+  name: string;
+}
+
+export interface NativeRunShortcutResponse {
+  output: string;
+}
+
 export interface NativeRunningAppsResponse {
   apps: RunningApp[];
 }
 
+export interface NativeScreenCapturePermissionResponse {
+  granted: boolean;
+}
+
+export interface NativeScreenCountResponse {
+  count: number;
+}
+
 export interface NativeScreenLockResponse {
   ok: boolean;
+}
+
+export interface NativeScreenLockedResponse {
+  enabled: boolean;
+}
+
+export interface NativeScreenResolutionResponse {
+  value: string;
+}
+
+export interface NativeScreenSaverAskPasswordResponse {
+  enabled: boolean;
+}
+
+export interface NativeScreenSaverStartResponse {
+  ok: boolean;
+}
+
+export interface NativeScreenSaverStatusResponse {
+  active: boolean;
+}
+
+export interface NativeScreenSharingEnabledResponse {
+  enabled: boolean;
 }
 
 export interface NativeScreenshotRequest {
@@ -1481,8 +3068,69 @@ export interface NativeScreenshotResponse {
   image_base64: string;
 }
 
+export interface NativeScreenshotFormatResponse {
+  value: string;
+}
+
+export interface NativeScreenshotIncludeShadowResponse {
+  enabled: boolean;
+}
+
+export interface NativeScreenshotLocationResponse {
+  path: string;
+}
+
+export interface NativeScreenshotShowThumbnailResponse {
+  enabled: boolean;
+}
+
+export interface NativeScrollDirectionResponse {
+  natural: boolean;
+}
+
+export interface NativeScrollDirectionNaturalResponse {
+  enabled: boolean;
+}
+
+export interface NativeSearchContactsRequest {
+  query: string;
+}
+
+export interface NativeSearchContactsResponse {
+  contacts: ContactInfo[];
+}
+
+export interface NativeSecureInputEnabledResponse {
+  enabled: boolean;
+}
+
 export interface NativeSelectedFinderItemsResponse {
   paths: string[];
+}
+
+export interface NativeSelectedTextResponse {
+  text: string;
+}
+
+export interface NativeSerialNumberResponse {
+  serial: string;
+}
+
+export interface NativeSetAirportPowerRequest {
+  on: boolean;
+}
+
+export interface NativeSetAirportPowerResponse {
+  ok: boolean;
+}
+
+export interface NativeSetAppHiddenRequest {
+  bundle_id: string;
+  hidden: boolean;
+}
+
+export interface NativeSetAppHiddenResponse {
+  ok: boolean;
 }
 
 export interface NativeSetAudioDeviceRequest {
@@ -1494,12 +3142,61 @@ export interface NativeSetAudioDeviceResponse {
   ok: boolean;
 }
 
+export interface NativeSetAudioDeviceVolumeRequest {
+  device_uid: string;
+  volume: number;
+}
+
+export interface NativeSetAudioDeviceVolumeResponse {
+  ok: boolean;
+}
+
+export interface NativeSetAudioInputDeviceRequest {
+  name: string;
+}
+
+export interface NativeSetAudioInputDeviceResponse {
+  ok: boolean;
+}
+
+export interface NativeSetAudioOutputDeviceRequest {
+  name: string;
+}
+
+export interface NativeSetAudioOutputDeviceResponse {
+  ok: boolean;
+}
+
+export interface NativeSetAutoRearrangeSpacesRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetAutoRearrangeSpacesResponse {
+  ok: boolean;
+}
+
+export interface NativeSetBluetoothPowerRequest {
+  on: boolean;
+}
+
+export interface NativeSetBluetoothPowerResponse {
+  ok: boolean;
+}
+
 export interface NativeSetBrightnessRequest {
   brightness: number;
   display_id?: unknown;
 }
 
 export interface NativeSetBrightnessResponse {
+  ok: boolean;
+}
+
+export interface NativeSetComputerNameRequest {
+  name: string;
+}
+
+export interface NativeSetComputerNameResponse {
   ok: boolean;
 }
 
@@ -1519,11 +3216,249 @@ export interface NativeSetDndResponse {
   ok: boolean;
 }
 
+export interface NativeSetDockAutoHideRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetDockAutoHideResponse {
+  ok: boolean;
+}
+
+export interface NativeSetDockMagnificationRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetDockMagnificationResponse {
+  ok: boolean;
+}
+
+export interface NativeSetDockMinimizeEffectRequest {
+  effect: string;
+}
+
+export interface NativeSetDockMinimizeEffectResponse {
+  ok: boolean;
+}
+
+export interface NativeSetDockPositionRequest {
+  position: string;
+}
+
+export interface NativeSetDockPositionResponse {
+  ok: boolean;
+}
+
+export interface NativeSetDockShowRecentsRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetDockShowRecentsResponse {
+  ok: boolean;
+}
+
+export interface NativeSetDockSizeRequest {
+  size: number;
+}
+
+export interface NativeSetDockSizeResponse {
+  ok: boolean;
+}
+
+export interface NativeSetExtendedAttributeRequest {
+  name: string;
+  path: string;
+  value: string;
+}
+
+export interface NativeSetExtendedAttributeResponse {
+  ok: boolean;
+}
+
+export interface NativeSetFileHiddenRequest {
+  hidden: boolean;
+  path: string;
+}
+
+export interface NativeSetFileHiddenResponse {
+  ok: boolean;
+}
+
+export interface NativeSetFilePermissionsRequest {
+  mode: string;
+  path: string;
+}
+
+export interface NativeSetFilePermissionsResponse {
+  ok: boolean;
+}
+
+export interface NativeSetFinderShowExtensionsRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetFinderShowExtensionsResponse {
+  ok: boolean;
+}
+
+export interface NativeSetFinderShowHiddenRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetFinderShowHiddenResponse {
+  ok: boolean;
+}
+
+export interface NativeSetHighlightColorRequest {
+  color: string;
+}
+
+export interface NativeSetHighlightColorResponse {
+  ok: boolean;
+}
+
+export interface NativeSetHotCornerRequest {
+  action: number;
+  corner: string;
+}
+
+export interface NativeSetHotCornerResponse {
+  ok: boolean;
+}
+
+export interface NativeSetInputSourceRequest {
+  source_id: string;
+}
+
+export interface NativeSetInputSourceResponse {
+  ok: boolean;
+}
+
+export interface NativeSetKeyRepeatDelayRequest {
+  delay: number;
+}
+
+export interface NativeSetKeyRepeatDelayResponse {
+  ok: boolean;
+}
+
+export interface NativeSetKeyRepeatRateRequest {
+  rate: number;
+}
+
+export interface NativeSetKeyRepeatRateResponse {
+  ok: boolean;
+}
+
+export interface NativeSetMenuBarAutoHideRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetMenuBarAutoHideResponse {
+  ok: boolean;
+}
+
+export interface NativeSetMouseSpeedRequest {
+  speed: number;
+}
+
+export interface NativeSetMouseSpeedResponse {
+  ok: boolean;
+}
+
+export interface NativeSetNightShiftRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetNightShiftResponse {
+  ok: boolean;
+}
+
+export interface NativeSetScreenshotFormatRequest {
+  format: string;
+}
+
+export interface NativeSetScreenshotFormatResponse {
+  ok: boolean;
+}
+
+export interface NativeSetScreenshotIncludeShadowRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetScreenshotIncludeShadowResponse {
+  ok: boolean;
+}
+
+export interface NativeSetScreenshotLocationRequest {
+  path: string;
+}
+
+export interface NativeSetScreenshotLocationResponse {
+  ok: boolean;
+}
+
+export interface NativeSetScrollDirectionNaturalRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetScrollDirectionNaturalResponse {
+  ok: boolean;
+}
+
+export interface NativeSetSidebarIconSizeRequest {
+  size: number;
+}
+
+export interface NativeSetSidebarIconSizeResponse {
+  ok: boolean;
+}
+
+export interface NativeSetStageManagerRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetStageManagerResponse {
+  ok: boolean;
+}
+
+export interface NativeSetTapToClickRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetTapToClickResponse {
+  ok: boolean;
+}
+
+export interface NativeSetTrackpadSpeedRequest {
+  speed: number;
+}
+
+export interface NativeSetTrackpadSpeedResponse {
+  ok: boolean;
+}
+
+export interface NativeSetURLSchemeHandlerRequest {
+  bundle_id: string;
+  scheme: string;
+}
+
+export interface NativeSetURLSchemeHandlerResponse {
+  ok: boolean;
+}
+
 export interface NativeSetVolumeRequest {
   volume: number;
 }
 
 export interface NativeSetVolumeResponse {
+  ok: boolean;
+}
+
+export interface NativeSetWallpaperRequest {
+  path: string;
+}
+
+export interface NativeSetWallpaperResponse {
   ok: boolean;
 }
 
@@ -1545,6 +3480,88 @@ export interface NativeSetWindowLevelResponse {
   result: boolean;
 }
 
+export interface NativeSetWindowPositionRequest {
+  window_id: string;
+  x: number;
+  y: number;
+}
+
+export interface NativeSetWindowPositionResponse {
+  ok: boolean;
+}
+
+export interface NativeSetWindowShadowRequest {
+  enabled: boolean;
+  window_id: string;
+}
+
+export interface NativeSetWindowShadowResponse {
+  ok: boolean;
+}
+
+export interface NativeSetWindowSizeRequest {
+  h: number;
+  w: number;
+  window_id: string;
+}
+
+export interface NativeSetWindowSizeResponse {
+  ok: boolean;
+}
+
+export interface NativeSetWindowStickyRequest {
+  sticky: boolean;
+  window_id: string;
+}
+
+export interface NativeSetWindowStickyResponse {
+  ok: boolean;
+}
+
+export interface NativeSharingNameResponse {
+  name: string;
+}
+
+export interface NativeShowScrollBarsResponse {
+  value: string;
+}
+
+export interface NativeSidebarIconSizeResponse {
+  value: string;
+}
+
+export interface NativeSipStatusResponse {
+  enabled: boolean;
+}
+
+export interface NativeSiriEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeSleepNowResponse {
+  ok: boolean;
+}
+
+export interface NativeSlowKeysResponse {
+  enabled: boolean;
+}
+
+export interface NativeSmartQuotesEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeSmartZoomResponse {
+  enabled: boolean;
+}
+
+export interface NativeSoundEffectsEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeSpacesSpanDisplaysResponse {
+  enabled: boolean;
+}
+
 export interface NativeSpeakRequest {
   rate?: unknown;
   text: string;
@@ -1553,6 +3570,23 @@ export interface NativeSpeakRequest {
 
 export interface NativeSpeakResponse {
   ok: boolean;
+}
+
+export interface NativeSpeechLocalesResponse {
+  locales: SpeechLocale[];
+}
+
+export interface NativeSpeechRecognitionAvailableResponse {
+  available: boolean;
+}
+
+export interface NativeSpeechRecognizeFileRequest {
+  locale?: string;
+  path: string;
+}
+
+export interface NativeSpellingLanguageResponse {
+  value: string;
 }
 
 export interface NativeSpotlightRequest {
@@ -1565,9 +3599,134 @@ export interface NativeSpotlightResponse {
   results: SpotlightResult[];
 }
 
+export interface NativeStageManagerEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeStartupDiskResponse {
+  disk: string;
+}
+
+export interface NativeStartupSoundEnabledResponse {
+  enabled: boolean;
+}
+
+export interface NativeStickyKeysResponse {
+  enabled: boolean;
+}
+
+export interface NativeSwipeBetweenPagesResponse {
+  enabled: boolean;
+}
+
+export interface NativeSwitchSpaceRequest {
+  space_id: number;
+}
+
+export interface NativeSwitchSpaceResponse {
+  ok: boolean;
+}
+
+export interface NativeSwitchSpaceWhenSwitchingAppResponse {
+  enabled: boolean;
+}
+
+export interface NativeSymlinkRequest {
+  link: string;
+  source: string;
+}
+
+export interface NativeSymlinkResponse {
+  ok: boolean;
+}
+
+export interface NativeSystemAppearanceResponse {
+  appearance?: unknown;
+}
+
+export interface NativeSystemInfoResponse {
+  cpu_arch: string;
+  model_identifier: string;
+  os_build: string;
+  os_version: string;
+  serial_number?: unknown;
+}
+
+export interface NativeSystemIntegrityInfoResponse {
+  value: string;
+}
+
+export interface NativeSystemLanguageResponse {
+  language: string;
+}
+
+export interface NativeSystemRegionResponse {
+  region: string;
+}
+
+export interface NativeSystemSoundsResponse {
+  sounds: string[];
+}
+
 export interface NativeSystemUptimeResponse {
   formatted: string;
   uptime_seconds: number;
+}
+
+export interface NativeSystemUptimeSecondsResponse {
+  seconds: number;
+}
+
+export interface NativeTapToClickResponse {
+  enabled: boolean;
+}
+
+export interface NativeTempDirectoryResponse {
+  path: string;
+}
+
+export interface NativeTemperatureUnitResponse {
+  value: string;
+}
+
+export interface NativeTextReplacementsResponse {
+  value: string;
+}
+
+export interface NativeThermalStateResponse {
+  state: string;
+}
+
+export interface NativeThreeFingerDragResponse {
+  enabled: boolean;
+}
+
+export interface NativeThunderboltDevicesResponse {
+  value: string;
+}
+
+export interface NativeTimeFormatResponse {
+  value: string;
+}
+
+export interface NativeTimeMachineLastBackupResponse {
+  date: string;
+}
+
+export interface NativeTimeMachineStatusResponse {
+  status: string;
+}
+
+export interface NativeTimezoneResponse {
+  timezone: string;
+}
+
+export interface NativeToggleBluetoothRequest {
+  enabled: boolean;
+}
+
+export interface NativeToggleBluetoothResponse {
+  ok: boolean;
 }
 
 export interface NativeToggleFullscreenRequest {
@@ -1578,12 +3737,40 @@ export interface NativeToggleFullscreenResponse {
   ok: boolean;
 }
 
+export interface NativeToggleWifiRequest {
+  enabled: boolean;
+}
+
+export interface NativeToggleWifiResponse {
+  ok: boolean;
+}
+
+export interface NativeTouchIDAvailableResponse {
+  available: boolean;
+}
+
+export interface NativeTransparencyConsentRequest {
+  service: string;
+}
+
 export interface NativeTrashRequest {
   path: string;
 }
 
 export interface NativeTrashResponse {
   result: boolean;
+}
+
+export interface NativeTrueToneResponse {
+  enabled: boolean;
+}
+
+export interface NativeTtsVoicesResponse {
+  voices: TtsVoice[];
+}
+
+export interface NativeTwentyFourHourClockResponse {
+  enabled: boolean;
 }
 
 export interface NativeUnhideAppRequest {
@@ -1610,9 +3797,50 @@ export interface NativeUnobserveWindowsResponse {
   result: boolean;
 }
 
+export interface NativeUnzipRequest {
+  destination: string;
+  source: string;
+}
+
+export interface NativeUnzipResponse {
+  ok: boolean;
+}
+
+export interface NativeURLSchemeHandlerRequest {
+  scheme: string;
+}
+
+export interface NativeURLSchemeHandlerResponse {
+  bundle_id: string;
+}
+
+export interface NativeUsbDevicesResponse {
+  devices: UsbDevice[];
+}
+
+export interface NativeUserAvatarResponse {
+  base64_png: string;
+}
+
+export interface NativeUserNameResponse {
+  name: string;
+}
+
+export interface NativeUserShellResponse {
+  shell: string;
+}
+
+export interface NativeVoiceoverEnabledResponse {
+  enabled: boolean;
+}
+
 export interface NativeVolumeResponse {
   is_muted: boolean;
   volume: number;
+}
+
+export interface NativeVpnStatusResponse {
+  active: boolean;
 }
 
 export interface NativeWarpCursorRequest {
@@ -1632,8 +3860,138 @@ export interface NativeWifiResponse {
   ssid?: unknown;
 }
 
+export interface NativeWifiNetworksResponse {
+  networks: string[];
+}
+
+export interface NativeWindowAppRequest {
+  window_id: string;
+}
+
+export interface NativeWindowBoundsRequest {
+  window_id: string;
+}
+
+export interface NativeWindowBoundsResponse {
+  h: number;
+  w: number;
+  x: number;
+  y: number;
+}
+
+export interface NativeWindowDisplayIDRequest {
+  window_id: string;
+}
+
+export interface NativeWindowIsFullscreenRequest {
+  window_id: string;
+}
+
+export interface NativeWindowIsFullscreenResponse {
+  enabled: boolean;
+}
+
+export interface NativeWindowIsMinimizedRequest {
+  window_id: string;
+}
+
+export interface NativeWindowIsMinimizedResponse {
+  enabled: boolean;
+}
+
+export interface NativeWindowLayerRequest {
+  window_id: string;
+}
+
+export interface NativeWindowScreenshotRequest {
+  window_id: number;
+}
+
+export interface NativeWindowSubroleRequest {
+  window_id: string;
+}
+
+export interface NativeWindowTitleRequest {
+  window_id: string;
+}
+
+export interface NativeWindowsOnSpaceRequest {
+  space_id: number;
+}
+
+export interface NativeWindowsOnSpaceResponse {
+  window_ids: string[];
+}
+
 export interface NativeWorldModelRequest {
   on_screen?: boolean;
+}
+
+export interface NativeWriteAppPreferenceRequest {
+  domain: string;
+  key: string;
+  value: unknown;
+}
+
+export interface NativeWriteAppPreferenceResponse {
+  ok: boolean;
+}
+
+export interface NativeWriteFileRequest {
+  contents: string;
+  path: string;
+}
+
+export interface NativeWriteFileResponse {
+  ok: boolean;
+}
+
+export interface NativeXcodePathResponse {
+  path: string;
+}
+
+export interface NativeXcodeVersionResponse {
+  version: string;
+}
+
+export interface NativeZipRequest {
+  destination: string;
+  source: string;
+}
+
+export interface NativeZipResponse {
+  ok: boolean;
+}
+
+export interface NativeZoomEnabledResponse {
+  enabled: boolean;
+}
+
+export interface PipelinesGrammarResponse {
+  words: string[];
+}
+
+export interface PipelinesRunRequest {
+  ephemeral?: boolean;
+  name: string;
+}
+
+export interface PipelinesRunResponse {
+  reason?: unknown;
+  started: boolean;
+}
+
+export interface PipelinesStatusResponse {
+  pipelines: PipelineStatusEntry[];
+  running: string[];
+}
+
+export interface PipelinesStopRequest {
+  name: string;
+}
+
+export interface PipelinesStopResponse {
+  stopped: boolean;
 }
 
 export interface SelectionPickRequest {
@@ -1780,26 +4138,4 @@ export interface RenderSettingsRequest {
 
 export interface RenderSettingsResponse {
   html: string;
-}
-
-export interface SpeechPipelineFullRequest {
-  channel_visibility?: Record<string, boolean>;
-  is_continuous?: boolean;
-  is_final: boolean;
-  mute_matching?: boolean;
-  scoped_prefixes?: string[];
-  segments: IngestSegmentSpec[];
-  selection_active?: boolean;
-  selection_items?: SelectionItemSpec[];
-  session_end: boolean;
-  session_id?: unknown;
-  should_lift?: boolean;
-  tags?: string[];
-}
-
-export interface SpeechPipelineFullResponse {
-  control_message?: unknown;
-  paste_text?: unknown;
-  reset_engine?: boolean;
-  status?: string;
 }
