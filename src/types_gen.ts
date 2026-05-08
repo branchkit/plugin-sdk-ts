@@ -769,6 +769,20 @@ export interface CollectionsListResponse {
   sections: CollectionsListSection[];
 }
 
+export interface CommandsCompletionsRequest {
+  active_tags?: unknown;
+  collections?: unknown;
+  require_tag?: unknown;
+  words?: string[];
+}
+
+export interface CommandsCompletionsResponse {
+  has_completions: boolean;
+  items: DiscoverItem[];
+  next_words: string[];
+  title: string;
+}
+
 export interface CommandsDiscoverRequest {
   active_tags?: unknown;
   require_tag?: unknown;
@@ -3969,6 +3983,16 @@ export interface NativeZoomEnabledResponse {
 
 export interface PipelinesGrammarResponse {
   words: string[];
+}
+
+export interface PipelinesInjectRequest {
+  data?: unknown;
+  event_type: string;
+  name: string;
+}
+
+export interface PipelinesInjectResponse {
+  injected: boolean;
 }
 
 export interface PipelinesRunRequest {
