@@ -783,27 +783,6 @@ export interface CommandsCompletionsResponse {
   title: string;
 }
 
-export interface CommandsDiscoverRequest {
-  active_tags?: unknown;
-  require_tag?: unknown;
-  words?: unknown;
-}
-
-export interface CommandsDiscoverResponse {
-  items: DiscoverItem[];
-  title: string;
-}
-
-export interface CommandsHasPartialRequest {
-  active_tags?: unknown;
-  words?: string[];
-}
-
-export interface CommandsHasPartialResponse {
-  has_partial: boolean;
-  next_list?: unknown;
-}
-
 export interface CommandsListResponse {
   footer: string;
   sections: ListCommandSection[];
