@@ -160,6 +160,7 @@ export interface CommandRowData {
   pattern: string;
   plugin_name: string;
   tier: string;
+  variants: string[];
 }
 
 export interface ContactInfo {
