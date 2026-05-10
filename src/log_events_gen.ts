@@ -49,6 +49,7 @@ export const LogEventStateTtlSwept = "state.ttl_swept" as const;
 export const LogEventStateWriteAttempted = "state.write_attempted" as const;
 export const LogEventStateWriteDenied = "state.write_denied" as const;
 export const LogEventStateWriteSucceeded = "state.write_succeeded" as const;
+export const LogEventValidationError = "validation.error" as const;
 export const LogEventValidationStartupPass = "validation.startup_pass" as const;
 export const LogEventValidationWarning = "validation.warning" as const;
 export const LogEventWatchdogWarning = "watchdog.warning" as const;
@@ -109,6 +110,7 @@ export const LogEventRegistry: Record<string, LogEventMeta> = {
     "state.write_attempted": { name: "state.write_attempted", summary: "A write to a state collection was initiated.", since: "0.1.0", source: "state", severity: "debug", redaction: "payload_hash" },
     "state.write_denied": { name: "state.write_denied", summary: "A write was rejected by auth, grants, validation, or policy.", since: "0.1.0", source: "state", severity: "warn", redaction: "none" },
     "state.write_succeeded": { name: "state.write_succeeded", summary: "A write to a state collection completed.", since: "0.1.0", source: "state", severity: "info", redaction: "none" },
+    "validation.error": { name: "validation.error", summary: "Manifest validation error — plugin was rejected or not reloaded.", since: "0.1.0", source: "validation", severity: "error", redaction: "none" },
     "validation.startup_pass": { name: "validation.startup_pass", summary: "Startup validation pass completed; warning_count summarizes any drift detected.", since: "0.1.0", source: "validation", severity: "info", redaction: "none" },
     "validation.warning": { name: "validation.warning", summary: "Manifest / commands / action validation produced a warning.", since: "0.1.0", source: "validation", severity: "warn", redaction: "none" },
     "watchdog.warning": { name: "watchdog.warning", summary: "Watchdog observed mutex contention or suspected a deadlock.", since: "0.1.0", source: "lifecycle", severity: "warn", redaction: "none" },
