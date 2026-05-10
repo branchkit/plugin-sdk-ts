@@ -156,9 +156,12 @@ export interface CommandRowData {
   action_json?: unknown;
   canonical: string;
   category: string;
+  clears_tags: string[];
   is_user: boolean;
   pattern: string;
   plugin_name: string;
+  requires_tags: string[];
+  sets_tags: string[];
   tier: string;
   variants: string[];
 }
