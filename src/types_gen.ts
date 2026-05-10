@@ -443,6 +443,18 @@ export interface PipelineStatusEntry {
   name: string;
 }
 
+export interface PipelineTranscriptAlternative {
+  confidence: number;
+  text: string;
+}
+
+export interface PoolStageStatusEntry {
+  alive: boolean;
+  generation: number;
+  leased: boolean;
+  name: string;
+}
+
 export interface PrinterInfo {
   is_default: boolean;
   name: string;
@@ -3986,6 +3998,7 @@ export interface PipelinesRunResponse {
 
 export interface PipelinesStatusResponse {
   pipelines: PipelineStatusEntry[];
+  pool_stages: PoolStageStatusEntry[];
   running: string[];
 }
 
@@ -4140,5 +4153,6 @@ export interface RenderSettingsRequest {
 }
 
 export interface RenderSettingsResponse {
+  css?: string;
   html: string;
 }
