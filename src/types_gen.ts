@@ -3993,6 +3993,7 @@ export interface PipelinesInjectResponse {
 export interface PipelinesRunRequest {
   ephemeral?: boolean;
   name: string;
+  param_overrides?: Record<string, unknown>;
 }
 
 export interface PipelinesRunResponse {

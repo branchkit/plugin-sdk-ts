@@ -1155,7 +1155,7 @@ declare module "./plugin.js" {
     nativeZoomEnabled(): Promise<NativeZoomEnabledResponse>;
     pipelinesGrammar(): Promise<string[]>;
     pipelinesInject(eventType: string, name: string, data?: unknown): Promise<PipelinesInjectResponse>;
-    pipelinesRun(name: string, ephemeral?: boolean): Promise<PipelinesRunResponse>;
+    pipelinesRun(name: string, ephemeral?: boolean, paramOverrides?: Record<string, unknown>): Promise<PipelinesRunResponse>;
     pipelinesStatus(): Promise<PipelinesStatusResponse>;
     pipelinesStop(name: string): Promise<PipelinesStopResponse>;
     selectionPick(index: number): Promise<SelectionPickResponse>;
@@ -5302,12 +5302,13 @@ Plugin.prototype.pipelinesInject = async function(eventType: string, name: strin
   return result as PipelinesInjectResponse;
 };
 
-Plugin.prototype.pipelinesRun = async function(name: string, ephemeral?: boolean) {
+Plugin.prototype.pipelinesRun = async function(name: string, ephemeral?: boolean, paramOverrides?: Record<string, unknown>) {
   const result = await this.call(
     MethodPipelinesRun,
     {
       name,
       ephemeral,
+      param_overrides: paramOverrides,
     },
   );
   return result as PipelinesRunResponse;
