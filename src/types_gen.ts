@@ -1142,19 +1142,6 @@ export interface KeybindsRegisterResponse {
   ok: boolean;
 }
 
-export interface MatchAliasesGetResponse {
-  aliases: Record<string, string>;
-}
-
-export interface MatchAliasesSetRequest {
-  aliases?: Record<string, string>;
-}
-
-export interface MatchAliasesSetResponse {
-  count: number;
-  ok: boolean;
-}
-
 export interface NativeAccentColorResponse {
   color: string;
 }
