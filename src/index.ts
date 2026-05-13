@@ -17,3 +17,8 @@ export {
   type IsEffectActiveResult,
   type EffectDisplacedEvent,
 } from "./effects.js";
+export {
+  type PipelineEvent,
+  PipelineReader,
+  PipelineWriter,
+} from "./pipeline.js";

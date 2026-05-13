@@ -100,7 +100,7 @@ declare module "./plugin.js" {
      * is stubbed pending the notification-path session — assertions are
      * audited and logged today, but the event-bus emit hasn't been
      * wired yet. Plugins can safely register callbacks now; they'll
-     * start firing once the actuator path lands. See §10.2 of the
+     * start firing once the actuator path lands. See section 10.2 of the
      * design doc.
      *
      * Multiple callbacks can be registered; each fires for every event.

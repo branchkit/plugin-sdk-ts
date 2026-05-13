@@ -2,7 +2,7 @@
 // in the plugin manifest as `kind: "log"`. The auto-generated methods
 // in methods_gen.ts are namespaced with the `collection*` prefix to
 // match the existing collection family. The helpers below provide
-// shorter, payload-typed wrappers that mirror the SDK spec §4.6 surface
+// shorter, payload-typed wrappers that mirror the SDK spec section 4.6 surface
 // and the parallel Go SDK helpers.
 
 import { Plugin } from "./plugin.js";
