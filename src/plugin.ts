@@ -196,6 +196,16 @@ export class Plugin {
   }
 
   /**
+   * Register a callback that fires when all plugins are ready.
+   * The actuator sends on_ready after every plugin has called run().
+   * This is the safe place to read other plugins' collections.
+   * Must be called before run().
+   */
+  onReady(fn: () => void): void {
+    this.on("on_ready", () => fn());
+  }
+
+  /**
    * Register a listener for actuator→plugin notifications (fire-and-forget).
    * Multiple listeners can be registered for the same method.
    */
@@ -254,6 +264,7 @@ export class Plugin {
    */
   async run(): Promise<void> {
     this.readyResolve();
+    this.notify("plugin.initialized");
     await this.shutdownPromise;
   }
 
