@@ -109,7 +109,7 @@ export class Plugin {
     // plugin reaches readiness to validate that handlers match the manifest's
     // `action_types` block. Registering here keeps plugins from having to
     // wire it themselves.
-    this.handlers.set("list_action_types", () => ({
+    this.handlers.set("list_action_types", async () => ({
       action_types: this.registeredActionTypes() ?? [],
     }));
 
