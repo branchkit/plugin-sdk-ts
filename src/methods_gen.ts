@@ -24,9 +24,11 @@ import {
   MethodCollectionSetRecording,
   MethodCollectionsList,
   MethodCommandsCompletions,
+  MethodCommandsDelete,
   MethodCommandsList,
   MethodCommandsMatch,
   MethodCommandsPush,
+  MethodCommandsReset,
   MethodControlSignal,
   MethodDiscoveryClosed,
   MethodDispatch,
@@ -63,6 +65,7 @@ import {
   MethodInputTypeText,
   MethodKeyNamesSet,
   MethodKeybindsRegister,
+  MethodModelDelete,
   MethodNativeAccentColor,
   MethodNativeAccessibilityDisplayInvert,
   MethodNativeAccessibilityEnabled,
@@ -576,6 +579,7 @@ import {
   MethodSelectionSet,
   MethodSessionEndCleanup,
   MethodSettingsPatchSignals,
+  MethodSettingsRedirect,
   MethodSettingsRefresh,
   MethodSettingsRulesCreate,
   MethodSettingsRulesUpdate,
@@ -606,9 +610,11 @@ declare module "./plugin.js" {
     collectionSetRecording(enabled: boolean, name: string): Promise<void>;
     collectionsList(kind?: unknown): Promise<CollectionsListSection[]>;
     commandsCompletions(activeTags?: unknown, collections?: unknown, requireTag?: unknown, words?: string[]): Promise<CommandsCompletionsResponse>;
+    commandsDelete(canonical: string): Promise<void>;
     commandsList(): Promise<CommandsListResponse>;
     commandsMatch(activeTags?: unknown, words?: string[]): Promise<CommandsMatchResponse>;
     commandsPush(commands?: unknown): Promise<CommandsPushResponse>;
+    commandsReset(canonical: string): Promise<void>;
     controlSignal(signal: string): Promise<void>;
     discoveryClosed(): Promise<void>;
     dispatch(action: unknown): Promise<DispatchResponse>;
@@ -645,6 +651,7 @@ declare module "./plugin.js" {
     inputTypeText(text: string): Promise<void>;
     keyNamesSet(names?: Record<string, number>): Promise<KeyNamesSetResponse>;
     keybindsRegister(snapshot: unknown): Promise<KeybindsRegisterResponse>;
+    modelDelete(ref: string): Promise<void>;
     nativeAccentColor(): Promise<NativeAccentColorResponse>;
     nativeAccessibilityDisplayInvert(): Promise<NativeAccessibilityDisplayInvertResponse>;
     nativeAccessibilityEnabled(): Promise<NativeAccessibilityEnabledResponse>;
@@ -1158,6 +1165,7 @@ declare module "./plugin.js" {
     selectionSet(channel?: unknown, items?: unknown, title?: unknown): Promise<void>;
     sessionEndCleanup(): Promise<SessionEndCleanupResponse>;
     settingsPatchSignals(signals: string): Promise<void>;
+    settingsRedirect(tab: string): Promise<void>;
     settingsRefresh(): Promise<void>;
     settingsRulesCreate(newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown): Promise<void>;
     settingsRulesUpdate(canonical: string, newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown): Promise<void>;
@@ -1376,6 +1384,15 @@ Plugin.prototype.commandsCompletions = async function(activeTags?: unknown, coll
   return result as CommandsCompletionsResponse;
 };
 
+Plugin.prototype.commandsDelete = async function(canonical: string) {
+  const result = await this.call(
+    MethodCommandsDelete,
+    {
+      canonical,
+    },
+  );
+};
+
 Plugin.prototype.commandsList = async function() {
   const result = await this.call(MethodCommandsList);
   return result as CommandsListResponse;
@@ -1400,6 +1417,15 @@ Plugin.prototype.commandsPush = async function(commands?: unknown) {
     },
   );
   return result as CommandsPushResponse;
+};
+
+Plugin.prototype.commandsReset = async function(canonical: string) {
+  const result = await this.call(
+    MethodCommandsReset,
+    {
+      canonical,
+    },
+  );
 };
 
 Plugin.prototype.controlSignal = async function(signal: string) {
@@ -1739,6 +1765,15 @@ Plugin.prototype.keybindsRegister = async function(snapshot: unknown) {
     },
   );
   return result as KeybindsRegisterResponse;
+};
+
+Plugin.prototype.modelDelete = async function(ref: string) {
+  const result = await this.call(
+    MethodModelDelete,
+    {
+      ref,
+    },
+  );
 };
 
 Plugin.prototype.nativeAccentColor = async function() {
@@ -5341,6 +5376,15 @@ Plugin.prototype.settingsPatchSignals = async function(signals: string) {
     MethodSettingsPatchSignals,
     {
       signals,
+    },
+  );
+};
+
+Plugin.prototype.settingsRedirect = async function(tab: string) {
+  const result = await this.call(
+    MethodSettingsRedirect,
+    {
+      tab,
     },
   );
 };

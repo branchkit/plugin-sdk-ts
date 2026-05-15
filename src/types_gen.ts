@@ -799,6 +799,14 @@ export interface CommandsCompletionsResponse {
   title: string;
 }
 
+export interface CommandsDeleteRequest {
+  canonical: string;
+}
+
+export interface CommandsDeleteResponse {
+  ok: boolean;
+}
+
 export interface CommandsListResponse {
   footer: string;
   sections: ListCommandSection[];
@@ -829,6 +837,14 @@ export interface CommandsPushRequest {
 
 export interface CommandsPushResponse {
   count: number;
+  ok: boolean;
+}
+
+export interface CommandsResetRequest {
+  canonical: string;
+}
+
+export interface CommandsResetResponse {
   ok: boolean;
 }
 
@@ -1139,6 +1155,14 @@ export interface KeybindsRegisterRequest {
 
 export interface KeybindsRegisterResponse {
   count: number;
+  ok: boolean;
+}
+
+export interface ModelDeleteRequest {
+  ref: string;
+}
+
+export interface ModelDeleteResponse {
   ok: boolean;
 }
 
@@ -4034,6 +4058,14 @@ export interface SettingsPatchSignalsRequest {
 }
 
 export interface SettingsPatchSignalsResponse {
+  ok: boolean;
+}
+
+export interface SettingsRedirectRequest {
+  tab: string;
+}
+
+export interface SettingsRedirectResponse {
   ok: boolean;
 }
 
