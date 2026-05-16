@@ -196,6 +196,22 @@ export class Harness {
   }
 
   /**
+   * Resolve, spawn, and run a dependency plugin in the harness. The
+   * dependency shares state with the primary plugin, enabling true
+   * integration tests. Requires the dependency's binary to be available.
+   */
+  async loadPlugin(dirOrName: string): Promise<void> {
+    const path = await import("node:path");
+    const fs = await import("node:fs");
+    const absDir = path.resolve(dirOrName);
+    if (fs.existsSync(path.join(absDir, "plugin.json"))) {
+      await this.call("test.load_plugin", { dir: absDir });
+    } else {
+      await this.call("test.load_plugin", { name: dirOrName });
+    }
+  }
+
+  /**
    * Resolve all depends_on entries for the running plugin and report status.
    */
   async resolveDeps(): Promise<DepStatus[]> {
