@@ -30,6 +30,7 @@ export const LogEventNativeBleLifecycle = "native.ble_lifecycle" as const;
 export const LogEventNativeHidLifecycle = "native.hid_lifecycle" as const;
 export const LogEventNativeWindowSkipped = "native.window_skipped" as const;
 export const LogEventNativeWorldPollerEvent = "native.world_poller_event" as const;
+export const LogEventOperationCompleted = "operation.completed" as const;
 export const LogEventPluginDegraded = "plugin.degraded" as const;
 export const LogEventPluginExited = "plugin.exited" as const;
 export const LogEventPluginLifecycleOp = "plugin.lifecycle_op" as const;
@@ -40,6 +41,8 @@ export const LogEventPluginRpcFailed = "plugin.rpc_failed" as const;
 export const LogEventPluginSandboxApplied = "plugin.sandbox_applied" as const;
 export const LogEventPluginSpawned = "plugin.spawned" as const;
 export const LogEventPluginStderrLine = "plugin.stderr_line" as const;
+export const LogEventRpcCallCompleted = "rpc.call_completed" as const;
+export const LogEventRpcCallReceived = "rpc.call_received" as const;
 export const LogEventSessionControlMessage = "session.control_message" as const;
 export const LogEventStateRetentionSwept = "state.retention_swept" as const;
 export const LogEventStateTagCleared = "state.tag_cleared" as const;
@@ -91,6 +94,7 @@ export const LogEventRegistry: Record<string, LogEventMeta> = {
     "native.hid_lifecycle": { name: "native.hid_lifecycle", summary: "Non-Apple HID device lifecycle event (connect, disconnect, seize, release, monitor start).", since: "0.1.0", source: "native", severity: "info", redaction: "none" },
     "native.window_skipped": { name: "native.window_skipped", summary: "World poller skipped a non-standard window (debug-level).", since: "0.1.0", source: "native", severity: "debug", redaction: "none" },
     "native.world_poller_event": { name: "native.world_poller_event", summary: "World poller lifecycle event (started, seeded, batch processed, idle).", since: "0.1.0", source: "native", severity: "debug", redaction: "none" },
+    "operation.completed": { name: "operation.completed", summary: "An operation handler completed execution.", since: "0.1.0", source: "dispatch", severity: "debug", redaction: "none" },
     "plugin.degraded": { name: "plugin.degraded", summary: "A managed plugin's RPC channel hit the consecutive-timeout threshold and was marked degraded.", since: "0.1.0", source: "plugins", severity: "warn", redaction: "none" },
     "plugin.exited": { name: "plugin.exited", summary: "A managed plugin process exited (clean or crashed).", since: "0.1.0", source: "plugins", severity: "info", redaction: "none" },
     "plugin.lifecycle_op": { name: "plugin.lifecycle_op", summary: "A plugin lifecycle operation (install, uninstall, update, reload, hot-reload, enable, disable).", since: "0.1.0", source: "plugins", severity: "info", redaction: "none" },
@@ -101,6 +105,8 @@ export const LogEventRegistry: Record<string, LogEventMeta> = {
     "plugin.sandbox_applied": { name: "plugin.sandbox_applied", summary: "Sandbox profile applied (or skipped) for a managed plugin spawn.", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },
     "plugin.spawned": { name: "plugin.spawned", summary: "A managed plugin process was spawned.", since: "0.1.0", source: "plugins", severity: "info", redaction: "none" },
     "plugin.stderr_line": { name: "plugin.stderr_line", summary: "A managed plugin emitted a stdout/stderr line.", since: "0.1.0", source: "plugins", severity: "info", redaction: "none" },
+    "rpc.call_completed": { name: "rpc.call_completed", summary: "A plugin-to-actuator RPC call completed.", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },
+    "rpc.call_received": { name: "rpc.call_received", summary: "A plugin-to-actuator RPC call was received.", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },
     "session.control_message": { name: "session.control_message", summary: "A control message was forwarded to the Swift host (HUD show, mode reset, etc.).", since: "0.1.0", source: "dispatch", severity: "info", redaction: "none" },
     "state.retention_swept": { name: "state.retention_swept", summary: "Retention sweep removed expired records from a collection.", since: "0.1.0", source: "state", severity: "info", redaction: "none" },
     "state.tag_cleared": { name: "state.tag_cleared", summary: "One or more tags were cleared via a gate-shape collection mutation.", since: "0.1.0", source: "state", severity: "info", redaction: "none" },
