@@ -171,6 +171,17 @@ export class Harness {
     await this.call("test.reload", {});
   }
 
+  /**
+   * Load a dependency plugin's manifest from a local directory without
+   * spawning its binary. The dependency's collections, schemas, and data
+   * files are registered into the harness state.
+   */
+  async loadManifest(dir: string): Promise<void> {
+    const path = await import("node:path");
+    const absDir = path.resolve(dir);
+    await this.call("test.load_manifest", { dir: absDir });
+  }
+
   async setTag(tag: string): Promise<void> {
     await this.call("test.set_tag", { tag });
   }
