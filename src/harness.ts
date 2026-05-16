@@ -95,6 +95,14 @@ export interface ConformanceResult {
   phases: ConformancePhase[];
 }
 
+export interface DepStatus {
+  plugin: string;
+  status: "resolved" | "missing";
+  version?: string;
+  source?: string;
+  reason?: string;
+}
+
 export class HarnessError extends Error {
   code: number;
   constructor(code: number, message: string) {
@@ -172,14 +180,27 @@ export class Harness {
   }
 
   /**
-   * Load a dependency plugin's manifest from a local directory without
-   * spawning its binary. The dependency's collections, schemas, and data
-   * files are registered into the harness state.
+   * Load a dependency plugin's manifest without spawning its binary.
+   * Accepts a local directory path or a plugin name (resolved via
+   * installed plugins, then the catalog).
    */
-  async loadManifest(dir: string): Promise<void> {
+  async loadManifest(dirOrName: string): Promise<void> {
     const path = await import("node:path");
-    const absDir = path.resolve(dir);
-    await this.call("test.load_manifest", { dir: absDir });
+    const fs = await import("node:fs");
+    const absDir = path.resolve(dirOrName);
+    if (fs.existsSync(path.join(absDir, "plugin.json"))) {
+      await this.call("test.load_manifest", { dir: absDir });
+    } else {
+      await this.call("test.load_manifest", { name: dirOrName });
+    }
+  }
+
+  /**
+   * Resolve all depends_on entries for the running plugin and report status.
+   */
+  async resolveDeps(): Promise<DepStatus[]> {
+    const result = await this.call<{ deps: DepStatus[] }>("test.resolve_deps", {});
+    return result.deps;
   }
 
   async setTag(tag: string): Promise<void> {
