@@ -22,9 +22,9 @@ describe("Harness", () => {
     const h = await Harness.start(HELLOWORLD_DIR);
     try {
       const result = await h.mustSimulateCommand("hello branchkit");
-      expect(h.actionType(result)).toBe("helloworld.greet");
+      expect(result.actionType()).toBe("helloworld.greet");
 
-      const params = h.actionParams<{ name: string }>(result);
+      const params = result.actionParams<{ name: string }>();
       expect(params.name).toBe("BranchKit");
     } finally {
       await h.stop();
@@ -45,7 +45,7 @@ describe("Harness", () => {
     const h = await Harness.start(HELLOWORLD_DIR);
     try {
       const result = await h.mustSimulateCommand("hello world");
-      const params = h.actionParams<{ name: string }>(result);
+      const params = result.actionParams<{ name: string }>();
       expect(params.name).toBe("world");
     } finally {
       await h.stop();

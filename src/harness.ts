@@ -1,4 +1,4 @@
-import { spawn, type ChildProcess } from "node:child_process";
+import { execSync, spawn, type ChildProcess } from "node:child_process";
 import { createInterface, type Interface } from "node:readline";
 import { resolve, join } from "node:path";
 import { existsSync } from "node:fs";
@@ -17,14 +17,33 @@ interface RpcError {
   message: string;
 }
 
-export interface SimulateResult {
-  matched: boolean;
+export interface ActionResponse {
+  status?: string;
+  control_message?: string;
+  result?: unknown;
+}
+
+export class SimulateResult {
+  matched!: boolean;
   action?: unknown;
   args?: unknown[];
   consumed_count?: number;
   sets_tags?: string[];
   clears_tags?: string[];
   owner_plugin?: string;
+  action_response?: ActionResponse;
+
+  actionType(): string {
+    if (!this.action || typeof this.action !== "object") return "";
+    return (this.action as Record<string, unknown>).action_type as string ?? "";
+  }
+
+  actionParams<T = unknown>(): T {
+    if (!this.action || typeof this.action !== "object") {
+      throw new Error("no action in result");
+    }
+    return (this.action as Record<string, unknown>).params as T;
+  }
 }
 
 export interface CollectionResult {
@@ -52,6 +71,13 @@ export interface HUDChannelInfo {
   channel: string;
   plugin_id: string;
   description: string;
+}
+
+export interface RpcLogEntry {
+  method: string;
+  params: unknown;
+  ok: boolean;
+  stubbed: boolean;
 }
 
 export interface ConformanceTest {
@@ -161,7 +187,8 @@ export class Harness {
   }
 
   async simulateCommand(phrase: string): Promise<SimulateResult> {
-    return this.call<SimulateResult>("test.simulate_command", { phrase });
+    const data = await this.call<SimulateResult>("test.simulate_command", { phrase });
+    return Object.assign(new SimulateResult(), data);
   }
 
   async mustSimulateCommand(phrase: string): Promise<SimulateResult> {
@@ -233,32 +260,49 @@ export class Harness {
     return result.channels;
   }
 
+  async getRpcLog(): Promise<RpcLogEntry[]> {
+    const result = await this.call<{ entries: RpcLogEntry[] }>(
+      "test.get_rpc_log",
+      {},
+    );
+    return result.entries;
+  }
+
   async runStaticAnalysis(): Promise<ConformancePhase> {
     return this.call<ConformancePhase>("test.run_static_analysis", {});
+  }
+
+  async runStartupCheck(): Promise<ConformancePhase> {
+    return this.call<ConformancePhase>("test.run_startup_check", {});
+  }
+
+  async runRPCContract(): Promise<ConformancePhase> {
+    return this.call<ConformancePhase>("test.run_rpc_contract", {});
+  }
+
+  async runSettingsCheck(): Promise<ConformancePhase> {
+    return this.call<ConformancePhase>("test.run_settings_check", {});
+  }
+
+  async runDependencyCheck(): Promise<ConformancePhase> {
+    return this.call<ConformancePhase>("test.run_dependency_check", {});
   }
 
   async runAll(): Promise<ConformanceResult> {
     return this.call<ConformanceResult>("test.run_all", {});
   }
 
-  actionType(result: SimulateResult): string {
-    if (!result.action || typeof result.action !== "object") return "";
-    return (result.action as Record<string, unknown>).action_type as string ?? "";
-  }
-
-  actionParams<T = unknown>(result: SimulateResult): T {
-    if (!result.action || typeof result.action !== "object") {
-      throw new Error("no action in result");
-    }
-    return (result.action as Record<string, unknown>).params as T;
-  }
-
   private call<T = unknown>(method: string, params: unknown): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       const id = ++this.nextId;
+      const timer = setTimeout(() => {
+        this.pending.delete(id);
+        reject(new HarnessError(-32000, `timeout: ${method} did not respond within 30s`));
+      }, 30_000);
+
       this.pending.set(id, {
-        resolve: resolve as (v: unknown) => void,
-        reject,
+        resolve: (v: unknown) => { clearTimeout(timer); (resolve as (v: unknown) => void)(v); },
+        reject: (e: Error) => { clearTimeout(timer); reject(e); },
       });
 
       const msg = JSON.stringify({
@@ -285,6 +329,10 @@ export class Harness {
   [Symbol.dispose](): void {
     this.cleanup();
   }
+
+  async [Symbol.asyncDispose](): Promise<void> {
+    await this.stop();
+  }
 }
 
 function findHarnessBinary(): string {
@@ -306,7 +354,6 @@ function findHarnessBinary(): string {
   }
 
   // Try PATH via which
-  const { execSync } = require("node:child_process");
   try {
     return execSync("which branchkit-test-harness", { encoding: "utf8" }).trim();
   } catch {
