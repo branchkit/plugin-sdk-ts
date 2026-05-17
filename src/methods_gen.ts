@@ -612,12 +612,12 @@ declare module "./plugin.js" {
     commandsCompletions(activeTags?: unknown, collections?: unknown, requireTag?: unknown, words?: string[]): Promise<CommandsCompletionsResponse>;
     commandsDelete(canonical: string): Promise<void>;
     commandsList(): Promise<CommandsListResponse>;
-    commandsMatch(activeTags?: unknown, words?: string[]): Promise<CommandsMatchResponse>;
+    commandsMatch(activeTags?: unknown, sessionId?: unknown, source?: unknown, words?: string[]): Promise<CommandsMatchResponse>;
     commandsPush(commands?: unknown): Promise<CommandsPushResponse>;
     commandsReset(canonical: string): Promise<void>;
     controlSignal(signal: string): Promise<void>;
     discoveryClosed(): Promise<void>;
-    dispatch(action: unknown): Promise<DispatchResponse>;
+    dispatch(action: unknown, traceId?: unknown): Promise<DispatchResponse>;
     effectsAssert(name: string): Promise<EffectsAssertResponse>;
     effectsIsActive(name: string): Promise<EffectsIsActiveResponse>;
     effectsRetract(name: string): Promise<EffectsRetractResponse>;
@@ -1398,11 +1398,13 @@ Plugin.prototype.commandsList = async function() {
   return result as CommandsListResponse;
 };
 
-Plugin.prototype.commandsMatch = async function(activeTags?: unknown, words?: string[]) {
+Plugin.prototype.commandsMatch = async function(activeTags?: unknown, sessionId?: unknown, source?: unknown, words?: string[]) {
   const result = await this.call(
     MethodCommandsMatch,
     {
       active_tags: activeTags,
+      session_id: sessionId,
+      source,
       words,
     },
   );
@@ -1441,11 +1443,12 @@ Plugin.prototype.discoveryClosed = async function() {
   const result = await this.call(MethodDiscoveryClosed);
 };
 
-Plugin.prototype.dispatch = async function(action: unknown) {
+Plugin.prototype.dispatch = async function(action: unknown, traceId?: unknown) {
   const result = await this.call(
     MethodDispatch,
     {
       action,
+      trace_id: traceId,
     },
   );
   return result as DispatchResponse;

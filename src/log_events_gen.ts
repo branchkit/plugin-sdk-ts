@@ -11,6 +11,7 @@ export const LogEventAudioSessionStarted = "audio.session_started" as const;
 export const LogEventAudioSpeechTranscript = "audio.speech_transcript" as const;
 export const LogEventBridgeLifecycle = "bridge.lifecycle" as const;
 export const LogEventCommandMatched = "command.matched" as const;
+export const LogEventCommandNoMatch = "command.no_match" as const;
 export const LogEventDiagnosticMessage = "diagnostic.message" as const;
 export const LogEventDispatchActionDispatched = "dispatch.action_dispatched" as const;
 export const LogEventDispatchActionPanicked = "dispatch.action_panicked" as const;
@@ -75,6 +76,7 @@ export const LogEventRegistry: Record<string, LogEventMeta> = {
     "audio.speech_transcript": { name: "audio.speech_transcript", summary: "Final or interim speech recognition transcript for a session.", since: "0.1.0", source: "audio", severity: "info", redaction: "full" },
     "bridge.lifecycle": { name: "bridge.lifecycle", summary: "FFI bridge lifecycle event (init, shutdown, UI server bind, callback registration).", since: "0.1.0", source: "lifecycle", severity: "info", redaction: "none" },
     "command.matched": { name: "command.matched", summary: "Speech recognition produced a match against a registered command.", since: "0.1.0", source: "dispatch", severity: "info", redaction: "none" },
+    "command.no_match": { name: "command.no_match", summary: "Speech input did not match any registered command.", since: "0.1.0", source: "dispatch", severity: "debug", redaction: "none" },
     "diagnostic.message": { name: "diagnostic.message", summary: "Catch-all for ad-hoc operational text that doesn't fit a typed variant.", since: "0.1.0", source: "generic", severity: "debug", redaction: "none" },
     "dispatch.action_dispatched": { name: "dispatch.action_dispatched", summary: "An action entered the dispatch pipeline.", since: "0.1.0", source: "dispatch", severity: "debug", redaction: "none" },
     "dispatch.action_panicked": { name: "dispatch.action_panicked", summary: "A dispatch handler panicked. Process likely degraded; investigate.", since: "0.1.0", source: "dispatch", severity: "error", redaction: "none" },

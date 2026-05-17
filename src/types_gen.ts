@@ -815,6 +815,8 @@ export interface CommandsListResponse {
 
 export interface CommandsMatchRequest {
   active_tags?: unknown;
+  session_id?: unknown;
+  source?: unknown;
   words?: string[];
 }
 
@@ -827,8 +829,10 @@ export interface CommandsMatchResponse {
   matched: boolean;
   owner_plugin?: unknown;
   requires_tags: string[];
+  scoped_tags?: string[];
   sets_tag_writes?: GateWrite[];
   sets_tags: string[];
+  trace_id?: string;
 }
 
 export interface CommandsPushRequest {
@@ -862,6 +866,7 @@ export interface DiscoveryClosedResponse {
 
 export interface DispatchRequest {
   action: unknown;
+  trace_id?: unknown;
 }
 
 export interface DispatchResponse {
