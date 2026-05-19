@@ -588,6 +588,7 @@ export const MethodSettingsRulesUpdate = "settings.rules_update" as const; // si
 export const MethodSystemLaunchApp = "system.launch_app" as const; // since 0.1.0
 export const MethodSystemNotify = "system.notify" as const; // since 0.1.0
 export const MethodSystemRunShell = "system.run_shell" as const; // since 0.1.0
+export const MethodVocabularyCommit = "vocabulary.commit" as const; // since 0.1.0
 
 // RPC method names: actuator → plugin (use with plugin.handle()).
 export const HookOnAction = "on_action" as const; // since 0.1.0

@@ -4142,6 +4142,10 @@ export interface SystemRunShellResponse {
   ok: boolean;
 }
 
+export interface VocabularyCommitResponse {
+  ok: boolean;
+}
+
 // ===== Actuator → Plugin request/response types =====
 
 export interface OnActionRequest {

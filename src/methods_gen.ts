@@ -587,6 +587,7 @@ import {
   MethodSystemLaunchApp,
   MethodSystemNotify,
   MethodSystemRunShell,
+  MethodVocabularyCommit,
 } from "./contracts_gen.js";
 
 declare module "./plugin.js" {
@@ -1174,6 +1175,7 @@ declare module "./plugin.js" {
     systemLaunchApp(bundleId: string, newInstance?: boolean): Promise<void>;
     systemNotify(body: string, title: string, durationSecs?: unknown): Promise<void>;
     systemRunShell(command: string): Promise<void>;
+    vocabularyCommit(): Promise<void>;
   }
 }
 
@@ -5465,4 +5467,8 @@ Plugin.prototype.systemRunShell = async function(command: string) {
       command,
     },
   );
+};
+
+Plugin.prototype.vocabularyCommit = async function() {
+  const result = await this.call(MethodVocabularyCommit);
 };
