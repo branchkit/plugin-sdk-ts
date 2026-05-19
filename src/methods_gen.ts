@@ -577,6 +577,7 @@ import {
   MethodPipelinesStop,
   MethodSelectionPick,
   MethodSelectionSet,
+  MethodSessionBoundary,
   MethodSessionEndCleanup,
   MethodSettingsPatchSignals,
   MethodSettingsRedirect,
@@ -1163,6 +1164,7 @@ declare module "./plugin.js" {
     pipelinesStop(name: string): Promise<PipelinesStopResponse>;
     selectionPick(index: number): Promise<SelectionPickResponse>;
     selectionSet(channel?: unknown, items?: unknown, title?: unknown): Promise<void>;
+    sessionBoundary(): Promise<void>;
     sessionEndCleanup(): Promise<SessionEndCleanupResponse>;
     settingsPatchSignals(signals: string): Promise<void>;
     settingsRedirect(tab: string): Promise<void>;
@@ -5367,6 +5369,10 @@ Plugin.prototype.selectionSet = async function(channel?: unknown, items?: unknow
       title,
     },
   );
+};
+
+Plugin.prototype.sessionBoundary = async function() {
+  const result = await this.call(MethodSessionBoundary);
 };
 
 Plugin.prototype.sessionEndCleanup = async function() {

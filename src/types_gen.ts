@@ -4052,6 +4052,10 @@ export interface SelectionSetResponse {
   ok: boolean;
 }
 
+export interface SessionBoundaryResponse {
+  ok: boolean;
+}
+
 export interface SessionEndCleanupResponse {
   control_message?: unknown;
   ok: boolean;
