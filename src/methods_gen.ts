@@ -575,6 +575,7 @@ import {
   MethodPipelinesRun,
   MethodPipelinesStatus,
   MethodPipelinesStop,
+  MethodPluginDebug,
   MethodSelectionPick,
   MethodSelectionSet,
   MethodSessionBoundary,
@@ -1163,6 +1164,7 @@ declare module "./plugin.js" {
     pipelinesRun(name: string, ephemeral?: boolean, paramOverrides?: Record<string, unknown>): Promise<PipelinesRunResponse>;
     pipelinesStatus(): Promise<PipelinesStatusResponse>;
     pipelinesStop(name: string): Promise<PipelinesStopResponse>;
+    pluginDebug(data?: unknown, tag?: unknown): Promise<void>;
     selectionPick(index: number): Promise<SelectionPickResponse>;
     selectionSet(channel?: unknown, items?: unknown, title?: unknown): Promise<void>;
     sessionBoundary(): Promise<void>;
@@ -5350,6 +5352,16 @@ Plugin.prototype.pipelinesStop = async function(name: string) {
     },
   );
   return result as PipelinesStopResponse;
+};
+
+Plugin.prototype.pluginDebug = async function(data?: unknown, tag?: unknown) {
+  const result = await this.call(
+    MethodPluginDebug,
+    {
+      data,
+      tag,
+    },
+  );
 };
 
 Plugin.prototype.selectionPick = async function(index: number) {

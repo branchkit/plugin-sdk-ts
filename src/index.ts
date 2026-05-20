@@ -9,6 +9,7 @@ import "./methods_gen.js"; // module augmentation — side-effect import
 import "./collection_log.js"; // module augmentation — log-kind helpers
 import "./collection.js"; // module augmentation — state uniform helpers
 import "./effects.js"; // module augmentation — capability-mechanism helpers
+import "./debug.js"; // module augmentation — per-plugin debug log helper
 export { RecordingDisabledError, logListOpts } from "./collection_log.js";
 export { listOpts, type CollectionChangedEvent } from "./collection.js";
 export {

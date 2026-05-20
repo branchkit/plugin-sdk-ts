@@ -4031,6 +4031,15 @@ export interface PipelinesStopResponse {
   stopped: boolean;
 }
 
+export interface PluginDebugRequest {
+  data?: unknown;
+  tag?: unknown;
+}
+
+export interface PluginDebugResponse {
+  ok: boolean;
+}
+
 export interface SelectionPickRequest {
   index: number;
 }

@@ -576,6 +576,7 @@ export const MethodPipelinesInject = "pipelines.inject" as const; // since 0.1.0
 export const MethodPipelinesRun = "pipelines.run" as const; // since 0.1.0
 export const MethodPipelinesStatus = "pipelines.status" as const; // since 0.1.0
 export const MethodPipelinesStop = "pipelines.stop" as const; // since 0.1.0
+export const MethodPluginDebug = "plugin.debug" as const; // since 0.1.0
 export const MethodSelectionPick = "selection.pick" as const; // since 0.1.0
 export const MethodSelectionSet = "selection.set" as const; // since 0.1.0
 export const MethodSessionBoundary = "session.boundary" as const; // since 0.1.0
