@@ -4033,6 +4033,7 @@ export interface PipelinesStopResponse {
 
 export interface PluginDebugRequest {
   data?: unknown;
+  level?: unknown;
   tag?: unknown;
 }
 

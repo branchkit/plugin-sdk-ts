@@ -33,6 +33,7 @@ export const LogEventNativeWindowSkipped = "native.window_skipped" as const;
 export const LogEventNativeWorldPollerEvent = "native.world_poller_event" as const;
 export const LogEventOperationCompleted = "operation.completed" as const;
 export const LogEventPluginDegraded = "plugin.degraded" as const;
+export const LogEventPluginDiagnostic = "plugin.diagnostic" as const;
 export const LogEventPluginExited = "plugin.exited" as const;
 export const LogEventPluginLifecycleOp = "plugin.lifecycle_op" as const;
 export const LogEventPluginLoaded = "plugin.loaded" as const;
@@ -98,6 +99,7 @@ export const LogEventRegistry: Record<string, LogEventMeta> = {
     "native.world_poller_event": { name: "native.world_poller_event", summary: "World poller lifecycle event (started, seeded, batch processed, idle).", since: "0.1.0", source: "native", severity: "debug", redaction: "none" },
     "operation.completed": { name: "operation.completed", summary: "An operation handler completed execution.", since: "0.1.0", source: "dispatch", severity: "debug", redaction: "none" },
     "plugin.degraded": { name: "plugin.degraded", summary: "A managed plugin's RPC channel hit the consecutive-timeout threshold and was marked degraded.", since: "0.1.0", source: "plugins", severity: "warn", redaction: "none" },
+    "plugin.diagnostic": { name: "plugin.diagnostic", summary: "A plugin emitted a warn- or error-level diagnostic via plugin.debug; cross-posted to actuator.log so plugin-level failures interleave with the actuator's view of dispatch / coordination.", since: "0.2.0", source: "plugins", severity: "warn", redaction: "none" },
     "plugin.exited": { name: "plugin.exited", summary: "A managed plugin process exited (clean or crashed).", since: "0.1.0", source: "plugins", severity: "info", redaction: "none" },
     "plugin.lifecycle_op": { name: "plugin.lifecycle_op", summary: "A plugin lifecycle operation (install, uninstall, update, reload, hot-reload, enable, disable).", since: "0.1.0", source: "plugins", severity: "info", redaction: "none" },
     "plugin.loaded": { name: "plugin.loaded", summary: "A plugin manifest was discovered and parsed.", since: "0.1.0", source: "plugins", severity: "info", redaction: "none" },
