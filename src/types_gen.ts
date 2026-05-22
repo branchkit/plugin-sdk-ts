@@ -822,7 +822,7 @@ export interface CommandsMatchRequest {
 
 export interface CommandsMatchResponse {
   action?: unknown;
-  args: unknown[];
+  args: Record<string, unknown>;
   clears_tag_writes?: GateWrite[];
   clears_tags: string[];
   consumed_count: number;
