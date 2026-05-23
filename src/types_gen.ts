@@ -7,15 +7,15 @@ export interface AXElementInfo {
   actions: string[];
   attributes: string[];
   children_count: number;
-  description?: unknown;
+  description?: string;
   enabled: boolean;
   focused: boolean;
   path: AXPathSegment[];
   position?: unknown;
   role: string;
   size?: unknown;
-  subrole?: unknown;
-  title?: unknown;
+  subrole?: string;
+  title?: string;
   value?: unknown;
 }
 
@@ -41,7 +41,7 @@ export interface ActionFieldSchema {
   fields: ActionFieldSchema[];
   key: string;
   label: string;
-  placeholder?: unknown;
+  placeholder?: string;
   required: boolean;
 }
 
@@ -94,18 +94,18 @@ export interface BleWriteEntry {
 
 export interface BluetoothDevice {
   address: string;
-  device_type?: unknown;
+  device_type?: string;
   is_connected: boolean;
   is_paired: boolean;
   name: string;
 }
 
 export interface CalendarEvent {
-  calendar?: unknown;
-  end?: unknown;
+  calendar?: string;
+  end?: string;
   is_all_day: boolean;
-  location?: unknown;
-  start?: unknown;
+  location?: string;
+  start?: string;
   title: string;
 }
 
@@ -120,15 +120,15 @@ export interface ClipboardContents {
   available_types: string[];
   content_type: string;
   file_urls?: unknown;
-  image_base64?: unknown;
-  text?: unknown;
+  image_base64?: string;
+  text?: string;
 }
 
 export interface ClipboardWriteItem {
   content_type: string;
   file_urls?: unknown;
-  image_base64?: unknown;
-  text?: unknown;
+  image_base64?: string;
+  text?: string;
 }
 
 export interface CollectionRecord {
@@ -139,7 +139,7 @@ export interface CollectionRecord {
 export interface CollectionsListItem {
   id: string;
   source: string;
-  subtitle?: unknown;
+  subtitle?: string;
   title: string;
 }
 
@@ -167,22 +167,22 @@ export interface CommandRowData {
 }
 
 export interface ContactInfo {
-  email?: unknown;
+  email?: string;
   name: string;
-  organization?: unknown;
-  phone?: unknown;
+  organization?: string;
+  phone?: string;
 }
 
 export interface CpuInfo {
   architecture: string;
   chip: string;
   core_count: number;
-  efficiency_cores?: unknown;
-  performance_cores?: unknown;
+  efficiency_cores?: number;
+  performance_cores?: number;
 }
 
 export interface DeliveredNotification {
-  body?: unknown;
+  body?: string;
   delivered_at: string;
   id: string;
   title: string;
@@ -198,7 +198,7 @@ export interface DirectoryEntry {
 
 export interface DiscoverItem {
   id: string;
-  subtitle?: unknown;
+  subtitle?: string;
   tag: string;
   title: string;
 }
@@ -246,7 +246,7 @@ export interface DisplayRotation {
 }
 
 export interface ExternalDisk {
-  file_system?: unknown;
+  file_system?: string;
   free_bytes: number;
   is_removable: boolean;
   mount_point: string;
@@ -290,7 +290,7 @@ export interface GateWrite {
 
 export interface HidDeviceEntry {
   axes: number;
-  ble_uuid?: unknown;
+  ble_uuid?: string;
   buttons: number;
   id: string;
   product: string;
@@ -346,8 +346,8 @@ export interface InstalledApp {
 
 export interface ListCommandItem {
   id: string;
-  subtitle?: unknown;
-  tag?: unknown;
+  subtitle?: string;
+  tag?: string;
   title: string;
 }
 
@@ -357,16 +357,16 @@ export interface ListCommandSection {
 }
 
 export interface ListOpts {
-  cursor?: unknown;
-  limit?: unknown;
-  since_ms?: unknown;
-  until_ms?: unknown;
+  cursor?: string;
+  limit?: number;
+  since_ms?: number;
+  until_ms?: number;
 }
 
 export interface ListeningPort {
-  pid?: unknown;
+  pid?: number;
   port: number;
-  process_name?: unknown;
+  process_name?: string;
   protocol: string;
 }
 
@@ -377,14 +377,14 @@ export interface LogEntry {
 }
 
 export interface LogListOpts {
-  cursor?: unknown;
-  limit?: unknown;
-  since_ms?: unknown;
-  until_ms?: unknown;
+  cursor?: string;
+  limit?: number;
+  since_ms?: number;
+  until_ms?: number;
 }
 
 export interface LoginItem {
-  bundle_id?: unknown;
+  bundle_id?: string;
   hidden: boolean;
   name: string;
   path: string;
@@ -402,7 +402,7 @@ export interface MenuItem {
   children: MenuItem[];
   enabled: boolean;
   index: number;
-  shortcut?: unknown;
+  shortcut?: string;
   title: string;
 }
 
@@ -413,22 +413,22 @@ export type MergeStrategy = "authoritative" | "collect" | "keyed";
 
 export interface NetworkInterface {
   display_name: string;
-  ipv4?: unknown;
-  ipv6?: unknown;
+  ipv4?: string;
+  ipv6?: string;
   is_loopback: boolean;
   is_up: boolean;
-  mac_address?: unknown;
+  mac_address?: string;
   name: string;
 }
 
 export interface NowPlayingInfo {
-  album?: unknown;
-  app_bundle_id?: unknown;
-  artist?: unknown;
-  duration?: unknown;
-  elapsed?: unknown;
+  album?: string;
+  app_bundle_id?: string;
+  artist?: string;
+  duration?: number;
+  elapsed?: number;
   is_playing: boolean;
-  title?: unknown;
+  title?: string;
 }
 
 export interface OcrRegion {
@@ -452,6 +452,8 @@ export interface PipelineTranscriptAlternative {
   text: string;
 }
 
+export type PluginLogLevel = "trace" | "info" | "warn" | "error" | "debug";
+
 export interface PoolStageStatusEntry {
   alive: boolean;
   generation: number;
@@ -466,24 +468,24 @@ export interface PrinterInfo {
 }
 
 export interface ProcessInfo {
-  cpu_percent?: unknown;
-  memory_bytes?: unknown;
+  cpu_percent?: number;
+  memory_bytes?: number;
   name: string;
-  path?: unknown;
+  path?: string;
   pid: number;
-  user?: unknown;
+  user?: string;
 }
 
 export interface ReminderItem {
-  due_date?: unknown;
+  due_date?: string;
   is_completed: boolean;
-  list_name?: unknown;
+  list_name?: string;
   priority: number;
   title: string;
 }
 
 export interface RunningApp {
-  bundle_id?: unknown;
+  bundle_id?: string;
   is_active: boolean;
   is_hidden: boolean;
   name: string;
@@ -511,7 +513,7 @@ export interface SettingsTagSchemaInfo {
 }
 
 export interface ShortcutInfo {
-  folder?: unknown;
+  folder?: string;
   name: string;
 }
 
@@ -533,12 +535,12 @@ export interface SpotlightResult {
   modified: string;
   name: string;
   path: string;
-  size?: unknown;
+  size?: number;
 }
 
 export interface SystemAppearance {
-  accent_color?: unknown;
-  highlight_color?: unknown;
+  accent_color?: string;
+  highlight_color?: string;
   increase_contrast: boolean;
   reduce_motion: boolean;
   reduce_transparency: boolean;
@@ -557,11 +559,11 @@ export interface TtsVoice {
 }
 
 export interface UsbDevice {
-  manufacturer?: unknown;
+  manufacturer?: string;
   name: string;
-  product_id?: unknown;
-  serial_number?: unknown;
-  vendor_id?: unknown;
+  product_id?: string;
+  serial_number?: string;
+  vendor_id?: string;
 }
 
 export interface WindowBounds {
@@ -572,14 +574,14 @@ export interface WindowBounds {
 }
 
 export interface WindowDetail {
-  alpha?: unknown;
+  alpha?: number;
   bounds: WindowBounds;
   display_id: number;
   is_focused: boolean;
   is_fullscreen: boolean;
   is_minimized: boolean;
-  subrole?: unknown;
-  title?: unknown;
+  subrole?: string;
+  title?: string;
   window_id: string;
 }
 
@@ -731,7 +733,7 @@ export interface CollectionOverrideRequest {
   action: string;
   collection: string;
   fields?: unknown;
-  id?: unknown;
+  id?: string;
 }
 
 export interface CollectionOverrideResponse {
@@ -750,7 +752,7 @@ export interface CollectionPatchResponse {
 
 export interface CollectionPushRequest {
   data: unknown;
-  label?: unknown;
+  label?: string;
   name: string;
 }
 
@@ -778,7 +780,7 @@ export interface CollectionSetRecordingResponse {
 }
 
 export interface CollectionsListRequest {
-  kind?: unknown;
+  kind?: string;
 }
 
 export interface CollectionsListResponse {
@@ -788,7 +790,7 @@ export interface CollectionsListResponse {
 export interface CommandsCompletionsRequest {
   active_tags?: unknown;
   collections?: unknown;
-  require_tag?: unknown;
+  require_tag?: string;
   words?: string[];
 }
 
@@ -815,8 +817,8 @@ export interface CommandsListResponse {
 
 export interface CommandsMatchRequest {
   active_tags?: unknown;
-  session_id?: unknown;
-  source?: unknown;
+  session_id?: string;
+  source?: string;
   words?: string[];
 }
 
@@ -827,7 +829,7 @@ export interface CommandsMatchResponse {
   clears_tags: string[];
   consumed_count: number;
   matched: boolean;
-  owner_plugin?: unknown;
+  owner_plugin?: string;
   requires_tags: string[];
   scoped_tags?: string[];
   sets_tag_writes?: GateWrite[];
@@ -866,13 +868,13 @@ export interface DiscoveryClosedResponse {
 
 export interface DispatchRequest {
   action: unknown;
-  trace_id?: unknown;
+  trace_id?: string;
 }
 
 export interface DispatchResponse {
-  control_message?: unknown;
-  handler?: unknown;
-  message?: unknown;
+  control_message?: string;
+  handler?: string;
+  message?: string;
   result?: unknown;
   status: string;
 }
@@ -883,7 +885,7 @@ export interface EffectsAssertRequest {
 
 export interface EffectsAssertResponse {
   already_held: boolean;
-  displaced?: unknown;
+  displaced?: string;
   granted: boolean;
 }
 
@@ -893,7 +895,7 @@ export interface EffectsIsActiveRequest {
 
 export interface EffectsIsActiveResponse {
   active: boolean;
-  current_owner?: unknown;
+  current_owner?: string;
 }
 
 export interface EffectsRetractRequest {
@@ -901,7 +903,7 @@ export interface EffectsRetractRequest {
 }
 
 export interface EffectsRetractResponse {
-  new_owner?: unknown;
+  new_owner?: string;
   retracted: boolean;
 }
 
@@ -916,7 +918,7 @@ export interface EventsAppendResponse {
 }
 
 export interface EventsEmitRequest {
-  correlation_id?: unknown;
+  correlation_id?: string;
   data?: unknown;
   event_type: string;
 }
@@ -992,7 +994,7 @@ export interface InputClickResponse {
 
 export interface InputClipboardActionRequest {
   action: string;
-  text?: unknown;
+  text?: string;
 }
 
 export interface InputClipboardActionResponse {
@@ -1011,8 +1013,8 @@ export interface InputClipboardReadResponse {
   available_types: string[];
   content_type: string;
   file_urls?: unknown;
-  image_base64?: unknown;
-  text?: unknown;
+  image_base64?: string;
+  text?: string;
 }
 
 export interface InputClipboardReadAllResponse {
@@ -1045,8 +1047,8 @@ export interface InputClipboardWriteItemsResponse {
 }
 
 export interface InputDoubleClickRequest {
-  x?: unknown;
-  y?: unknown;
+  x?: number;
+  y?: number;
 }
 
 export interface InputDoubleClickResponse {
@@ -1079,9 +1081,9 @@ export interface InputMouseButtonResponse {
 }
 
 export interface InputPressKeyRequest {
-  code?: unknown;
+  code?: number;
   modifiers?: string[];
-  name?: unknown;
+  name?: string;
 }
 
 export interface InputPressKeyResponse {
@@ -1098,8 +1100,8 @@ export interface InputRawKeyResponse {
 }
 
 export interface InputRightClickRequest {
-  x?: unknown;
-  y?: unknown;
+  x?: number;
+  y?: number;
 }
 
 export interface InputRightClickResponse {
@@ -1129,8 +1131,8 @@ export interface InputSwitchInputSourceResponse {
 }
 
 export interface InputTripleClickRequest {
-  x?: unknown;
-  y?: unknown;
+  x?: number;
+  y?: number;
 }
 
 export interface InputTripleClickResponse {
@@ -1279,13 +1281,13 @@ export interface NativeAppMetadataRequest {
 }
 
 export interface NativeAppMetadataResponse {
-  build?: unknown;
+  build?: string;
   bundle_id: string;
-  category?: unknown;
-  min_os_version?: unknown;
+  category?: string;
+  min_os_version?: string;
   name: string;
   path: string;
-  version?: unknown;
+  version?: string;
 }
 
 export interface NativeAppPathRequest {
@@ -1375,15 +1377,15 @@ export interface NativeAxElementAtPointResponse {
   actions: string[];
   attributes: string[];
   children_count: number;
-  description?: unknown;
+  description?: string;
   enabled: boolean;
   focused: boolean;
   path: AXPathSegment[];
   position?: unknown;
   role: string;
   size?: unknown;
-  subrole?: unknown;
-  title?: unknown;
+  subrole?: string;
+  title?: string;
   value?: unknown;
 }
 
@@ -1455,7 +1457,7 @@ export interface NativeBatteryResponse {
   is_plugged_in: boolean;
   is_present: boolean;
   level: number;
-  time_remaining_minutes?: unknown;
+  time_remaining_minutes?: number;
 }
 
 export interface NativeBatteryHealthResponse {
@@ -1523,7 +1525,7 @@ export interface NativeBordersResponse {
 }
 
 export interface NativeBrightnessRequest {
-  display_id?: unknown;
+  display_id?: number;
 }
 
 export interface NativeBrightnessResponse {
@@ -1891,7 +1893,7 @@ export interface NativeDisplaysResponse {
 
 export interface NativeDndResponse {
   enabled: boolean;
-  focus_name?: unknown;
+  focus_name?: string;
 }
 
 export interface NativeDnsServersResponse {
@@ -2016,11 +2018,11 @@ export interface NativeFileMetadataRequest {
 }
 
 export interface NativeFileMetadataResponse {
-  accessed?: unknown;
-  created?: unknown;
+  accessed?: number;
+  created?: number;
   is_dir: boolean;
   is_symlink: boolean;
-  modified?: unknown;
+  modified?: number;
   readonly: boolean;
   size: number;
 }
@@ -2176,14 +2178,14 @@ export interface NativeGetWindowInfoRequest {
 }
 
 export interface NativeGetWindowInfoResponse {
-  alpha?: unknown;
+  alpha?: number;
   bounds: WindowBounds;
   display_id: number;
   is_focused: boolean;
   is_fullscreen: boolean;
   is_minimized: boolean;
-  subrole?: unknown;
-  title?: unknown;
+  subrole?: string;
+  title?: string;
   window_id: string;
 }
 
@@ -2553,8 +2555,8 @@ export interface NativeMountPointsResponse {
 
 export interface NativeMouseButtonClickRequest {
   button: number;
-  x?: unknown;
-  y?: unknown;
+  x?: number;
+  y?: number;
 }
 
 export interface NativeMouseButtonClickResponse {
@@ -2637,14 +2639,14 @@ export interface NativeNotificationSoundEnabledResponse {
 }
 
 export interface NativeNotifyRequest {
-  body?: unknown;
-  sound?: unknown;
-  subtitle?: unknown;
+  body?: string;
+  sound?: string;
+  subtitle?: string;
   title: string;
 }
 
 export interface NativeNotifyResponse {
-  id?: unknown;
+  id?: string;
 }
 
 export interface NativeNowPlayingResponse {
@@ -2715,7 +2717,7 @@ export interface NativeOpenFinderWindowResponse {
 }
 
 export interface NativeOpenSystemSettingsRequest {
-  pane?: unknown;
+  pane?: string;
 }
 
 export interface NativeOpenSystemSettingsResponse {
@@ -2806,7 +2808,7 @@ export interface NativePressAndHoldEnabledResponse {
 }
 
 export interface NativePreventSleepRequest {
-  assertion_id?: unknown;
+  assertion_id?: string;
   reason?: string;
 }
 
@@ -2851,12 +2853,12 @@ export interface NativeProcessInfoRequest {
 }
 
 export interface NativeProcessInfoResponse {
-  cpu_percent?: unknown;
-  memory_bytes?: unknown;
+  cpu_percent?: number;
+  memory_bytes?: number;
   name: string;
-  path?: unknown;
+  path?: string;
   pid: number;
-  user?: unknown;
+  user?: string;
 }
 
 export interface NativeProcessListResponse {
@@ -2939,7 +2941,7 @@ export interface NativeReadFileResponse {
 }
 
 export interface NativeReadFileBinaryRequest {
-  max_bytes?: unknown;
+  max_bytes?: number;
   path: string;
 }
 
@@ -3034,7 +3036,7 @@ export interface NativeRunJxaResponse {
 }
 
 export interface NativeRunShortcutRequest {
-  input?: unknown;
+  input?: string;
   name: string;
 }
 
@@ -3083,9 +3085,9 @@ export interface NativeScreenSharingEnabledResponse {
 }
 
 export interface NativeScreenshotRequest {
-  display_id?: unknown;
+  display_id?: number;
   region?: unknown;
-  window_id?: unknown;
+  window_id?: string;
 }
 
 export interface NativeScreenshotResponse {
@@ -3210,7 +3212,7 @@ export interface NativeSetBluetoothPowerResponse {
 
 export interface NativeSetBrightnessRequest {
   brightness: number;
-  display_id?: unknown;
+  display_id?: number;
 }
 
 export interface NativeSetBrightnessResponse {
@@ -3588,9 +3590,9 @@ export interface NativeSpacesSpanDisplaysResponse {
 }
 
 export interface NativeSpeakRequest {
-  rate?: unknown;
+  rate?: number;
   text: string;
-  voice?: unknown;
+  voice?: string;
 }
 
 export interface NativeSpeakResponse {
@@ -3674,7 +3676,7 @@ export interface NativeSystemInfoResponse {
   model_identifier: string;
   os_build: string;
   os_version: string;
-  serial_number?: unknown;
+  serial_number?: string;
 }
 
 export interface NativeSystemIntegrityInfoResponse {
@@ -3878,11 +3880,11 @@ export interface NativeWarpCursorResponse {
 }
 
 export interface NativeWifiResponse {
-  bssid?: unknown;
+  bssid?: string;
   is_connected: boolean;
   is_enabled: boolean;
-  rssi?: unknown;
-  ssid?: unknown;
+  rssi?: number;
+  ssid?: string;
 }
 
 export interface NativeWifiNetworksResponse {
@@ -4013,7 +4015,7 @@ export interface PipelinesRunRequest {
 }
 
 export interface PipelinesRunResponse {
-  reason?: unknown;
+  reason?: string;
   started: boolean;
 }
 
@@ -4034,7 +4036,7 @@ export interface PipelinesStopResponse {
 export interface PluginDebugRequest {
   data?: unknown;
   level?: unknown;
-  tag?: unknown;
+  tag?: string;
 }
 
 export interface PluginDebugResponse {
@@ -4053,9 +4055,9 @@ export interface SelectionPickResponse {
 }
 
 export interface SelectionSetRequest {
-  channel?: unknown;
+  channel?: string;
   items?: unknown;
-  title?: unknown;
+  title?: string;
 }
 
 export interface SelectionSetResponse {
@@ -4067,7 +4069,7 @@ export interface SessionBoundaryResponse {
 }
 
 export interface SessionEndCleanupResponse {
-  control_message?: unknown;
+  control_message?: string;
   ok: boolean;
   reset_engine: boolean;
 }
@@ -4093,15 +4095,15 @@ export interface SettingsRefreshResponse {
 }
 
 export interface SettingsRulesCreateRequest {
-  newruleactionjson?: unknown;
-  newruleactiontype?: unknown;
-  newruleactionval?: unknown;
-  newrulecategory?: unknown;
-  newruleclearstags?: unknown;
-  newruledescription?: unknown;
-  newrulephrase?: unknown;
-  newrulerequirestags?: unknown;
-  newrulesetstags?: unknown;
+  newruleactionjson?: string;
+  newruleactiontype?: string;
+  newruleactionval?: string;
+  newrulecategory?: string;
+  newruleclearstags?: string;
+  newruledescription?: string;
+  newrulephrase?: string;
+  newrulerequirestags?: string;
+  newrulesetstags?: string;
 }
 
 export interface SettingsRulesCreateResponse {
@@ -4110,15 +4112,15 @@ export interface SettingsRulesCreateResponse {
 
 export interface SettingsRulesUpdateRequest {
   canonical: string;
-  newruleactionjson?: unknown;
-  newruleactiontype?: unknown;
-  newruleactionval?: unknown;
-  newrulecategory?: unknown;
-  newruleclearstags?: unknown;
-  newruledescription?: unknown;
-  newrulephrase?: unknown;
-  newrulerequirestags?: unknown;
-  newrulesetstags?: unknown;
+  newruleactionjson?: string;
+  newruleactiontype?: string;
+  newruleactionval?: string;
+  newrulecategory?: string;
+  newruleclearstags?: string;
+  newruledescription?: string;
+  newrulephrase?: string;
+  newrulerequirestags?: string;
+  newrulesetstags?: string;
 }
 
 export interface SettingsRulesUpdateResponse {
@@ -4136,7 +4138,7 @@ export interface SystemLaunchAppResponse {
 
 export interface SystemNotifyRequest {
   body: string;
-  duration_secs?: unknown;
+  duration_secs?: number;
   title: string;
 }
 

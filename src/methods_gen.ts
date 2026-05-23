@@ -606,26 +606,26 @@ declare module "./plugin.js" {
     collectionGetRecording(name: string): Promise<CollectionGetRecordingResponse>;
     collectionList(name: string, opts?: ListOpts): Promise<CollectionListResponse>;
     collectionListLog(name: string, opts?: LogListOpts): Promise<CollectionListLogResponse>;
-    collectionOverride(action: string, collection: string, fields?: unknown, id?: unknown): Promise<void>;
+    collectionOverride(action: string, collection: string, fields?: unknown, id?: string): Promise<void>;
     collectionPatch(fields: unknown, id: string, name: string): Promise<void>;
-    collectionPush(data: unknown, name: string, label?: unknown): Promise<void>;
+    collectionPush(data: unknown, name: string, label?: string): Promise<void>;
     collectionPut(id: string, name: string, payload: unknown): Promise<void>;
     collectionSetRecording(enabled: boolean, name: string): Promise<void>;
-    collectionsList(kind?: unknown): Promise<CollectionsListSection[]>;
-    commandsCompletions(activeTags?: unknown, collections?: unknown, requireTag?: unknown, words?: string[]): Promise<CommandsCompletionsResponse>;
+    collectionsList(kind?: string): Promise<CollectionsListSection[]>;
+    commandsCompletions(activeTags?: unknown, collections?: unknown, requireTag?: string, words?: string[]): Promise<CommandsCompletionsResponse>;
     commandsDelete(canonical: string): Promise<void>;
     commandsList(): Promise<CommandsListResponse>;
-    commandsMatch(activeTags?: unknown, sessionId?: unknown, source?: unknown, words?: string[]): Promise<CommandsMatchResponse>;
+    commandsMatch(activeTags?: unknown, sessionId?: string, source?: string, words?: string[]): Promise<CommandsMatchResponse>;
     commandsPush(commands?: unknown): Promise<CommandsPushResponse>;
     commandsReset(canonical: string): Promise<void>;
     controlSignal(signal: string): Promise<void>;
     discoveryClosed(): Promise<void>;
-    dispatch(action: unknown, traceId?: unknown): Promise<DispatchResponse>;
+    dispatch(action: unknown, traceId?: string): Promise<DispatchResponse>;
     effectsAssert(name: string): Promise<EffectsAssertResponse>;
     effectsIsActive(name: string): Promise<EffectsIsActiveResponse>;
     effectsRetract(name: string): Promise<EffectsRetractResponse>;
     eventsAppend(eventType: string, data?: unknown, sessionId?: string): Promise<void>;
-    eventsEmit(eventType: string, correlationId?: unknown, data?: unknown): Promise<void>;
+    eventsEmit(eventType: string, correlationId?: string, data?: unknown): Promise<void>;
     hudCreateChannel(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, followsFocus?: boolean, minHeight?: number, width?: number): Promise<void>;
     hudHide(channel: string): Promise<void>;
     hudPush(channel: string, fragments: unknown): Promise<void>;
@@ -633,24 +633,24 @@ declare module "./plugin.js" {
     hudSetSize(channel: string, height: number): Promise<void>;
     hudShow(channel: string): Promise<void>;
     inputClick(button?: string): Promise<void>;
-    inputClipboardAction(action: string, text?: unknown): Promise<void>;
+    inputClipboardAction(action: string, text?: string): Promise<void>;
     inputClipboardHistory(): Promise<string[]>;
     inputClipboardRead(contentType: string): Promise<InputClipboardReadResponse>;
     inputClipboardReadAll(): Promise<ClipboardContents[]>;
     inputClipboardReadFormat(format: string): Promise<InputClipboardReadFormatResponse>;
     inputClipboardWrite(contentType: string, data: string): Promise<void>;
     inputClipboardWriteItems(items?: ClipboardWriteItem[]): Promise<void>;
-    inputDoubleClick(x?: unknown, y?: unknown): Promise<void>;
+    inputDoubleClick(x?: number, y?: number): Promise<void>;
     inputDrag(fromX: number, fromY: number, toX: number, toY: number, durationMs?: number): Promise<void>;
     inputListInputSources(): Promise<InputSource[]>;
     inputMouseButton(direction: string, button?: string): Promise<void>;
-    inputPressKey(code?: unknown, modifiers?: string[], name?: unknown): Promise<void>;
+    inputPressKey(code?: number, modifiers?: string[], name?: string): Promise<void>;
     inputRawKey(code: number, direction: string): Promise<void>;
-    inputRightClick(x?: unknown, y?: unknown): Promise<void>;
+    inputRightClick(x?: number, y?: number): Promise<void>;
     inputScroll(direction: string, amount?: number, unit?: string): Promise<void>;
     inputSelectAll(): Promise<void>;
     inputSwitchInputSource(sourceId: string): Promise<boolean>;
-    inputTripleClick(x?: unknown, y?: unknown): Promise<void>;
+    inputTripleClick(x?: number, y?: number): Promise<void>;
     inputTypeText(text: string): Promise<void>;
     keyNamesSet(names?: Record<string, number>): Promise<KeyNamesSetResponse>;
     keybindsRegister(snapshot: unknown): Promise<KeybindsRegisterResponse>;
@@ -715,7 +715,7 @@ declare module "./plugin.js" {
     nativeBoldTextEnabled(): Promise<NativeBoldTextEnabledResponse>;
     nativeBootVolume(): Promise<NativeBootVolumeResponse>;
     nativeBorders(): Promise<void>;
-    nativeBrightness(displayId?: unknown): Promise<NativeBrightnessResponse>;
+    nativeBrightness(displayId?: number): Promise<NativeBrightnessResponse>;
     nativeCalendarEventsRange(end: string, start: string): Promise<CalendarEvent[]>;
     nativeCalendarEventsToday(): Promise<CalendarEvent[]>;
     nativeCalendarPermission(): Promise<NativeCalendarPermissionResponse>;
@@ -917,7 +917,7 @@ declare module "./plugin.js" {
     nativeMinimizeWindow(windowId: string): Promise<void>;
     nativeModelName(): Promise<NativeModelNameResponse>;
     nativeMountPoints(): Promise<string[]>;
-    nativeMouseButtonClick(button: number, x?: unknown, y?: unknown): Promise<void>;
+    nativeMouseButtonClick(button: number, x?: number, y?: number): Promise<void>;
     nativeMouseSpeed(): Promise<void>;
     nativeMoveFile(destination: string, source: string): Promise<void>;
     nativeMoveWindowToDisplay(displayId: number, windowId: string): Promise<void>;
@@ -933,7 +933,7 @@ declare module "./plugin.js" {
     nativeNetworkSsid(): Promise<NativeNetworkSsidResponse>;
     nativeNightShift(): Promise<NativeNightShiftResponse>;
     nativeNotificationSoundEnabled(): Promise<NativeNotificationSoundEnabledResponse>;
-    nativeNotify(title: string, body?: unknown, sound?: unknown, subtitle?: unknown): Promise<NativeNotifyResponse>;
+    nativeNotify(title: string, body?: string, sound?: string, subtitle?: string): Promise<NativeNotifyResponse>;
     nativeNowPlaying(): Promise<NativeNowPlayingResponse>;
     nativeNumberFormatDecimal(): Promise<NativeNumberFormatDecimalResponse>;
     nativeObserveWindows(pid: number): Promise<NativeObserveWindowsResponse>;
@@ -944,7 +944,7 @@ declare module "./plugin.js" {
     nativeOcrWindow(windowId: number): Promise<OcrRegion[]>;
     nativeOpenAppSettings(bundleId: string): Promise<void>;
     nativeOpenFinderWindow(path: string): Promise<void>;
-    nativeOpenSystemSettings(pane?: unknown): Promise<void>;
+    nativeOpenSystemSettings(pane?: string): Promise<void>;
     nativeOpenTarget(target: string): Promise<void>;
     nativeOpenURL(url: string): Promise<void>;
     nativeOpenWithApp(bundleId: string, target: string): Promise<void>;
@@ -960,7 +960,7 @@ declare module "./plugin.js" {
     nativePowerAdapterConnected(): Promise<NativePowerAdapterConnectedResponse>;
     nativePowerSource(): Promise<NativePowerSourceResponse>;
     nativePressAndHoldEnabled(): Promise<NativePressAndHoldEnabledResponse>;
-    nativePreventSleep(assertionId?: unknown, reason?: string): Promise<NativePreventSleepResponse>;
+    nativePreventSleep(assertionId?: string, reason?: string): Promise<NativePreventSleepResponse>;
     nativePrimaryDisplay(): Promise<NativePrimaryDisplayResponse>;
     nativePrimaryDisplayID(): Promise<NativePrimaryDisplayIDResponse>;
     nativePrinterSharingEnabled(): Promise<NativePrinterSharingEnabledResponse>;
@@ -985,7 +985,7 @@ declare module "./plugin.js" {
     nativeRandomUuid(): Promise<NativeRandomUuidResponse>;
     nativeReadAppPreference(domain: string, key: string): Promise<void>;
     nativeReadFile(path: string): Promise<NativeReadFileResponse>;
-    nativeReadFileBinary(path: string, maxBytes?: unknown): Promise<NativeReadFileBinaryResponse>;
+    nativeReadFileBinary(path: string, maxBytes?: number): Promise<NativeReadFileBinaryResponse>;
     nativeReadPlist(path: string): Promise<void>;
     nativeRecentDocuments(bundleId: string): Promise<string[]>;
     nativeReduceMotion(): Promise<NativeReduceMotionResponse>;
@@ -1000,7 +1000,7 @@ declare module "./plugin.js" {
     nativeRosettaInstalled(): Promise<NativeRosettaInstalledResponse>;
     nativeRunApplescript(script: string): Promise<NativeRunApplescriptResponse>;
     nativeRunJxa(script: string): Promise<NativeRunJxaResponse>;
-    nativeRunShortcut(name: string, input?: unknown): Promise<NativeRunShortcutResponse>;
+    nativeRunShortcut(name: string, input?: string): Promise<NativeRunShortcutResponse>;
     nativeRunningApps(): Promise<RunningApp[]>;
     nativeScreenCapturePermission(): Promise<NativeScreenCapturePermissionResponse>;
     nativeScreenCount(): Promise<NativeScreenCountResponse>;
@@ -1012,7 +1012,7 @@ declare module "./plugin.js" {
     nativeScreenSaverStart(): Promise<void>;
     nativeScreenSaverStatus(): Promise<NativeScreenSaverStatusResponse>;
     nativeScreenSharingEnabled(): Promise<NativeScreenSharingEnabledResponse>;
-    nativeScreenshot(displayId?: unknown, region?: unknown, windowId?: unknown): Promise<NativeScreenshotResponse>;
+    nativeScreenshot(displayId?: number, region?: unknown, windowId?: string): Promise<NativeScreenshotResponse>;
     nativeScreenshotFormat(): Promise<NativeScreenshotFormatResponse>;
     nativeScreenshotIncludeShadow(): Promise<NativeScreenshotIncludeShadowResponse>;
     nativeScreenshotLocation(): Promise<NativeScreenshotLocationResponse>;
@@ -1032,7 +1032,7 @@ declare module "./plugin.js" {
     nativeSetAudioOutputDevice(name: string): Promise<void>;
     nativeSetAutoRearrangeSpaces(enabled: boolean): Promise<void>;
     nativeSetBluetoothPower(on: boolean): Promise<void>;
-    nativeSetBrightness(brightness: number, displayId?: unknown): Promise<void>;
+    nativeSetBrightness(brightness: number, displayId?: number): Promise<void>;
     nativeSetComputerName(name: string): Promise<void>;
     nativeSetDarkMode(dark: boolean): Promise<void>;
     nativeSetDnd(enabled: boolean): Promise<void>;
@@ -1083,7 +1083,7 @@ declare module "./plugin.js" {
     nativeSmartZoom(): Promise<NativeSmartZoomResponse>;
     nativeSoundEffectsEnabled(): Promise<NativeSoundEffectsEnabledResponse>;
     nativeSpacesSpanDisplays(): Promise<NativeSpacesSpanDisplaysResponse>;
-    nativeSpeak(text: string, rate?: unknown, voice?: unknown): Promise<void>;
+    nativeSpeak(text: string, rate?: number, voice?: string): Promise<void>;
     nativeSpeechLocales(): Promise<SpeechLocale[]>;
     nativeSpeechRecognitionAvailable(): Promise<NativeSpeechRecognitionAvailableResponse>;
     nativeSpeechRecognizeFile(path: string, locale?: string): Promise<void>;
@@ -1164,18 +1164,18 @@ declare module "./plugin.js" {
     pipelinesRun(name: string, ephemeral?: boolean, paramOverrides?: Record<string, unknown>): Promise<PipelinesRunResponse>;
     pipelinesStatus(): Promise<PipelinesStatusResponse>;
     pipelinesStop(name: string): Promise<PipelinesStopResponse>;
-    pluginDebug(data?: unknown, level?: unknown, tag?: unknown): Promise<void>;
+    pluginDebug(data?: unknown, level?: unknown, tag?: string): Promise<void>;
     selectionPick(index: number): Promise<SelectionPickResponse>;
-    selectionSet(channel?: unknown, items?: unknown, title?: unknown): Promise<void>;
+    selectionSet(channel?: string, items?: unknown, title?: string): Promise<void>;
     sessionBoundary(): Promise<void>;
     sessionEndCleanup(): Promise<SessionEndCleanupResponse>;
     settingsPatchSignals(signals: string): Promise<void>;
     settingsRedirect(tab: string): Promise<void>;
     settingsRefresh(): Promise<void>;
-    settingsRulesCreate(newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown): Promise<void>;
-    settingsRulesUpdate(canonical: string, newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown): Promise<void>;
+    settingsRulesCreate(newruleactionjson?: string, newruleactiontype?: string, newruleactionval?: string, newrulecategory?: string, newruleclearstags?: string, newruledescription?: string, newrulephrase?: string, newrulerequirestags?: string, newrulesetstags?: string): Promise<void>;
+    settingsRulesUpdate(canonical: string, newruleactionjson?: string, newruleactiontype?: string, newruleactionval?: string, newrulecategory?: string, newruleclearstags?: string, newruledescription?: string, newrulephrase?: string, newrulerequirestags?: string, newrulesetstags?: string): Promise<void>;
     systemLaunchApp(bundleId: string, newInstance?: boolean): Promise<void>;
-    systemNotify(body: string, title: string, durationSecs?: unknown): Promise<void>;
+    systemNotify(body: string, title: string, durationSecs?: number): Promise<void>;
     systemRunShell(command: string): Promise<void>;
     vocabularyCommit(): Promise<void>;
   }
@@ -1312,7 +1312,7 @@ Plugin.prototype.collectionListLog = async function(name: string, opts?: LogList
   return result as CollectionListLogResponse;
 };
 
-Plugin.prototype.collectionOverride = async function(action: string, collection: string, fields?: unknown, id?: unknown) {
+Plugin.prototype.collectionOverride = async function(action: string, collection: string, fields?: unknown, id?: string) {
   const result = await this.call(
     MethodCollectionOverride,
     {
@@ -1335,7 +1335,7 @@ Plugin.prototype.collectionPatch = async function(fields: unknown, id: string, n
   );
 };
 
-Plugin.prototype.collectionPush = async function(data: unknown, name: string, label?: unknown) {
+Plugin.prototype.collectionPush = async function(data: unknown, name: string, label?: string) {
   const result = await this.call(
     MethodCollectionPush,
     {
@@ -1367,7 +1367,7 @@ Plugin.prototype.collectionSetRecording = async function(enabled: boolean, name:
   );
 };
 
-Plugin.prototype.collectionsList = async function(kind?: unknown) {
+Plugin.prototype.collectionsList = async function(kind?: string) {
   const result = await this.call(
     MethodCollectionsList,
     {
@@ -1377,7 +1377,7 @@ Plugin.prototype.collectionsList = async function(kind?: unknown) {
   return (result as any).sections;
 };
 
-Plugin.prototype.commandsCompletions = async function(activeTags?: unknown, collections?: unknown, requireTag?: unknown, words?: string[]) {
+Plugin.prototype.commandsCompletions = async function(activeTags?: unknown, collections?: unknown, requireTag?: string, words?: string[]) {
   const result = await this.call(
     MethodCommandsCompletions,
     {
@@ -1404,7 +1404,7 @@ Plugin.prototype.commandsList = async function() {
   return result as CommandsListResponse;
 };
 
-Plugin.prototype.commandsMatch = async function(activeTags?: unknown, sessionId?: unknown, source?: unknown, words?: string[]) {
+Plugin.prototype.commandsMatch = async function(activeTags?: unknown, sessionId?: string, source?: string, words?: string[]) {
   const result = await this.call(
     MethodCommandsMatch,
     {
@@ -1449,7 +1449,7 @@ Plugin.prototype.discoveryClosed = async function() {
   const result = await this.call(MethodDiscoveryClosed);
 };
 
-Plugin.prototype.dispatch = async function(action: unknown, traceId?: unknown) {
+Plugin.prototype.dispatch = async function(action: unknown, traceId?: string) {
   const result = await this.call(
     MethodDispatch,
     {
@@ -1501,7 +1501,7 @@ Plugin.prototype.eventsAppend = async function(eventType: string, data?: unknown
   );
 };
 
-Plugin.prototype.eventsEmit = async function(eventType: string, correlationId?: unknown, data?: unknown) {
+Plugin.prototype.eventsEmit = async function(eventType: string, correlationId?: string, data?: unknown) {
   const result = await this.call(
     MethodEventsEmit,
     {
@@ -1584,7 +1584,7 @@ Plugin.prototype.inputClick = async function(button?: string) {
   );
 };
 
-Plugin.prototype.inputClipboardAction = async function(action: string, text?: unknown) {
+Plugin.prototype.inputClipboardAction = async function(action: string, text?: string) {
   const result = await this.call(
     MethodInputClipboardAction,
     {
@@ -1643,7 +1643,7 @@ Plugin.prototype.inputClipboardWriteItems = async function(items?: ClipboardWrit
   );
 };
 
-Plugin.prototype.inputDoubleClick = async function(x?: unknown, y?: unknown) {
+Plugin.prototype.inputDoubleClick = async function(x?: number, y?: number) {
   const result = await this.call(
     MethodInputDoubleClick,
     {
@@ -1681,7 +1681,7 @@ Plugin.prototype.inputMouseButton = async function(direction: string, button?: s
   );
 };
 
-Plugin.prototype.inputPressKey = async function(code?: unknown, modifiers?: string[], name?: unknown) {
+Plugin.prototype.inputPressKey = async function(code?: number, modifiers?: string[], name?: string) {
   const result = await this.call(
     MethodInputPressKey,
     {
@@ -1702,7 +1702,7 @@ Plugin.prototype.inputRawKey = async function(code: number, direction: string) {
   );
 };
 
-Plugin.prototype.inputRightClick = async function(x?: unknown, y?: unknown) {
+Plugin.prototype.inputRightClick = async function(x?: number, y?: number) {
   const result = await this.call(
     MethodInputRightClick,
     {
@@ -1737,7 +1737,7 @@ Plugin.prototype.inputSwitchInputSource = async function(sourceId: string) {
   return (result as any).result;
 };
 
-Plugin.prototype.inputTripleClick = async function(x?: unknown, y?: unknown) {
+Plugin.prototype.inputTripleClick = async function(x?: number, y?: number) {
   const result = await this.call(
     MethodInputTripleClick,
     {
@@ -2236,7 +2236,7 @@ Plugin.prototype.nativeBorders = async function() {
   const result = await this.call(MethodNativeBorders);
 };
 
-Plugin.prototype.nativeBrightness = async function(displayId?: unknown) {
+Plugin.prototype.nativeBrightness = async function(displayId?: number) {
   const result = await this.call(
     MethodNativeBrightness,
     {
@@ -3529,7 +3529,7 @@ Plugin.prototype.nativeMountPoints = async function() {
   return (result as any).volumes;
 };
 
-Plugin.prototype.nativeMouseButtonClick = async function(button: number, x?: unknown, y?: unknown) {
+Plugin.prototype.nativeMouseButtonClick = async function(button: number, x?: number, y?: number) {
   const result = await this.call(
     MethodNativeMouseButtonClick,
     {
@@ -3638,7 +3638,7 @@ Plugin.prototype.nativeNotificationSoundEnabled = async function() {
   return result as NativeNotificationSoundEnabledResponse;
 };
 
-Plugin.prototype.nativeNotify = async function(title: string, body?: unknown, sound?: unknown, subtitle?: unknown) {
+Plugin.prototype.nativeNotify = async function(title: string, body?: string, sound?: string, subtitle?: string) {
   const result = await this.call(
     MethodNativeNotify,
     {
@@ -3732,7 +3732,7 @@ Plugin.prototype.nativeOpenFinderWindow = async function(path: string) {
   );
 };
 
-Plugin.prototype.nativeOpenSystemSettings = async function(pane?: unknown) {
+Plugin.prototype.nativeOpenSystemSettings = async function(pane?: string) {
   const result = await this.call(
     MethodNativeOpenSystemSettings,
     {
@@ -3850,7 +3850,7 @@ Plugin.prototype.nativePressAndHoldEnabled = async function() {
   return result as NativePressAndHoldEnabledResponse;
 };
 
-Plugin.prototype.nativePreventSleep = async function(assertionId?: unknown, reason?: string) {
+Plugin.prototype.nativePreventSleep = async function(assertionId?: string, reason?: string) {
   const result = await this.call(
     MethodNativePreventSleep,
     {
@@ -4038,7 +4038,7 @@ Plugin.prototype.nativeReadFile = async function(path: string) {
   return result as NativeReadFileResponse;
 };
 
-Plugin.prototype.nativeReadFileBinary = async function(path: string, maxBytes?: unknown) {
+Plugin.prototype.nativeReadFileBinary = async function(path: string, maxBytes?: number) {
   const result = await this.call(
     MethodNativeReadFileBinary,
     {
@@ -4151,7 +4151,7 @@ Plugin.prototype.nativeRunJxa = async function(script: string) {
   return result as NativeRunJxaResponse;
 };
 
-Plugin.prototype.nativeRunShortcut = async function(name: string, input?: unknown) {
+Plugin.prototype.nativeRunShortcut = async function(name: string, input?: string) {
   const result = await this.call(
     MethodNativeRunShortcut,
     {
@@ -4214,7 +4214,7 @@ Plugin.prototype.nativeScreenSharingEnabled = async function() {
   return result as NativeScreenSharingEnabledResponse;
 };
 
-Plugin.prototype.nativeScreenshot = async function(displayId?: unknown, region?: unknown, windowId?: unknown) {
+Plugin.prototype.nativeScreenshot = async function(displayId?: number, region?: unknown, windowId?: string) {
   const result = await this.call(
     MethodNativeScreenshot,
     {
@@ -4361,7 +4361,7 @@ Plugin.prototype.nativeSetBluetoothPower = async function(on: boolean) {
   );
 };
 
-Plugin.prototype.nativeSetBrightness = async function(brightness: number, displayId?: unknown) {
+Plugin.prototype.nativeSetBrightness = async function(brightness: number, displayId?: number) {
   const result = await this.call(
     MethodNativeSetBrightness,
     {
@@ -4791,7 +4791,7 @@ Plugin.prototype.nativeSpacesSpanDisplays = async function() {
   return result as NativeSpacesSpanDisplaysResponse;
 };
 
-Plugin.prototype.nativeSpeak = async function(text: string, rate?: unknown, voice?: unknown) {
+Plugin.prototype.nativeSpeak = async function(text: string, rate?: number, voice?: string) {
   const result = await this.call(
     MethodNativeSpeak,
     {
@@ -5354,7 +5354,7 @@ Plugin.prototype.pipelinesStop = async function(name: string) {
   return result as PipelinesStopResponse;
 };
 
-Plugin.prototype.pluginDebug = async function(data?: unknown, level?: unknown, tag?: unknown) {
+Plugin.prototype.pluginDebug = async function(data?: unknown, level?: unknown, tag?: string) {
   const result = await this.call(
     MethodPluginDebug,
     {
@@ -5375,7 +5375,7 @@ Plugin.prototype.selectionPick = async function(index: number) {
   return result as SelectionPickResponse;
 };
 
-Plugin.prototype.selectionSet = async function(channel?: unknown, items?: unknown, title?: unknown) {
+Plugin.prototype.selectionSet = async function(channel?: string, items?: unknown, title?: string) {
   const result = await this.call(
     MethodSelectionSet,
     {
@@ -5417,7 +5417,7 @@ Plugin.prototype.settingsRefresh = async function() {
   const result = await this.call(MethodSettingsRefresh);
 };
 
-Plugin.prototype.settingsRulesCreate = async function(newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown) {
+Plugin.prototype.settingsRulesCreate = async function(newruleactionjson?: string, newruleactiontype?: string, newruleactionval?: string, newrulecategory?: string, newruleclearstags?: string, newruledescription?: string, newrulephrase?: string, newrulerequirestags?: string, newrulesetstags?: string) {
   const result = await this.call(
     MethodSettingsRulesCreate,
     {
@@ -5434,7 +5434,7 @@ Plugin.prototype.settingsRulesCreate = async function(newruleactionjson?: unknow
   );
 };
 
-Plugin.prototype.settingsRulesUpdate = async function(canonical: string, newruleactionjson?: unknown, newruleactiontype?: unknown, newruleactionval?: unknown, newrulecategory?: unknown, newruleclearstags?: unknown, newruledescription?: unknown, newrulephrase?: unknown, newrulerequirestags?: unknown, newrulesetstags?: unknown) {
+Plugin.prototype.settingsRulesUpdate = async function(canonical: string, newruleactionjson?: string, newruleactiontype?: string, newruleactionval?: string, newrulecategory?: string, newruleclearstags?: string, newruledescription?: string, newrulephrase?: string, newrulerequirestags?: string, newrulesetstags?: string) {
   const result = await this.call(
     MethodSettingsRulesUpdate,
     {
@@ -5462,7 +5462,7 @@ Plugin.prototype.systemLaunchApp = async function(bundleId: string, newInstance?
   );
 };
 
-Plugin.prototype.systemNotify = async function(body: string, title: string, durationSecs?: unknown) {
+Plugin.prototype.systemNotify = async function(body: string, title: string, durationSecs?: number) {
   const result = await this.call(
     MethodSystemNotify,
     {
