@@ -602,6 +602,7 @@ export const EventActionExecuted = "_platform.action.executed" as const;
 export const EventAppFocused = "_platform.app.focused" as const;
 export const EventBleNotification = "_platform.ble.notification" as const;
 export const EventCollectionUpdated = "_platform.collection.updated" as const;
+export const EventDependentCaptureProgress = "_platform.dependent_capture.progress" as const;
 export const EventDiscoveryClosed = "_platform.discovery.closed" as const;
 export const EventDisplayChanged = "_platform.display.changed" as const;
 export const EventEffectDisplaced = "_platform.effect.displaced" as const;
