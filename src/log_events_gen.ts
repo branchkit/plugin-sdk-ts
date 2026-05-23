@@ -10,6 +10,7 @@ export const LogEventAudioSessionEnded = "audio.session_ended" as const;
 export const LogEventAudioSessionStarted = "audio.session_started" as const;
 export const LogEventAudioSpeechTranscript = "audio.speech_transcript" as const;
 export const LogEventBridgeLifecycle = "bridge.lifecycle" as const;
+export const LogEventCommandMatchDecision = "command.match_decision" as const;
 export const LogEventCommandMatched = "command.matched" as const;
 export const LogEventCommandNoMatch = "command.no_match" as const;
 export const LogEventDependentCaptureProgress = "dependent_capture.progress" as const;
@@ -77,6 +78,7 @@ export const LogEventRegistry: Record<string, LogEventMeta> = {
     "audio.session_started": { name: "audio.session_started", summary: "A speech session began (hold-to-talk pressed or continuous mode entered).", since: "0.1.0", source: "audio", severity: "info", redaction: "none" },
     "audio.speech_transcript": { name: "audio.speech_transcript", summary: "Final or interim speech recognition transcript for a session.", since: "0.1.0", source: "audio", severity: "info", redaction: "full" },
     "bridge.lifecycle": { name: "bridge.lifecycle", summary: "FFI bridge lifecycle event (init, shutdown, UI server bind, callback registration).", since: "0.1.0", source: "lifecycle", severity: "info", redaction: "none" },
+    "command.match_decision": { name: "command.match_decision", summary: "Diagnostic snapshot of the matcher's tiebreaker choice — which category won, which gates were active, whether a gated Partial was suppressed.", since: "0.1.0", source: "dispatch", severity: "debug", redaction: "none" },
     "command.matched": { name: "command.matched", summary: "Speech recognition produced a match against a registered command.", since: "0.1.0", source: "dispatch", severity: "info", redaction: "none" },
     "command.no_match": { name: "command.no_match", summary: "Speech input did not match any registered command.", since: "0.1.0", source: "dispatch", severity: "debug", redaction: "none" },
     "dependent_capture.progress": { name: "dependent_capture.progress", summary: "Partial match reached a DependentCapture whose deps are bound and whose resolved collection exists — plugins can react to the intermediate step (e.g. browser hint grayout).", since: "0.1.0", source: "dispatch", severity: "info", redaction: "none" },
