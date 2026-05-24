@@ -3,7 +3,7 @@ import { Plugin } from "./plugin.js";
 
 /**
  * Payload delivered to {@link Plugin.onEffectDisplaced} callbacks.
- * Mirrors the actuator-side audit shape — see
+ * Mirrors the actuator-side broadcast shape — see
  * `actuator/src/operations/registered/effects.rs`.
  */
 export interface EffectDisplacedEvent {
@@ -11,6 +11,13 @@ export interface EffectDisplacedEvent {
   effect: string;
   /** Plugin id that just took top-of-stack ownership of the effect. */
   newOwner: string;
+  /**
+   * Plugin id that lost top-of-stack ownership. The SDK filters on this
+   * so `onEffectDisplaced` only fires when *this* plugin was displaced;
+   * the field is exposed for plugins that subscribe to the underlying
+   * event directly via `on(EventEffectDisplaced, ...)`.
+   */
+  displacedOwner: string;
 }
 
 /**
@@ -96,12 +103,15 @@ declare module "./plugin.js" {
      * Registers a callback fired when this plugin's assertion is
      * overridden by a later asserter.
      *
-     * IMPORTANT: the actuator-side emit of `_platform.effect.displaced`
-     * is stubbed pending the notification-path session — assertions are
-     * audited and logged today, but the event-bus emit hasn't been
-     * wired yet. Plugins can safely register callbacks now; they'll
-     * start firing once the actuator path lands. See section 10.2 of the
-     * design doc.
+     * Delivery is broadcast — every plugin subscribed to
+     * `_platform.effect.displaced` receives every displacement event.
+     * This helper filters on `displacedOwner === this plugin's id` so
+     * the callback only fires for *this* plugin's displacements.
+     * Plugins that want to observe all displacements (e.g. a UI showing
+     * system effect state) should subscribe directly via
+     * `on(EventEffectDisplaced, ...)`.
+     *
+     * See `notes/DESIGN_CAPABILITY_MECHANISM.md` section 10.2.
      *
      * Multiple callbacks can be registered; each fires for every event.
      */
@@ -143,13 +153,24 @@ Plugin.prototype.isEffectActive = async function (
 Plugin.prototype.onEffectDisplaced = function (
   handler: (evt: EffectDisplacedEvent) => void,
 ): void {
+  // Reads BRANCHKIT_PLUGIN_ID, the same source Plugin's constructor uses.
+  // Lets the helper filter without depending on Plugin's private field.
+  const selfId = process.env.BRANCHKIT_PLUGIN_ID ?? "unknown";
   this.on(EventEffectDisplaced, (params: unknown) => {
     if (params == null || typeof params !== "object") return;
     const obj = params as Record<string, unknown>;
     const effect = optionalString(obj.effect);
     const newOwner = optionalString(obj.new_owner);
-    if (effect === undefined || newOwner === undefined) return;
-    handler({ effect, newOwner });
+    const displacedOwner = optionalString(obj.displaced_owner);
+    if (
+      effect === undefined ||
+      newOwner === undefined ||
+      displacedOwner === undefined
+    ) {
+      return;
+    }
+    if (displacedOwner !== selfId) return;
+    handler({ effect, newOwner, displacedOwner });
   });
 };
 
