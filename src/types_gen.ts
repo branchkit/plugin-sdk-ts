@@ -281,13 +281,6 @@ export interface Frame {
   y: number;
 }
 
-export interface GateWrite {
-  collection: string;
-  id: string;
-  payload?: unknown;
-  tag: string;
-}
-
 export interface HidDeviceEntry {
   axes: number;
   ble_uuid?: string;
@@ -390,6 +383,15 @@ export interface LoginItem {
   path: string;
 }
 
+/**
+ * Which category the matcher's tiebreaker chose. Mirrors the four
+ * branches of `find_match_at_start_impl`: gated Completes win over
+ * ungated Completes (scoped beats unscoped within the gated set), an
+ * ungated Complete loses if any gated command had a Partial in flight
+ * (`suppress_ungated`), and `NoMatch` is the fall-through.
+ */
+export type MatchWinner = "gated_scoped" | "gated_unscoped" | "ungated" | "no_match";
+
 export interface MemoryInfo {
   available_bytes: number;
   swap_total_bytes: number;
@@ -482,6 +484,11 @@ export interface ReminderItem {
   list_name?: string;
   priority: number;
   title: string;
+}
+
+export interface ResolveTelemetry {
+  gated_partial_seen: boolean;
+  winner: MatchWinner;
 }
 
 export interface RunningApp {
@@ -787,20 +794,6 @@ export interface CollectionsListResponse {
   sections: CollectionsListSection[];
 }
 
-export interface CommandsCompletionsRequest {
-  active_tags?: unknown;
-  collections?: unknown;
-  require_tag?: string;
-  words?: string[];
-}
-
-export interface CommandsCompletionsResponse {
-  has_completions: boolean;
-  items: DiscoverItem[];
-  next_words: string[];
-  title: string;
-}
-
 export interface CommandsDeleteRequest {
   canonical: string;
 }
@@ -813,28 +806,6 @@ export interface CommandsListResponse {
   footer: string;
   sections: ListCommandSection[];
   title: string;
-}
-
-export interface CommandsMatchRequest {
-  active_tags?: unknown;
-  session_id?: string;
-  source?: string;
-  words?: string[];
-}
-
-export interface CommandsMatchResponse {
-  action?: unknown;
-  args: Record<string, unknown>;
-  clears_tag_writes?: GateWrite[];
-  clears_tags: string[];
-  consumed_count: number;
-  matched: boolean;
-  owner_plugin?: string;
-  requires_tags: string[];
-  scoped_tags?: string[];
-  sets_tag_writes?: GateWrite[];
-  sets_tags: string[];
-  trace_id?: string;
 }
 
 export interface CommandsPushRequest {
@@ -852,6 +823,33 @@ export interface CommandsResetRequest {
 
 export interface CommandsResetResponse {
   ok: boolean;
+}
+
+export interface CommandsResolveRequest {
+  active_tags?: unknown;
+  collections?: unknown;
+  require_tag?: string;
+  session_id?: string;
+  source?: string;
+  words?: string[];
+}
+
+export interface CommandsResolveResponse {
+  action?: unknown;
+  args: Record<string, unknown>;
+  clears_tags: string[];
+  consumed_count: number;
+  has_completions: boolean;
+  items: DiscoverItem[];
+  matched: boolean;
+  next_words: string[];
+  owner_plugin?: string;
+  requires_tags: string[];
+  scoped_tags?: string[];
+  sets_tags: string[];
+  telemetry: ResolveTelemetry;
+  title: string;
+  trace_id?: string;
 }
 
 export interface ControlSignalRequest {
