@@ -846,6 +846,7 @@ export interface CommandsResolveResponse {
   next_words: string[];
   owner_plugin?: string;
   requires_tags: string[];
+  scoped_prefixes?: string[];
   scoped_tags?: string[];
   sets_tags: string[];
   telemetry: ResolveTelemetry;
