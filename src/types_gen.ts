@@ -836,6 +836,7 @@ export interface CommandsResolveRequest {
 
 export interface CommandsResolveResponse {
   action?: unknown;
+  active_plugin_gates?: string[];
   args: Record<string, unknown>;
   clears_tags: string[];
   consumed_count: number;
