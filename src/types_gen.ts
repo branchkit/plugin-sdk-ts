@@ -245,6 +245,16 @@ export interface DisplayRotation {
   display_id: number;
 }
 
+export interface EnumeratedCommand {
+  dynamic: boolean;
+  dynamic_owner?: string;
+  id: string;
+  owner_plugin: string;
+  pattern: string;
+  requires_tags: string[];
+  sets_tags: string[];
+}
+
 export interface ExternalDisk {
   file_system?: string;
   free_bytes: number;
@@ -338,6 +348,8 @@ export interface InstalledApp {
 }
 
 export interface ListCommandItem {
+  dynamic: boolean;
+  dynamic_owner?: string;
   id: string;
   subtitle?: string;
   tag?: string;
@@ -800,6 +812,10 @@ export interface CommandsDeleteRequest {
 
 export interface CommandsDeleteResponse {
   ok: boolean;
+}
+
+export interface CommandsEnumerateResponse {
+  commands: EnumeratedCommand[];
 }
 
 export interface CommandsListResponse {

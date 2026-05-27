@@ -25,6 +25,7 @@ export const MethodCollectionPut = "collection.put" as const; // since 0.1.0
 export const MethodCollectionSetRecording = "collection.set_recording" as const; // since 0.1.0
 export const MethodCollectionsList = "collections.list" as const; // since 0.1.0
 export const MethodCommandsDelete = "commands.delete" as const; // since 0.1.0
+export const MethodCommandsEnumerate = "commands.enumerate" as const; // since 0.1.0
 export const MethodCommandsList = "commands.list" as const; // since 0.1.0
 export const MethodCommandsPush = "commands.push" as const; // since 0.1.0
 export const MethodCommandsReset = "commands.reset" as const; // since 0.1.0
