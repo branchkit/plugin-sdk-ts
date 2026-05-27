@@ -647,6 +647,24 @@ export interface BridgeEmitObservabilityEventResponse {
   ok: boolean;
 }
 
+export interface CalibrationRegisterFixtureHandleRequest {
+  fixture_handle: string;
+  owner_plugin_id: string;
+  trial_id: string;
+}
+
+export interface CalibrationTrialBeginResponse {
+  trial_id: string;
+}
+
+export interface CalibrationTrialEndRequest {
+  trial_id: string;
+}
+
+export interface CalibrationTrialEndResponse {
+  released_handle_count: number;
+}
+
 export interface CollectionAppendRequest {
   name: string;
   payload: unknown;
