@@ -47,6 +47,10 @@ export const LogEventPluginSpawned = "plugin.spawned" as const;
 export const LogEventPluginStderrLine = "plugin.stderr_line" as const;
 export const LogEventRpcCallCompleted = "rpc.call_completed" as const;
 export const LogEventRpcCallReceived = "rpc.call_received" as const;
+export const LogEventRpcNotifyReceived = "rpc.notify_received" as const;
+export const LogEventRpcOutboundCallCompleted = "rpc.outbound_call_completed" as const;
+export const LogEventRpcOutboundCallSent = "rpc.outbound_call_sent" as const;
+export const LogEventRpcOutboundNotify = "rpc.outbound_notify" as const;
 export const LogEventSessionControlMessage = "session.control_message" as const;
 export const LogEventStateRetentionSwept = "state.retention_swept" as const;
 export const LogEventStateTagCleared = "state.tag_cleared" as const;
@@ -115,6 +119,10 @@ export const LogEventRegistry: Record<string, LogEventMeta> = {
     "plugin.stderr_line": { name: "plugin.stderr_line", summary: "A managed plugin emitted a stdout/stderr line.", since: "0.1.0", source: "plugins", severity: "info", redaction: "none" },
     "rpc.call_completed": { name: "rpc.call_completed", summary: "A plugin-to-actuator RPC call completed.", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },
     "rpc.call_received": { name: "rpc.call_received", summary: "A plugin-to-actuator RPC call was received.", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },
+    "rpc.notify_received": { name: "rpc.notify_received", summary: "A plugin-to-actuator RPC notification (fire-and-forget) was received.", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },
+    "rpc.outbound_call_completed": { name: "rpc.outbound_call_completed", summary: "An actuator-to-plugin RPC call completed (response received or timed out).", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },
+    "rpc.outbound_call_sent": { name: "rpc.outbound_call_sent", summary: "An actuator-to-plugin RPC call was sent (awaiting response).", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },
+    "rpc.outbound_notify": { name: "rpc.outbound_notify", summary: "An actuator-to-plugin RPC notification (fire-and-forget) was sent.", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },
     "session.control_message": { name: "session.control_message", summary: "A control message was forwarded to the Swift host (HUD show, mode reset, etc.).", since: "0.1.0", source: "dispatch", severity: "info", redaction: "none" },
     "state.retention_swept": { name: "state.retention_swept", summary: "Retention sweep removed expired records from a collection.", since: "0.1.0", source: "state", severity: "info", redaction: "none" },
     "state.tag_cleared": { name: "state.tag_cleared", summary: "One or more tags were cleared via a gate-shape collection mutation.", since: "0.1.0", source: "state", severity: "info", redaction: "none" },

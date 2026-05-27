@@ -10,6 +10,7 @@ interface RpcMessage {
   params?: unknown;
   result?: unknown;
   error?: RpcError;
+  correlation_id?: string;
 }
 
 interface RpcError {

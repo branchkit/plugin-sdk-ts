@@ -12,6 +12,13 @@ interface RpcMessage {
   params?: unknown;
   result?: unknown;
   error?: RpcError;
+  /**
+   * Envelope-level correlation id (`tr_<base62>`). Lives outside `params`
+   * so methods and notifies carry it uniformly. The actuator stamps
+   * outbound calls from its current scope; inbound calls preserve the
+   * id from the wire.
+   */
+  correlation_id?: string;
 }
 
 interface RpcError {
