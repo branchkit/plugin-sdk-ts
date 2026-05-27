@@ -647,6 +647,16 @@ export interface BridgeEmitObservabilityEventResponse {
   ok: boolean;
 }
 
+export interface CalibrationApplyRequest {
+  command_id: string;
+  trial_id: string;
+}
+
+export interface CalibrationApplyResponse {
+  fixture_handle: string;
+  owner_plugin: string;
+}
+
 export interface CalibrationRegisterFixtureHandleRequest {
   fixture_handle: string;
   owner_plugin_id: string;
@@ -4193,6 +4203,18 @@ export interface VocabularyCommitResponse {
 }
 
 // ===== Actuator → Plugin request/response types =====
+
+export interface CalibrationApplyFixtureRequest {
+  command_id: string;
+}
+
+export interface CalibrationApplyFixtureResponse {
+  fixture_handle: string;
+}
+
+export interface CalibrationReleaseFixtureRequest {
+  fixture_handle: string;
+}
 
 export interface OnActionRequest {
   action: string;
