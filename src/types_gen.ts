@@ -265,13 +265,17 @@ export interface ExternalDisk {
 }
 
 /**
- * Where a field appears in generic UI rendering. Currently used by
- * `kind: "log"` collections in the Collections tab to drive the timeline
- * row summary line. Extending this enum is how new generic display roles
- * get added (detail-only, hidden, etc.) without smuggling presentation
- * hints into freeform strings.
+ * Where a field appears in generic UI rendering. Each field on a
+ * collection declares at most one role; surfaces (discovery HUD,
+ * settings UI, etc.) interpret roles on their own terms.
+ * 
+ * See `notes/DESIGN_COLLECTION_FIELD_ROLES.md` for the full vocabulary
+ * rationale. Roles `primary`, `secondary`, `description`, `payload` are
+ * consumed by `services::matching_service::expand_collections_to_items`
+ * for discovery items; `summary` is consumed by the settings UI's
+ * log-kind timeline rows.
  */
-export type FieldDisplay = "summary";
+export type FieldDisplay = "primary" | "secondary" | "description" | "payload" | "summary";
 
 /**
  * The declared shape of a single action-type field. See `ActionFieldSchema`.
@@ -801,6 +805,7 @@ export interface CollectionPushRequest {
   data: unknown;
   label?: string;
   name: string;
+  roles?: unknown;
 }
 
 export interface CollectionPushResponse {
