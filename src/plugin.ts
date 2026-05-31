@@ -2,6 +2,7 @@ import { createInterface } from "node:readline";
 import { Log } from "./log.js";
 import { APIVersion, HookOnAction } from "./contracts_gen.js";
 import type { OnActionRequest, OnActionResponse } from "./types_gen.js";
+import { runWithCorrelation, getCurrentCorrelation } from "./correlation.js";
 
 // --- JSON-RPC 2.0 message types ---
 
@@ -253,8 +254,16 @@ export class Plugin {
         timer,
       });
 
-      // Write the request
-      this.write({ jsonrpc: "2.0", id, method, params });
+      // Write the request, inheriting the ambient inbound correlation so the
+      // call joins the upstream causal chain (the actuator opens a scope from
+      // the envelope id for the whole RPC).
+      this.write({
+        jsonrpc: "2.0",
+        id,
+        method,
+        params,
+        correlation_id: getCurrentCorrelation() || undefined,
+      });
     });
   }
 
@@ -262,7 +271,22 @@ export class Plugin {
    * Send a fire-and-forget notification to the actuator (no response expected).
    */
   notify(method: string, params?: unknown): void {
-    this.write({ jsonrpc: "2.0", method, params });
+    this.write({
+      jsonrpc: "2.0",
+      method,
+      params,
+      correlation_id: getCurrentCorrelation() || undefined,
+    });
+  }
+
+  /**
+   * The inbound correlation id for the actuator→plugin request or notification
+   * currently being handled, or "" if none is in flight. Handlers use it to
+   * tie their own work back to the upstream causal chain; outbound calls
+   * inherit it automatically, so most handlers never need to read it directly.
+   */
+  currentCorrelation(): string {
+    return getCurrentCorrelation();
   }
 
   /**
@@ -355,18 +379,23 @@ export class Plugin {
     // Request from actuator — has id + method
     if (msg.id !== undefined && msg.method) {
       // Fire async — don't block the read loop (C1)
-      this.handleRequest(msg.id, msg.method, msg.params);
+      this.handleRequest(msg.id, msg.method, msg.params, msg.correlation_id);
       return;
     }
 
     // Notification from actuator — has method, no id (W5: no response)
     if (msg.id === undefined && msg.method) {
-      this.handleNotification(msg.method, msg.params);
+      this.handleNotification(msg.method, msg.params, msg.correlation_id);
       return;
     }
   }
 
-  private async handleRequest(id: number, method: string, params: unknown): Promise<void> {
+  private async handleRequest(
+    id: number,
+    method: string,
+    params: unknown,
+    correlationId: string | undefined,
+  ): Promise<void> {
     // Wait for handlers to be registered (run() called) or shutdown (L4)
     await Promise.race([this.readyPromise, this.shutdownPromise]);
 
@@ -381,28 +410,37 @@ export class Plugin {
       return;
     }
 
-    // Run handler with exception recovery (C3)
-    try {
-      const result = await handler(params);
-      this.write({ jsonrpc: "2.0", id, result: result ?? null });
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : String(err);
-      Log(this.pluginId, `handler error for ${method}: ${message}`);
-      this.sendError(id, -1, message);
-    }
-  }
-
-  private handleNotification(method: string, params: unknown): void {
-    const listeners = this.listeners.get(method);
-    if (!listeners) return;
-    for (const fn of listeners) {
+    // Make the inbound envelope correlation ambient for the handler (and any
+    // outbound call it makes), then run with exception recovery (C3).
+    await runWithCorrelation(correlationId, async () => {
       try {
-        fn(params);
+        const result = await handler(params);
+        this.write({ jsonrpc: "2.0", id, result: result ?? null });
       } catch (err: unknown) {
         const message = err instanceof Error ? err.message : String(err);
-        Log(this.pluginId, `listener error for ${method}: ${message}`);
+        Log(this.pluginId, `handler error for ${method}: ${message}`);
+        this.sendError(id, -1, message);
       }
-    }
+    });
+  }
+
+  private handleNotification(
+    method: string,
+    params: unknown,
+    correlationId: string | undefined,
+  ): void {
+    const listeners = this.listeners.get(method);
+    if (!listeners) return;
+    runWithCorrelation(correlationId, () => {
+      for (const fn of listeners) {
+        try {
+          fn(params);
+        } catch (err: unknown) {
+          const message = err instanceof Error ? err.message : String(err);
+          Log(this.pluginId, `listener error for ${method}: ${message}`);
+        }
+      }
+    });
   }
 
   private sendError(id: number, code: number, message: string): void {
