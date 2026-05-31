@@ -628,7 +628,7 @@ declare module "./plugin.js" {
     commandsResolve(activeTags?: unknown, collections?: unknown, requireTag?: string, sessionId?: string, source?: string, words?: string[]): Promise<CommandsResolveResponse>;
     controlSignal(signal: string): Promise<void>;
     discoveryClosed(): Promise<void>;
-    dispatch(action: unknown, traceId?: string): Promise<DispatchResponse>;
+    dispatch(action: unknown, sessionId?: string, traceId?: string): Promise<DispatchResponse>;
     effectsAssert(name: string): Promise<EffectsAssertResponse>;
     effectsIsActive(name: string): Promise<EffectsIsActiveResponse>;
     effectsRetract(name: string): Promise<EffectsRetractResponse>;
@@ -1489,11 +1489,12 @@ Plugin.prototype.discoveryClosed = async function() {
   const result = await this.call(MethodDiscoveryClosed);
 };
 
-Plugin.prototype.dispatch = async function(action: unknown, traceId?: string) {
+Plugin.prototype.dispatch = async function(action: unknown, sessionId?: string, traceId?: string) {
   const result = await this.call(
     MethodDispatch,
     {
       action,
+      session_id: sessionId,
       trace_id: traceId,
     },
   );

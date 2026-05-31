@@ -917,6 +917,7 @@ export interface DiscoveryClosedResponse {
 
 export interface DispatchRequest {
   action: unknown;
+  session_id?: string;
   trace_id?: string;
 }
 
