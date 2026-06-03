@@ -131,6 +131,11 @@ export interface ClipboardWriteItem {
   text?: string;
 }
 
+export interface CollectionPutEntry {
+  id: string;
+  payload?: unknown;
+}
+
 export interface CollectionRecord {
   id: string;
   payload?: unknown;
@@ -713,13 +718,14 @@ export interface CollectionDeleteLogEntryResponse {
   deleted: boolean;
 }
 
-export interface CollectionDeleteRecordRequest {
-  id: string;
+export interface CollectionDeleteRecordsRequest {
+  ids: string[];
   name: string;
 }
 
-export interface CollectionDeleteRecordResponse {
-  deleted: boolean;
+export interface CollectionDeleteRecordsResponse {
+  already_absent: number;
+  deleted: number;
 }
 
 export interface CollectionFetchRequest {
@@ -813,12 +819,12 @@ export interface CollectionPushResponse {
 }
 
 export interface CollectionPutRequest {
-  id: string;
+  entries: CollectionPutEntry[];
   name: string;
-  payload: unknown;
 }
 
 export interface CollectionPutResponse {
+  count: number;
   ok: boolean;
 }
 
@@ -887,6 +893,7 @@ export interface CommandsResolveResponse {
   action?: unknown;
   active_plugin_gates?: string[];
   args: Record<string, unknown>;
+  bridge_active?: boolean;
   clears_tags: string[];
   consumed_count: number;
   has_completions: boolean;

@@ -46,13 +46,31 @@ describe("collection state helpers", () => {
   test("put marshals payload through wire", async () => {
     const { plugin, inbox } = fakePlugin((method) => {
       expect(method).toBe("collection.put");
-      return undefined;
+      return { ok: true, count: 1 };
     });
     await plugin.put("things", "k1", { v: 7 });
     expect(inbox[0]?.params).toEqual({
-      id: "k1",
       name: "things",
-      payload: { v: 7 },
+      entries: [{ id: "k1", payload: { v: 7 } }],
+    });
+  });
+
+  test("putMany batches entries through wire", async () => {
+    const { plugin, inbox } = fakePlugin((method) => {
+      expect(method).toBe("collection.put");
+      return { ok: true, count: 2 };
+    });
+    const count = await plugin.putMany("things", [
+      { id: "k1", payload: { v: 1 } },
+      { id: "k2", payload: { v: 2 } },
+    ]);
+    expect(count).toBe(2);
+    expect(inbox[0]?.params).toEqual({
+      name: "things",
+      entries: [
+        { id: "k1", payload: { v: 1 } },
+        { id: "k2", payload: { v: 2 } },
+      ],
     });
   });
 
@@ -89,10 +107,32 @@ describe("collection state helpers", () => {
 
   test("delete returns whether the record existed", async () => {
     const { plugin } = fakePlugin((method) => {
-      expect(method).toBe("collection.delete_record");
-      return { deleted: true };
+      expect(method).toBe("collection.delete_records");
+      return { deleted: 1, already_absent: 0 };
     });
     expect(await plugin.delete("things", "k1")).toBe(true);
+  });
+
+  test("delete returns false when record already absent", async () => {
+    const { plugin } = fakePlugin((method) => {
+      expect(method).toBe("collection.delete_records");
+      return { deleted: 0, already_absent: 1 };
+    });
+    expect(await plugin.delete("things", "k1")).toBe(false);
+  });
+
+  test("deleteMany returns counts split", async () => {
+    const { plugin, inbox } = fakePlugin((method) => {
+      expect(method).toBe("collection.delete_records");
+      return { deleted: 2, already_absent: 1 };
+    });
+    const { deleted, alreadyAbsent } = await plugin.deleteMany("things", ["k1", "k2", "k3"]);
+    expect(deleted).toBe(2);
+    expect(alreadyAbsent).toBe(1);
+    expect(inbox[0]?.params).toEqual({
+      name: "things",
+      ids: ["k1", "k2", "k3"],
+    });
   });
 
   test("patch marshals fields through wire", async () => {

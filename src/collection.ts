@@ -1,6 +1,8 @@
 import { EventCollectionUpdated } from "./contracts_gen.js";
 import { Plugin } from "./plugin.js";
-import type { ListOpts, CollectionRecord } from "./types_gen.js";
+import type { ListOpts, CollectionRecord, CollectionPutEntry } from "./types_gen.js";
+
+export type { CollectionPutEntry };
 
 /** Payload of `_platform.collection.updated` notifications. */
 export interface CollectionChangedEvent {
@@ -23,7 +25,23 @@ declare module "./plugin.js" {
 
     count(name: string): Promise<number>;
 
+    /**
+     * Single-record upsert. Sugar over the bulk wire shape — wraps
+     * one entry in a 1-element array. If the target collection name
+     * isn't registered yet, the platform auto-registers it as a
+     * record-keyed dynamic collection with this plugin as the
+     * introducer.
+     */
     put(name: string, id: string, payload: unknown): Promise<void>;
+
+    /**
+     * Bulk upsert. Returns the number of records upserted (always
+     * `entries.length` on success — the count is informational, useful
+     * for telemetry). Validation runs across all entries before any
+     * commit, so a partial batch with one invalid entry leaves the
+     * backend untouched.
+     */
+    putMany(name: string, entries: CollectionPutEntry[]): Promise<number>;
 
     /**
      * Errors with NOT_FOUND if no record with that id exists, or
@@ -33,8 +51,22 @@ declare module "./plugin.js" {
      */
     patch(name: string, id: string, fields: unknown): Promise<void>;
 
-    /** Returns whether the record existed. */
+    /**
+     * Single-record delete. Returns whether the record existed and
+     * was removed. Sugar over the bulk wire shape.
+     */
     delete(name: string, id: string): Promise<boolean>;
+
+    /**
+     * Bulk delete. Returns `{ deleted, alreadyAbsent }` so callers
+     * can detect drift between their view of the collection and the
+     * platform's — a high `alreadyAbsent` count suggests something
+     * else is wiping records.
+     */
+    deleteMany(
+      name: string,
+      ids: string[],
+    ): Promise<{ deleted: number; alreadyAbsent: number }>;
 
     /**
      * Multiple subscriptions on the same name run independently. There
@@ -82,7 +114,16 @@ Plugin.prototype.put = async function (
   id: string,
   payload: unknown,
 ): Promise<void> {
-  await this.collectionPut(id, name, payload);
+  await this.collectionPut([{ id, payload }], name);
+};
+
+Plugin.prototype.putMany = async function (
+  name: string,
+  entries: CollectionPutEntry[],
+): Promise<number> {
+  if (entries.length === 0) return 0;
+  const res = await this.collectionPut(entries, name);
+  return res?.count ?? 0;
 };
 
 Plugin.prototype.patch = async function (
@@ -94,8 +135,20 @@ Plugin.prototype.patch = async function (
 };
 
 Plugin.prototype.delete = async function (name: string, id: string): Promise<boolean> {
-  const res = await this.collectionDeleteRecord(id, name);
-  return res?.deleted ?? false;
+  const res = await this.collectionDeleteRecords([id], name);
+  return (res?.deleted ?? 0) > 0;
+};
+
+Plugin.prototype.deleteMany = async function (
+  name: string,
+  ids: string[],
+): Promise<{ deleted: number; alreadyAbsent: number }> {
+  if (ids.length === 0) return { deleted: 0, alreadyAbsent: 0 };
+  const res = await this.collectionDeleteRecords(ids, name);
+  return {
+    deleted: res?.deleted ?? 0,
+    alreadyAbsent: res?.already_absent ?? 0,
+  };
 };
 
 Plugin.prototype.subscribe = function (
