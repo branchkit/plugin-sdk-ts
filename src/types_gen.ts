@@ -821,6 +821,7 @@ export interface CollectionPushResponse {
 export interface CollectionPutRequest {
   entries: CollectionPutEntry[];
   name: string;
+  roles?: unknown;
 }
 
 export interface CollectionPutResponse {

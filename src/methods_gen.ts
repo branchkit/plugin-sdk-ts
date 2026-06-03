@@ -617,7 +617,7 @@ declare module "./plugin.js" {
     collectionOverride(action: string, collection: string, fields?: unknown, id?: string): Promise<void>;
     collectionPatch(fields: unknown, id: string, name: string): Promise<void>;
     collectionPush(data: unknown, name: string, label?: string, roles?: unknown): Promise<void>;
-    collectionPut(entries: CollectionPutEntry[], name: string): Promise<CollectionPutResponse>;
+    collectionPut(entries: CollectionPutEntry[], name: string, roles?: unknown): Promise<CollectionPutResponse>;
     collectionSetRecording(enabled: boolean, name: string): Promise<void>;
     collectionsList(kind?: string): Promise<CollectionsListSection[]>;
     commandsDelete(canonical: string): Promise<void>;
@@ -1392,12 +1392,13 @@ Plugin.prototype.collectionPush = async function(data: unknown, name: string, la
   );
 };
 
-Plugin.prototype.collectionPut = async function(entries: CollectionPutEntry[], name: string) {
+Plugin.prototype.collectionPut = async function(entries: CollectionPutEntry[], name: string, roles?: unknown) {
   const result = await this.call(
     MethodCollectionPut,
     {
       entries,
       name,
+      roles,
     },
   );
   return result as CollectionPutResponse;

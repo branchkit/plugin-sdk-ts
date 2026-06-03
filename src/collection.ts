@@ -44,6 +44,20 @@ declare module "./plugin.js" {
     putMany(name: string, entries: CollectionPutEntry[]): Promise<number>;
 
     /**
+     * Bulk upsert with optional per-payload-field display roles. Used
+     * by plugins that auto-register dynamic collections and want the
+     * discovery HUD / Settings UI to know which payload field is the
+     * subtitle, primary label, etc. Roles persist on the collection
+     * — pass them on the first put to a new name, then omit on
+     * subsequent puts.
+     */
+    putManyWithRoles(
+      name: string,
+      entries: CollectionPutEntry[],
+      roles: Record<string, string>,
+    ): Promise<number>;
+
+    /**
      * Errors with NOT_FOUND if no record with that id exists, or
      * OPERATION_NOT_PERMITTED on collections the state forbids
      * patching (e.g., log-shaped, or gate-feed during the state
@@ -123,6 +137,16 @@ Plugin.prototype.putMany = async function (
 ): Promise<number> {
   if (entries.length === 0) return 0;
   const res = await this.collectionPut(entries, name);
+  return res?.count ?? 0;
+};
+
+Plugin.prototype.putManyWithRoles = async function (
+  name: string,
+  entries: CollectionPutEntry[],
+  roles: Record<string, string>,
+): Promise<number> {
+  if (entries.length === 0) return 0;
+  const res = await this.collectionPut(entries, name, roles);
   return res?.count ?? 0;
 };
 
