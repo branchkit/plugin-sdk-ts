@@ -431,8 +431,15 @@ export interface MenuItem {
 
 /**
  * How contributions to a shared store are merged when read.
+ * 
+ * `Keyed` was removed in Phase 3d of the collection-primitive
+ * unification — it had no legitimate multi-contributor users in
+ * practice; the implicit `Preset::Data` default flipped to
+ * `Authoritative` (matches the dominant single-writer pattern).
+ * `Collect` remains for genuine multi-contributor pooling (keybinds,
+ * `Preset::Tag` multi-cardinality tag collections).
  */
-export type MergeStrategy = "authoritative" | "collect" | "keyed";
+export type MergeStrategy = "authoritative" | "collect";
 
 export interface NetworkInterface {
   display_name: string;
