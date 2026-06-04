@@ -128,7 +128,7 @@ Plugin.prototype.put = async function (
   id: string,
   payload: unknown,
 ): Promise<void> {
-  await this.collectionPut([{ id, payload }], name);
+  await this.collectionPut(name, [{ id, payload }]);
 };
 
 Plugin.prototype.putMany = async function (
@@ -136,7 +136,7 @@ Plugin.prototype.putMany = async function (
   entries: CollectionPutEntry[],
 ): Promise<number> {
   if (entries.length === 0) return 0;
-  const res = await this.collectionPut(entries, name);
+  const res = await this.collectionPut(name, entries);
   return res?.count ?? 0;
 };
 
@@ -146,7 +146,7 @@ Plugin.prototype.putManyWithRoles = async function (
   roles: Record<string, string>,
 ): Promise<number> {
   if (entries.length === 0) return 0;
-  const res = await this.collectionPut(entries, name, roles);
+  const res = await this.collectionPut(name, entries, roles);
   return res?.count ?? 0;
 };
 
@@ -159,7 +159,7 @@ Plugin.prototype.patch = async function (
 };
 
 Plugin.prototype.delete = async function (name: string, id: string): Promise<boolean> {
-  const res = await this.collectionDeleteRecords([id], name);
+  const res = await this.collectionDeleteRecords(name, [id]);
   return (res?.deleted ?? 0) > 0;
 };
 
@@ -168,7 +168,7 @@ Plugin.prototype.deleteMany = async function (
   ids: string[],
 ): Promise<{ deleted: number; alreadyAbsent: number }> {
   if (ids.length === 0) return { deleted: 0, alreadyAbsent: 0 };
-  const res = await this.collectionDeleteRecords(ids, name);
+  const res = await this.collectionDeleteRecords(name, ids);
   return {
     deleted: res?.deleted ?? 0,
     alreadyAbsent: res?.already_absent ?? 0,
