@@ -726,7 +726,7 @@ export interface CollectionDeleteLogEntryResponse {
 }
 
 export interface CollectionDeleteRecordsRequest {
-  ids: string[];
+  ids?: string[];
   name: string;
 }
 
@@ -814,19 +814,8 @@ export interface CollectionPatchResponse {
   ok: boolean;
 }
 
-export interface CollectionPushRequest {
-  data: unknown;
-  label?: string;
-  name: string;
-  roles?: unknown;
-}
-
-export interface CollectionPushResponse {
-  ok: boolean;
-}
-
 export interface CollectionPutRequest {
-  entries: CollectionPutEntry[];
+  entries?: CollectionPutEntry[];
   name: string;
   roles?: unknown;
 }

@@ -24,7 +24,6 @@ export const MethodCollectionList = "collection.list" as const; // since 0.1.0
 export const MethodCollectionListLog = "collection.list_log" as const; // since 0.1.0
 export const MethodCollectionOverride = "collection.override" as const; // since 0.1.0
 export const MethodCollectionPatch = "collection.patch" as const; // since 0.1.0
-export const MethodCollectionPush = "collection.push" as const; // since 0.1.0
 export const MethodCollectionPut = "collection.put" as const; // since 0.1.0
 export const MethodCollectionSetRecording = "collection.set_recording" as const; // since 0.1.0
 export const MethodCollectionsList = "collections.list" as const; // since 0.1.0

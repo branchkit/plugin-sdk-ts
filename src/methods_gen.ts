@@ -23,7 +23,6 @@ import {
   MethodCollectionListLog,
   MethodCollectionOverride,
   MethodCollectionPatch,
-  MethodCollectionPush,
   MethodCollectionPut,
   MethodCollectionSetRecording,
   MethodCollectionsList,
@@ -607,7 +606,7 @@ declare module "./plugin.js" {
     collectionCount(name: string): Promise<CollectionCountResponse>;
     collectionDelete(name: string): Promise<void>;
     collectionDeleteLogEntry(id: string, name: string): Promise<CollectionDeleteLogEntryResponse>;
-    collectionDeleteRecords(ids: string[], name: string): Promise<CollectionDeleteRecordsResponse>;
+    collectionDeleteRecords(name: string, ids?: string[]): Promise<CollectionDeleteRecordsResponse>;
     collectionFetch(id: string, name: string): Promise<CollectionFetchResponse>;
     collectionGet(name: string): Promise<CollectionGetResponse>;
     collectionGetLogEntry(id: string, name: string): Promise<CollectionGetLogEntryResponse>;
@@ -616,8 +615,7 @@ declare module "./plugin.js" {
     collectionListLog(name: string, opts?: LogListOpts): Promise<CollectionListLogResponse>;
     collectionOverride(action: string, collection: string, fields?: unknown, id?: string): Promise<void>;
     collectionPatch(fields: unknown, id: string, name: string): Promise<void>;
-    collectionPush(data: unknown, name: string, label?: string, roles?: unknown): Promise<void>;
-    collectionPut(entries: CollectionPutEntry[], name: string, roles?: unknown): Promise<CollectionPutResponse>;
+    collectionPut(name: string, entries?: CollectionPutEntry[], roles?: unknown): Promise<CollectionPutResponse>;
     collectionSetRecording(enabled: boolean, name: string): Promise<void>;
     collectionsList(kind?: string): Promise<CollectionsListSection[]>;
     commandsDelete(canonical: string): Promise<void>;
@@ -1282,12 +1280,12 @@ Plugin.prototype.collectionDeleteLogEntry = async function(id: string, name: str
   return result as CollectionDeleteLogEntryResponse;
 };
 
-Plugin.prototype.collectionDeleteRecords = async function(ids: string[], name: string) {
+Plugin.prototype.collectionDeleteRecords = async function(name: string, ids?: string[]) {
   const result = await this.call(
     MethodCollectionDeleteRecords,
     {
-      ids,
       name,
+      ids,
     },
   );
   return result as CollectionDeleteRecordsResponse;
@@ -1380,24 +1378,12 @@ Plugin.prototype.collectionPatch = async function(fields: unknown, id: string, n
   );
 };
 
-Plugin.prototype.collectionPush = async function(data: unknown, name: string, label?: string, roles?: unknown) {
-  const result = await this.call(
-    MethodCollectionPush,
-    {
-      data,
-      name,
-      label,
-      roles,
-    },
-  );
-};
-
-Plugin.prototype.collectionPut = async function(entries: CollectionPutEntry[], name: string, roles?: unknown) {
+Plugin.prototype.collectionPut = async function(name: string, entries?: CollectionPutEntry[], roles?: unknown) {
   const result = await this.call(
     MethodCollectionPut,
     {
-      entries,
       name,
+      entries,
       roles,
     },
   );
