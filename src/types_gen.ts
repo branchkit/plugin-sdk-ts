@@ -171,6 +171,19 @@ export interface CommandRowData {
   variants: string[];
 }
 
+export interface CommandSpec {
+  action?: unknown;
+  cancels_bridge: boolean;
+  category?: string;
+  clears_tags: string[];
+  description?: string;
+  pattern: unknown[];
+  requires_tags: string[];
+  sets_on_partial: string[];
+  sets_tags: string[];
+  variants: unknown[];
+}
+
 export interface ContactInfo {
   email?: string;
   name: string;
