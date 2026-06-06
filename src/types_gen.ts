@@ -1599,6 +1599,14 @@ export interface NativeBrightnessResponse {
   brightness: number;
 }
 
+export interface NativeBundleForRemotePortRequest {
+  remote_port: number;
+}
+
+export interface NativeBundleForRemotePortResponse {
+  bundle_id: string;
+}
+
 export interface NativeCalendarEventsRangeRequest {
   end: string;
   start: string;

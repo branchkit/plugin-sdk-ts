@@ -131,6 +131,7 @@ export const MethodNativeBoldTextEnabled = "native.bold_text_enabled" as const; 
 export const MethodNativeBootVolume = "native.boot_volume" as const; // since 0.1.0
 export const MethodNativeBorders = "native.borders" as const; // since 0.1.0
 export const MethodNativeBrightness = "native.brightness" as const; // since 0.1.0
+export const MethodNativeBundleForRemotePort = "native.bundle_for_remote_port" as const; // since 0.1.0
 export const MethodNativeCalendarEventsRange = "native.calendar_events_range" as const; // since 0.1.0
 export const MethodNativeCalendarEventsToday = "native.calendar_events_today" as const; // since 0.1.0
 export const MethodNativeCalendarPermission = "native.calendar_permission" as const; // since 0.1.0
