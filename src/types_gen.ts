@@ -419,7 +419,7 @@ export interface LoginItem {
 
 /**
  * Which category the matcher's tiebreaker chose. Mirrors the four
- * branches of `find_match_at_start_impl`: gated Completes win over
+ * branches of `find_match_at_start_with_telemetry`: gated Completes win over
  * ungated Completes (scoped beats unscoped within the gated set), an
  * ungated Complete loses if any gated command had a Partial in flight
  * (`suppress_ungated`), and `NoMatch` is the fall-through.
