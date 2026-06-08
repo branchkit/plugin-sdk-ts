@@ -594,6 +594,17 @@ export interface SystemAppearance {
   reduce_transparency: boolean;
 }
 
+export interface TiedCandidate {
+  action?: unknown;
+  args: Record<string, unknown>;
+  clears_tags: string[];
+  consumed_count: number;
+  label: string;
+  owner_plugin: string;
+  requires_tags: string[];
+  sets_tags: string[];
+}
+
 export interface TileableEntry {
   tileable: boolean;
   window_id: string;
@@ -916,6 +927,7 @@ export interface CommandsResolveResponse {
   scoped_tags?: string[];
   sets_tags: string[];
   telemetry: ResolveTelemetry;
+  tied_candidates?: TiedCandidate[];
   title: string;
   trace_id?: string;
 }
