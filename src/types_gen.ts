@@ -904,6 +904,7 @@ export interface CommandsResetResponse {
 export interface CommandsResolveRequest {
   active_tags?: unknown;
   collections?: unknown;
+  prefer_owner?: string;
   require_tag?: string;
   session_id?: string;
   source?: string;
