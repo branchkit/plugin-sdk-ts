@@ -1,5 +1,13 @@
 import { describe, test, expect } from "bun:test";
-import { command, word, oneOf, capture, text } from "../commands.js";
+import {
+  command,
+  word,
+  oneOf,
+  capture,
+  text,
+  pushCommandSpecs,
+} from "../commands.js";
+import type { Plugin } from "../plugin.js";
 
 // The builder's job is to produce the exact wire JSON the actuator parses.
 // JSON.stringify round-trips here mirror what pushCommandSpecs sends.
@@ -57,5 +65,34 @@ describe("command builder", () => {
     );
     expect(m.sets_tags).toEqual(["plugin.tiling.snap_mode"]);
     expect(m.cancels_bridge).toBe(true);
+  });
+
+  test("pushCommandSpecs coerces null array fields to [] (Go parity)", async () => {
+    let sentBody: { commands: Record<string, unknown>[] } | undefined;
+    const fakePlugin = {
+      call: async (_method: string, body: { commands: Record<string, unknown>[] }) => {
+        sentBody = body;
+        return { count: 1 };
+      },
+    } as unknown as Plugin;
+
+    // A spec as loadCommands would produce from a file with explicit nulls.
+    const raw = {
+      pattern: ["x"],
+      action: { type: "noop" },
+      requires_tags: null,
+      sets_tags: null,
+      clears_tags: null,
+      sets_on_partial: null,
+      variants: null,
+    } as unknown as Parameters<typeof pushCommandSpecs>[1][number];
+
+    await pushCommandSpecs(fakePlugin, [raw]);
+    const c = sentBody!.commands[0];
+    expect(c.requires_tags).toEqual([]);
+    expect(c.sets_tags).toEqual([]);
+    expect(c.clears_tags).toEqual([]);
+    expect(c.sets_on_partial).toEqual([]);
+    expect(c.variants).toEqual([]);
   });
 });

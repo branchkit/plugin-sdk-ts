@@ -254,6 +254,29 @@ export function loadCommands(): CommandSpec[] {
   return raw as unknown as CommandSpec[];
 }
 
+// The actuator's command parser rejects an explicit JSON `null` for these
+// array fields (it accepts an array or an absent field). The builder defaults
+// them to [], but a spec from loadCommands carries whatever the file had — so
+// coerce null/undefined to [] before the wire. Mirrors Go's
+// normalizeCommandSpec; keeps the two SDKs at parity for hand-authored files.
+const COMMAND_SPEC_ARRAY_FIELDS = [
+  "requires_tags",
+  "sets_tags",
+  "clears_tags",
+  "sets_on_partial",
+  "variants",
+] as const;
+
+function normalizeCommandSpec(spec: CommandSpec): CommandSpec {
+  const out: Record<string, unknown> = { ...spec };
+  for (const field of COMMAND_SPEC_ARRAY_FIELDS) {
+    if (out[field] == null) {
+      out[field] = [];
+    }
+  }
+  return out as unknown as CommandSpec;
+}
+
 /**
  * Register a built/loaded set of commands with the actuator via commands.push
  * (replace-per-plugin semantics). Sibling to PushCommands, which loads and
@@ -264,7 +287,7 @@ export async function pushCommandSpecs(
   specs: CommandSpec[],
 ): Promise<number> {
   const resp = await plugin.call<{ count: number }>("commands.push", {
-    commands: specs,
+    commands: specs.map(normalizeCommandSpec),
   });
   return resp.count;
 }
