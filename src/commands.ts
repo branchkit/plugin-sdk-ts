@@ -1,6 +1,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import type { Plugin } from "./plugin.js";
+import type { CommandSpec } from "./types_gen.js";
 
 /**
  * Context file format: a context-scoped command file.
@@ -102,4 +103,168 @@ function mergeRequiresTags(
     ...cmd,
     requires_tags: [...contextTags, ...existing],
   };
+}
+
+// =============================================================================
+// Command authoring builder.
+//
+// Codegen emits `CommandSpec` with `unknown` `pattern` / `action` fields (the
+// same quirk the `listOpts` builder smooths over), so constructing a command
+// by hand means writing JSON literals inline. This builder produces a
+// `CommandSpec` with first-class pattern slots — and exposes the actuator's
+// alternatives capability (`oneOf`) that no authoring surface reached before.
+//
+//   command(oneOf("refresh", "reload"))
+//     .action("browser.refresh")
+//     .requiresTags("plugin.browser.active")
+//     .category("Navigation")
+//     .build();
+//
+//   command(word("focus"), capture("app", "apps"))
+//     .action("input.focus_app")
+//     .build();
+//
+// Pair with loadCommands (file → CommandSpec[], no push) and pushCommandSpecs
+// (typed push) to union static, file-authored commands with built dynamic
+// ones and push them in a single call.
+// =============================================================================
+
+/** One position in a command pattern: a literal word or an alternatives group. */
+export type PatternSlot = string | string[];
+
+/** A literal spoken word. */
+export function word(w: string): PatternSlot {
+  return w;
+}
+
+/** An alternatives slot: any of the given words matches, sharing one action. */
+export function oneOf(...alts: string[]): PatternSlot {
+  return alts;
+}
+
+/**
+ * A list-capture token `<name:collection>` whose matched value binds to
+ * `name`. An empty name uses the collection as the binding name.
+ */
+export function capture(name: string, collection: string): PatternSlot {
+  return name ? `<${name}:${collection}>` : `<${collection}>`;
+}
+
+/** A free-text capture token `<name:text>` (or `<text>` when name is omitted). */
+export function text(name?: string): PatternSlot {
+  return name ? `<${name}:text>` : "<text>";
+}
+
+/** Accumulates a CommandSpec via chained setters; finish with build(). */
+export class CommandBuilder {
+  private spec: CommandSpec;
+
+  constructor(slots: PatternSlot[]) {
+    this.spec = {
+      pattern: slots,
+      cancels_bridge: false,
+      requires_tags: [],
+      sets_tags: [],
+      clears_tags: [],
+      sets_on_partial: [],
+      variants: [],
+    };
+  }
+
+  /**
+   * Set the action fired on match. `type` is the action's type (a built-in
+   * like "key" or a dotted plugin action like "browser.refresh"); optional
+   * `params` are merged into the action object.
+   */
+  action(type: string, params?: Record<string, unknown>): this {
+    this.spec.action = { type, ...(params ?? {}) };
+    return this;
+  }
+
+  requiresTags(...tags: string[]): this {
+    this.spec.requires_tags.push(...tags);
+    return this;
+  }
+
+  setsTags(...tags: string[]): this {
+    this.spec.sets_tags.push(...tags);
+    return this;
+  }
+
+  clearsTags(...tags: string[]): this {
+    this.spec.clears_tags.push(...tags);
+    return this;
+  }
+
+  setsOnPartial(...tags: string[]): this {
+    this.spec.sets_on_partial.push(...tags);
+    return this;
+  }
+
+  cancelsBridge(): this {
+    this.spec.cancels_bridge = true;
+    return this;
+  }
+
+  category(c: string): this {
+    this.spec.category = c;
+    return this;
+  }
+
+  description(d: string): this {
+    this.spec.description = d;
+    return this;
+  }
+
+  build(): CommandSpec {
+    return this.spec;
+  }
+}
+
+/** Start a command builder with the given pattern slots. */
+export function command(...slots: PatternSlot[]): CommandBuilder {
+  return new CommandBuilder(slots);
+}
+
+/**
+ * Load commands.json and any context files from commands/ into CommandSpec[]
+ * WITHOUT pushing. Splitting load from push (vs. PushCommands, which does
+ * both) lets a plugin union file-authored static commands with built dynamic
+ * ones and push them in a single pushCommandSpecs call.
+ */
+export function loadCommands(): CommandSpec[] {
+  const pluginDir = process.env.BRANCHKIT_PLUGIN_DIR;
+  if (!pluginDir) return [];
+
+  const raw: Record<string, unknown>[] = [];
+  raw.push(...loadCommandFile(join(pluginDir, "commands.json")));
+
+  let entries: string[];
+  try {
+    entries = readdirSync(join(pluginDir, "commands"))
+      .filter((e) => e.endsWith(".json"))
+      .sort();
+  } catch {
+    entries = [];
+  }
+  for (const entry of entries) {
+    raw.push(...loadContextFile(join(pluginDir, "commands", entry)));
+  }
+
+  return raw as unknown as CommandSpec[];
+}
+
+/**
+ * Register a built/loaded set of commands with the actuator via commands.push
+ * (replace-per-plugin semantics). Sibling to PushCommands, which loads and
+ * pushes files in one step. Returns the number of command variants registered.
+ */
+export async function pushCommandSpecs(
+  plugin: Plugin,
+  specs: CommandSpec[],
+): Promise<number> {
+  const resp = await plugin.call<{ count: number }>("commands.push", {
+    commands: specs,
+  });
+  return resp.count;
 }

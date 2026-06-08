@@ -1,6 +1,17 @@
 export { Plugin, RpcCallError, apiVersion } from "./plugin.js";
 export { Log } from "./log.js";
-export { PushCommands } from "./commands.js";
+export {
+  PushCommands,
+  command,
+  CommandBuilder,
+  word,
+  oneOf,
+  capture,
+  text,
+  loadCommands,
+  pushCommandSpecs,
+  type PatternSlot,
+} from "./commands.js";
 export { ListenLocal, Listener, type ConnectInfo } from "./listen.js";
 export { UpstreamClient } from "./upstream.js";
 export * from "./contracts_gen.js";
