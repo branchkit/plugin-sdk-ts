@@ -13,7 +13,6 @@ export const MethodCalibrationTrialBegin = "calibration.trial_begin" as const; /
 export const MethodCalibrationTrialEnd = "calibration.trial_end" as const; // since 0.1.0
 export const MethodCollectionAppend = "collection.append" as const; // since 0.1.0
 export const MethodCollectionCount = "collection.count" as const; // since 0.1.0
-export const MethodCollectionDelete = "collection.delete" as const; // since 0.1.0
 export const MethodCollectionDeleteLogEntry = "collection.delete_log_entry" as const; // since 0.1.0
 export const MethodCollectionDeleteRecords = "collection.delete_records" as const; // since 0.1.0
 export const MethodCollectionFetch = "collection.fetch" as const; // since 0.1.0

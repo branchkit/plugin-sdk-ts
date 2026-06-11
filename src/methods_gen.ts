@@ -12,7 +12,6 @@ import {
   MethodCalibrationTrialEnd,
   MethodCollectionAppend,
   MethodCollectionCount,
-  MethodCollectionDelete,
   MethodCollectionDeleteLogEntry,
   MethodCollectionDeleteRecords,
   MethodCollectionFetch,
@@ -605,7 +604,6 @@ declare module "./plugin.js" {
     calibrationTrialEnd(trialId: string): Promise<CalibrationTrialEndResponse>;
     collectionAppend(name: string, payload: unknown): Promise<LogEntry | undefined>;
     collectionCount(name: string): Promise<CollectionCountResponse>;
-    collectionDelete(name: string): Promise<void>;
     collectionDeleteLogEntry(id: string, name: string): Promise<CollectionDeleteLogEntryResponse>;
     collectionDeleteRecords(name: string, ids?: string[]): Promise<CollectionDeleteRecordsResponse>;
     collectionFetch(id: string, name: string): Promise<CollectionFetchResponse>;
@@ -1260,15 +1258,6 @@ Plugin.prototype.collectionCount = async function(name: string) {
     },
   );
   return result as CollectionCountResponse;
-};
-
-Plugin.prototype.collectionDelete = async function(name: string) {
-  const result = await this.call(
-    MethodCollectionDelete,
-    {
-      name,
-    },
-  );
 };
 
 Plugin.prototype.collectionDeleteLogEntry = async function(id: string, name: string) {

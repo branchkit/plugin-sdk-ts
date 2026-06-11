@@ -139,6 +139,8 @@ export interface CollectionPutEntry {
 export interface CollectionRecord {
   id: string;
   payload?: unknown;
+  revision: number;
+  timestamp_ms: number;
 }
 
 export interface CollectionsListItem {
@@ -730,14 +732,6 @@ export interface CollectionCountRequest {
 
 export interface CollectionCountResponse {
   count: number;
-}
-
-export interface CollectionDeleteRequest {
-  name: string;
-}
-
-export interface CollectionDeleteResponse {
-  ok: boolean;
 }
 
 export interface CollectionDeleteLogEntryRequest {
