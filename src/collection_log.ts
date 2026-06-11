@@ -6,7 +6,22 @@
 // and the parallel Go SDK helpers.
 
 import { Plugin } from "./plugin.js";
-import type { LogEntry, LogListOpts } from "./types_gen.js";
+// Side-effect import: the log sugar delegates to the unified-verb
+// prototype methods (get/listPage/delete) that collection.ts installs.
+import "./collection.js";
+import type { CollectionRecord, ListOpts, LogEntry } from "./types_gen.js";
+
+/**
+ * Filters for listLog / listLogPage. SDK-level type — the wire carries
+ * the unified ListOpts (the former collection.list_log op was folded
+ * into collection.list); the fields are identical by design.
+ */
+export interface LogListOpts {
+  since_ms?: number;
+  until_ms?: number;
+  limit?: number;
+  cursor?: string;
+}
 
 /**
  * Sentinel for the "RECORDING_DISABLED" wire error returned by the
@@ -101,51 +116,64 @@ Plugin.prototype.appendEntry = async function (
   }
 };
 
+/**
+ * Project the unified record envelope onto the log view. Lossless: log
+ * records carry their append time in timestamp_ms.
+ */
+function recordToLogEntry(r: CollectionRecord): LogEntry {
+  return { id: r.id, timestamp_ms: r.timestamp_ms, payload: r.payload };
+}
+
+/** Map log opts onto the unified list opts — field-identical by design. */
+function logOptsToListOpts(o?: LogListOpts): ListOpts | undefined {
+  if (!o) return undefined;
+  return { since_ms: o.since_ms, until_ms: o.until_ms, limit: o.limit, cursor: o.cursor };
+}
+
+// Sugar over the unified verbs — the wire surface is collection.list /
+// collection.fetch / collection.delete_records; log-shaped reads are the
+// same list with time-window opts.
+
 Plugin.prototype.listLog = async function (
   name: string,
   opts?: LogListOpts,
 ): Promise<LogEntry[]> {
-  const res = await this.collectionListLog(name, opts);
-  return res?.entries ?? [];
+  const { entries } = await this.listLogPage(name, opts);
+  return entries;
 };
 
 Plugin.prototype.listLogPage = async function (
   name: string,
   opts?: LogListOpts,
 ): Promise<{ entries: LogEntry[]; total: number }> {
-  const res = await this.collectionListLog(name, opts);
-  return { entries: res?.entries ?? [], total: res?.total ?? 0 };
+  const { records, total } = await this.listPage(name, logOptsToListOpts(opts));
+  return { entries: records.map(recordToLogEntry), total };
 };
 
 Plugin.prototype.getLogEntry = async function (
   name: string,
   id: string,
 ): Promise<LogEntry | undefined> {
-  const res = await this.collectionGetLogEntry(id, name);
-  // res.entry is typed as `unknown` by codegen because the Rust type is
-  // Option<LogEntry> and the TS emitter routes Option<T> through unknown.
-  // null/undefined → entry not found.
-  if (!res || res.entry == null) return undefined;
-  return res.entry as LogEntry;
+  const rec = await this.get(name, id);
+  return rec ? recordToLogEntry(rec) : undefined;
 };
 
 Plugin.prototype.deleteLogEntry = async function (
   name: string,
   id: string,
 ): Promise<boolean> {
-  const res = await this.collectionDeleteLogEntry(id, name);
-  return res?.deleted ?? false;
+  return this.delete(name, id);
 };
 
 Plugin.prototype.setCollectionRecording = async function (
   name: string,
   enabled: boolean,
 ): Promise<void> {
-  await this.collectionSetRecording(enabled, name);
+  await this.privacySetRecording(enabled, name);
 };
 
 Plugin.prototype.getCollectionRecording = async function (name: string): Promise<boolean> {
-  const res = await this.collectionGetRecording(name);
+  const res = await this.privacyGetRecording(name);
   return res?.enabled ?? false;
 };
 

@@ -69,21 +69,22 @@ describe("collection_log helpers", () => {
   });
 
   test("listLog returns entries in actuator order", async () => {
-    const { plugin } = fakePlugin(() => ({
-      entries: [
-        { id: "01H_B", timestamp_ms: 200, payload: {} },
-        { id: "01H_A", timestamp_ms: 100, payload: {} },
+    const { plugin, inbox } = fakePlugin(() => ({
+      records: [
+        { id: "01H_B", timestamp_ms: 200, revision: 1, payload: {} },
+        { id: "01H_A", timestamp_ms: 100, revision: 1, payload: {} },
       ],
       total: 2,
     }));
     const entries = await plugin.listLog("any");
     expect(entries.length).toBe(2);
     expect(entries[0]?.id).toBe("01H_B");
+    expect(inbox[0]?.method).toBe("collection.list");
   });
 
   test("listLogPage exposes total separately from page", async () => {
     const { plugin } = fakePlugin(() => ({
-      entries: [{ id: "01H_one", timestamp_ms: 1, payload: {} }],
+      records: [{ id: "01H_one", timestamp_ms: 1, revision: 1, payload: {} }],
       total: 17,
     }));
     const page = await plugin.listLogPage("any", logListOpts({ limit: 1 }));
@@ -92,14 +93,14 @@ describe("collection_log helpers", () => {
   });
 
   test("getLogEntry returns undefined when entry is null", async () => {
-    const { plugin } = fakePlugin(() => ({ entry: null }));
+    const { plugin } = fakePlugin(() => ({ record: null }));
     const entry = await plugin.getLogEntry("any", "missing");
     expect(entry).toBeUndefined();
   });
 
   test("getLogEntry returns typed entry when present", async () => {
     const { plugin } = fakePlugin(() => ({
-      entry: { id: "01H_typed", timestamp_ms: 42, payload: { k: "v" } },
+      record: { id: "01H_typed", timestamp_ms: 42, revision: 1, payload: { k: "v" } },
     }));
     const entry = await plugin.getLogEntry("any", "01H_typed");
     expect(entry).toBeDefined();
@@ -108,14 +109,14 @@ describe("collection_log helpers", () => {
   });
 
   test("deleteLogEntry returns the deleted boolean", async () => {
-    const { plugin } = fakePlugin(() => ({ deleted: true }));
+    const { plugin } = fakePlugin(() => ({ deleted: 1, already_absent: 0 }));
     expect(await plugin.deleteLogEntry("any", "01H")).toBe(true);
   });
 
   test("setCollectionRecording forwards enabled flag", async () => {
     const { plugin, inbox } = fakePlugin(() => undefined);
     await plugin.setCollectionRecording("any", true);
-    expect(inbox[0]?.method).toBe("collection.set_recording");
+    expect(inbox[0]?.method).toBe("privacy.set_recording");
     expect((inbox[0]?.params as { enabled: boolean }).enabled).toBe(true);
   });
 

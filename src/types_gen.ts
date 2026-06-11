@@ -405,13 +405,6 @@ export interface LogEntry {
   timestamp_ms: number;
 }
 
-export interface LogListOpts {
-  cursor?: string;
-  limit?: number;
-  since_ms?: number;
-  until_ms?: number;
-}
-
 export interface LoginItem {
   bundle_id?: string;
   hidden: boolean;
@@ -734,15 +727,6 @@ export interface CollectionCountResponse {
   count: number;
 }
 
-export interface CollectionDeleteLogEntryRequest {
-  id: string;
-  name: string;
-}
-
-export interface CollectionDeleteLogEntryResponse {
-  deleted: boolean;
-}
-
 export interface CollectionDeleteRecordsRequest {
   ids?: string[];
   name: string;
@@ -774,23 +758,6 @@ export interface CollectionGetResponse {
   name: string;
 }
 
-export interface CollectionGetLogEntryRequest {
-  id: string;
-  name: string;
-}
-
-export interface CollectionGetLogEntryResponse {
-  entry?: unknown;
-}
-
-export interface CollectionGetRecordingRequest {
-  name: string;
-}
-
-export interface CollectionGetRecordingResponse {
-  enabled: boolean;
-}
-
 export interface CollectionListRequest {
   name: string;
   opts?: ListOpts;
@@ -799,27 +766,6 @@ export interface CollectionListRequest {
 export interface CollectionListResponse {
   records: CollectionRecord[];
   total: number;
-}
-
-export interface CollectionListLogRequest {
-  name: string;
-  opts?: LogListOpts;
-}
-
-export interface CollectionListLogResponse {
-  entries: LogEntry[];
-  total: number;
-}
-
-export interface CollectionOverrideRequest {
-  action: string;
-  collection: string;
-  fields?: unknown;
-  id?: string;
-}
-
-export interface CollectionOverrideResponse {
-  ok: boolean;
 }
 
 export interface CollectionPatchRequest {
@@ -840,15 +786,6 @@ export interface CollectionPutRequest {
 
 export interface CollectionPutResponse {
   count: number;
-  ok: boolean;
-}
-
-export interface CollectionSetRecordingRequest {
-  enabled: boolean;
-  name: string;
-}
-
-export interface CollectionSetRecordingResponse {
   ok: boolean;
 }
 
@@ -4076,6 +4013,17 @@ export interface NativeZoomEnabledResponse {
   enabled: boolean;
 }
 
+export interface OverridesApplyRequest {
+  action: string;
+  collection: string;
+  fields?: unknown;
+  id?: string;
+}
+
+export interface OverridesApplyResponse {
+  ok: boolean;
+}
+
 export interface PipelinesGrammarResponse {
   words: string[];
 }
@@ -4122,6 +4070,23 @@ export interface PluginDebugRequest {
 }
 
 export interface PluginDebugResponse {
+  ok: boolean;
+}
+
+export interface PrivacyGetRecordingRequest {
+  name: string;
+}
+
+export interface PrivacyGetRecordingResponse {
+  enabled: boolean;
+}
+
+export interface PrivacySetRecordingRequest {
+  enabled: boolean;
+  name: string;
+}
+
+export interface PrivacySetRecordingResponse {
   ok: boolean;
 }
 
