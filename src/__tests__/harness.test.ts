@@ -18,14 +18,20 @@ describe("Harness", () => {
     }
   });
 
-  test("simulate command match", async () => {
+  test("simulate command tie surfaced", async () => {
     const h = await Harness.start(HELLOWORLD_DIR);
     try {
-      const result = await h.mustSimulateCommand("hello branchkit");
-      expect(result.actionType()).toBe("helloworld.greet");
-
-      const params = result.actionParams<{ name: string }>();
-      expect(params.name).toBe("BranchKit");
+      // "hello branchkit" completes BOTH helloworld commands at the same
+      // length (the ["hello","branchkit"] literal and the ["hello","<text>"]
+      // capture). Equally-eligible same-length candidates are a genuine tie:
+      // the matcher declines to act and surfaces the tied set for
+      // disambiguation (DESIGN_MATCHER_COLLISION_RESOLUTION step 2).
+      const result = await h.simulateCommand("hello branchkit");
+      expect(result.matched).toBe(false);
+      expect(result.tied_candidates?.length).toBe(2);
+      for (const c of result.tied_candidates ?? []) {
+        expect(c.owner_plugin).toBe("helloworld");
+      }
     } finally {
       await h.stop();
     }

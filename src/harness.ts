@@ -24,15 +24,30 @@ export interface ActionResponse {
   result?: unknown;
 }
 
+/** One command in a surfaced tie. */
+export interface TiedCandidate {
+  owner_plugin: string;
+  label: string;
+}
+
 export class SimulateResult {
   matched!: boolean;
   action?: unknown;
-  args?: unknown[];
+  /** Captured pattern arguments, keyed by capture name (e.g. `{text: "world"}` for a `<text>` capture). */
+  args?: Record<string, unknown>;
   consumed_count?: number;
   sets_tags?: string[];
   clears_tags?: string[];
   owner_plugin?: string;
   action_response?: ActionResponse;
+  /**
+   * Populated when the matcher declined to act because 2+ equally-eligible
+   * commands tied on the phrase (`matched` stays false; in production the
+   * voice plugin opens the disambiguation HUD). Overlapping patterns like a
+   * literal and a same-length capture from the same plugin tie too — see
+   * DESIGN_MATCHER_COLLISION_RESOLUTION section 8.
+   */
+  tied_candidates?: TiedCandidate[];
 
   actionType(): string {
     if (!this.action || typeof this.action !== "object") return "";
