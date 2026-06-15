@@ -4154,6 +4154,7 @@ export interface SettingsRulesCreateRequest {
 }
 
 export interface SettingsRulesCreateResponse {
+  conflict?: string;
   ok: boolean;
 }
 
@@ -4171,6 +4172,7 @@ export interface SettingsRulesUpdateRequest {
 }
 
 export interface SettingsRulesUpdateResponse {
+  conflict?: string;
   ok: boolean;
 }
 
