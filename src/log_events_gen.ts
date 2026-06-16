@@ -52,6 +52,7 @@ export const LogEventRpcOutboundCallCompleted = "rpc.outbound_call_completed" as
 export const LogEventRpcOutboundCallSent = "rpc.outbound_call_sent" as const;
 export const LogEventRpcOutboundNotify = "rpc.outbound_notify" as const;
 export const LogEventSessionControlMessage = "session.control_message" as const;
+export const LogEventStageDiagnostic = "stage.diagnostic" as const;
 export const LogEventStateRetentionSwept = "state.retention_swept" as const;
 export const LogEventStateTagCleared = "state.tag_cleared" as const;
 export const LogEventStateTagLifecycleClear = "state.tag_lifecycle_clear" as const;
@@ -124,6 +125,7 @@ export const LogEventRegistry: Record<string, LogEventMeta> = {
     "rpc.outbound_call_sent": { name: "rpc.outbound_call_sent", summary: "An actuator-to-plugin RPC call was sent (awaiting response).", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },
     "rpc.outbound_notify": { name: "rpc.outbound_notify", summary: "An actuator-to-plugin RPC notification (fire-and-forget) was sent.", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },
     "session.control_message": { name: "session.control_message", summary: "A control message was forwarded to the Swift host (HUD show, mode reset, etc.).", since: "0.1.0", source: "dispatch", severity: "info", redaction: "none" },
+    "stage.diagnostic": { name: "stage.diagnostic", summary: "A pipeline stage emitted a diagnostic line (e.g. a [PERF] latency measurement); correlated to the command via tr_ derived from the stage's session id.", since: "0.2.0", source: "generic", severity: "info", redaction: "none" },
     "state.retention_swept": { name: "state.retention_swept", summary: "Retention sweep removed expired records from a collection.", since: "0.1.0", source: "state", severity: "info", redaction: "none" },
     "state.tag_cleared": { name: "state.tag_cleared", summary: "One or more tags were cleared via a gate-shape collection mutation.", since: "0.1.0", source: "state", severity: "info", redaction: "none" },
     "state.tag_lifecycle_clear": { name: "state.tag_lifecycle_clear", summary: "Lifecycle policy cleared transient tags after a triggering event.", since: "0.1.0", source: "state", severity: "debug", redaction: "none" },
