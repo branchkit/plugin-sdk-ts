@@ -266,6 +266,7 @@ export interface DisplayRotation {
 }
 
 export interface EnumeratedCommand {
+  action: string;
   dynamic: boolean;
   dynamic_owner?: string;
   id: string;
