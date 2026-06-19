@@ -691,7 +691,8 @@ export interface CalibrationApplyRequest {
 
 export interface CalibrationApplyResponse {
   fixture_handle: string;
-  owner_plugin: string;
+  kind: string;
+  tags: string[];
 }
 
 export interface CalibrationRegisterFixtureHandleRequest {
