@@ -526,6 +526,7 @@ export interface ReminderItem {
 export interface ResolveTelemetry {
   gated_partial_seen: boolean;
   winner: MatchWinner;
+  winning_pattern?: string;
 }
 
 export interface RunningApp {
@@ -837,6 +838,7 @@ export interface CommandsResolveRequest {
   active_tags?: unknown;
   collections?: unknown;
   prefer_owner?: string;
+  preview?: boolean;
   require_tag?: string;
   session_id?: string;
   source?: string;

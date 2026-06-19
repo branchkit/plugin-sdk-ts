@@ -613,7 +613,7 @@ declare module "./plugin.js" {
     commandsList(): Promise<CommandsListResponse>;
     commandsPush(commands?: unknown): Promise<CommandsPushResponse>;
     commandsReset(canonical: string): Promise<void>;
-    commandsResolve(activeTags?: unknown, collections?: unknown, preferOwner?: string, requireTag?: string, sessionId?: string, source?: string, words?: string[]): Promise<CommandsResolveResponse>;
+    commandsResolve(activeTags?: unknown, collections?: unknown, preferOwner?: string, preview?: boolean, requireTag?: string, sessionId?: string, source?: string, words?: string[]): Promise<CommandsResolveResponse>;
     controlSignal(signal: string): Promise<void>;
     discoveryClosed(): Promise<void>;
     dispatch(action: unknown, sessionId?: string, traceId?: string): Promise<DispatchResponse>;
@@ -1368,13 +1368,14 @@ Plugin.prototype.commandsReset = async function(canonical: string) {
   );
 };
 
-Plugin.prototype.commandsResolve = async function(activeTags?: unknown, collections?: unknown, preferOwner?: string, requireTag?: string, sessionId?: string, source?: string, words?: string[]) {
+Plugin.prototype.commandsResolve = async function(activeTags?: unknown, collections?: unknown, preferOwner?: string, preview?: boolean, requireTag?: string, sessionId?: string, source?: string, words?: string[]) {
   const result = await this.call(
     MethodCommandsResolve,
     {
       active_tags: activeTags,
       collections,
       prefer_owner: preferOwner,
+      preview,
       require_tag: requireTag,
       session_id: sessionId,
       source,
