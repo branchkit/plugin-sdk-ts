@@ -164,6 +164,7 @@ export interface CommandRowData {
   canonical: string;
   category: string;
   clears_tags: string[];
+  description?: string;
   is_user: boolean;
   pattern: string;
   plugin_name: string;
