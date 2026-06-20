@@ -4025,6 +4025,7 @@ export interface OverridesApplyRequest {
   collection: string;
   fields?: unknown;
   id?: string;
+  new_id?: string;
 }
 
 export interface OverridesApplyResponse {

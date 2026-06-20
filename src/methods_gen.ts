@@ -1156,7 +1156,7 @@ declare module "./plugin.js" {
     nativeXcodeVersion(): Promise<NativeXcodeVersionResponse>;
     nativeZip(destination: string, source: string): Promise<void>;
     nativeZoomEnabled(): Promise<NativeZoomEnabledResponse>;
-    overridesApply(action: string, collection: string, fields?: unknown, id?: string): Promise<void>;
+    overridesApply(action: string, collection: string, fields?: unknown, id?: string, newId?: string): Promise<void>;
     pipelinesGrammar(): Promise<string[]>;
     pipelinesInject(eventType: string, name: string, data?: unknown): Promise<PipelinesInjectResponse>;
     pipelinesRun(name: string, ephemeral?: boolean, paramOverrides?: Record<string, unknown>): Promise<PipelinesRunResponse>;
@@ -5270,7 +5270,7 @@ Plugin.prototype.nativeZoomEnabled = async function() {
   return result as NativeZoomEnabledResponse;
 };
 
-Plugin.prototype.overridesApply = async function(action: string, collection: string, fields?: unknown, id?: string) {
+Plugin.prototype.overridesApply = async function(action: string, collection: string, fields?: unknown, id?: string, newId?: string) {
   const result = await this.call(
     MethodOverridesApply,
     {
@@ -5278,6 +5278,7 @@ Plugin.prototype.overridesApply = async function(action: string, collection: str
       collection,
       fields,
       id,
+      new_id: newId,
     },
   );
 };
