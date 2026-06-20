@@ -4029,6 +4029,7 @@ export interface OverridesApplyRequest {
 }
 
 export interface OverridesApplyResponse {
+  key?: string;
   ok: boolean;
 }
 
