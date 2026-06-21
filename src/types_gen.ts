@@ -116,6 +116,12 @@ export interface CameraDevice {
   unique_id: string;
 }
 
+export interface CaptureManifestRow {
+  file: string;
+  text: string;
+  ts: string;
+}
+
 export interface ClipboardContents {
   available_types: string[];
   content_type: string;
@@ -518,6 +524,16 @@ export interface ProcessInfo {
   user?: string;
 }
 
+export interface RecordingRow {
+  disposition: string;
+  engine: string;
+  file: string;
+  heard: string;
+  matched: boolean;
+  target: string;
+  ts: string;
+}
+
 export interface ReminderItem {
   due_date?: string;
   is_completed: boolean;
@@ -696,6 +712,65 @@ export interface CalibrationApplyResponse {
   fixture_handle: string;
   kind: string;
   tags: string[];
+}
+
+export interface CalibrationCaptureReadCorpusResponse {
+  rows: RecordingRow[];
+}
+
+export interface CalibrationCaptureReadManifestRequest {
+  game: string;
+}
+
+export interface CalibrationCaptureReadManifestResponse {
+  lines: CaptureManifestRow[];
+}
+
+export interface CalibrationCaptureWriteCorpusRequest {
+  mode: string;
+  rows: RecordingRow[];
+}
+
+export interface CalibrationCaptureWriteCorpusResponse {
+  total: number;
+}
+
+export interface CalibrationRecordingsClearResponse {
+  removed: number;
+}
+
+export interface CalibrationRecordingsDeleteRequest {
+  file: string;
+}
+
+export interface CalibrationRecordingsDeleteResponse {
+  deleted: boolean;
+}
+
+export interface CalibrationRecordingsListRequest {
+  limit?: number;
+}
+
+export interface CalibrationRecordingsListResponse {
+  recordings: RecordingRow[];
+  total: number;
+}
+
+export interface CalibrationRecordingsSetDispositionRequest {
+  disposition: string;
+  file: string;
+}
+
+export interface CalibrationRecordingsSetDispositionResponse {
+  ok: boolean;
+}
+
+export interface CalibrationRecordingsSweepRequest {
+  game?: string;
+}
+
+export interface CalibrationRecordingsSweepResponse {
+  removed: number;
 }
 
 export interface CalibrationRegisterFixtureHandleRequest {
