@@ -8,6 +8,7 @@ import {
   MethodBridgeEmitObservabilityEvent,
   MethodCalibrationApply,
   MethodCalibrationRegisterFixtureHandle,
+  MethodCalibrationResolveSamples,
   MethodCalibrationTrialBegin,
   MethodCalibrationTrialEnd,
   MethodCollectionAppend,
@@ -597,6 +598,7 @@ declare module "./plugin.js" {
     bridgeEmitObservabilityEvent(eventType: string, params: unknown): Promise<void>;
     calibrationApply(commandId: string, trialId: string): Promise<CalibrationApplyResponse>;
     calibrationRegisterFixtureHandle(fixtureHandle: string, ownerPluginId: string, trialId: string): Promise<void>;
+    calibrationResolveSamples(commandId: string): Promise<string[]>;
     calibrationTrialBegin(): Promise<CalibrationTrialBeginResponse>;
     calibrationTrialEnd(trialId: string): Promise<CalibrationTrialEndResponse>;
     collectionAppend(name: string, payload: unknown): Promise<LogEntry | undefined>;
@@ -1216,6 +1218,16 @@ Plugin.prototype.calibrationRegisterFixtureHandle = async function(fixtureHandle
       trial_id: trialId,
     },
   );
+};
+
+Plugin.prototype.calibrationResolveSamples = async function(commandId: string) {
+  const result = await this.call(
+    MethodCalibrationResolveSamples,
+    {
+      command_id: commandId,
+    },
+  );
+  return (result as any).prompts;
 };
 
 Plugin.prototype.calibrationTrialBegin = async function() {

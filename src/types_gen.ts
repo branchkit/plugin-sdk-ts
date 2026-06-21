@@ -704,6 +704,14 @@ export interface CalibrationRegisterFixtureHandleRequest {
   trial_id: string;
 }
 
+export interface CalibrationResolveSamplesRequest {
+  command_id: string;
+}
+
+export interface CalibrationResolveSamplesResponse {
+  prompts: string[];
+}
+
 export interface CalibrationTrialBeginResponse {
   trial_id: string;
 }
@@ -4228,6 +4236,14 @@ export interface CalibrationApplyFixtureResponse {
 
 export interface CalibrationReleaseFixtureRequest {
   fixture_handle: string;
+}
+
+export interface CalibrationSamplesRequest {
+  command_id: string;
+}
+
+export interface CalibrationSamplesResponse {
+  prompts: string[];
 }
 
 export interface OnActionRequest {
