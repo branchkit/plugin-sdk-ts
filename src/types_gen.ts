@@ -515,6 +515,24 @@ export interface PrinterInfo {
   state: string;
 }
 
+export interface ProbeItem {
+  audio: string;
+  id: string;
+  noise?: unknown;
+  words: string[];
+}
+
+export interface ProbeLine {
+  error: string;
+  id: string;
+  text: string;
+}
+
+export interface ProbeNoise {
+  seed: number;
+  snr_db: number;
+}
+
 export interface ProcessInfo {
   cpu_percent?: number;
   memory_bytes?: number;
@@ -712,6 +730,17 @@ export interface CalibrationApplyResponse {
   fixture_handle: string;
   kind: string;
   tags: string[];
+}
+
+export interface CalibrationCaptureProbeRequest {
+  items: ProbeItem[];
+  max_active?: number;
+  model: string;
+  stage: string;
+}
+
+export interface CalibrationCaptureProbeResponse {
+  lines: ProbeLine[];
 }
 
 export interface CalibrationCaptureReadCorpusResponse {
