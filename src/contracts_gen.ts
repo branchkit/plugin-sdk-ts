@@ -14,6 +14,7 @@ export const MethodCalibrationCaptureReadManifest = "calibration.capture.read_ma
 export const MethodCalibrationCaptureWriteCorpus = "calibration.capture.write_corpus" as const; // since 0.1.0
 export const MethodCalibrationRecordingsClear = "calibration.recordings.clear" as const; // since 0.1.0
 export const MethodCalibrationRecordingsDelete = "calibration.recordings.delete" as const; // since 0.1.0
+export const MethodCalibrationRecordingsExport = "calibration.recordings.export" as const; // since 0.1.0
 export const MethodCalibrationRecordingsList = "calibration.recordings.list" as const; // since 0.1.0
 export const MethodCalibrationRecordingsSetDisposition = "calibration.recordings.set_disposition" as const; // since 0.1.0
 export const MethodCalibrationRecordingsSweep = "calibration.recordings.sweep" as const; // since 0.1.0

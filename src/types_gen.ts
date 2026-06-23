@@ -741,6 +741,7 @@ export interface CalibrationCaptureProbeRequest {
 
 export interface CalibrationCaptureProbeResponse {
   lines: ProbeLine[];
+  model_version?: string;
 }
 
 export interface CalibrationCaptureReadCorpusResponse {
@@ -774,6 +775,15 @@ export interface CalibrationRecordingsDeleteRequest {
 
 export interface CalibrationRecordingsDeleteResponse {
   deleted: boolean;
+}
+
+export interface CalibrationRecordingsExportRequest {
+  confirmed_only?: boolean;
+}
+
+export interface CalibrationRecordingsExportResponse {
+  count: number;
+  path: string;
 }
 
 export interface CalibrationRecordingsListRequest {
