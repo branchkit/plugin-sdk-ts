@@ -156,21 +156,51 @@ describe("collection state helpers", () => {
     expect(opts.cursor).toBe("k5");
   });
 
-  test("subscribe filters notifications by collection name", () => {
+  test("subscribe filters notifications by collection name", async () => {
     const p = new Plugin();
     const seen: CollectionChangedEvent[] = [];
     p.subscribe("things", (evt) => seen.push(evt));
 
-    // Drive the on() listener directly; the actuator side is exercised
-    // by the conformance harness.
-    // @ts-expect-error — handleNotification is private
-    p.handleNotification(EventCollectionUpdated, { collection: "things", writer: "voice" });
+    // Drive the ordered notification pump directly; the actuator side is
+    // exercised by the conformance harness. Delivery is async (wire-ordered),
+    // so flush the pump before asserting.
+    // @ts-expect-error — enqueueNotification is private
+    p.enqueueNotification(EventCollectionUpdated, { collection: "things", writer: "voice" });
     // @ts-expect-error
-    p.handleNotification(EventCollectionUpdated, { collection: "other", writer: "voice" });
+    p.enqueueNotification(EventCollectionUpdated, { collection: "other", writer: "voice" });
     // @ts-expect-error
-    p.handleNotification(EventCollectionUpdated, { collection: "things", writer: "voice" });
+    p.enqueueNotification(EventCollectionUpdated, { collection: "things", writer: "voice" });
+
+    await new Promise((r) => setTimeout(r, 0));
 
     expect(seen.length).toBe(2);
     expect(seen.every((e) => e.collection === "things")).toBe(true);
+  });
+
+  test("notifications are delivered to listeners in order", async () => {
+    const p = new Plugin();
+    const got: number[] = [];
+    let resolveDone!: () => void;
+    const done = new Promise<void>((r) => {
+      resolveDone = r;
+    });
+    const n = 20;
+
+    p.on("seq.tick", async (params) => {
+      const seq = (params as { seq: number }).seq;
+      // Slow the first handler: concurrent dispatch would let later ticks
+      // overtake it here. The ordered pump must hold them back.
+      if (seq === 0) await new Promise((r) => setTimeout(r, 30));
+      got.push(seq);
+      if (got.length === n) resolveDone();
+    });
+
+    for (let i = 0; i < n; i++) {
+      // @ts-expect-error — enqueueNotification is private
+      p.enqueueNotification("seq.tick", { seq: i }, undefined);
+    }
+
+    await done;
+    expect(got).toEqual(Array.from({ length: n }, (_, i) => i));
   });
 });

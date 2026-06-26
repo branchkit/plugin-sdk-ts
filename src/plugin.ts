@@ -94,6 +94,15 @@ export class Plugin {
   private readyPromise: Promise<void>;
   private readyResolve!: () => void;
 
+  // Inbound notifications drain through one pump so listeners observe them in
+  // wire order, matching the Go SDK. See notes/DESIGN_SDK_EVENT_ORDERING.md.
+  private notifyQueue: Array<{
+    method: string;
+    params: unknown;
+    correlationId: string | undefined;
+  }> = [];
+  private notifyPumpActive = false;
+
   constructor() {
     this.pluginId = process.env.BRANCHKIT_PLUGIN_ID ?? "unknown";
 
@@ -383,9 +392,10 @@ export class Plugin {
       return;
     }
 
-    // Notification from actuator — has method, no id (W5: no response)
+    // Notification from actuator — has method, no id (W5: no response).
+    // Enqueue for the single ordered pump so listeners run in wire order.
     if (msg.id === undefined && msg.method) {
-      this.handleNotification(msg.method, msg.params, msg.correlation_id);
+      this.enqueueNotification(msg.method, msg.params, msg.correlation_id);
       return;
     }
   }
@@ -424,23 +434,42 @@ export class Plugin {
     });
   }
 
-  private handleNotification(
+  // enqueueNotification appends to the ordered queue and starts the pump if it
+  // is idle. Never blocks the read loop.
+  private enqueueNotification(
     method: string,
     params: unknown,
     correlationId: string | undefined,
   ): void {
-    const listeners = this.listeners.get(method);
-    if (!listeners) return;
-    runWithCorrelation(correlationId, () => {
-      for (const fn of listeners) {
-        try {
-          fn(params);
-        } catch (err: unknown) {
-          const message = err instanceof Error ? err.message : String(err);
-          Log(this.pluginId, `listener error for ${method}: ${message}`);
+    this.notifyQueue.push({ method, params, correlationId });
+    if (!this.notifyPumpActive) {
+      this.notifyPumpActive = true;
+      void this.drainNotifications();
+    }
+  }
+
+  // drainNotifications runs queued notifications one at a time, awaiting each
+  // listener (and any outbound call() it makes) before the next notification —
+  // so listeners observe wire order. The read loop keeps running while a
+  // listener awaits, so responses still arrive; serializing cannot deadlock.
+  // See notes/DESIGN_SDK_EVENT_ORDERING.md.
+  private async drainNotifications(): Promise<void> {
+    while (this.notifyQueue.length > 0) {
+      const { method, params, correlationId } = this.notifyQueue.shift()!;
+      const listeners = this.listeners.get(method);
+      if (!listeners) continue;
+      await runWithCorrelation(correlationId, async () => {
+        for (const fn of listeners) {
+          try {
+            await fn(params);
+          } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : String(err);
+            Log(this.pluginId, `listener error for ${method}: ${message}`);
+          }
         }
-      }
-    });
+      });
+    }
+    this.notifyPumpActive = false;
   }
 
   private sendError(id: number, code: number, message: string): void {
