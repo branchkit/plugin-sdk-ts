@@ -615,6 +615,7 @@ export const HookRenderSettings = "render_settings" as const; // since 0.1.0
 // Platform event type constants (use with plugin.on()).
 export const EventActionExecuted = "_platform.action.executed" as const;
 export const EventAppFocused = "_platform.app.focused" as const;
+export const EventAudioDevicesChanged = "_platform.audio_devices.changed" as const;
 export const EventBleNotification = "_platform.ble.notification" as const;
 export const EventCollectionUpdated = "_platform.collection.updated" as const;
 export const EventDependentCaptureProgress = "_platform.dependent_capture.progress" as const;
