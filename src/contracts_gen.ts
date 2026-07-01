@@ -585,6 +585,7 @@ export const MethodPipelinesInject = "pipelines.inject" as const; // since 0.1.0
 export const MethodPipelinesRun = "pipelines.run" as const; // since 0.1.0
 export const MethodPipelinesStatus = "pipelines.status" as const; // since 0.1.0
 export const MethodPipelinesStop = "pipelines.stop" as const; // since 0.1.0
+export const MethodPipelinesWarm = "pipelines.warm" as const; // since 0.1.0
 export const MethodPluginDebug = "plugin.debug" as const; // since 0.1.0
 export const MethodPrivacyGetRecording = "privacy.get_recording" as const; // since 0.1.0
 export const MethodPrivacySetRecording = "privacy.set_recording" as const; // since 0.1.0

@@ -516,7 +516,9 @@ export interface PrinterInfo {
 }
 
 export interface ProbeItem {
+  apply_bias: boolean;
   audio: string;
+  bias_strength?: number;
   id: string;
   noise?: unknown;
   words: string[];
@@ -4192,6 +4194,14 @@ export interface PipelinesStopRequest {
 
 export interface PipelinesStopResponse {
   stopped: boolean;
+}
+
+export interface PipelinesWarmRequest {
+  name: string;
+}
+
+export interface PipelinesWarmResponse {
+  warmed: boolean;
 }
 
 export interface PluginDebugRequest {
