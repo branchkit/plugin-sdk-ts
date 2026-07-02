@@ -399,6 +399,19 @@ export class Harness {
   }
 }
 
+/// True when the `branchkit-test-harness` binary can be located. Harness-backed
+/// integration tests should `skipIf(!harnessBinaryAvailable())` so they run
+/// where the binary is built (the app-repo conformance context) and skip
+/// cleanly where it isn't (this SDK's standalone CI, a fresh checkout).
+export function harnessBinaryAvailable(): boolean {
+  try {
+    findHarnessBinary();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function findHarnessBinary(): string {
   const env = process.env.BRANCHKIT_TEST_HARNESS;
   if (env) return env;

@@ -1,12 +1,16 @@
 import { describe, test, expect } from "bun:test";
-import { Harness } from "../harness.js";
+import { Harness, harnessBinaryAvailable } from "../harness.js";
 
 const HELLOWORLD_DIR = new URL(
   "../../../plugins/helloworld",
   import.meta.url,
 ).pathname;
 
-describe("Harness", () => {
+// These are integration tests that drive the Rust `branchkit-test-harness`
+// binary. It isn't built (or reachable) from this SDK's standalone checkout, so
+// skip when absent — they run in the app-repo conformance context where the
+// binary exists. See harnessBinaryAvailable().
+describe.skipIf(!harnessBinaryAvailable())("Harness", () => {
   test("start and get plugin state", async () => {
     const h = await Harness.start(HELLOWORLD_DIR);
     try {
