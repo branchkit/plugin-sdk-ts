@@ -1028,6 +1028,7 @@ export interface EffectsAssertRequest {
 export interface EffectsAssertResponse {
   already_held: boolean;
   displaced?: string;
+  enforced: boolean;
   granted: boolean;
 }
 

@@ -41,6 +41,17 @@ export interface AssertEffectResult {
    * someone, undefined otherwise.
    */
   displaced?: string;
+  /**
+   * True when the platform actually delivers this effect's semantics
+   * while you hold ownership. Signal-shape effects (e.g.
+   * `signal_recording_active`, whose entire meaning is the queryable
+   * ownership stack) are always enforced. False means the OS handler
+   * for this effect is not implemented yet: you get ownership
+   * bookkeeping, displacement events, and `isEffectActive` queries,
+   * but the OS-level behavior (actual notification muting, focus-steal
+   * blocking, …) does NOT happen.
+   */
+  enforced: boolean;
 }
 
 /**
@@ -127,6 +138,7 @@ Plugin.prototype.assertEffect = async function (
     granted: res.granted,
     alreadyHeld: res.already_held,
     displaced: optionalString(res.displaced),
+    enforced: res.enforced,
   };
 };
 
