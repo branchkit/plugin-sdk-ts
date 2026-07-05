@@ -734,6 +734,16 @@ export interface CalibrationApplyResponse {
   tags: string[];
 }
 
+export interface CalibrationBiasApplyRequest {
+  force?: boolean;
+  strength: number;
+}
+
+export interface CalibrationBiasApplyResponse {
+  applied: boolean;
+  previous_provenance: string;
+}
+
 export interface CalibrationCaptureProbeRequest {
   items: ProbeItem[];
   max_active?: number;

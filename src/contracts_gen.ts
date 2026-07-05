@@ -8,6 +8,7 @@ export const APIVersion = "0.1.0" as const;
 export const MethodActionsList = "actions.list" as const; // since 0.1.0
 export const MethodBridgeEmitObservabilityEvent = "bridge.emit_observability_event" as const; // since 0.1.0
 export const MethodCalibrationApply = "calibration.apply" as const; // since 0.1.0
+export const MethodCalibrationBiasApply = "calibration.bias.apply" as const; // since 0.1.0
 export const MethodCalibrationCaptureProbe = "calibration.capture.probe" as const; // since 0.1.0
 export const MethodCalibrationCaptureReadCorpus = "calibration.capture.read_corpus" as const; // since 0.1.0
 export const MethodCalibrationCaptureReadManifest = "calibration.capture.read_manifest" as const; // since 0.1.0
