@@ -164,6 +164,12 @@ export interface CollectionsListSection {
   plugin: string;
 }
 
+export interface CommandOverride {
+  action: string;
+  default_pattern: string;
+  new_pattern: string;
+}
+
 export interface CommandRowData {
   action: string;
   action_json?: unknown;
@@ -955,6 +961,10 @@ export interface CommandsListResponse {
   title: string;
 }
 
+export interface CommandsListOverridesResponse {
+  overrides: CommandOverride[];
+}
+
 export interface CommandsPushRequest {
   commands?: unknown;
 }
@@ -970,6 +980,16 @@ export interface CommandsResetRequest {
 
 export interface CommandsResetResponse {
   ok: boolean;
+}
+
+export interface CommandsResetOverrideRequest {
+  action: string;
+  default_pattern: string;
+}
+
+export interface CommandsResetOverrideResponse {
+  ok: boolean;
+  removed: boolean;
 }
 
 export interface CommandsResolveRequest {
@@ -1003,6 +1023,16 @@ export interface CommandsResolveResponse {
   tied_candidates?: TiedCandidate[];
   title: string;
   trace_id?: string;
+}
+
+export interface CommandsSetOverrideRequest {
+  action: string;
+  default_pattern: string;
+  new_pattern: string;
+}
+
+export interface CommandsSetOverrideResponse {
+  ok: boolean;
 }
 
 export interface ControlSignalRequest {
