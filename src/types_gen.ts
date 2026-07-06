@@ -943,6 +943,16 @@ export interface CollectionsListResponse {
   sections: CollectionsListSection[];
 }
 
+export interface CommandsAddAliasRequest {
+  action: string;
+  default_pattern: string;
+  new_pattern: string;
+}
+
+export interface CommandsAddAliasResponse {
+  ok: boolean;
+}
+
 export interface CommandsDeleteRequest {
   canonical: string;
 }
@@ -961,6 +971,10 @@ export interface CommandsListResponse {
   title: string;
 }
 
+export interface CommandsListAliasesResponse {
+  aliases: CommandOverride[];
+}
+
 export interface CommandsListOverridesResponse {
   overrides: CommandOverride[];
 }
@@ -972,6 +986,17 @@ export interface CommandsPushRequest {
 export interface CommandsPushResponse {
   count: number;
   ok: boolean;
+}
+
+export interface CommandsRemoveAliasRequest {
+  action: string;
+  default_pattern: string;
+  new_pattern: string;
+}
+
+export interface CommandsRemoveAliasResponse {
+  ok: boolean;
+  removed: boolean;
 }
 
 export interface CommandsResetRequest {
