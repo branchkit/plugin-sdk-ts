@@ -58,6 +58,20 @@ declare module "./plugin.js" {
     ): Promise<number>;
 
     /**
+     * Bulk upsert that also sets the collection's human-readable label —
+     * the friendly category name shown on the Discovery HUD's tag badge and
+     * in the Settings UI, in place of the raw collection id (e.g. "Badge"
+     * instead of "browser_hints_arch_strict"). Pass "" to leave the label
+     * unchanged; like roles, it persists on the collection.
+     */
+    putManyWithDisplay(
+      name: string,
+      entries: CollectionPutEntry[],
+      roles: Record<string, string> | undefined,
+      label: string,
+    ): Promise<number>;
+
+    /**
      * Errors with NOT_FOUND if no record with that id exists, or
      * OPERATION_NOT_PERMITTED on collections the state forbids
      * patching (e.g., log-shaped, or gate-feed during the state
@@ -145,8 +159,17 @@ Plugin.prototype.putManyWithRoles = async function (
   entries: CollectionPutEntry[],
   roles: Record<string, string>,
 ): Promise<number> {
+  return this.putManyWithDisplay(name, entries, roles, "");
+};
+
+Plugin.prototype.putManyWithDisplay = async function (
+  name: string,
+  entries: CollectionPutEntry[],
+  roles: Record<string, string> | undefined,
+  label: string,
+): Promise<number> {
   if (entries.length === 0) return 0;
-  const res = await this.collectionPut(name, entries, roles);
+  const res = await this.collectionPut(name, entries, label || undefined, roles);
   return res?.count ?? 0;
 };
 

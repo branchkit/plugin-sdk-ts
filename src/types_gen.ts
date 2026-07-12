@@ -926,6 +926,7 @@ export interface CollectionPatchResponse {
 
 export interface CollectionPutRequest {
   entries?: CollectionPutEntry[];
+  label?: string;
   name: string;
   roles?: unknown;
 }
