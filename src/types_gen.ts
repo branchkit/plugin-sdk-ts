@@ -515,6 +515,11 @@ export interface OcrRegion {
 
 export type OnActionStatus = "ok" | "error" | "not_handled";
 
+/**
+ * What a HUD window does when the pointer moves into its frame.
+ */
+export type OnPointer = "none" | "fade";
+
 export interface PipelineStatusEntry {
   ephemeral: boolean;
   name: string;
@@ -1174,6 +1179,7 @@ export interface HUDCreateChannelRequest {
   draggable?: boolean;
   follows_focus?: boolean;
   min_height?: number;
+  on_pointer?: OnPointer;
   transparent?: boolean;
   width?: number;
 }
