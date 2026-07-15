@@ -4255,7 +4255,12 @@ export interface OverridesApplyResponse {
   ok: boolean;
 }
 
+export interface PipelinesGrammarRequest {
+  full?: boolean;
+}
+
 export interface PipelinesGrammarResponse {
+  vocabulary_update?: unknown;
   words: string[];
 }
 
