@@ -588,6 +588,7 @@ export const MethodNativeZip = "native.zip" as const; // since 0.1.0
 export const MethodNativeZoomEnabled = "native.zoom_enabled" as const; // since 0.1.0
 export const MethodOverridesApply = "overrides.apply" as const; // since 0.1.0
 export const MethodPipelinesGrammar = "pipelines.grammar" as const; // since 0.1.0
+export const MethodPipelinesIngestTranscript = "pipelines.ingest_transcript" as const; // since 0.1.0
 export const MethodPipelinesInject = "pipelines.inject" as const; // since 0.1.0
 export const MethodPipelinesRun = "pipelines.run" as const; // since 0.1.0
 export const MethodPipelinesStatus = "pipelines.status" as const; // since 0.1.0

@@ -1141,6 +1141,7 @@ export interface HUDCreateChannelRequest {
   anchor?: unknown;
   channel: string;
   description?: string;
+  draggable?: boolean;
   follows_focus?: boolean;
   min_height?: number;
   width?: number;
@@ -4226,6 +4227,20 @@ export interface OverridesApplyResponse {
 
 export interface PipelinesGrammarResponse {
   words: string[];
+}
+
+export interface PipelinesIngestTranscriptRequest {
+  confidence?: number;
+  is_final?: boolean;
+  name: string;
+  text: string;
+}
+
+export interface PipelinesIngestTranscriptResponse {
+  ingested: boolean;
+  matched?: boolean;
+  owner_plugin?: string;
+  plugin_dispatched: boolean;
 }
 
 export interface PipelinesInjectRequest {
