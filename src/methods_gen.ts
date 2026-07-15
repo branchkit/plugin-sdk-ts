@@ -662,7 +662,7 @@ declare module "./plugin.js" {
     eventsAppend(eventType: string, data?: unknown, sessionId?: string): Promise<void>;
     eventsEmit(eventType: string, correlationId?: string, data?: unknown): Promise<void>;
     eventsQuery(correlationId?: string, limit?: number): Promise<EventsQueryResponse>;
-    hudCreateChannel(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, draggable?: boolean, followsFocus?: boolean, minHeight?: number, width?: number): Promise<void>;
+    hudCreateChannel(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, draggable?: boolean, followsFocus?: boolean, minHeight?: number, transparent?: boolean, width?: number): Promise<void>;
     hudHide(channel: string): Promise<void>;
     hudPush(channel: string, fragments: unknown): Promise<void>;
     hudRemoveChannel(channel: string): Promise<HUDRemoveChannelResponse>;
@@ -1686,7 +1686,7 @@ Plugin.prototype.eventsQuery = async function(correlationId?: string, limit?: nu
   return result as EventsQueryResponse;
 };
 
-Plugin.prototype.hudCreateChannel = async function(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, draggable?: boolean, followsFocus?: boolean, minHeight?: number, width?: number) {
+Plugin.prototype.hudCreateChannel = async function(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, draggable?: boolean, followsFocus?: boolean, minHeight?: number, transparent?: boolean, width?: number) {
   const result = await this.call(
     MethodHudCreateChannel,
     {
@@ -1697,6 +1697,7 @@ Plugin.prototype.hudCreateChannel = async function(channel: string, acceptsInput
       draggable,
       follows_focus: followsFocus,
       min_height: minHeight,
+      transparent,
       width,
     },
   );

@@ -1174,6 +1174,7 @@ export interface HUDCreateChannelRequest {
   draggable?: boolean;
   follows_focus?: boolean;
   min_height?: number;
+  transparent?: boolean;
   width?: number;
 }
 
