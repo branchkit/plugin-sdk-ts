@@ -6,7 +6,6 @@ export const APIVersion = "0.1.0" as const;
 
 // RPC method names: plugin → actuator (use with plugin.call()).
 export const MethodActionsList = "actions.list" as const; // since 0.1.0
-export const MethodBridgeEmitObservabilityEvent = "bridge.emit_observability_event" as const; // since 0.1.0
 export const MethodCalibrationApply = "calibration.apply" as const; // since 0.1.0
 export const MethodCalibrationBiasApply = "calibration.bias.apply" as const; // since 0.1.0
 export const MethodCalibrationCaptureProbe = "calibration.capture.probe" as const; // since 0.1.0
@@ -52,7 +51,6 @@ export const MethodEffectsIsActive = "effects.is_active" as const; // since 0.1.
 export const MethodEffectsRetract = "effects.retract" as const; // since 0.1.0
 export const MethodEventsAppend = "events.append" as const; // since 0.1.0
 export const MethodEventsEmit = "events.emit" as const; // since 0.1.0
-export const MethodEventsQuery = "events.query" as const; // since 0.1.0
 export const MethodHudCreateChannel = "hud.create_channel" as const; // since 0.1.0
 export const MethodHudHide = "hud.hide" as const; // since 0.1.0
 export const MethodHudPush = "hud.push" as const; // since 0.1.0
@@ -589,7 +587,6 @@ export const MethodNativeZip = "native.zip" as const; // since 0.1.0
 export const MethodNativeZoomEnabled = "native.zoom_enabled" as const; // since 0.1.0
 export const MethodOverridesApply = "overrides.apply" as const; // since 0.1.0
 export const MethodPipelinesGrammar = "pipelines.grammar" as const; // since 0.1.0
-export const MethodPipelinesIngestTranscript = "pipelines.ingest_transcript" as const; // since 0.1.0
 export const MethodPipelinesInject = "pipelines.inject" as const; // since 0.1.0
 export const MethodPipelinesRun = "pipelines.run" as const; // since 0.1.0
 export const MethodPipelinesStatus = "pipelines.status" as const; // since 0.1.0
