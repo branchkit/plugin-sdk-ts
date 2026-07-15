@@ -291,6 +291,25 @@ export interface EnumeratedCommand {
   sets_tags: string[];
 }
 
+export interface EventsQueryChainSummary {
+  correlation_id: string;
+  headline_event: string;
+  headline_params?: unknown;
+  max_severity: string;
+  record_count: number;
+  sources: string[];
+  when: string;
+}
+
+export interface EventsQueryRecord {
+  caller: string;
+  event_type: string;
+  params?: unknown;
+  severity: string;
+  source: string;
+  ts_utc: string;
+}
+
 export interface ExternalDisk {
   file_system?: string;
   free_bytes: number;
@@ -1134,6 +1153,17 @@ export interface EventsEmitRequest {
 
 export interface EventsEmitResponse {
   ok: boolean;
+}
+
+export interface EventsQueryRequest {
+  correlation_id?: string;
+  limit?: number;
+}
+
+export interface EventsQueryResponse {
+  chains: EventsQueryChainSummary[];
+  plugin_callers: string[];
+  records: EventsQueryRecord[];
 }
 
 export interface HUDCreateChannelRequest {

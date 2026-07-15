@@ -52,6 +52,7 @@ export const MethodEffectsIsActive = "effects.is_active" as const; // since 0.1.
 export const MethodEffectsRetract = "effects.retract" as const; // since 0.1.0
 export const MethodEventsAppend = "events.append" as const; // since 0.1.0
 export const MethodEventsEmit = "events.emit" as const; // since 0.1.0
+export const MethodEventsQuery = "events.query" as const; // since 0.1.0
 export const MethodHudCreateChannel = "hud.create_channel" as const; // since 0.1.0
 export const MethodHudHide = "hud.hide" as const; // since 0.1.0
 export const MethodHudPush = "hud.push" as const; // since 0.1.0
