@@ -153,3 +153,23 @@ describe("ListenLocal", () => {
     }
   });
 });
+
+describe("inheritedListenerCount", () => {
+  test("reports 0 for absent/invalid LISTEN_FDS and the granted count otherwise", async () => {
+    const { inheritedListenerCount } = await import("../listen.js");
+    const saved = process.env.LISTEN_FDS;
+    try {
+      for (const v of ["", "0", "garbage", "-2"]) {
+        process.env.LISTEN_FDS = v;
+        expect(inheritedListenerCount()).toBe(0);
+      }
+      delete process.env.LISTEN_FDS;
+      expect(inheritedListenerCount()).toBe(0);
+      process.env.LISTEN_FDS = "2";
+      expect(inheritedListenerCount()).toBe(2);
+    } finally {
+      if (saved === undefined) delete process.env.LISTEN_FDS;
+      else process.env.LISTEN_FDS = saved;
+    }
+  });
+});

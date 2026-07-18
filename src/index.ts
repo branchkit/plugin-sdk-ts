@@ -12,7 +12,7 @@ export {
   pushCommandSpecs,
   type PatternSlot,
 } from "./commands.js";
-export { ListenLocal, Listener, type ConnectInfo } from "./listen.js";
+export { ListenLocal, Listener, inheritedListenerCount, type ConnectInfo } from "./listen.js";
 export { UpstreamClient } from "./upstream.js";
 export * from "./contracts_gen.js";
 export * from "./types_gen.js";

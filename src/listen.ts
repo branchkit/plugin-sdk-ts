@@ -102,9 +102,30 @@ export class Listener {
 }
 
 /**
+ * Number of actuator-granted listener sockets (manifest `sockets.listen`,
+ * delivered per the LISTEN_FDS convention at fds 3+). 0 when none were
+ * granted — old actuators, unsandboxed dev runs, or no manifest
+ * declaration. Unlike systemd's convention, LISTEN_PID is deliberately
+ * not set or checked: the actuator cannot know the child pid before
+ * spawn, and plugin identity is already established by fd ownership.
+ */
+export function inheritedListenerCount(): number {
+  const n = Number.parseInt(process.env.LISTEN_FDS ?? "", 10);
+  return Number.isFinite(n) && n > 0 ? n : 0;
+}
+
+/**
  * Bind a localhost TCP port for an external service to connect to.
  * Generates a pairing token and writes a connect.json discovery file
  * to BRANCHKIT_PLUGIN_DIR so the external service can find the port and token.
+ *
+ * When the actuator granted listener sockets (manifest `sockets.listen`),
+ * the FIRST granted listener (fd 3) is used instead of self-binding.
+ * This is not an optimization: inside the Linux sandbox the plugin runs
+ * in an empty network namespace, where a self-bound "127.0.0.1" is a
+ * private dead loopback — the inherited host-loopback listener is the
+ * only reachable surface. See the actuator's
+ * notes/DESIGN_SANDBOX_LOOPBACK_FDPASS.md.
  */
 export function ListenLocal(plugin: Plugin): Promise<Listener> {
   return new Promise((resolve, reject) => {
@@ -112,7 +133,7 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
 
     const server = createServer();
 
-    server.listen(0, "127.0.0.1", () => {
+    const onListening = () => {
       const address = server.address();
       if (!address || typeof address === "string") {
         server.close();
@@ -129,7 +150,13 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
 
       writeDiscovery({ port: String(address.port), token });
       resolve(listener);
-    });
+    };
+
+    if (inheritedListenerCount() > 0) {
+      server.listen({ fd: 3 }, onListening);
+    } else {
+      server.listen(0, "127.0.0.1", onListening);
+    }
 
     server.on("error", (err) => {
       reject(err);
