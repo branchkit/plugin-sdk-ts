@@ -167,6 +167,7 @@ export class CommandBuilder {
       sets_tags: [],
       clears_tags: [],
       sets_on_partial: [],
+      display_sources: {},
       variants: [],
     };
   }
@@ -193,6 +194,17 @@ export class CommandBuilder {
 
   clearsTags(...tags: string[]): this {
     this.spec.clears_tags.push(...tags);
+    return this;
+  }
+
+  /**
+   * Discovery-HUD display override for one capture: enumerate `collection`
+   * in the HUD instead of the capture's matching collection. Matching is
+   * untouched — pair a sealed/static matching collection with a live menu.
+   * (notes/DESIGN_CAPTURE_DISPLAY_FORMS.md, part A.)
+   */
+  displaySource(capture: string, collection: string): this {
+    this.spec.display_sources[capture] = collection;
     return this;
   }
 

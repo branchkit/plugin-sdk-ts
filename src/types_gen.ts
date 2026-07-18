@@ -192,6 +192,7 @@ export interface CommandSpec {
   category?: string;
   clears_tags: string[];
   description?: string;
+  display_sources: Record<string, string>;
   pattern: unknown[];
   requires_tags: string[];
   sets_on_partial: string[];
