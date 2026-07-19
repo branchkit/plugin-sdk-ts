@@ -1,3 +1,4 @@
+import "./proxy.js"; // side-effect: route fetch through BRANCHKIT_PROXY when sandboxed (per-host tier)
 export { Plugin, RpcCallError, apiVersion } from "./plugin.js";
 export { Log } from "./log.js";
 export {
