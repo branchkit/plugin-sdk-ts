@@ -1197,7 +1197,7 @@ declare module "./plugin.js" {
     pipelinesRun(name: string, ephemeral?: boolean, paramOverrides?: Record<string, unknown>): Promise<PipelinesRunResponse>;
     pipelinesStatus(): Promise<PipelinesStatusResponse>;
     pipelinesStop(name: string): Promise<PipelinesStopResponse>;
-    pipelinesWarm(name: string): Promise<PipelinesWarmResponse>;
+    pipelinesWarm(name: string, paramOverrides?: Record<string, unknown>): Promise<PipelinesWarmResponse>;
     pluginDebug(data?: unknown, level?: unknown, tag?: string): Promise<void>;
     privacyGetRecording(name: string): Promise<PrivacyGetRecordingResponse>;
     privacySetRecording(enabled: boolean, name: string): Promise<void>;
@@ -5533,11 +5533,12 @@ Plugin.prototype.pipelinesStop = async function(name: string) {
   return result as PipelinesStopResponse;
 };
 
-Plugin.prototype.pipelinesWarm = async function(name: string) {
+Plugin.prototype.pipelinesWarm = async function(name: string, paramOverrides?: Record<string, unknown>) {
   const result = await this.call(
     MethodPipelinesWarm,
     {
       name,
+      param_overrides: paramOverrides,
     },
   );
   return result as PipelinesWarmResponse;

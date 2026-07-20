@@ -4270,6 +4270,7 @@ export interface PipelinesStopResponse {
 
 export interface PipelinesWarmRequest {
   name: string;
+  param_overrides?: Record<string, unknown>;
 }
 
 export interface PipelinesWarmResponse {
