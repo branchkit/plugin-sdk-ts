@@ -192,6 +192,7 @@ export interface CommandSpec {
   category?: string;
   clears_tags: string[];
   description?: string;
+  dictated_param?: unknown;
   display_sources: Record<string, string>;
   pattern: unknown[];
   requires_tags: string[];
@@ -220,6 +221,14 @@ export interface DeliveredNotification {
   delivered_at: string;
   id: string;
   title: string;
+}
+
+export interface DictatedParamSpec {
+  arm_action?: unknown;
+  cue_body?: string;
+  cue_title?: string;
+  disarm_action?: unknown;
+  param: string;
 }
 
 export interface DirectoryEntry {
@@ -1033,6 +1042,7 @@ export interface CommandsResolveResponse {
   bridge_active?: boolean;
   clears_tags: string[];
   consumed_count: number;
+  dictated_param?: unknown;
   has_completions: boolean;
   items: DiscoverItem[];
   matched: boolean;
