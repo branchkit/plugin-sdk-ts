@@ -577,7 +577,6 @@ export const MethodNativeWindowLayer = "native.window_layer" as const; // since 
 export const MethodNativeWindowScreenshot = "native.window_screenshot" as const; // since 0.1.0
 export const MethodNativeWindowSubrole = "native.window_subrole" as const; // since 0.1.0
 export const MethodNativeWindowTitle = "native.window_title" as const; // since 0.1.0
-export const MethodNativeWindowsOnSpace = "native.windows_on_space" as const; // since 0.1.0
 export const MethodNativeWorldModel = "native.world_model" as const; // since 0.1.0
 export const MethodNativeWriteAppPreference = "native.write_app_preference" as const; // since 0.1.0
 export const MethodNativeWriteFile = "native.write_file" as const; // since 0.1.0

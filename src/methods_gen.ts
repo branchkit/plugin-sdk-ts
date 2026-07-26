@@ -576,7 +576,6 @@ import {
   MethodNativeWindowScreenshot,
   MethodNativeWindowSubrole,
   MethodNativeWindowTitle,
-  MethodNativeWindowsOnSpace,
   MethodNativeWorldModel,
   MethodNativeWriteAppPreference,
   MethodNativeWriteFile,
@@ -1183,7 +1182,6 @@ declare module "./plugin.js" {
     nativeWindowScreenshot(windowId: number): Promise<void>;
     nativeWindowSubrole(windowId: string): Promise<void>;
     nativeWindowTitle(windowId: string): Promise<void>;
-    nativeWindowsOnSpace(spaceId: number): Promise<string[]>;
     nativeWorldModel(onScreen?: boolean): Promise<WorldModel>;
     nativeWriteAppPreference(domain: string, key: string, value: unknown): Promise<void>;
     nativeWriteFile(contents: string, path: string): Promise<void>;
@@ -5402,16 +5400,6 @@ Plugin.prototype.nativeWindowTitle = async function(windowId: string) {
       window_id: windowId,
     },
   );
-};
-
-Plugin.prototype.nativeWindowsOnSpace = async function(spaceId: number) {
-  const result = await this.call(
-    MethodNativeWindowsOnSpace,
-    {
-      space_id: spaceId,
-    },
-  );
-  return (result as any).window_ids;
 };
 
 Plugin.prototype.nativeWorldModel = async function(onScreen?: boolean) {

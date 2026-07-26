@@ -712,9 +712,11 @@ export interface WindowFrame {
 export interface WindowInfo {
   app_id: string;
   app_name: string;
+  desk?: number;
   h: number;
   id: string;
   source: string;
+  space_ids: number[];
   title: string;
   w: number;
   x: number;
@@ -4167,14 +4169,6 @@ export interface NativeWindowSubroleRequest {
 
 export interface NativeWindowTitleRequest {
   window_id: string;
-}
-
-export interface NativeWindowsOnSpaceRequest {
-  space_id: number;
-}
-
-export interface NativeWindowsOnSpaceResponse {
-  window_ids: string[];
 }
 
 export interface NativeWorldModelRequest {
