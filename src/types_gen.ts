@@ -574,6 +574,11 @@ export interface ReminderItem {
   title: string;
 }
 
+export interface ReportSummary {
+  modified: number;
+  slot: string;
+}
+
 export interface ResolveTelemetry {
   gated_partial_seen: boolean;
   winner: MatchWinner;
@@ -853,6 +858,18 @@ export interface CalibrationTrialEndRequest {
 
 export interface CalibrationTrialEndResponse {
   released_handle_count: number;
+}
+
+export interface CodewordLabReportsListResponse {
+  reports: ReportSummary[];
+}
+
+export interface CodewordLabReportsReadRequest {
+  slot: string;
+}
+
+export interface CodewordLabReportsReadResponse {
+  report: unknown;
 }
 
 export interface CollectionAppendRequest {
