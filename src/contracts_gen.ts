@@ -359,6 +359,7 @@ export const MethodNativeNetworkQuality = "native.network_quality" as const; // 
 export const MethodNativeNetworkReachable = "native.network_reachable" as const; // since 0.1.0
 export const MethodNativeNetworkSignalStrength = "native.network_signal_strength" as const; // since 0.1.0
 export const MethodNativeNetworkSsid = "native.network_ssid" as const; // since 0.1.0
+export const MethodNativeNewAppWindow = "native.new_app_window" as const; // since 0.1.0
 export const MethodNativeNightShift = "native.night_shift" as const; // since 0.1.0
 export const MethodNativeNotificationSoundEnabled = "native.notification_sound_enabled" as const; // since 0.1.0
 export const MethodNativeNotify = "native.notify" as const; // since 0.1.0

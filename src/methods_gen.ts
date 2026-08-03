@@ -358,6 +358,7 @@ import {
   MethodNativeNetworkReachable,
   MethodNativeNetworkSignalStrength,
   MethodNativeNetworkSsid,
+  MethodNativeNewAppWindow,
   MethodNativeNightShift,
   MethodNativeNotificationSoundEnabled,
   MethodNativeNotify,
@@ -966,6 +967,7 @@ declare module "./plugin.js" {
     nativeNetworkReachable(host: string): Promise<NativeNetworkReachableResponse>;
     nativeNetworkSignalStrength(): Promise<void>;
     nativeNetworkSsid(): Promise<NativeNetworkSsidResponse>;
+    nativeNewAppWindow(bundleId: string): Promise<void>;
     nativeNightShift(): Promise<NativeNightShiftResponse>;
     nativeNotificationSoundEnabled(): Promise<NativeNotificationSoundEnabledResponse>;
     nativeNotify(title: string, body?: string, sound?: string, subtitle?: string): Promise<NativeNotifyResponse>;
@@ -3803,6 +3805,15 @@ Plugin.prototype.nativeNetworkSignalStrength = async function() {
 Plugin.prototype.nativeNetworkSsid = async function() {
   const result = await this.call(MethodNativeNetworkSsid);
   return result as NativeNetworkSsidResponse;
+};
+
+Plugin.prototype.nativeNewAppWindow = async function(bundleId: string) {
+  const result = await this.call(
+    MethodNativeNewAppWindow,
+    {
+      bundle_id: bundleId,
+    },
+  );
 };
 
 Plugin.prototype.nativeNightShift = async function() {

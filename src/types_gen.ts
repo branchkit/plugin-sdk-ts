@@ -2867,6 +2867,14 @@ export interface NativeNetworkSsidResponse {
   value: string;
 }
 
+export interface NativeNewAppWindowRequest {
+  bundle_id: string;
+}
+
+export interface NativeNewAppWindowResponse {
+  ok: boolean;
+}
+
 export interface NativeNightShiftResponse {
   enabled: boolean;
 }
