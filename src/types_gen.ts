@@ -3883,6 +3883,10 @@ export interface NativeStartupSoundEnabledResponse {
   enabled: boolean;
 }
 
+export interface NativeStatusIndicatorResponse {
+  available: boolean;
+}
+
 export interface NativeStickyKeysResponse {
   enabled: boolean;
 }

@@ -521,6 +521,7 @@ export const MethodNativeSpotlight = "native.spotlight" as const; // since 0.1.0
 export const MethodNativeStageManagerEnabled = "native.stage_manager_enabled" as const; // since 0.1.0
 export const MethodNativeStartupDisk = "native.startup_disk" as const; // since 0.1.0
 export const MethodNativeStartupSoundEnabled = "native.startup_sound_enabled" as const; // since 0.1.0
+export const MethodNativeStatusIndicator = "native.status_indicator" as const; // since 0.1.0
 export const MethodNativeStickyKeys = "native.sticky_keys" as const; // since 0.1.0
 export const MethodNativeSwipeBetweenPages = "native.swipe_between_pages" as const; // since 0.1.0
 export const MethodNativeSwitchSpace = "native.switch_space" as const; // since 0.1.0
