@@ -174,12 +174,16 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
 
     if (usingInherited) {
       // Bun cannot serve an inherited fd: node:net's listen({fd}) throws
-      // "Bun does not support listening on a file descriptor", Bun.listen
-      // likewise, and node:http's listen({fd}) SILENTLY self-binds a fresh
-      // ephemeral port (measured on Bun 1.3.14). A silent self-bind inside
-      // the sandbox serves a dead private loopback, so refuse loudly — a
-      // TS plugin declaring sockets.listen must run under Node until Bun
-      // grows fd support.
+      // "Bun does not support listening on a file descriptor" (explicit in
+      // Bun's src/runtime/socket/Listener.rs), Bun.listen likewise,
+      // Bun.serve ignores an fd option, node:http's listen({fd}) SILENTLY
+      // self-binds a fresh ephemeral port, and even net.Socket({fd}) on a
+      // connected socket is a silent dead socket — so no FFI accept-loop
+      // workaround exists either (all measured on Bun 1.3.14; upstream
+      // tracker: oven-sh/bun#22559, systemd socket activation, open).
+      // A silent self-bind inside the sandbox serves a dead private
+      // loopback, so refuse loudly — a TS plugin declaring sockets.listen
+      // must run under Node until Bun grows fd support.
       if (process.versions.bun) {
         reject(
           new Error(
