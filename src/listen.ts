@@ -132,6 +132,7 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
     const token = randomBytes(32).toString("hex");
 
     const server = createServer();
+    const usingInherited = inheritedListenerCount() > 0;
 
     const onListening = () => {
       const address = server.address();
@@ -139,6 +140,25 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
         server.close();
         reject(new Error("failed to get listener address"));
         return;
+      }
+
+      // Tripwire for runtimes that accept listen({fd}) but silently bind a
+      // fresh socket instead (Bun's node:http does exactly this): when the
+      // actuator published the granted ports, serving anywhere else means
+      // the inherited listener was dropped on the floor — inside the
+      // sandbox that is a dead private loopback, so fail loudly.
+      if (usingInherited) {
+        const granted = grantedPorts();
+        if (granted.length > 0 && !granted.includes(address.port)) {
+          server.close();
+          reject(
+            new Error(
+              `runtime silently rebound the inherited listener ` +
+                `(serving :${address.port}, granted :${granted.join(", :")})`,
+            ),
+          );
+          return;
+        }
       }
 
       const addr = `127.0.0.1:${address.port}`;
@@ -152,7 +172,24 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
       resolve(listener);
     };
 
-    if (inheritedListenerCount() > 0) {
+    if (usingInherited) {
+      // Bun cannot serve an inherited fd: node:net's listen({fd}) throws
+      // "Bun does not support listening on a file descriptor", Bun.listen
+      // likewise, and node:http's listen({fd}) SILENTLY self-binds a fresh
+      // ephemeral port (measured on Bun 1.3.14). A silent self-bind inside
+      // the sandbox serves a dead private loopback, so refuse loudly — a
+      // TS plugin declaring sockets.listen must run under Node until Bun
+      // grows fd support.
+      if (process.versions.bun) {
+        reject(
+          new Error(
+            "sockets.listen granted, but the Bun runtime cannot serve an inherited " +
+              "listener fd (no listen({fd}) support as of Bun 1.3; node:http silently " +
+              "rebinds). Run this plugin under Node, or drop the sockets.listen declaration.",
+          ),
+        );
+        return;
+      }
       server.listen({ fd: 3 }, onListening);
     } else {
       server.listen(0, "127.0.0.1", onListening);
@@ -162,6 +199,19 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
       reject(err);
     });
   });
+}
+
+/**
+ * Ports of the actuator-granted listeners, parsed from
+ * BRANCHKIT_LISTEN_PORTS ("id=port" pairs, comma-separated). Empty when
+ * the actuator didn't publish them (old actuator / none granted).
+ */
+function grantedPorts(): number[] {
+  const raw = process.env.BRANCHKIT_LISTEN_PORTS ?? "";
+  return raw
+    .split(",")
+    .map((pair) => Number.parseInt(pair.split("=")[1] ?? "", 10))
+    .filter((p) => Number.isFinite(p) && p > 0);
 }
 
 function writeDiscovery(info: ConnectInfo): void {

@@ -154,6 +154,25 @@ describe("ListenLocal", () => {
   });
 });
 
+describe("ListenLocal under Bun with a granted listener", () => {
+  test("refuses loudly instead of silently self-binding", async () => {
+    // This suite runs under bun:test, so process.versions.bun is set —
+    // exactly the runtime that cannot serve an inherited fd. The contract
+    // is refuse-loudly (a silent self-bind inside the sandbox serves a
+    // dead private loopback).
+    const saved = process.env.LISTEN_FDS;
+    process.env.LISTEN_FDS = "1";
+    try {
+      expect(ListenLocal({} as any)).rejects.toThrow(
+        /cannot serve an inherited listener fd/,
+      );
+    } finally {
+      if (saved === undefined) delete process.env.LISTEN_FDS;
+      else process.env.LISTEN_FDS = saved;
+    }
+  });
+});
+
 describe("inheritedListenerCount", () => {
   test("reports 0 for absent/invalid LISTEN_FDS and the granted count otherwise", async () => {
     const { inheritedListenerCount } = await import("../listen.js");
