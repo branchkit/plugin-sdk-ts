@@ -662,7 +662,7 @@ declare module "./plugin.js" {
     effectsRetract(name: string): Promise<EffectsRetractResponse>;
     eventsAppend(eventType: string, data?: unknown, sessionId?: string): Promise<void>;
     eventsEmit(eventType: string, correlationId?: string, data?: unknown): Promise<void>;
-    hudCreateChannel(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, draggable?: boolean, followsFocus?: boolean, minHeight?: number, onPointer?: OnPointer, transparent?: boolean, width?: number): Promise<void>;
+    hudCreateChannel(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, draggable?: boolean, followsFocus?: boolean, minHeight?: number, onPointer?: OnPointer, stackOrder?: number, transparent?: boolean, width?: number): Promise<void>;
     hudHide(channel: string): Promise<void>;
     hudPush(channel: string, fragments: unknown): Promise<void>;
     hudRemoveChannel(channel: string): Promise<HUDRemoveChannelResponse>;
@@ -1680,7 +1680,7 @@ Plugin.prototype.eventsEmit = async function(eventType: string, correlationId?: 
   );
 };
 
-Plugin.prototype.hudCreateChannel = async function(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, draggable?: boolean, followsFocus?: boolean, minHeight?: number, onPointer?: OnPointer, transparent?: boolean, width?: number) {
+Plugin.prototype.hudCreateChannel = async function(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, draggable?: boolean, followsFocus?: boolean, minHeight?: number, onPointer?: OnPointer, stackOrder?: number, transparent?: boolean, width?: number) {
   const result = await this.call(
     MethodHudCreateChannel,
     {
@@ -1692,6 +1692,7 @@ Plugin.prototype.hudCreateChannel = async function(channel: string, acceptsInput
       follows_focus: followsFocus,
       min_height: minHeight,
       on_pointer: onPointer,
+      stack_order: stackOrder,
       transparent,
       width,
     },

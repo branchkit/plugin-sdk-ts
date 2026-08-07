@@ -1162,6 +1162,7 @@ export interface HUDCreateChannelRequest {
   follows_focus?: boolean;
   min_height?: number;
   on_pointer?: OnPointer;
+  stack_order?: number;
   transparent?: boolean;
   width?: number;
 }
