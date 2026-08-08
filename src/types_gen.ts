@@ -4286,6 +4286,7 @@ export interface PipelinesStatusResponse {
 }
 
 export interface PipelinesStopRequest {
+  audio_cutoff_ms?: number;
   name: string;
 }
 

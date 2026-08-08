@@ -1202,7 +1202,7 @@ declare module "./plugin.js" {
     pipelinesInject(eventType: string, name: string, data?: unknown): Promise<PipelinesInjectResponse>;
     pipelinesRun(name: string, ephemeral?: boolean, paramOverrides?: Record<string, unknown>): Promise<PipelinesRunResponse>;
     pipelinesStatus(): Promise<PipelinesStatusResponse>;
-    pipelinesStop(name: string): Promise<PipelinesStopResponse>;
+    pipelinesStop(name: string, audioCutoffMs?: number): Promise<PipelinesStopResponse>;
     pipelinesWarm(name: string, paramOverrides?: Record<string, unknown>): Promise<PipelinesWarmResponse>;
     pluginDebug(data?: unknown, level?: unknown, tag?: string): Promise<void>;
     privacyGetRecording(name: string): Promise<PrivacyGetRecordingResponse>;
@@ -5549,11 +5549,12 @@ Plugin.prototype.pipelinesStatus = async function() {
   return result as PipelinesStatusResponse;
 };
 
-Plugin.prototype.pipelinesStop = async function(name: string) {
+Plugin.prototype.pipelinesStop = async function(name: string, audioCutoffMs?: number) {
   const result = await this.call(
     MethodPipelinesStop,
     {
       name,
+      audio_cutoff_ms: audioCutoffMs,
     },
   );
   return result as PipelinesStopResponse;
