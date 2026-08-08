@@ -508,11 +508,6 @@ export interface PipelineStatusEntry {
   name: string;
 }
 
-export interface PipelineTranscriptAlternative {
-  confidence: number;
-  text: string;
-}
-
 export type PluginLogLevel = "trace" | "info" | "warn" | "error" | "debug";
 
 export interface PoolStageStatusEntry {
