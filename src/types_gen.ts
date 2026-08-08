@@ -560,6 +560,7 @@ export interface RecordingRow {
   matched: boolean;
   target: string;
   ts: string;
+  word_scores?: unknown;
 }
 
 export interface ReminderItem {
