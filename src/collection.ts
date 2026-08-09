@@ -30,7 +30,12 @@ declare module "./plugin.js" {
      * one entry in a 1-element array. If the target collection name
      * isn't registered yet, the platform auto-registers it as a
      * record-keyed dynamic collection with this plugin as the
-     * introducer.
+     * introducer. IMPORTANT: an auto-registered collection uses
+     * memory-only storage — it is EPHEMERAL and lost on restart (the
+     * default suits session-scoped data like browser hints). For
+     * DURABLE storage, declare the collection in your plugin manifest
+     * (a "log" or "data" preset) rather than relying on cold-put
+     * auto-registration.
      */
     put(name: string, id: string, payload: unknown): Promise<void>;
 
