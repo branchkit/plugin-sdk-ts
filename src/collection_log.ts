@@ -52,6 +52,20 @@ declare module "./plugin.js" {
     appendEntry(name: string, payload: unknown): Promise<LogEntry>;
 
     /**
+     * Annotate a keyed log — a `log`-preset collection with
+     * `id_strategy: by_field`. Appends `payload` with `key` stamped into the
+     * collection's key field, as a fresh append (the raw log is never mutated);
+     * appending another record with the same `key` folds onto the first. Read
+     * the merged current-state view with {@link Plugin.listCompacted}. This is
+     * the compacted-changelog primitive — see
+     * notes/DESIGN_LOG_ANNOTATION_PROJECTION.md.
+     *
+     * "Annotate a past record" is just "append the same key with the new
+     * field." Throws if the collection is not a keyed log.
+     */
+    appendKeyed(name: string, key: string, payload: unknown): Promise<void>;
+
+    /**
      * List log entries newest-first. Pass undefined for default options
      * (no filter, no limit, no cursor).
      */
@@ -66,7 +80,12 @@ declare module "./plugin.js" {
       opts?: LogListOpts,
     ): Promise<{ entries: LogEntry[]; total: number }>;
 
-    /** Fetch one entry by id. Returns undefined if it doesn't exist. */
+    /**
+     * Fetch one entry by id. Returns undefined if it doesn't exist. Returns the
+     * RAW entry, so on a keyed (compacted-changelog) log this is the introducing
+     * record without later annotations; use {@link Plugin.getCompacted} for a
+     * key's current state.
+     */
     getLogEntry(name: string, id: string): Promise<LogEntry | undefined>;
 
     /**
@@ -111,6 +130,18 @@ Plugin.prototype.appendEntry = async function (
       throw new Error("collection.append: actuator returned no entry");
     }
     return entry;
+  } catch (e) {
+    throw maybeWrapRecordingDisabled(e);
+  }
+};
+
+Plugin.prototype.appendKeyed = async function (
+  name: string,
+  key: string,
+  payload: unknown,
+): Promise<void> {
+  try {
+    await this.collectionAppendKeyed(key, name, payload);
   } catch (e) {
     throw maybeWrapRecordingDisabled(e);
   }

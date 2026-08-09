@@ -192,6 +192,7 @@ export interface CommandSpec {
   category?: string;
   clears_tags: string[];
   description?: string;
+  discovery?: string;
   display_sources: Record<string, string>;
   pattern: unknown[];
   requires_tags: string[];
@@ -404,6 +405,7 @@ export interface ListCommandSection {
 }
 
 export interface ListOpts {
+  compacted?: boolean;
   cursor?: string;
   limit?: number;
   since_ms?: number;
@@ -878,6 +880,16 @@ export interface CollectionAppendResponse {
   entry: LogEntry;
 }
 
+export interface CollectionAppendKeyedRequest {
+  key: string;
+  name: string;
+  payload: unknown;
+}
+
+export interface CollectionAppendKeyedResponse {
+  entry: LogEntry;
+}
+
 export interface CollectionCountRequest {
   name: string;
 }
@@ -902,6 +914,15 @@ export interface CollectionFetchRequest {
 }
 
 export interface CollectionFetchResponse {
+  record?: unknown;
+}
+
+export interface CollectionFetchCompactedRequest {
+  id: string;
+  name: string;
+}
+
+export interface CollectionFetchCompactedResponse {
   record?: unknown;
 }
 

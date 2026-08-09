@@ -12,10 +12,38 @@ export interface CollectionChangedEvent {
 
 declare module "./plugin.js" {
   interface Plugin {
-    /** Returns undefined if no record with that id exists. */
+    /**
+     * Returns undefined if no record with that id exists.
+     *
+     * On a keyed (compacted-changelog) log, `get` returns the RAW entry with
+     * that id — for a key, the introducing record WITHOUT later annotations.
+     * Use {@link Plugin.getCompacted} for the folded current state.
+     */
     get(name: string, id: string): Promise<CollectionRecord | undefined>;
 
+    /**
+     * Read a keyed log's folded CURRENT state for one key — the point-read half
+     * of the compacted-changelog projection (paired with
+     * {@link Plugin.listCompacted}). `key` is the fold key; same-key appends are
+     * merged per the collection's `merge` and that key's current record is
+     * returned, or undefined if the key has no records. Throws if the collection
+     * is not a keyed (`id_strategy: by_field`) log. See
+     * notes/DESIGN_LOG_ANNOTATION_PROJECTION.md.
+     */
+    getCompacted(name: string, key: string): Promise<CollectionRecord | undefined>;
+
     list(name: string, opts?: ListOpts): Promise<CollectionRecord[]>;
+
+    /**
+     * Read the compacted-changelog projection of a keyed log — one folded
+     * record per key (its current state) instead of the raw append history.
+     * Same-key records are merged per the collection's `merge` (Authoritative:
+     * later non-null fields win; Collect: payloads accumulate into an array).
+     * Pairs with {@link Plugin.appendKeyed}. Throws if the collection is not a
+     * keyed (`id_strategy: by_field`) log. `opts` since/until/limit apply to
+     * the folded records. See notes/DESIGN_LOG_ANNOTATION_PROJECTION.md.
+     */
+    listCompacted(name: string, opts?: ListOpts): Promise<CollectionRecord[]>;
 
     /** Like {@link Plugin.list} but also returns the unfiltered total. */
     listPage(
@@ -121,11 +149,28 @@ Plugin.prototype.get = async function (
   return res.record as CollectionRecord;
 };
 
+Plugin.prototype.getCompacted = async function (
+  name: string,
+  key: string,
+): Promise<CollectionRecord | undefined> {
+  const res = await this.collectionFetchCompacted(key, name);
+  if (!res || res.record == null) return undefined;
+  return res.record as CollectionRecord;
+};
+
 Plugin.prototype.list = async function (
   name: string,
   opts?: ListOpts,
 ): Promise<CollectionRecord[]> {
   const res = await this.collectionList(name, opts);
+  return res?.records ?? [];
+};
+
+Plugin.prototype.listCompacted = async function (
+  name: string,
+  opts?: ListOpts,
+): Promise<CollectionRecord[]> {
+  const res = await this.collectionList(name, { ...opts, compacted: true });
   return res?.records ?? [];
 };
 

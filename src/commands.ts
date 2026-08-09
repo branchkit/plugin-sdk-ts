@@ -155,6 +155,17 @@ export function text(name?: string): PatternSlot {
   return name ? `<${name}:text>` : "<text>";
 }
 
+/**
+ * Prefix-discovery modes for {@link CommandBuilder.discovery}.
+ * See notes/DESIGN_DISCOVERABLE_PREFIX.md.
+ *
+ * - `"prefix"` — the bare prefix opens the HUD; the capture's words stay live in
+ *   free context (small, acoustically safe target sets).
+ * - `"exclusive"` — the bare prefix enters an auto-minted exclusive mode so the
+ *   capture's words only decode while it holds (large/dynamic sets, e.g. tabs).
+ */
+export type DiscoveryMode = "prefix" | "exclusive";
+
 /** Accumulates a CommandSpec via chained setters; finish with build(). */
 export class CommandBuilder {
   private spec: CommandSpec;
@@ -215,6 +226,18 @@ export class CommandBuilder {
 
   cancelsBridge(): this {
     this.spec.cancels_bridge = true;
+    return this;
+  }
+
+  /**
+   * Declare the command's prefix-discovery affordance (see {@link DiscoveryMode}):
+   * the bare literal prefix of a `prefix + tail-capture` pattern opens the
+   * Discovery HUD when spoken alone, instead of firing. Valid only on a
+   * literal-prefix + single-tail-capture pattern; the actuator rejects other
+   * shapes at load. See notes/DESIGN_DISCOVERABLE_PREFIX.md.
+   */
+  discovery(mode: DiscoveryMode): this {
+    this.spec.discovery = mode;
     return this;
   }
 

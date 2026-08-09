@@ -23,14 +23,16 @@ import type { CollectionGetResponse } from "./types_gen.js";
 export class CollectionMirror {
   #plugin: Plugin;
   #name: string;
+  #compacted: boolean;
   #data: unknown = null;
   #ready = false;
   #onChange: Array<() => void> = [];
 
-  /** @internal — use {@link Plugin.mirrorCollection}. */
-  constructor(plugin: Plugin, name: string) {
+  /** @internal — use {@link Plugin.mirrorCollection} / {@link Plugin.mirrorCompacted}. */
+  constructor(plugin: Plugin, name: string, compacted = false) {
     this.#plugin = plugin;
     this.#name = name;
+    this.#compacted = compacted;
   }
 
   /** True once the mirror has fetched a populated snapshot. */
@@ -65,11 +67,23 @@ export class CollectionMirror {
    * the previous snapshot intact.
    */
   async refresh(): Promise<void> {
-    const res: CollectionGetResponse = await this.#plugin.collectionGet(this.#name);
-    if (unpopulated(res?.data)) {
-      return;
+    let data: unknown;
+    if (this.#compacted) {
+      // Folded view: one record per key. An empty array is the boot-race
+      // no-op, same as a raw unpopulated read.
+      const recs = await this.#plugin.listCompacted(this.#name);
+      if (recs.length === 0) {
+        return;
+      }
+      data = recs;
+    } else {
+      const res: CollectionGetResponse = await this.#plugin.collectionGet(this.#name);
+      if (unpopulated(res?.data)) {
+        return;
+      }
+      data = res.data;
     }
-    this.#data = res.data;
+    this.#data = data;
     this.#ready = true;
     for (const fn of [...this.#onChange]) {
       fn();
@@ -112,11 +126,29 @@ declare module "./plugin.js" {
      * on_ready fetch lands.
      */
     mirrorCollection(name: string): CollectionMirror;
+
+    /**
+     * Mirror the FOLDED current-state view of a keyed (compacted-changelog)
+     * log — the same records `listCompacted` returns, one per key — kept fresh
+     * the same way {@link Plugin.mirrorCollection} is. Use this instead of
+     * `mirrorCollection` for a keyed log: plain `mirrorCollection` mirrors the
+     * RAW append history (every append, unfolded), almost never what a consumer
+     * of a keyed log wants. The mirrored collection must declare
+     * `emits_on_change: true` for the refetch-on-change to fire (logs default
+     * off — see notes/DESIGN_LOG_ANNOTATION_PROJECTION.md).
+     */
+    mirrorCompacted(name: string): CollectionMirror;
   }
 }
 
 Plugin.prototype.mirrorCollection = function (name: string): CollectionMirror {
   const mirror = new CollectionMirror(this, name);
+  mirror.attach();
+  return mirror;
+};
+
+Plugin.prototype.mirrorCompacted = function (name: string): CollectionMirror {
+  const mirror = new CollectionMirror(this, name, true);
   mirror.attach();
   return mirror;
 };
