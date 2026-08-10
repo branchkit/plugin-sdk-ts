@@ -36,6 +36,7 @@ export const MethodCollectionPatch = "collection.patch" as const; // since 0.1.0
 export const MethodCollectionPut = "collection.put" as const; // since 0.1.0
 export const MethodCollectionsList = "collections.list" as const; // since 0.1.0
 export const MethodCommandsAddAlias = "commands.add_alias" as const; // since 0.1.0
+export const MethodCommandsConfusability = "commands.confusability" as const; // since 0.1.0
 export const MethodCommandsDelete = "commands.delete" as const; // since 0.1.0
 export const MethodCommandsEnumerate = "commands.enumerate" as const; // since 0.1.0
 export const MethodCommandsList = "commands.list" as const; // since 0.1.0

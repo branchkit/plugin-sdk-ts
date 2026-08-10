@@ -201,6 +201,14 @@ export interface CommandSpec {
   variants: unknown[];
 }
 
+export interface ConfusabilityFinding {
+  confuser: string;
+  distance: number;
+  example: string;
+  owner: string;
+  target: string;
+}
+
 export interface ContactInfo {
   email?: string;
   name: string;
@@ -986,6 +994,15 @@ export interface CommandsAddAliasRequest {
 
 export interface CommandsAddAliasResponse {
   ok: boolean;
+}
+
+export interface CommandsConfusabilityRequest {
+  requires_tags?: string[];
+  words?: string[];
+}
+
+export interface CommandsConfusabilityResponse {
+  findings: ConfusabilityFinding[];
 }
 
 export interface CommandsDeleteRequest {
