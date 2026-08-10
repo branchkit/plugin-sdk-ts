@@ -978,6 +978,16 @@ export interface CollectionPutResponse {
   ok: boolean;
 }
 
+export interface CollectionsCreateUserRequest {
+  description?: string;
+  name: string;
+  words_text?: string;
+}
+
+export interface CollectionsCreateUserResponse {
+  name: string;
+}
+
 export interface CollectionsListRequest {
   kind?: string;
 }
