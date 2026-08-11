@@ -159,7 +159,9 @@ describe("collection state helpers", () => {
   test("subscribe filters notifications by collection name", async () => {
     const p = new Plugin();
     const seen: CollectionChangedEvent[] = [];
-    p.subscribe("things", (evt) => seen.push(evt));
+    p.subscribe("things", (evt) => {
+      seen.push(evt);
+    });
 
     // Drive the ordered notification pump directly; the actuator side is
     // exercised by the conformance harness. Delivery is async (wire-ordered),

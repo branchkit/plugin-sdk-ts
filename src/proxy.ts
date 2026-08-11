@@ -28,6 +28,12 @@
 import { connect as netConnect, type Socket } from "node:net";
 import { connect as tlsConnect } from "node:tls";
 
+/** Statuses that carry a Location the client is expected to follow. */
+const REDIRECT_STATUS = new Set([301, 302, 303, 307, 308]);
+
+/** Matches WHATWG fetch (and undici); Go's http.Client caps at 10. */
+const MAX_REDIRECTS = 20;
+
 interface ProxyEndpoint {
   kind: "unix" | "tcp";
   path: string; // unix: socket path
@@ -64,35 +70,54 @@ function connectTunnel(
   endpoint: ProxyEndpoint,
   host: string,
   port: number,
+  signal?: AbortSignal,
 ): Promise<Socket> {
   return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(abortError());
+      return;
+    }
     const sock =
       endpoint.kind === "unix"
         ? netConnect(endpoint.path)
         : netConnect(endpoint.port, endpoint.host);
     let head = Buffer.alloc(0);
-    const fail = (err: Error) => {
+    let settled = false;
+
+    // The caller's AbortSignal MUST cover this phase, not just the request that
+    // follows it. Previously the signal was wired only in requestOverTunnel, so
+    // UpstreamClient's 10s timeout could not fire while the proxy dial or the
+    // CONNECT handshake hung — the request sat forever and the socket leaked.
+    const onAbort = () => fail(abortError());
+    const done = () => {
+      settled = true;
+      signal?.removeEventListener("abort", onAbort);
+      sock.removeListener("data", onData);
+      sock.removeListener("error", fail);
+    };
+    function fail(err: Error) {
+      if (settled) return;
+      done();
       sock.destroy();
       reject(err);
-    };
+    }
+    signal?.addEventListener("abort", onAbort, { once: true });
+
     sock.on("error", fail);
     sock.on("connect", () => {
       sock.write(`CONNECT ${host}:${port} HTTP/1.1\r\nHost: ${host}:${port}\r\n\r\n`);
     });
-    const onData = (d: Buffer) => {
+    function onData(d: Buffer) {
       head = Buffer.concat([head, d]);
       const end = head.indexOf("\r\n\r\n");
       if (end === -1) {
         if (head.length > 4096) fail(new Error("oversized CONNECT response"));
         return;
       }
-      sock.removeListener("data", onData);
-      sock.removeListener("error", fail);
       const status = head.subarray(0, end).toString("latin1").split("\r\n")[0] ?? "";
       const code = status.split(/\s+/)[1];
       if (code !== "200") {
-        sock.destroy();
-        reject(
+        fail(
           new Error(
             `branchkit proxy refused CONNECT ${host}:${port}: ${status} ` +
               `(host not in the plugin's declared allowlist?)`,
@@ -100,11 +125,17 @@ function connectTunnel(
         );
         return;
       }
+      if (settled) return;
+      done();
       // Nothing follows the 200 head until we speak, so no residual bytes.
       resolve(sock);
-    };
+    }
     sock.on("data", onData);
   });
+}
+
+function abortError(): Error {
+  return new DOMException("This operation was aborted", "AbortError");
 }
 
 /** Incremental Transfer-Encoding: chunked decoder. Feed raw bytes, receive
@@ -166,15 +197,17 @@ class ChunkedDecoder {
 function requestOverTunnel(
   sock: Socket,
   url: URL,
-  req: Request,
+  method: string,
+  reqHeaders: Headers,
   bodyBytes: Uint8Array | null,
   signal: AbortSignal | undefined,
 ): Promise<Response> {
   return new Promise((resolve, reject) => {
     const path = (url.pathname || "/") + url.search;
-    const lines = [`${req.method} ${path} HTTP/1.1`];
-    const headers = new Headers(req.headers);
-    if (!headers.has("host")) headers.set("host", url.host);
+    const lines = [`${method} ${path} HTTP/1.1`];
+    // Copy: the caller reuses its Headers across redirect hops.
+    const headers = new Headers(reqHeaders);
+    headers.set("host", url.host);
     // One request per tunnel: the proxy tunnels a single connection, and
     // read-to-EOF is the universal body terminator.
     headers.set("connection", "close");
@@ -232,7 +265,7 @@ function requestOverTunnel(
       }
 
       const bodyless =
-        req.method === "HEAD" || status === 204 || status === 304 || status < 200;
+        method === "HEAD" || status === 204 || status === 304 || status < 200;
       if (bodyless) {
         settled = true;
         signal?.removeEventListener("abort", onAbort);
@@ -327,21 +360,74 @@ export function proxiedFetchVia(
     }
     const req = new Request(input as RequestInfo, init);
     const signal = init?.signal ?? (input instanceof Request ? input.signal : undefined) ?? undefined;
-    const bodyBytes =
-      req.method === "GET" || req.method === "HEAD"
-        ? null
-        : new Uint8Array(await req.arrayBuffer());
-    const port = url.port
-      ? Number(url.port)
-      : url.protocol === "https:"
-        ? 443
-        : 80;
-    const raw = await connectTunnel(endpoint, url.hostname, port);
-    const sock =
-      url.protocol === "https:"
-        ? (tlsConnect({ socket: raw, servername: url.hostname }) as unknown as Socket)
-        : raw;
-    return requestOverTunnel(sock, url, req, bodyBytes, signal ?? undefined);
+
+    let method = req.method;
+    let bodyBytes =
+      method === "GET" || method === "HEAD" ? null : new Uint8Array(await req.arrayBuffer());
+    const headers = new Headers(req.headers);
+    const redirectMode = req.redirect || "follow";
+    let current = url;
+
+    // Redirect following, because unproxied `fetch` follows and this function
+    // stands in for it — without the loop the SAME plugin code got a bare 3xx
+    // when sandboxed and the final response when not. Cap and semantics match
+    // WHATWG fetch (20 hops; 303, and 301/302-on-POST, rewrite to GET).
+    for (let hop = 0; ; hop++) {
+      if (signal?.aborted) throw abortError();
+
+      const port = current.port
+        ? Number(current.port)
+        : current.protocol === "https:"
+          ? 443
+          : 80;
+      const raw = await connectTunnel(endpoint, current.hostname, port, signal);
+      const sock =
+        current.protocol === "https:"
+          ? (tlsConnect({ socket: raw, servername: current.hostname }) as unknown as Socket)
+          : raw;
+      const res = await requestOverTunnel(sock, current, method, headers, bodyBytes, signal);
+
+      const location = res.headers.get("location");
+      if (!REDIRECT_STATUS.has(res.status) || !location) return res;
+      if (redirectMode === "manual") return res;
+      if (redirectMode === "error") {
+        await res.body?.cancel();
+        throw new TypeError(`unexpected redirect (${res.status}) to ${location}`);
+      }
+      if (hop >= MAX_REDIRECTS) {
+        await res.body?.cancel();
+        throw new TypeError(`too many redirects (${MAX_REDIRECTS})`);
+      }
+
+      let next: URL;
+      try {
+        next = new URL(location, current);
+      } catch {
+        return res; // unparseable Location — hand the 3xx back rather than guess
+      }
+      if (next.protocol !== "http:" && next.protocol !== "https:") {
+        await res.body?.cancel();
+        throw new TypeError(`redirect to unsupported scheme ${next.protocol}`);
+      }
+
+      // Release the tunnel before dialing the next hop.
+      await res.body?.cancel();
+
+      if (res.status === 303 || ((res.status === 301 || res.status === 302) && method === "POST")) {
+        method = "GET";
+        bodyBytes = null;
+        headers.delete("content-length");
+        headers.delete("content-type");
+      }
+      // Credentials must not follow a hop to a different origin — same rule
+      // WHATWG fetch applies. (The proxy would also refuse a host outside the
+      // manifest allowlist, but that is a second line of defense, not the first.)
+      if (next.origin !== current.origin) {
+        headers.delete("authorization");
+        headers.delete("cookie");
+      }
+      current = next;
+    }
   };
   return proxied as typeof fetch;
 }

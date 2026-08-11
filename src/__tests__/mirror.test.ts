@@ -90,6 +90,42 @@ describe("collection mirror", () => {
     expect(mirror.ready).toBe(true);
   });
 
+  // Drives the REAL notification pump (not fakePlugin's stubbed `on`), because
+  // the thing under test IS the pump's await. Inverted latency is the
+  // discriminator: the FIRST update's fetch is slow, the SECOND's is instant.
+  //
+  //   serialized (correct): get#1 completes → v1, then get#2 → v2. Final = v2.
+  //   concurrent (the bug): both in flight; get#2 resolves first and writes v2,
+  //                         then the stale get#1 resolves and clobbers it → v1.
+  //
+  // So a regression flips the final snapshot back to v1.
+  test("rapid updates refresh in wire order, not completion order", async () => {
+    const p = new Plugin();
+    let get = 0;
+    // @ts-expect-error — stubbing transport for unit test
+    p.call = async (method: string) => {
+      expect(method).toBe("collection.get");
+      get++;
+      const version = `v${get}`;
+      // First fetch is slow, second is instant.
+      await new Promise((r) => setTimeout(r, get === 1 ? 50 : 0));
+      return { name: "alphabet", introducer: "voice", merge: "authoritative", data: { k: version } };
+    };
+
+    const mirror = p.mirrorCollection("alphabet");
+
+    // Two updates land back-to-back, as a burst of owner writes produces.
+    // @ts-expect-error — enqueueNotification is private
+    p.enqueueNotification("_platform.collection.updated", { collection: "alphabet" });
+    // @ts-expect-error
+    p.enqueueNotification("_platform.collection.updated", { collection: "alphabet" });
+
+    await new Promise((r) => setTimeout(r, 200));
+
+    expect(get).toBe(2);
+    expect(mirror.raw()).toEqual({ k: "v2" });
+  });
+
   test("on_ready fetches; matching update refetches; non-matching ignored", async () => {
     let version = "v1";
     let gets = 0;

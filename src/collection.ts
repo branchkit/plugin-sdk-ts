@@ -133,8 +133,15 @@ declare module "./plugin.js" {
      * Multiple subscriptions on the same name run independently. There
      * is no Unsubscribe today; subscriptions live for the plugin
      * process's lifetime.
+     *
+     * An async handler is awaited before the next notification is delivered —
+     * return the promise rather than `void`-ing it, or two rapid updates race
+     * and the later-resolving one wins regardless of wire order.
      */
-    subscribe(name: string, fn: (evt: CollectionChangedEvent) => void): void;
+    subscribe(
+      name: string,
+      fn: (evt: CollectionChangedEvent) => void | Promise<void>,
+    ): void;
   }
 }
 
@@ -250,12 +257,14 @@ Plugin.prototype.deleteMany = async function (
 
 Plugin.prototype.subscribe = function (
   name: string,
-  fn: (evt: CollectionChangedEvent) => void,
+  fn: (evt: CollectionChangedEvent) => void | Promise<void>,
 ): void {
   this.on(EventCollectionUpdated, (params: unknown) => {
     const evt = params as CollectionChangedEvent | undefined;
     if (evt && evt.collection === name) {
-      fn(evt);
+      // Return, don't discard: the ordered pump awaits this, which is what
+      // keeps two rapid updates from racing.
+      return fn(evt);
     }
   });
 };

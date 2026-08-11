@@ -30,7 +30,12 @@ interface RpcError {
 // --- Handler types ---
 
 type HandlerFn = (params: unknown) => Promise<unknown>;
-type ListenerFn = (params: unknown) => void;
+/**
+ * A listener may be async. The ordered pump awaits whatever it returns before
+ * delivering the next notification, so returning the promise is what preserves
+ * wire order across an async listener — see {@link Plugin.on}.
+ */
+type ListenerFn = (params: unknown) => void | Promise<void>;
 
 /**
  * A typed on_action request where the params field is narrowed to T.
@@ -217,14 +222,21 @@ export class Plugin {
    * The actuator sends on_ready after every plugin has called run().
    * This is the safe place to read other plugins' collections.
    * Must be called before run().
+   *
+   * An async callback is awaited before the next notification is delivered,
+   * so an on_ready fetch completes before any update event lands.
    */
-  onReady(fn: () => void): void {
+  onReady(fn: () => void | Promise<void>): void {
     this.on("on_ready", () => fn());
   }
 
   /**
    * Register a listener for actuator→plugin notifications (fire-and-forget).
    * Multiple listeners can be registered for the same method.
+   *
+   * An async listener MUST return its promise (do not `void` it) — the ordered
+   * pump awaits the return value, so a discarded promise opts that listener out
+   * of the wire-order guarantee and lets concurrent invocations interleave.
    */
   on(method: string, fn: ListenerFn): void {
     const list = this.listeners.get(method) ?? [];

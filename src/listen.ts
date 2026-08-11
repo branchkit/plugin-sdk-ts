@@ -36,6 +36,7 @@ export class Listener {
   private token: string;
   private routes = new Map<string, HttpHandler>();
   private _addr: string;
+  private serving = false;
   readonly plugin: Plugin;
 
   /** @internal — use ListenLocal() to create */
@@ -47,8 +48,15 @@ export class Listener {
   }
 
   /**
-   * Register an HTTP handler.
-   * Pattern is "METHOD /path" (e.g. "POST /push", "GET /status").
+   * Register an HTTP handler for an exact method + path.
+   *
+   * Matching is on the path only — a query string on the request is ignored,
+   * so `POST /push` also serves `POST /push?since=12`.
+   *
+   * Narrower than the Go SDK, which hands the pattern to `http.ServeMux` and
+   * therefore also supports wildcards (`/item/{id}`) and trailing-slash subtree
+   * matches. Register each concrete path here, or read the params off
+   * `req.url` yourself.
    */
   handleFunc(method: string, path: string, handler: HttpHandler): void {
     this.routes.set(`${method} ${path}`, handler);
@@ -64,14 +72,28 @@ export class Listener {
     return this.token;
   }
 
-  /** Start accepting connections. Non-blocking (unlike Go's Serve). */
+  /**
+   * Begin dispatching to registered handlers. Non-blocking (unlike Go's Serve,
+   * which blocks until shutdown).
+   *
+   * The socket is already bound and accepting when ListenLocal resolves — Node
+   * cannot separate bind from accept the way Go's net.Listen + Serve can, and
+   * the port has to be known to write connect.json. So rather than accept
+   * silently into an empty route table, requests arriving before serve() get a
+   * 503. Without that they drew a 404, which is indistinguishable from a
+   * genuinely wrong path and sent callers hunting the wrong bug.
+   */
   serve(): void {
-    // Already listening from ListenLocal
+    this.serving = true;
   }
 
   /** Gracefully stop the listener and remove the discovery file. */
   shutdown(): void {
     this.server.close();
+    // close() alone stops new connections but waits on idle keep-alive
+    // sockets, which can hang process exit. Go's Shutdown(ctx) bounds this
+    // with the caller's deadline; Node needs the explicit sweep.
+    this.server.closeAllConnections?.();
     removeDiscovery();
   }
 
@@ -90,8 +112,20 @@ export class Listener {
       return;
     }
 
-    const key = `${req.method} ${req.url}`;
-    const handler = this.routes.get(key);
+    if (!this.serving) {
+      res.writeHead(503);
+      res.end("listener not serving yet");
+      return;
+    }
+
+    // Match on the path alone: req.url carries the query string, so keying the
+    // route table on it made `POST /push?x=1` miss a `POST /push` route. Go's
+    // ServeMux matches on path, so the same plugin worked there and 404'd here.
+    const url = req.url ?? "";
+    const q = url.indexOf("?");
+    const path = q === -1 ? url : url.slice(0, q);
+
+    const handler = this.routes.get(`${req.method} ${path}`);
     if (handler) {
       handler(req, res);
     } else {
@@ -134,11 +168,28 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
     const server = createServer();
     const usingInherited = inheritedListenerCount() > 0;
 
+    // onListening runs as an async callback, OUTSIDE the executor's synchronous
+    // frame — so a throw in there does not reject this promise, it becomes an
+    // uncaughtException while the caller awaits forever. Route every settle
+    // through these two so that cannot happen, and so a late `error` event
+    // can't reject after we've already resolved.
+    let settled = false;
+    const settleOk = (l: Listener) => {
+      if (settled) return;
+      settled = true;
+      resolve(l);
+    };
+    const settleErr = (err: Error) => {
+      if (settled) return;
+      settled = true;
+      server.close();
+      reject(err);
+    };
+
     const onListening = () => {
       const address = server.address();
       if (!address || typeof address === "string") {
-        server.close();
-        reject(new Error("failed to get listener address"));
+        settleErr(new Error("failed to get listener address"));
         return;
       }
 
@@ -150,8 +201,7 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
       if (usingInherited) {
         const granted = grantedPorts();
         if (granted.length > 0 && !granted.includes(address.port)) {
-          server.close();
-          reject(
+          settleErr(
             new Error(
               `runtime silently rebound the inherited listener ` +
                 `(serving :${address.port}, granted :${granted.join(", :")})`,
@@ -168,8 +218,24 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
         listener._dispatch(req, res);
       });
 
-      writeDiscovery({ port: String(address.port), token });
-      resolve(listener);
+      // A failed discovery write is fatal, not cosmetic: the external service
+      // finds the port and token ONLY through connect.json, so a listener
+      // without one is unreachable. Go closes the listener and returns the
+      // error (listen.go); match that instead of throwing into the void.
+      try {
+        writeDiscovery({ port: String(address.port), token });
+      } catch (err: unknown) {
+        settleErr(
+          new Error(
+            `failed to write connect.json discovery file: ${
+              err instanceof Error ? err.message : String(err)
+            }`,
+          ),
+        );
+        return;
+      }
+
+      settleOk(listener);
     };
 
     if (usingInherited) {
@@ -185,7 +251,7 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
       // loopback, so refuse loudly — a TS plugin declaring sockets.listen
       // must run under Node until Bun grows fd support.
       if (process.versions.bun) {
-        reject(
+        settleErr(
           new Error(
             "sockets.listen granted, but the Bun runtime cannot serve an inherited " +
               "listener fd (no listen({fd}) support as of Bun 1.3; node:http silently " +
@@ -200,7 +266,7 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
     }
 
     server.on("error", (err) => {
-      reject(err);
+      settleErr(err);
     });
   });
 }

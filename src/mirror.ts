@@ -96,16 +96,25 @@ export class CollectionMirror {
     // uses, so log lines carry the plugin prefix without depending on
     // Plugin's private field.
     const selfId = process.env.BRANCHKIT_PLUGIN_ID ?? "unknown";
-    this.#plugin.onReady(() => {
-      void this.refresh().catch((err) => {
+    // RETURN the refresh promise — the ordered notification pump awaits it, so
+    // refreshes run one at a time in wire order. Discarding it (`void ...`) let
+    // N rapid update events start N concurrent collection.get calls, and
+    // whichever resolved LAST won the snapshot write regardless of which event
+    // it belonged to. The Go SDK gets this for free: its notify worker is a
+    // single goroutine calling Refresh() synchronously.
+    //
+    // This cannot deadlock: refresh() blocks on an outbound call whose response
+    // is delivered by the read loop, which runs independently of this pump.
+    this.#plugin.onReady(() =>
+      this.refresh().catch((err) => {
         Log(selfId, `mirror "${this.#name}": initial fetch failed: ${err}`);
-      });
-    });
-    this.#plugin.subscribe(this.#name, () => {
-      void this.refresh().catch((err) => {
+      }),
+    );
+    this.#plugin.subscribe(this.#name, () =>
+      this.refresh().catch((err) => {
         Log(selfId, `mirror "${this.#name}": refresh failed: ${err}`);
-      });
-    });
+      }),
+    );
   }
 }
 
