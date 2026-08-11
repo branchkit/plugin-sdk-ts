@@ -1,5 +1,12 @@
 import "./proxy.js"; // side-effect: route fetch through BRANCHKIT_PROXY when sandboxed (per-host tier)
-export { Plugin, RpcCallError, apiVersion } from "./plugin.js";
+export {
+  Plugin,
+  RpcCallError,
+  RecordingDisabledError,
+  errorKindOf,
+  apiVersion,
+} from "./plugin.js";
+export type { FaultData } from "./plugin.js";
 export { Log } from "./log.js";
 export {
   PushCommands,
@@ -15,6 +22,9 @@ export {
 } from "./commands.js";
 export { ListenLocal, Listener, inheritedListenerCount, type ConnectInfo } from "./listen.js";
 export { UpstreamClient } from "./upstream.js";
+// Closed vocabularies generated from the actuator (error kinds, input
+// directives, effect names). Go gets these for free via package `shared`.
+export * from "./closed_vocab_gen.js";
 export * from "./contracts_gen.js";
 export * from "./types_gen.js";
 import "./methods_gen.js"; // module augmentation — side-effect import
@@ -24,7 +34,7 @@ import "./effects.js"; // module augmentation — capability-mechanism helpers
 import "./debug.js"; // module augmentation — per-plugin debug log helper
 import "./mirror.js"; // module augmentation — consumed-collection mirror
 export { CollectionMirror } from "./mirror.js";
-export { RecordingDisabledError, logListOpts } from "./collection_log.js";
+export { logListOpts } from "./collection_log.js";
 export { listOpts, type CollectionChangedEvent } from "./collection.js";
 export {
   type AssertEffectResult,

@@ -1,6 +1,15 @@
 import { describe, test, expect } from "bun:test";
-import { Plugin } from "../plugin.js";
-import { RecordingDisabledError, logListOpts } from "../collection_log.js";
+import {
+  Plugin,
+  RpcCallError,
+  RecordingDisabledError,
+  errorKindOf,
+} from "../plugin.js";
+import {
+  ErrorKindRecordingDisabled,
+  ErrorKindNotFound,
+} from "../closed_vocab_gen.js";
+import { logListOpts } from "../collection_log.js";
 import "../methods_gen.js"; // ensure auto-gen methods are wired before helpers
 import "../collection_log.js";
 
@@ -45,9 +54,46 @@ describe("collection_log helpers", () => {
     });
   });
 
-  test("append wraps RECORDING_DISABLED into RecordingDisabledError", async () => {
+  // The wire→class mapping itself lives in `rpcErrorFor` and is exercised
+  // end to end by the conformance harness (`Structured errors` category,
+  // all three lanes) because only that path goes through a real wire error.
+  // What this asserts is the contract the mapping produces: the sentinel is
+  // an RpcCallError carrying the kind, and `append` propagates it untouched
+  // rather than re-wrapping or swallowing it.
+  test("append propagates RecordingDisabledError carrying its kind", async () => {
+    // The message deliberately omits the "RECORDING_DISABLED" token — nothing
+    // in the path is allowed to depend on the prose.
+    const wire = new RecordingDisabledError(
+      -32006,
+      "log collection 'x' has recording turned off",
+      {
+        kind: ErrorKindRecordingDisabled,
+        op: "append",
+        collection: "x",
+        detail: "log collection 'x' has recording turned off",
+      },
+    );
+    const { plugin } = fakePlugin(() => wire);
+
+    let caught: unknown;
+    try {
+      await plugin.append("x", {});
+    } catch (e) {
+      caught = e;
+    }
+    expect(caught).toBe(wire);
+    expect(caught).toBeInstanceOf(RecordingDisabledError);
+    expect(caught).toBeInstanceOf(RpcCallError);
+    expect(errorKindOf(caught)).toBe(ErrorKindRecordingDisabled);
+    expect((caught as RpcCallError).data?.op).toBe("append");
+  });
+
+  // An actuator predating structured errors sends no `data`. The call must
+  // still produce a usable error, but cannot be classified — so kind-based
+  // matching correctly does not fire.
+  test("an error without data degrades instead of throwing", async () => {
     const { plugin } = fakePlugin(
-      () => new Error("RECORDING_DISABLED: log collection 'x' has recording turned off"),
+      () => new RpcCallError(-1, "RECORDING_DISABLED: recording is off"),
     );
 
     let caught: unknown;
@@ -56,7 +102,47 @@ describe("collection_log helpers", () => {
     } catch (e) {
       caught = e;
     }
-    expect(caught).toBeInstanceOf(RecordingDisabledError);
+    expect(caught).toBeInstanceOf(RpcCallError);
+    expect(caught).not.toBeInstanceOf(RecordingDisabledError);
+    expect((caught as RpcCallError).kind).toBeUndefined();
+    expect((caught as RpcCallError).message).toBe("RECORDING_DISABLED: recording is off");
+    expect(errorKindOf(caught)).toBeUndefined();
+  });
+
+  // A kind this SDK has no constant for must fall through, not blow up.
+  test("an unrecognized kind degrades to the generic error", async () => {
+    const { plugin } = fakePlugin(
+      () =>
+        new RpcCallError(-32099, "something new happened", {
+          kind: "teleportation_failed",
+        }),
+    );
+
+    let caught: unknown;
+    try {
+      await plugin.append("x", {});
+    } catch (e) {
+      caught = e;
+    }
+    expect(caught).toBeInstanceOf(RpcCallError);
+    expect(caught).not.toBeInstanceOf(RecordingDisabledError);
+    expect(errorKindOf(caught)).toBe("teleportation_failed");
+    expect(errorKindOf(caught)).not.toBe(ErrorKindNotFound);
+  });
+
+  test("the error kind carries the structured detail members", async () => {
+    const err = new RpcCallError(-32002, "OPERATION_NOT_PERMITTED (Put): append-only", {
+      kind: "not_permitted",
+      op: "put",
+      collection: "evts",
+      detail: "append-only",
+    });
+    expect(err.kind).toBe("not_permitted");
+    expect(err.data?.op).toBe("put");
+    expect(err.data?.collection).toBe("evts");
+    // `detail` is the reason WITHOUT the taxonomy prefix `message` carries.
+    expect(err.data?.detail).toBe("append-only");
+    expect(err.message).toContain("OPERATION_NOT_PERMITTED");
   });
 
   test("appendEntry returns the full LogEntry", async () => {

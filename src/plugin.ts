@@ -1,6 +1,7 @@
 import { createInterface } from "node:readline";
 import { Log } from "./log.js";
 import { APIVersion, HookOnAction } from "./contracts_gen.js";
+import { type ErrorKind, ErrorKindRecordingDisabled } from "./closed_vocab_gen.js";
 import type { OnActionRequest, OnActionResponse } from "./types_gen.js";
 import { runWithCorrelation, getCurrentCorrelation } from "./correlation.js";
 
@@ -25,6 +26,32 @@ interface RpcMessage {
 interface RpcError {
   code: number;
   message: string;
+  /**
+   * Structured classification (JSON-RPC 2.0 `data`). Absent from errors sent
+   * by an actuator predating structured errors, and from errors a plugin
+   * sends back — always treat it as optional.
+   */
+  data?: FaultData;
+}
+
+/**
+ * The structured payload on an RPC error. Only `kind` is guaranteed; the rest
+ * are populated when they apply.
+ *
+ * `kind` is typed as `ErrorKind` (a plain `string`), NOT a union of the known
+ * values — an actuator newer than this SDK may send a kind with no constant
+ * here, and that must fall through a `switch` rather than fail to parse.
+ */
+export interface FaultData {
+  kind: ErrorKind;
+  /** The collection verb, snake_case ("put", "append", …). */
+  op?: string;
+  /** Collection the operation targeted. */
+  collection?: string;
+  /** Record id the operation targeted. */
+  id?: string;
+  /** The reason WITHOUT the taxonomy prefix that `message` carries. */
+  detail?: string;
 }
 
 // --- Handler types ---
@@ -67,13 +94,77 @@ interface PendingCall {
 
 // --- RPC call error ---
 
+/**
+ * An error returned by the actuator in response to a plugin call.
+ *
+ * Branch on `kind`, never on `message` — the prose is human-readable and its
+ * wording is not part of the contract:
+ *
+ * ```ts
+ * catch (e) {
+ *   if (e instanceof RpcCallError && e.kind === ErrorKindNotPermitted) {
+ *     // the collection's shape forbids this op — a different remedy from
+ *     // ErrorKindForbidden, which means the caller lacks a privilege
+ *   }
+ * }
+ * ```
+ *
+ * Version skew: an actuator predating structured errors sends no `data`, so
+ * `kind` is `undefined` and only `code` and `message` are meaningful.
+ */
 export class RpcCallError extends Error {
+  /**
+   * JSON-RPC error code. Derived from `kind` actuator-side, so the two never
+   * disagree; prefer `kind` for branching.
+   */
   code: number;
-  constructor(code: number, message: string) {
+  /** Machine-readable classification. Undefined when `data` was absent. */
+  kind?: ErrorKind;
+  /** Full structured payload. Undefined when absent from the wire. */
+  data?: FaultData;
+
+  constructor(code: number, message: string, data?: FaultData) {
     super(message);
     this.code = code;
+    this.data = data;
+    this.kind = data?.kind;
     this.name = "RpcCallError";
   }
+}
+
+/**
+ * Sentinel subclass for the recording-disabled refusal: a log collection has
+ * its recording flag off, so the append was refused.
+ *
+ * Constructed centrally by {@link rpcErrorFor}, so `instanceof` works for ANY
+ * call that hits this condition — not just the log helpers. That is what keeps
+ * it at parity with the Go SDK, whose `errors.Is(err, ErrRecordingDisabled)`
+ * matches on the kind wherever the error came from.
+ */
+export class RecordingDisabledError extends RpcCallError {
+  constructor(code: number, message: string, data?: FaultData) {
+    super(code, message, data);
+    this.name = "RecordingDisabledError";
+  }
+}
+
+/**
+ * Build the right error class for a wire error. Kind-driven, so a new sentinel
+ * subclass is a line here rather than a wrapper at every call site.
+ */
+function rpcErrorFor(code: number, message: string, data?: FaultData): RpcCallError {
+  if (data?.kind === ErrorKindRecordingDisabled) {
+    return new RecordingDisabledError(code, message, data);
+  }
+  return new RpcCallError(code, message, data);
+}
+
+/**
+ * Read the error kind off any thrown value. Returns undefined when the value
+ * is not an RpcCallError or carries no structured data.
+ */
+export function errorKindOf(e: unknown): ErrorKind | undefined {
+  return e instanceof RpcCallError ? e.kind : undefined;
 }
 
 // --- Plugin class ---
@@ -389,7 +480,7 @@ export class Plugin {
       if (pc) {
         this.pending.delete(msg.id);
         if (msg.error) {
-          pc.reject(new RpcCallError(msg.error.code, msg.error.message));
+          pc.reject(rpcErrorFor(msg.error.code, msg.error.message, msg.error.data));
         } else {
           pc.resolve(msg.result);
         }

@@ -23,19 +23,6 @@ export interface LogListOpts {
   cursor?: string;
 }
 
-/**
- * Sentinel for the "RECORDING_DISABLED" wire error returned by the
- * actuator when an Append targets a log collection whose recording flag
- * is off. Throw an instance of this; callers can `instanceof` check it
- * to drop silently or surface a one-time warning.
- */
-export class RecordingDisabledError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "RecordingDisabledError";
-  }
-}
-
 declare module "./plugin.js" {
   interface Plugin {
     /**
@@ -116,7 +103,7 @@ Plugin.prototype.append = async function (name: string, payload: unknown): Promi
     }
     return entry.id;
   } catch (e) {
-    throw maybeWrapRecordingDisabled(e);
+    throw e;
   }
 };
 
@@ -131,7 +118,7 @@ Plugin.prototype.appendEntry = async function (
     }
     return entry;
   } catch (e) {
-    throw maybeWrapRecordingDisabled(e);
+    throw e;
   }
 };
 
@@ -143,7 +130,7 @@ Plugin.prototype.appendKeyed = async function (
   try {
     await this.collectionAppendKeyed(key, name, payload);
   } catch (e) {
-    throw maybeWrapRecordingDisabled(e);
+    throw e;
   }
 };
 
@@ -207,13 +194,6 @@ Plugin.prototype.getCollectionRecording = async function (name: string): Promise
   const res = await this.privacyGetRecording(name);
   return res?.enabled ?? false;
 };
-
-function maybeWrapRecordingDisabled(e: unknown): unknown {
-  if (e instanceof Error && e.message.includes("RECORDING_DISABLED")) {
-    return new RecordingDisabledError(e.message);
-  }
-  return e;
-}
 
 /**
  * Build a LogListOpts with typed scalar values. The auto-generated
