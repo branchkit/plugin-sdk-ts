@@ -172,15 +172,15 @@ Plugin.prototype.onEffectDisplaced = function (
     if (params == null || typeof params !== "object") return;
     const obj = params as Record<string, unknown>;
     const effect = optionalString(obj.effect);
-    const newOwner = optionalString(obj.new_owner);
     const displacedOwner = optionalString(obj.displaced_owner);
-    if (
-      effect === undefined ||
-      newOwner === undefined ||
-      displacedOwner === undefined
-    ) {
-      return;
-    }
+    // Only `effect` and `displaced_owner` are load-bearing — the first
+    // identifies what was lost, the second is what this filter keys on. Their
+    // absence means a payload this SDK cannot interpret, so drop it.
+    if (effect === undefined || displacedOwner === undefined) return;
+    // `new_owner` is Option<String> on the wire and may legitimately be null.
+    // Requiring it dropped real displacement events that Go delivers with an
+    // empty owner — the plugin never learned it had lost the effect at all.
+    const newOwner = optionalString(obj.new_owner) ?? "";
     if (displacedOwner !== selfId) return;
     handler({ effect, newOwner, displacedOwner });
   });

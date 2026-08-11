@@ -134,6 +134,25 @@ describe("PushCommands file loading", () => {
     }
   });
 
+  // A missing file is fine (tested below), but every OTHER read failure used to
+  // be swallowed too — an unreadable or permission-denied commands.json quietly
+  // pushed zero commands and the plugin looked like it simply had none.
+  test("an unreadable commands.json throws instead of pushing zero commands", async () => {
+    setup();
+    const orig = process.env.BRANCHKIT_PLUGIN_DIR;
+    process.env.BRANCHKIT_PLUGIN_DIR = FIXTURE_DIR;
+    try {
+      // A directory where the file should be: EISDIR on read, not ENOENT.
+      mkdirSync(join(FIXTURE_DIR, "commands.json"), { recursive: true });
+      const mockPlugin = { call: async () => ({ count: 0 }) };
+      await expect(PushCommands(mockPlugin as any)).rejects.toThrow(/commands\.json/);
+    } finally {
+      if (orig !== undefined) process.env.BRANCHKIT_PLUGIN_DIR = orig;
+      else delete process.env.BRANCHKIT_PLUGIN_DIR;
+      teardown();
+    }
+  });
+
   test("returns 0 when commands.json is missing and no context dir", async () => {
     setup();
     try {

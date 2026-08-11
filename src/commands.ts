@@ -68,12 +68,21 @@ export async function PushCommands(plugin: Plugin): Promise<number> {
   return resp.count;
 }
 
+/**
+ * An ABSENT file is not an error — a plugin may ship only context files under
+ * commands/, or no command files at all. Any other read failure propagates:
+ * this used to swallow every error and return `[]`, so an unreadable or
+ * permission-denied commands.json silently pushed zero commands.
+ */
 function loadCommandFile(path: string): Record<string, unknown>[] {
   let data: string;
   try {
     data = readFileSync(path, "utf-8");
-  } catch {
-    return [];
+  } catch (err: unknown) {
+    if ((err as NodeJS.ErrnoException)?.code === "ENOENT") return [];
+    throw new Error(
+      `${path}: ${err instanceof Error ? err.message : String(err)}`,
+    );
   }
   return JSON.parse(data);
 }
