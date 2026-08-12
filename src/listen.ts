@@ -1,5 +1,5 @@
 import { createServer, type IncomingMessage, type ServerResponse, type Server } from "node:http";
-import { randomBytes } from "node:crypto";
+import { randomBytes, timingSafeEqual } from "node:crypto";
 import { writeFileSync, unlinkSync } from "node:fs";
 import { join } from "node:path";
 import type { Plugin } from "./plugin.js";
@@ -13,6 +13,22 @@ export interface ConnectInfo {
 }
 
 type HttpHandler = (req: IncomingMessage, res: ServerResponse) => void;
+
+/**
+ * Compare a presented bearer token against the expected one without leaking
+ * the token prefix-by-prefix through response timing. `!==` on strings short-
+ * circuits at the first differing byte, which is enough to recover the token
+ * one character at a time.
+ *
+ * Length is compared first because `timingSafeEqual` throws on a length
+ * mismatch. That leaks the token's length and nothing else — the same bound Go's
+ * `subtle.ConstantTimeCompare` gives, so both SDKs behave identically here.
+ */
+function tokensMatch(presented: string, expected: string): boolean {
+  const a = Buffer.from(presented);
+  const b = Buffer.from(expected);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
 
 /**
  * Listener accepts inbound HTTP connections from an external service
@@ -106,7 +122,7 @@ export class Listener {
       res.end("unauthorized");
       return;
     }
-    if (auth.slice(7) !== this.token) {
+    if (!tokensMatch(auth.slice(7), this.token)) {
       res.writeHead(403);
       res.end("forbidden");
       return;
