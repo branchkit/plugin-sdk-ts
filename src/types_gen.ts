@@ -143,6 +143,7 @@ export interface CollectionPutEntry {
 }
 
 export interface CollectionRecord {
+  group?: string;
   id: string;
   payload?: unknown;
   revision: number;
@@ -971,6 +972,7 @@ export interface CollectionPatchResponse {
 
 export interface CollectionPutRequest {
   entries?: CollectionPutEntry[];
+  group?: string;
   label?: string;
   name: string;
   roles?: unknown;

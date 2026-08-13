@@ -26,11 +26,11 @@ export interface CollectionChangedEvent {
  * subset under this key space" are different intentions, and guessing between
  * them is how a refresh silently becomes a wipe.
  *
- * Construct with {@link scopeCollection} or {@link scopePrefix}.
+ * Construct with {@link scopeCollection} or {@link scopeGroup}.
  */
 export type ReplaceScope =
   | { kind: "collection" }
-  | { kind: "prefix"; value: string };
+  | { kind: "group"; value: string };
 
 /**
  * Every other record THIS PLUGIN owns in the collection is the complement:
@@ -40,7 +40,7 @@ export type ReplaceScope =
  *
  * Safe on a collection you did not declare — `writers: anyone_who_declares`
  * collections are meant to have several contributors, and each can manage its
- * own with this. Reach for {@link scopePrefix} when you keep SEVERAL
+ * own with this. Reach for {@link scopeGroup} when you keep SEVERAL
  * independent replace-sets in one collection, not merely because you are not
  * the owner.
  */
@@ -49,14 +49,18 @@ export function scopeCollection(): ReplaceScope {
 }
 
 /**
- * Narrows further, to ids starting with `prefix`, so one plugin can maintain
- * several independent replace-sets in one collection (per-tab hint sets,
- * per-source command sets). Entries whose id falls outside the prefix are
- * rejected rather than written — accepting them would create records the same
- * call could never clean up.
+ * Narrows further, to this plugin's records carrying the named group label —
+ * and stamps that label on every entry written, so membership is an envelope
+ * fact rather than an id convention. One plugin keeps several independent
+ * replace-sets in one collection this way (per-source command sets are the
+ * motivating case: commands.push's group is exactly this).
+ *
+ * The label must be non-empty — an empty one is indistinguishable from
+ * "ungrouped" on the records it writes, which would silently make this a
+ * collection-wide replace. The platform refuses it.
  */
-export function scopePrefix(prefix: string): ReplaceScope {
-  return { kind: "prefix", value: prefix };
+export function scopeGroup(group: string): ReplaceScope {
+  return { kind: "group", value: group };
 }
 
 /**
@@ -180,8 +184,8 @@ declare module "./plugin.js" {
      * needs no shadow.
      *
      * ```ts
-     * // publish this tab's hints, clearing any this tab published before
-     * await plugin.replace("browser_hints", entries, scopePrefix(`${tabId}:`));
+     * // publish this source's commands, clearing what it published before
+     * await plugin.replace("cmds", entries, scopeGroup("hints"));
      * ```
      *
      * A name the platform does not know yet is created on first call, with
@@ -370,7 +374,7 @@ Plugin.prototype.putManyWithDisplay = async function (
   label: string,
 ): Promise<number> {
   if (entries.length === 0) return 0;
-  const res = await this.collectionPut(name, entries, label || undefined, roles);
+  const res = await this.collectionPut(name, entries, undefined, label || undefined, roles);
   return res?.count ?? 0;
 };
 

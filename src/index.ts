@@ -39,7 +39,7 @@ export { logListOpts } from "./collection_log.js";
 export {
   listOpts,
   scopeCollection,
-  scopePrefix,
+  scopeGroup,
   type CollectionChangedEvent,
   type ReplaceScope,
   type ReplaceResult,
