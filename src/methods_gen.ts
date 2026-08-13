@@ -658,7 +658,7 @@ declare module "./plugin.js" {
     commandsList(): Promise<CommandsListResponse>;
     commandsListAliases(): Promise<CommandOverride[]>;
     commandsListOverrides(): Promise<CommandOverride[]>;
-    commandsPush(commands?: unknown): Promise<CommandsPushResponse>;
+    commandsPush(commands?: unknown, group?: string): Promise<CommandsPushResponse>;
     commandsRemoveAlias(action: string, defaultPattern: string, newPattern: string): Promise<CommandsRemoveAliasResponse>;
     commandsReset(canonical: string): Promise<void>;
     commandsResetOverride(action: string, defaultPattern: string): Promise<CommandsResetOverrideResponse>;
@@ -1603,11 +1603,12 @@ Plugin.prototype.commandsListOverrides = async function() {
   return (result as any).overrides;
 };
 
-Plugin.prototype.commandsPush = async function(commands?: unknown) {
+Plugin.prototype.commandsPush = async function(commands?: unknown, group?: string) {
   const result = await this.call(
     MethodCommandsPush,
     {
       commands,
+      group,
     },
   );
   return result as CommandsPushResponse;

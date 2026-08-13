@@ -1057,6 +1057,7 @@ export interface CommandsListOverridesResponse {
 
 export interface CommandsPushRequest {
   commands?: unknown;
+  group?: string;
 }
 
 export interface CommandsPushResponse {
