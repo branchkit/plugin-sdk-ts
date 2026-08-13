@@ -35,7 +35,14 @@ import "./debug.js"; // module augmentation — per-plugin debug log helper
 import "./mirror.js"; // module augmentation — consumed-collection mirror
 export { CollectionMirror } from "./mirror.js";
 export { logListOpts } from "./collection_log.js";
-export { listOpts, type CollectionChangedEvent } from "./collection.js";
+export {
+  listOpts,
+  scopeCollection,
+  scopePrefix,
+  type CollectionChangedEvent,
+  type ReplaceScope,
+  type ReplaceResult,
+} from "./collection.js";
 export {
   type AssertEffectResult,
   type RetractEffectResult,

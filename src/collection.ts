@@ -10,6 +10,59 @@ export interface CollectionChangedEvent {
   writer: string;
 }
 
+/**
+ * Bounds what a {@link Plugin.replace} is allowed to DELETE. Required and never
+ * inferred: collection ownership is per-collection, not per-record, and
+ * `writers: anyone_who_declares` permits several plugins to write one
+ * collection — so a replace that assumed the whole collection was the caller's
+ * could silently wipe another plugin's records.
+ *
+ * Construct with {@link scopeCollection} or {@link scopePrefix}.
+ */
+export type ReplaceScope =
+  | { kind: "collection" }
+  | { kind: "prefix"; value: string };
+
+/**
+ * Every other record in the collection is the complement: after the call the
+ * collection contains exactly the given records.
+ *
+ * Restricted by the platform to the collection's introducer. If this plugin did
+ * not declare the collection, use {@link scopePrefix} over a key space it owns.
+ */
+export function scopeCollection(): ReplaceScope {
+  return { kind: "collection" };
+}
+
+/**
+ * Limits both the replace and its deletions to record ids starting with
+ * `prefix`, so one plugin can maintain several independent replace-sets in one
+ * collection (per-tab hint sets, per-source command sets). Entries whose id
+ * falls outside the prefix are rejected rather than written — accepting them
+ * would create records the same call could never clean up.
+ */
+export function scopePrefix(prefix: string): ReplaceScope {
+  return { kind: "prefix", value: prefix };
+}
+
+/**
+ * What a {@link Plugin.replace} changed. Counts are split for drift detection,
+ * like `deleteMany`'s: a caller that expected a steady state and sees a nonzero
+ * `put` or `deleted` has diverged from the platform's view.
+ */
+export interface ReplaceResult {
+  /** Records written — new, or whose payload differed. */
+  put: number;
+  /** Records removed because they were in scope but not in the desired set. */
+  deleted: number;
+  /**
+   * Records left untouched because their payload was byte-identical. Load
+   * bearing: skipping these is what keeps a periodic refresh from re-firing
+   * `_platform.collection.updated` per record and waking every subscriber.
+   */
+  skipped: number;
+}
+
 declare module "./plugin.js" {
   interface Plugin {
     /**
@@ -75,6 +128,29 @@ declare module "./plugin.js" {
      * backend untouched.
      */
     putMany(name: string, entries: CollectionPutEntry[]): Promise<number>;
+
+    /**
+     * Make the records in scope exactly `entries`: upsert what changed, delete
+     * what is absent, skip what is byte-identical.
+     *
+     * Prefer this over hand-rolling a diff. Computing the complement on the
+     * plugin side means remembering what you last published, and that memory
+     * dies with the process — which is precisely the orphaned-record bug this
+     * replaces. The platform already knows what is in the collection, so it
+     * needs no shadow.
+     *
+     * ```ts
+     * // publish this tab's hints, clearing any this tab published before
+     * await plugin.replace("browser_hints", entries, scopePrefix(`${tabId}:`));
+     * ```
+     *
+     * See notes/DESIGN_COLLECTION_REPLACE.md.
+     */
+    replace(
+      name: string,
+      entries: CollectionPutEntry[],
+      scope: ReplaceScope,
+    ): Promise<ReplaceResult>;
 
     /**
      * Bulk upsert with optional per-payload-field display roles. Used
@@ -209,6 +285,22 @@ Plugin.prototype.putMany = async function (
   if (entries.length === 0) return 0;
   const res = await this.collectionPut(name, entries);
   return res?.count ?? 0;
+};
+
+Plugin.prototype.replace = async function (
+  name: string,
+  entries: CollectionPutEntry[],
+  scope: ReplaceScope,
+): Promise<ReplaceResult> {
+  // No early return on an empty `entries`: replacing with the empty set is how
+  // a caller CLEARS its scope, and short-circuiting would silently turn that
+  // into a no-op — the opposite of what was asked.
+  const res = await this.collectionReplace(name, scope, entries);
+  return {
+    put: res?.put ?? 0,
+    deleted: res?.deleted ?? 0,
+    skipped: res?.skipped ?? 0,
+  };
 };
 
 Plugin.prototype.putManyWithRoles = async function (

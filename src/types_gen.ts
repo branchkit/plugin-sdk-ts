@@ -978,6 +978,20 @@ export interface CollectionPutResponse {
   ok: boolean;
 }
 
+export interface CollectionReplaceRequest {
+  entries?: CollectionPutEntry[];
+  label?: string;
+  name: string;
+  roles?: unknown;
+  scope: unknown;
+}
+
+export interface CollectionReplaceResponse {
+  deleted: number;
+  put: number;
+  skipped: number;
+}
+
 export interface CollectionsCreateUserRequest {
   description?: string;
   name: string;
