@@ -335,3 +335,47 @@ export async function pushCommandSpecs(
   });
   return resp.count;
 }
+
+/**
+ * Register `specs` as a NAMED GROUP within this plugin's command set,
+ * replacing only that group and leaving the plugin's other groups intact.
+ *
+ * Use this whenever a plugin has more than one command source. Plain
+ * {@link pushCommandSpecs} replaces the plugin's ENTIRE set, so two sources
+ * pushing independently race: whichever landed last is the only set the
+ * matcher sees. That is not hypothetical — it cost the browser plugin its
+ * hint-skeleton commands repeatedly, and the workaround was a mutex plus
+ * rebuilding the union from every builder on each call. With groups, each
+ * source owns one and nothing needs to know about the others.
+ *
+ * ```ts
+ * // each source owns its own group; no coordination between them
+ * await pushCommandGroup(plugin, "hints", hintSpecs);
+ * await pushCommandGroup(plugin, "scroll", scrollSpecs);
+ *
+ * // retract one source without touching the rest
+ * await pushCommandGroup(plugin, "hints", []);
+ * ```
+ *
+ * Returns the number of command variants now active for the whole plugin, not
+ * just this group.
+ */
+export async function pushCommandGroup(
+  plugin: Plugin,
+  group: string,
+  specs: CommandSpec[],
+): Promise<number> {
+  // Refused locally rather than sent: an empty group name is
+  // indistinguishable on the wire from an ungrouped push, which replaces
+  // EVERY group. A caller must not reach whole-set semantics by accident.
+  if (!group) {
+    throw new Error(
+      "pushCommandGroup: group name is required (use pushCommandSpecs to replace the whole set)",
+    );
+  }
+  const resp = await plugin.call<{ count: number }>("commands.push", {
+    commands: specs.map(normalizeCommandSpec),
+    group,
+  });
+  return resp.count;
+}

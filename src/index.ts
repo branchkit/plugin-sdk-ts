@@ -18,6 +18,7 @@ export {
   text,
   loadCommands,
   pushCommandSpecs,
+  pushCommandGroup,
   type PatternSlot,
 } from "./commands.js";
 export { ListenLocal, Listener, inheritedListenerCount, type ConnectInfo } from "./listen.js";
