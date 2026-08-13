@@ -165,9 +165,9 @@ Plugin.prototype.isEffectActive = async function (
 Plugin.prototype.onEffectDisplaced = function (
   handler: (evt: EffectDisplacedEvent) => void,
 ): void {
-  // Reads BRANCHKIT_PLUGIN_ID, the same source Plugin's constructor uses.
-  // Lets the helper filter without depending on Plugin's private field.
-  const selfId = process.env.BRANCHKIT_PLUGIN_ID ?? "unknown";
+  // The canonical accessor — one definition of this plugin's id and its
+  // fallback, rather than a second copy of the env-var lookup here.
+  const selfId = this.id;
   this.on(EventEffectDisplaced, (params: unknown) => {
     if (params == null || typeof params !== "object") return;
     const obj = params as Record<string, unknown>;

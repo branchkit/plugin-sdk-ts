@@ -92,10 +92,9 @@ export class CollectionMirror {
 
   /** @internal — wires the on_ready fetch and update-event refetch. */
   attach(): void {
-    // Reads BRANCHKIT_PLUGIN_ID, the same source Plugin's constructor
-    // uses, so log lines carry the plugin prefix without depending on
-    // Plugin's private field.
-    const selfId = process.env.BRANCHKIT_PLUGIN_ID ?? "unknown";
+    // The canonical accessor — one definition of this plugin's id and its
+    // fallback, rather than a second copy of the env-var lookup here.
+    const selfId = this.#plugin.id;
     // RETURN the refresh promise — the ordered notification pump awaits it, so
     // refreshes run one at a time in wire order. Discarding it (`void ...`) let
     // N rapid update events start N concurrent collection.get calls, and
