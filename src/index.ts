@@ -42,6 +42,7 @@ export {
   type CollectionChangedEvent,
   type ReplaceScope,
   type ReplaceResult,
+  type ReplaceDisplay,
 } from "./collection.js";
 export {
   type AssertEffectResult,

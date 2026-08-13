@@ -1,6 +1,11 @@
 import { EventCollectionUpdated } from "./contracts_gen.js";
 import { Plugin } from "./plugin.js";
-import type { ListOpts, CollectionRecord, CollectionPutEntry } from "./types_gen.js";
+import type {
+  ListOpts,
+  CollectionRecord,
+  CollectionPutEntry,
+  FieldDisplay,
+} from "./types_gen.js";
 
 export type { CollectionPutEntry };
 
@@ -61,6 +66,32 @@ export interface ReplaceResult {
    * `_platform.collection.updated` per record and waking every subscriber.
    */
   skipped: number;
+}
+
+/**
+ * Presentation metadata a {@link Plugin.replace} may carry alongside its
+ * records. Both fields describe how a DYNAMIC collection renders; a collection
+ * declared in plugin.json sets the same things there instead, and passing them
+ * here would be redundant.
+ *
+ * Safe to pass on every call. The platform's semantics are last-write-wins,
+ * and a replace that omits a field leaves the prior setting in place — so
+ * re-asserting the same values on each publish costs nothing and keeps them
+ * correct across a plugin restart.
+ */
+export interface ReplaceDisplay {
+  /**
+   * Display roles for this collection's fields (field name → role), telling
+   * display surfaces which payload field is the primary label, the subtitle,
+   * the group header, and so on.
+   */
+  roles?: Record<string, FieldDisplay>;
+  /**
+   * The collection's human-readable category name — what display surfaces (the
+   * Discovery HUD's tag badge, Settings) render instead of humanizing the
+   * collection id.
+   */
+  label?: string;
 }
 
 declare module "./plugin.js" {
@@ -144,12 +175,17 @@ declare module "./plugin.js" {
      * await plugin.replace("browser_hints", entries, scopePrefix(`${tabId}:`));
      * ```
      *
+     * A name the platform does not know yet is created on first call, with
+     * this plugin as its introducer — the same auto-registration `put`
+     * performs.
+     *
      * See notes/DESIGN_COLLECTION_REPLACE.md.
      */
     replace(
       name: string,
       entries: CollectionPutEntry[],
       scope: ReplaceScope,
+      opts?: ReplaceDisplay,
     ): Promise<ReplaceResult>;
 
     /**
@@ -291,11 +327,18 @@ Plugin.prototype.replace = async function (
   name: string,
   entries: CollectionPutEntry[],
   scope: ReplaceScope,
+  opts?: ReplaceDisplay,
 ): Promise<ReplaceResult> {
   // No early return on an empty `entries`: replacing with the empty set is how
   // a caller CLEARS its scope, and short-circuiting would silently turn that
   // into a no-op — the opposite of what was asked.
-  const res = await this.collectionReplace(name, scope, entries);
+  const res = await this.collectionReplace(
+    name,
+    scope,
+    entries,
+    opts?.label,
+    opts?.roles,
+  );
   return {
     put: res?.put ?? 0,
     deleted: res?.deleted ?? 0,
