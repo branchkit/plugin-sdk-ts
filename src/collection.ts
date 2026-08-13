@@ -16,11 +16,15 @@ export interface CollectionChangedEvent {
 }
 
 /**
- * Bounds what a {@link Plugin.replace} is allowed to DELETE. Required and never
- * inferred: collection ownership is per-collection, not per-record, and
- * `writers: anyone_who_declares` permits several plugins to write one
- * collection — so a replace that assumed the whole collection was the caller's
- * could silently wipe another plugin's records.
+ * Bounds what a {@link Plugin.replace} is allowed to DELETE, WITHIN the records
+ * this plugin owns. A replace never reaches another plugin's records whatever
+ * the scope says: the platform computes the complement over records whose
+ * writer is the caller, so the worst a wrong scope can do is delete too much of
+ * your own.
+ *
+ * Still required and never inferred, because "everything I own here" and "the
+ * subset under this key space" are different intentions, and guessing between
+ * them is how a refresh silently becomes a wipe.
  *
  * Construct with {@link scopeCollection} or {@link scopePrefix}.
  */
@@ -29,22 +33,27 @@ export type ReplaceScope =
   | { kind: "prefix"; value: string };
 
 /**
- * Every other record in the collection is the complement: after the call the
- * collection contains exactly the given records.
+ * Every other record THIS PLUGIN owns in the collection is the complement:
+ * after the call, the records you own here are exactly the ones you passed.
+ * Other plugins' records, and any the user added through Settings, are
+ * untouched and invisible to the diff.
  *
- * Restricted by the platform to the collection's introducer. If this plugin did
- * not declare the collection, use {@link scopePrefix} over a key space it owns.
+ * Safe on a collection you did not declare — `writers: anyone_who_declares`
+ * collections are meant to have several contributors, and each can manage its
+ * own with this. Reach for {@link scopePrefix} when you keep SEVERAL
+ * independent replace-sets in one collection, not merely because you are not
+ * the owner.
  */
 export function scopeCollection(): ReplaceScope {
   return { kind: "collection" };
 }
 
 /**
- * Limits both the replace and its deletions to record ids starting with
- * `prefix`, so one plugin can maintain several independent replace-sets in one
- * collection (per-tab hint sets, per-source command sets). Entries whose id
- * falls outside the prefix are rejected rather than written — accepting them
- * would create records the same call could never clean up.
+ * Narrows further, to ids starting with `prefix`, so one plugin can maintain
+ * several independent replace-sets in one collection (per-tab hint sets,
+ * per-source command sets). Entries whose id falls outside the prefix are
+ * rejected rather than written — accepting them would create records the same
+ * call could never clean up.
  */
 export function scopePrefix(prefix: string): ReplaceScope {
   return { kind: "prefix", value: prefix };
