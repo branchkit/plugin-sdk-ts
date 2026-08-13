@@ -419,6 +419,7 @@ export interface ListOpts {
   limit?: number;
   since_ms?: number;
   until_ms?: number;
+  writer?: string;
 }
 
 export interface ListeningPort {

@@ -415,11 +415,23 @@ export function listOpts(opts: {
   untilMs?: number;
   limit?: number;
   cursor?: string;
+  /**
+   * Return only records owned by this writer — the plugin id that CREATED
+   * them, or `"_platform"` for host writes. Exact equality; omitting it
+   * returns every record whoever owns it.
+   *
+   * Pair with `plugin.id` to ask for your own records, the read half of a
+   * scoped write. Filtering happens before `limit`, so a limited read returns
+   * up to `limit` MATCHING records rather than the matches within the first
+   * `limit` records.
+   */
+  writer?: string;
 }): ListOpts {
   const out: ListOpts = {};
   if (opts.sinceMs !== undefined) out.since_ms = opts.sinceMs;
   if (opts.untilMs !== undefined) out.until_ms = opts.untilMs;
   if (opts.limit !== undefined) out.limit = opts.limit;
   if (opts.cursor !== undefined) out.cursor = opts.cursor;
+  if (opts.writer !== undefined) out.writer = opts.writer;
   return out;
 }

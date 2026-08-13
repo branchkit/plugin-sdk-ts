@@ -199,6 +199,25 @@ export class Plugin {
   }> = [];
   private notifyPumpActive = false;
 
+  /**
+   * This plugin's own id, as the actuator assigned it
+   * (BRANCHKIT_PLUGIN_ID), or `"unknown"` when running outside the actuator.
+   *
+   * Exposed because a plugin routinely needs to name itself to the platform —
+   * most directly to ask for its OWN records:
+   *
+   * ```ts
+   * const mine = listOpts({ writer: plugin.id });
+   * ```
+   *
+   * Without it every caller reaches for `process.env` and re-derives the
+   * fallback, which is how the SDK ended up reading the variable in several
+   * places internally before this existed.
+   */
+  get id(): string {
+    return this.pluginId;
+  }
+
   constructor() {
     this.pluginId = process.env.BRANCHKIT_PLUGIN_ID ?? "unknown";
 
