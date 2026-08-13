@@ -517,6 +517,12 @@ export type OnActionStatus = "ok" | "error" | "not_handled";
  */
 export type OnPointer = "none" | "fade";
 
+export interface OwnedCollection {
+  count: number;
+  group?: string;
+  name: string;
+}
+
 export interface PipelineStatusEntry {
   ephemeral: boolean;
   name: string;
@@ -1013,6 +1019,10 @@ export interface CollectionsListRequest {
 
 export interface CollectionsListResponse {
   sections: CollectionsListSection[];
+}
+
+export interface CollectionsOwnedResponse {
+  owned: OwnedCollection[];
 }
 
 export interface CommandsAddAliasRequest {

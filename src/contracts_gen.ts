@@ -37,6 +37,7 @@ export const MethodCollectionPut = "collection.put" as const; // since 0.1.0
 export const MethodCollectionReplace = "collection.replace" as const; // since 0.1.0
 export const MethodCollectionsCreateUser = "collections.create_user" as const; // since 0.1.0
 export const MethodCollectionsList = "collections.list" as const; // since 0.1.0
+export const MethodCollectionsOwned = "collections.owned" as const; // since 0.1.0
 export const MethodCommandsAddAlias = "commands.add_alias" as const; // since 0.1.0
 export const MethodCommandsConfusability = "commands.confusability" as const; // since 0.1.0
 export const MethodCommandsDelete = "commands.delete" as const; // since 0.1.0
