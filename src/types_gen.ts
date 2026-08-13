@@ -147,6 +147,7 @@ export interface CollectionRecord {
   payload?: unknown;
   revision: number;
   timestamp_ms: number;
+  writer: string;
 }
 
 export interface CollectionsListItem {
@@ -431,6 +432,7 @@ export interface LogEntry {
   id: string;
   payload?: unknown;
   timestamp_ms: number;
+  writer: string;
 }
 
 export interface LoginItem {

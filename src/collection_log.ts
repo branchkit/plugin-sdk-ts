@@ -136,10 +136,10 @@ Plugin.prototype.appendKeyed = async function (
 
 /**
  * Project the unified record envelope onto the log view. Lossless: log
- * records carry their append time in timestamp_ms.
+ * records carry their append time in timestamp_ms and their owner in writer.
  */
 function recordToLogEntry(r: CollectionRecord): LogEntry {
-  return { id: r.id, timestamp_ms: r.timestamp_ms, payload: r.payload };
+  return { id: r.id, timestamp_ms: r.timestamp_ms, payload: r.payload, writer: r.writer };
 }
 
 /** Map log opts onto the unified list opts — field-identical by design. */
