@@ -62,26 +62,35 @@ export class CollectionMirror {
   /**
    * Synchronously refetch the collection. A populated response updates
    * the snapshot, marks the mirror ready, and fires onChange callbacks.
-   * An unpopulated response is a silent no-op (boot race — the update
-   * event will complete the mirror). An RPC error rejects and leaves
-   * the previous snapshot intact.
+   * An RPC error rejects and leaves the previous snapshot intact.
+   *
+   * An EMPTY response means one of two things, and readiness tells them
+   * apart. A never-populated mirror is in the boot race — the owner hasn't
+   * put yet, the update event will complete it — so the read is a silent
+   * no-op. A mirror that HAS been populated cannot be racing boot: an empty
+   * read is the source saying "I am now empty", so the snapshot empties and
+   * onChange fires like any other change. Swallowing it (the pre-2026-08-14
+   * contract) is how derived projections orphaned: the snapshot kept serving
+   * records the source had deleted, forever, with no notification.
    */
   async refresh(): Promise<void> {
     let data: unknown;
+    let empty: boolean;
     if (this.#compacted) {
-      // Folded view: one record per key. An empty array is the boot-race
-      // no-op, same as a raw unpopulated read.
+      // Folded view: one record per key.
       const recs = await this.#plugin.listCompacted(this.#name);
-      if (recs.length === 0) {
-        return;
-      }
+      empty = recs.length === 0;
       data = recs;
     } else {
       const res: CollectionGetResponse = await this.#plugin.collectionGet(this.#name);
-      if (unpopulated(res?.data)) {
-        return;
+      empty = unpopulated(res?.data);
+      data = res?.data;
+    }
+    if (empty) {
+      if (!this.#ready) {
+        return; // boot race — the update event will complete the mirror
       }
-      data = res.data;
+      data = [];
     }
     this.#data = data;
     this.#ready = true;

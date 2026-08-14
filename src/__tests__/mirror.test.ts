@@ -56,6 +56,34 @@ describe("collection mirror", () => {
     expect(changes).toBe(1);
   });
 
+  // The contract's other half, missing until 2026-08-14: a populated mirror
+  // cannot be racing boot, so an empty read commits an empty snapshot and
+  // fires onChange. Before this the empty read was swallowed as the boot
+  // race, the mirror served deleted records forever, and derived projections
+  // orphaned silently. (This suite used to pin that as intended.)
+  test("empty read after population commits empty and notifies", async () => {
+    let populated = true;
+    const { plugin } = fakePlugin(() => ({
+      name: "alphabet",
+      introducer: "voice",
+      merge: "authoritative",
+      data: populated ? [{ letter: "a", codeword: "arch" }] : [],
+    }));
+    const mirror = plugin.mirrorCollection("alphabet");
+    let changes = 0;
+    mirror.onChange(() => changes++);
+
+    await mirror.refresh();
+    expect(changes).toBe(1);
+
+    // The source empties (owner deleted everything).
+    populated = false;
+    await mirror.refresh();
+    expect(changes).toBe(2); // a projection not told the source emptied orphans
+    expect(mirror.ready).toBe(true); // empty is a real state, not un-readiness
+    expect(mirror.raw()).toEqual([]);
+  });
+
   test("unpopulated sentinel stays not-ready without error", async () => {
     // The boot race: collection.get before the owner's first Put
     // returns the empty-array sentinel.
