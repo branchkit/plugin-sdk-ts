@@ -113,6 +113,7 @@ describe("collection mirror", () => {
     };
 
     const mirror = p.mirrorCollection("alphabet");
+    void p.run(); // resolves readiness; the pump holds delivery until then
 
     // Two updates land back-to-back, as a burst of owner writes produces.
     // @ts-expect-error — enqueueNotification is private

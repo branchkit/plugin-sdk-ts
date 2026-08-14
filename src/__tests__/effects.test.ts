@@ -23,6 +23,11 @@ describe("onEffectDisplaced", () => {
     p.onEffectDisplaced((evt) => {
       seen.push(evt);
     });
+    // Signals readiness, the way a real plugin does. The notification pump
+    // holds delivery until run() so a notification arriving during setup is
+    // queued rather than discarded — matching the Go SDK. Without this the
+    // negative cases below would pass vacuously.
+    void p.run();
     if (prev === undefined) delete process.env.BRANCHKIT_PLUGIN_ID;
     else process.env.BRANCHKIT_PLUGIN_ID = prev;
     return { p, seen };

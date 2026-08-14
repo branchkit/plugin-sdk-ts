@@ -162,6 +162,7 @@ describe("collection state helpers", () => {
     p.subscribe("things", (evt) => {
       seen.push(evt);
     });
+    void p.run(); // resolves readiness; the pump holds delivery until then
 
     // Drive the ordered notification pump directly; the actuator side is
     // exercised by the conformance harness. Delivery is async (wire-ordered),
@@ -196,6 +197,7 @@ describe("collection state helpers", () => {
       got.push(seq);
       if (got.length === n) resolveDone();
     });
+    void p.run(); // resolves readiness; the pump holds delivery until then
 
     for (let i = 0; i < n; i++) {
       // @ts-expect-error — enqueueNotification is private
@@ -204,5 +206,58 @@ describe("collection state helpers", () => {
 
     await done;
     expect(got).toEqual(Array.from({ length: n }, (_, i) => i));
+  });
+});
+
+// The TS counterpart to Go's TestNotificationsBeforeRunAreQueuedNotDropped
+// (plugin-sdk-go/rpc_test.go). Go gated BOTH inbound lanes — requests block in
+// handleRequest, notifications queue in notifyWorker — and documented the gate
+// as fixing a real fatal: without it "a notification arriving during plugin
+// setup was dropped on the floor — no listener registered yet". TS gated only
+// requests, so its notification pump started on arrival and discarded anything
+// with no listener yet, silently, at `if (!listeners) continue`.
+//
+// Narrow in practice: readline can't deliver before the constructing
+// synchronous block yields, so `new Plugin(); on(...); await run()` was always
+// safe. It broke for a plugin that awaits ANYTHING between construction and its
+// on() calls — a config read, a dynamic import — which is why nothing caught it.
+describe("notification readiness gate", () => {
+  test("notifications arriving before run() are queued, not dropped", async () => {
+    const p = new Plugin();
+    const got: number[] = [];
+
+    // The actuator's forwarder starts writing as soon as the RPC session
+    // exists; it gates on subscription + interaction, never on
+    // `plugin.initialized`. So these land before any listener is registered.
+    for (let i = 0; i < 5; i++) {
+      // @ts-expect-error — enqueueNotification is private
+      p.enqueueNotification("early.tick", { seq: i }, undefined);
+    }
+
+    // The plugin body is still setting up — an await here is exactly the shape
+    // that used to lose them, because the pump had already drained.
+    await new Promise((r) => setTimeout(r, 10));
+
+    p.on("early.tick", (params) => {
+      got.push((params as { seq: number }).seq);
+    });
+    void p.run();
+
+    await new Promise((r) => setTimeout(r, 10));
+    expect(got).toEqual([0, 1, 2, 3, 4]);
+  });
+
+  test("a pre-run() queue does not hang the pump when the plugin is shut down instead", async () => {
+    const p = new Plugin();
+    // @ts-expect-error — enqueueNotification is private
+    p.enqueueNotification("never.delivered", { seq: 0 }, undefined);
+    // @ts-expect-error — shutdown is private
+    p.shutdown();
+    // Mirrors Go's `select { case <-p.ready: case <-p.closed: return }`. A pump
+    // awaiting only readiness would never settle for a process signalled
+    // before run().
+    await new Promise((r) => setTimeout(r, 10));
+    // @ts-expect-error — notifyPumpActive is private
+    expect(p.notifyPumpActive).toBe(false);
   });
 });

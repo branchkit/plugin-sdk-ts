@@ -576,6 +576,31 @@ export class Plugin {
   // listener awaits, so responses still arrive; serializing cannot deadlock.
   // See notes/DESIGN_SDK_EVENT_ORDERING.md.
   private async drainNotifications(): Promise<void> {
+    // Hold delivery until run() signals that listeners are registered — the
+    // same gate handleRequest applies to inbound requests, and the one the Go
+    // SDK applies to BOTH lanes (notifyWorker). The actuator's forwarder starts
+    // writing as soon as the RPC session exists — it gates on subscription +
+    // interaction, never on `plugin.initialized` — so without this a
+    // notification arriving during plugin setup was dropped on the floor by the
+    // `if (!listeners) continue` below: no listener registered yet, no log, no
+    // requeue.
+    //
+    // Narrow in practice, which is why it survived: readline can't deliver
+    // before the constructing synchronous block yields, so the idiomatic
+    // `new Plugin(); on(...); await run()` was always safe. It broke for a
+    // plugin that awaits ANYTHING — a config read, a dynamic import — between
+    // construction and its on() calls, by which point the pump had already
+    // drained and discarded. The queue is unbounded and enqueue never blocks,
+    // so holding here is free.
+    //
+    // Raced against shutdown, mirroring Go's `select { <-ready; <-closed }`:
+    // a process that is signalled before run() would otherwise leave this pump
+    // awaiting a promise nothing will ever resolve.
+    await Promise.race([this.readyPromise, this.shutdownPromise]);
+    if (this.closed) {
+      this.notifyPumpActive = false;
+      return;
+    }
     while (this.notifyQueue.length > 0) {
       const { method, params, correlationId } = this.notifyQueue.shift()!;
       const listeners = this.listeners.get(method);
