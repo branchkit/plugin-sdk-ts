@@ -521,6 +521,7 @@ export interface OwnedCollection {
   count: number;
   group?: string;
   name: string;
+  writer: string;
 }
 
 export interface PipelineStatusEntry {
