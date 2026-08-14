@@ -517,6 +517,14 @@ export type OnActionStatus = "ok" | "error" | "not_handled";
  */
 export type OnPointer = "none" | "fade";
 
+export interface OverlayRow {
+  added: number;
+  collection: string;
+  patched_ids: string[];
+  removed: number;
+  tenant: string;
+}
+
 export interface OwnedCollection {
   count: number;
   group?: string;
@@ -4317,11 +4325,16 @@ export interface OverridesApplyRequest {
   fields?: unknown;
   id?: string;
   new_id?: string;
+  tenant?: string;
 }
 
 export interface OverridesApplyResponse {
   key?: string;
   ok: boolean;
+}
+
+export interface OverridesListResponse {
+  overlays: OverlayRow[];
 }
 
 export interface PipelinesGrammarRequest {
