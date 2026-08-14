@@ -15,6 +15,7 @@ export const EffectPauseMicrophoneIndicator = "pause_microphone_indicator" as co
 export const EffectPreventFocusSteal = "prevent_focus_steal" as const;
 export const EffectSignalRecordingActive = "signal_recording_active" as const;
 export const EffectSuppressHuds = "suppress_huds" as const;
+export const EffectSuppressKeybinds = "suppress_keybinds" as const;
 export const EffectSuppressNotifications = "suppress_notifications" as const;
 
 // KnownInputDirectives lists the full closed-vocabulary set.
@@ -30,6 +31,7 @@ export const KnownEffects = [
   "prevent_focus_steal",
   "signal_recording_active",
   "suppress_huds",
+  "suppress_keybinds",
   "suppress_notifications",
 ] as const;
 
