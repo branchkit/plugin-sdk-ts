@@ -35,6 +35,8 @@ import "./effects.js"; // module augmentation — capability-mechanism helpers
 import "./debug.js"; // module augmentation — per-plugin debug log helper
 import "./mirror.js"; // module augmentation — consumed-collection mirror
 export { CollectionMirror } from "./mirror.js";
+import "./settings.js"; // module augmentation — typed settings mirror
+export { SettingsMirror } from "./settings.js";
 export { logListOpts } from "./collection_log.js";
 export {
   listOpts,
