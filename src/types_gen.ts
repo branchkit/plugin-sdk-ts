@@ -35,6 +35,7 @@ export interface AXPathSegment {
 }
 
 export interface ActionFieldSchema {
+  default?: unknown;
   display?: unknown;
   enum_values: string[];
   field_type: FieldType;
@@ -4322,6 +4323,7 @@ export interface NativeZoomEnabledResponse {
 export interface OverridesApplyRequest {
   action: string;
   collection: string;
+  field?: string;
   fields?: unknown;
   id?: string;
   new_id?: string;
