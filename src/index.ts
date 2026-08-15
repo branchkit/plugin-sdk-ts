@@ -37,6 +37,7 @@ import "./mirror.js"; // module augmentation — consumed-collection mirror
 export { CollectionMirror } from "./mirror.js";
 import "./settings.js"; // module augmentation — typed settings mirror
 export { SettingsMirror } from "./settings.js";
+export { methodURL, methodPost } from "./settings_route.js";
 export { logListOpts } from "./collection_log.js";
 export {
   listOpts,
