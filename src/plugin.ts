@@ -632,4 +632,22 @@ export function apiVersion(): string {
   return process.env.BRANCHKIT_API_VERSION ?? APIVersion;
 }
 
+/**
+ * Returns the plugin's installation directory, as handed to the process by the
+ * actuator via BRANCHKIT_PLUGIN_DIR. Falls back to "." when unset, which is what
+ * a plugin run by hand outside the actuator sees.
+ *
+ * This is launch-contract surface, not convenience: the actuator sets the
+ * variable, every plugin that reads a file next to its manifest needs it, and
+ * resolving it costs no dependency. Same class as apiVersion().
+ *
+ * The command loaders (PushCommands, loadCommands) deliberately do NOT route
+ * through this. They distinguish unset from any directory — an unset variable
+ * means "not launched by the actuator, load nothing", and a "." fallback would
+ * have them scan the working directory for commands.json instead.
+ */
+export function pluginDir(): string {
+  return process.env.BRANCHKIT_PLUGIN_DIR || ".";
+}
+
 export { Log } from "./log.js";
