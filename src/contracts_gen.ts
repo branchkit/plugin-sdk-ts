@@ -6,8 +6,6 @@ export const APIVersion = "0.1.0" as const;
 
 // RPC method names: plugin → actuator (use with plugin.call()).
 export const MethodActionsList = "actions.list" as const; // since 0.1.0
-export const MethodCalibrationBiasApply = "calibration.bias.apply" as const; // since 0.1.0
-export const MethodCalibrationCaptureProbe = "calibration.capture.probe" as const; // since 0.1.0
 export const MethodCollectionAppend = "collection.append" as const; // since 0.1.0
 export const MethodCollectionAppendKeyed = "collection.append_keyed" as const; // since 0.1.0
 export const MethodCollectionCount = "collection.count" as const; // since 0.1.0
@@ -590,6 +588,8 @@ export const MethodPluginDataExport = "plugin.data.export" as const; // since 0.
 export const MethodPluginDebug = "plugin.debug" as const; // since 0.1.0
 export const MethodPrivacyGetRecording = "privacy.get_recording" as const; // since 0.1.0
 export const MethodPrivacySetRecording = "privacy.set_recording" as const; // since 0.1.0
+export const MethodRecognitionBiasApply = "recognition.bias.apply" as const; // since 0.1.0
+export const MethodRecognitionRedecode = "recognition.redecode" as const; // since 0.1.0
 export const MethodSelectionPick = "selection.pick" as const; // since 0.1.0
 export const MethodSelectionSet = "selection.set" as const; // since 0.1.0
 export const MethodSessionBoundary = "session.boundary" as const; // since 0.1.0

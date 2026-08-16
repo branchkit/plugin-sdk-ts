@@ -547,7 +547,16 @@ export interface PrinterInfo {
   state: string;
 }
 
-export interface ProbeItem {
+export interface ProcessInfo {
+  cpu_percent?: number;
+  memory_bytes?: number;
+  name: string;
+  path?: string;
+  pid: number;
+  user?: string;
+}
+
+export interface RedecodeItem {
   apply_bias: boolean;
   audio: string;
   bias_strength?: number;
@@ -556,24 +565,15 @@ export interface ProbeItem {
   words: string[];
 }
 
-export interface ProbeLine {
+export interface RedecodeLine {
   error: string;
   id: string;
   text: string;
 }
 
-export interface ProbeNoise {
+export interface RedecodeNoise {
   seed: number;
   snr_db: number;
-}
-
-export interface ProcessInfo {
-  cpu_percent?: number;
-  memory_bytes?: number;
-  name: string;
-  path?: string;
-  pid: number;
-  user?: string;
 }
 
 export interface ReminderItem {
@@ -736,28 +736,6 @@ export interface WorldModel {
 
 export interface ActionsListResponse {
   actions: Record<string, ActionTypeSchema>;
-}
-
-export interface CalibrationBiasApplyRequest {
-  force?: boolean;
-  strength: number;
-}
-
-export interface CalibrationBiasApplyResponse {
-  applied: boolean;
-  previous_provenance: string;
-}
-
-export interface CalibrationCaptureProbeRequest {
-  items: ProbeItem[];
-  max_active?: number;
-  model: string;
-  stage: string;
-}
-
-export interface CalibrationCaptureProbeResponse {
-  lines: ProbeLine[];
-  model_version?: string;
 }
 
 export interface CollectionAppendRequest {
@@ -4289,6 +4267,28 @@ export interface PrivacySetRecordingRequest {
 
 export interface PrivacySetRecordingResponse {
   ok: boolean;
+}
+
+export interface RecognitionBiasApplyRequest {
+  force?: boolean;
+  strength: number;
+}
+
+export interface RecognitionBiasApplyResponse {
+  applied: boolean;
+  previous_provenance: string;
+}
+
+export interface RecognitionRedecodeRequest {
+  items: RedecodeItem[];
+  max_active?: number;
+  model: string;
+  stage: string;
+}
+
+export interface RecognitionRedecodeResponse {
+  lines: RedecodeLine[];
+  model_version?: string;
 }
 
 export interface SelectionPickRequest {
