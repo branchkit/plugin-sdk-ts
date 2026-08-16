@@ -6,6 +6,7 @@ export {
   errorKindOf,
   apiVersion,
   pluginDir,
+  pluginDataDir,
 } from "./plugin.js";
 export type { FaultData } from "./plugin.js";
 export { Log } from "./log.js";

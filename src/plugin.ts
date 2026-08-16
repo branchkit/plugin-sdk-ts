@@ -650,4 +650,29 @@ export function pluginDir(): string {
   return process.env.BRANCHKIT_PLUGIN_DIR || ".";
 }
 
+/**
+ * Returns the directory this plugin may read and write freely, as handed to the
+ * process by the actuator via BRANCHKIT_PLUGIN_DATA. Returns `""` when unset,
+ * which means the plugin was not launched by the actuator.
+ *
+ * This is the plugin's OWN data namespace, and it is the answer to "where do I
+ * keep the files I own?" The sandbox grants read/write here and denies the rest
+ * of app support, so no other plugin can see it — and the stages this plugin
+ * ships share the same directory, which is what lets a stage write a file its
+ * plugin reads back with ordinary file calls. A plugin that needs the platform
+ * to carry its own bytes for it has usually just failed to use this.
+ *
+ * The install directory (pluginDir) is NOT a substitute: it is read-only for a
+ * plugin's stages, it is inside the signed app bundle for a bundled plugin, and
+ * it is replaced wholesale on update.
+ *
+ * Unset returns `""` rather than falling back to `"."` on purpose — the same
+ * distinction the command loaders make. A `"."` fallback would have a plugin run
+ * by hand write into its own source tree, and silently, since nothing about a
+ * working directory looks wrong until it is committed.
+ */
+export function pluginDataDir(): string {
+  return process.env.BRANCHKIT_PLUGIN_DATA ?? "";
+}
+
 export { Log } from "./log.js";
