@@ -6,9 +6,6 @@
 
 /** Log event name constants. Use instead of string literals so vocabulary drift is a type error. */
 export const LogEventAudioKeybindTriggered = "audio.keybind_triggered" as const;
-export const LogEventAudioSessionEnded = "audio.session_ended" as const;
-export const LogEventAudioSessionStarted = "audio.session_started" as const;
-export const LogEventAudioSpeechTranscript = "audio.speech_transcript" as const;
 export const LogEventBridgeLifecycle = "bridge.lifecycle" as const;
 export const LogEventCaptureProgress = "capture.progress" as const;
 export const LogEventCommandMatchDecision = "command.match_decision" as const;
@@ -79,9 +76,6 @@ export interface LogEventMeta {
 /** Closed vocabulary keyed by event name. */
 export const LogEventRegistry: Record<string, LogEventMeta> = {
     "audio.keybind_triggered": { name: "audio.keybind_triggered", summary: "Global keybind triggered an action via the Swift shell.", since: "0.1.0", source: "audio", severity: "info", redaction: "none" },
-    "audio.session_ended": { name: "audio.session_ended", summary: "A speech session ended (hold-to-talk released or continuous mode terminated).", since: "0.1.0", source: "audio", severity: "info", redaction: "none" },
-    "audio.session_started": { name: "audio.session_started", summary: "A speech session began (hold-to-talk pressed or continuous mode entered).", since: "0.1.0", source: "audio", severity: "info", redaction: "none" },
-    "audio.speech_transcript": { name: "audio.speech_transcript", summary: "Final or interim speech recognition transcript for a session.", since: "0.1.0", source: "audio", severity: "info", redaction: "full" },
     "bridge.lifecycle": { name: "bridge.lifecycle", summary: "FFI bridge lifecycle event (init, shutdown, UI server bind, callback registration).", since: "0.1.0", source: "lifecycle", severity: "info", redaction: "none" },
     "capture.progress": { name: "capture.progress", summary: "Partial match reached a DependentCapture whose deps are bound and whose resolved collection exists — plugins can react to the intermediate step (e.g. browser hint grayout).", since: "0.1.0", source: "dispatch", severity: "info", redaction: "none" },
     "command.match_decision": { name: "command.match_decision", summary: "Diagnostic snapshot of the matcher's tiebreaker choice — which category won, which gates were active, whether a gated Partial was suppressed.", since: "0.1.0", source: "dispatch", severity: "debug", redaction: "none" },
