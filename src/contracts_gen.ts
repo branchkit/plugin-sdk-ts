@@ -643,6 +643,7 @@ export const EventPipelineWarmed = "_platform.pipeline.warmed" as const;
 export const EventPluginDegraded = "_platform.plugin.degraded" as const;
 export const EventPluginDisabled = "_platform.plugin.disabled" as const;
 export const EventPluginEnabled = "_platform.plugin.enabled" as const;
+export const EventPowerChanged = "_platform.power.changed" as const;
 export const EventSelectionPicked = "_platform.selection.picked" as const;
 export const EventSystemDidWake = "_platform.system.did_wake" as const;
 export const EventSystemWillSleep = "_platform.system.will_sleep" as const;
