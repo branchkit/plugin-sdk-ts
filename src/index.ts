@@ -7,6 +7,7 @@ export {
   apiVersion,
   pluginDir,
   pluginDataDir,
+  modelsDir,
 } from "./plugin.js";
 export type { FaultData } from "./plugin.js";
 export { Log } from "./log.js";
