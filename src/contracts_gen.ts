@@ -6,13 +6,8 @@ export const APIVersion = "0.1.0" as const;
 
 // RPC method names: plugin → actuator (use with plugin.call()).
 export const MethodActionsList = "actions.list" as const; // since 0.1.0
-export const MethodCalibrationApply = "calibration.apply" as const; // since 0.1.0
 export const MethodCalibrationBiasApply = "calibration.bias.apply" as const; // since 0.1.0
 export const MethodCalibrationCaptureProbe = "calibration.capture.probe" as const; // since 0.1.0
-export const MethodCalibrationRegisterFixtureHandle = "calibration.register_fixture_handle" as const; // since 0.1.0
-export const MethodCalibrationResolveSamples = "calibration.resolve_samples" as const; // since 0.1.0
-export const MethodCalibrationTrialBegin = "calibration.trial_begin" as const; // since 0.1.0
-export const MethodCalibrationTrialEnd = "calibration.trial_end" as const; // since 0.1.0
 export const MethodCollectionAppend = "collection.append" as const; // since 0.1.0
 export const MethodCollectionAppendKeyed = "collection.append_keyed" as const; // since 0.1.0
 export const MethodCollectionCount = "collection.count" as const; // since 0.1.0
@@ -607,16 +602,21 @@ export const MethodSettingsRulesUpdate = "settings.rules_update" as const; // si
 export const MethodSystemLaunchApp = "system.launch_app" as const; // since 0.1.0
 export const MethodSystemNotify = "system.notify" as const; // since 0.1.0
 export const MethodSystemRunShell = "system.run_shell" as const; // since 0.1.0
+export const MethodTrialBegin = "trial.begin" as const; // since 0.1.0
+export const MethodTrialEnd = "trial.end" as const; // since 0.1.0
+export const MethodTrialEnterContext = "trial.enter_context" as const; // since 0.1.0
+export const MethodTrialRegisterFixture = "trial.register_fixture" as const; // since 0.1.0
+export const MethodTrialResolveSamples = "trial.resolve_samples" as const; // since 0.1.0
 export const MethodVocabularyCommit = "vocabulary.commit" as const; // since 0.1.0
 
 // RPC method names: actuator → plugin (use with plugin.handle()).
-export const HookCalibrationApplyFixture = "calibration_apply_fixture" as const; // since 0.1.0
-export const HookCalibrationReleaseFixture = "calibration_release_fixture" as const; // since 0.1.0
-export const HookCalibrationSamples = "calibration_samples" as const; // since 0.1.0
 export const HookOnAction = "on_action" as const; // since 0.1.0
 export const HookOnCommandsChanged = "on_commands_changed" as const; // since 0.1.0
 export const HookRenderHud = "render_hud" as const; // since 0.1.0
 export const HookRenderSettings = "render_settings" as const; // since 0.1.0
+export const HookTrialApplyFixture = "trial_apply_fixture" as const; // since 0.1.0
+export const HookTrialReleaseFixture = "trial_release_fixture" as const; // since 0.1.0
+export const HookTrialSamples = "trial_samples" as const; // since 0.1.0
 
 // Platform event type constants (use with plugin.on()).
 export const EventActionExecuted = "_platform.action.executed" as const;

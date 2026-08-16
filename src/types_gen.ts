@@ -738,17 +738,6 @@ export interface ActionsListResponse {
   actions: Record<string, ActionTypeSchema>;
 }
 
-export interface CalibrationApplyRequest {
-  command_id: string;
-  trial_id: string;
-}
-
-export interface CalibrationApplyResponse {
-  fixture_handle: string;
-  kind: string;
-  tags: string[];
-}
-
 export interface CalibrationBiasApplyRequest {
   force?: boolean;
   strength: number;
@@ -769,32 +758,6 @@ export interface CalibrationCaptureProbeRequest {
 export interface CalibrationCaptureProbeResponse {
   lines: ProbeLine[];
   model_version?: string;
-}
-
-export interface CalibrationRegisterFixtureHandleRequest {
-  fixture_handle: string;
-  owner_plugin_id: string;
-  trial_id: string;
-}
-
-export interface CalibrationResolveSamplesRequest {
-  command_id: string;
-}
-
-export interface CalibrationResolveSamplesResponse {
-  prompts: string[];
-}
-
-export interface CalibrationTrialBeginResponse {
-  trial_id: string;
-}
-
-export interface CalibrationTrialEndRequest {
-  trial_id: string;
-}
-
-export interface CalibrationTrialEndResponse {
-  released_handle_count: number;
 }
 
 export interface CollectionAppendRequest {
@@ -4441,31 +4404,48 @@ export interface SystemRunShellResponse {
   ok: boolean;
 }
 
+export interface TrialBeginResponse {
+  trial_id: string;
+}
+
+export interface TrialEndRequest {
+  trial_id: string;
+}
+
+export interface TrialEndResponse {
+  released_handle_count: number;
+}
+
+export interface TrialEnterContextRequest {
+  command_id: string;
+  trial_id: string;
+}
+
+export interface TrialEnterContextResponse {
+  fixture_handle: string;
+  kind: string;
+  tags: string[];
+}
+
+export interface TrialRegisterFixtureRequest {
+  fixture_handle: string;
+  owner_plugin_id: string;
+  trial_id: string;
+}
+
+export interface TrialResolveSamplesRequest {
+  command_id: string;
+}
+
+export interface TrialResolveSamplesResponse {
+  prompts: string[];
+}
+
 export interface VocabularyCommitResponse {
   ok: boolean;
 }
 
 // ===== Actuator → Plugin request/response types =====
-
-export interface CalibrationApplyFixtureRequest {
-  command_id: string;
-}
-
-export interface CalibrationApplyFixtureResponse {
-  fixture_handle: string;
-}
-
-export interface CalibrationReleaseFixtureRequest {
-  fixture_handle: string;
-}
-
-export interface CalibrationSamplesRequest {
-  command_id: string;
-}
-
-export interface CalibrationSamplesResponse {
-  prompts: string[];
-}
 
 export interface OnActionRequest {
   action: string;
@@ -4511,4 +4491,24 @@ export interface RenderSettingsRequest {
 export interface RenderSettingsResponse {
   css?: string;
   html: string;
+}
+
+export interface TrialApplyFixtureRequest {
+  command_id: string;
+}
+
+export interface TrialApplyFixtureResponse {
+  fixture_handle: string;
+}
+
+export interface TrialReleaseFixtureRequest {
+  fixture_handle: string;
+}
+
+export interface TrialSamplesRequest {
+  command_id: string;
+}
+
+export interface TrialSamplesResponse {
+  prompts: string[];
 }
