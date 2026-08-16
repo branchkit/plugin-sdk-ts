@@ -635,6 +635,7 @@ export const EventHidReport = "_platform.hid.report" as const;
 export const EventInputSessionBoundary = "_platform.input.session_boundary" as const;
 export const EventInputSessionEnded = "_platform.input.session_ended" as const;
 export const EventKeyboardLayoutChanged = "_platform.keyboard.layout_changed" as const;
+export const EventNetworkChanged = "_platform.network.changed" as const;
 export const EventPipelineError = "_platform.pipeline.error" as const;
 export const EventPipelineStarted = "_platform.pipeline.started" as const;
 export const EventPipelineStopped = "_platform.pipeline.stopped" as const;

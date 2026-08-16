@@ -439,6 +439,14 @@ export interface LoginItem {
   path: string;
 }
 
+export interface ManagedFieldRow {
+  actor: string;
+  at_unix_ms: number;
+  field: string;
+  id: string;
+  origin: string;
+}
+
 /**
  * Which category the matcher's tiebreaker chose. Mirrors the four
  * branches of `find_match_at_start_with_telemetry`: gated Completes win over
@@ -515,6 +523,7 @@ export type OnPointer = "none" | "fade";
 export interface OverlayRow {
   added: number;
   collection: string;
+  managed_fields: ManagedFieldRow[];
   patched_ids: string[];
   removed: number;
   tenant: string;
