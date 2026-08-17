@@ -36,6 +36,7 @@ export interface AXPathSegment {
 
 export interface ActionFieldSchema {
   default?: unknown;
+  description: string;
   display?: unknown;
   enum_values: string[];
   field_type: FieldType;
