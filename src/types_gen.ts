@@ -214,15 +214,6 @@ export interface ContactInfo {
   phone?: string;
 }
 
-export interface ControlRow {
-  actor: string;
-  at_unix_ms: number;
-  collection: string;
-  field: string;
-  id: string;
-  level: string;
-}
-
 export interface CpuInfo {
   architecture: string;
   chip: string;
@@ -4191,14 +4182,6 @@ export interface OverridesApplyRequest {
 export interface OverridesApplyResponse {
   key?: string;
   ok: boolean;
-}
-
-export interface OverridesControlRequest {
-  collection?: string;
-}
-
-export interface OverridesControlResponse {
-  control: ControlRow[];
 }
 
 export interface OverridesListResponse {

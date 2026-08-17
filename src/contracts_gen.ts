@@ -577,7 +577,6 @@ export const MethodNativeXcodeVersion = "native.xcode_version" as const; // sinc
 export const MethodNativeZip = "native.zip" as const; // since 0.1.0
 export const MethodNativeZoomEnabled = "native.zoom_enabled" as const; // since 0.1.0
 export const MethodOverridesApply = "overrides.apply" as const; // since 0.1.0
-export const MethodOverridesControl = "overrides.control" as const; // since 0.1.0
 export const MethodOverridesList = "overrides.list" as const; // since 0.1.0
 export const MethodPipelinesGrammar = "pipelines.grammar" as const; // since 0.1.0
 export const MethodPipelinesInject = "pipelines.inject" as const; // since 0.1.0
