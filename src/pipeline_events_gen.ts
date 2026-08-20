@@ -4,33 +4,25 @@
 // The BranchKit pipeline event vocabulary, projected from
 // contracts/pipeline.json (itself generated from the branchkit-stage-sdk Rust
 // types). Framing lives in the hand-written reader/writer alongside this file.
+//
+// Transport vocabulary: the handshake, framing, error and flow-credit
+// types every stage speaks whatever its domain.
+
+import type { AudioFormat } from "./pipeline_events_audio_gen.js";
+export type { AudioFormat };
 
 /** Wire event tags. Use instead of string literals so vocabulary drift is a type error. */
-export const EventAudioChunk = "audio_chunk" as const;
-export const EventAudioDeviceAdded = "audio_device_added" as const;
-export const EventAudioDeviceDefaultChanged = "audio_device_default_changed" as const;
-export const EventAudioDeviceRemoved = "audio_device_removed" as const;
-export const EventAudioDeviceSnapshot = "audio_device_snapshot" as const;
-export const EventAudioStart = "audio_start" as const;
-export const EventAudioStop = "audio_stop" as const;
 export const EventCapability = "capability" as const;
-export const EventDisplayAdded = "display_added" as const;
-export const EventDisplayChanged = "display_changed" as const;
-export const EventDisplayRemoved = "display_removed" as const;
-export const EventDisplaySnapshot = "display_snapshot" as const;
 export const EventError = "error" as const;
 export const EventFlowCredit = "flow_credit" as const;
-export const EventHeadingUpdate = "heading_update" as const;
-export const EventLocationError = "location_error" as const;
-export const EventLocationUpdate = "location_update" as const;
-export const EventPowerSnapshot = "power_snapshot" as const;
-export const EventPowerSourceChanged = "power_source_changed" as const;
-export const EventTranscript = "transcript" as const;
-export const EventVocabularyUpdate = "vocabulary_update" as const;
 
 /**
  * The open namespace a stage emits custom events under: at least three
  * non-empty dot segments, `ext.<vendor>.<name>`.
+ *
+ * This is the namespace EVERY domain the platform does not itself decode
+ * lives in — a foot pedal, a frame source, a MIDI filter. It needs no
+ * platform change and no entry in any catalog.
  */
 export const EXT_EVENT_PREFIX = "ext." as const;
 
@@ -50,69 +42,6 @@ export function isValidExtEventType(t: string): boolean {
 export const MODELS_DIR_ENV = "BRANCHKIT_MODELS_DIR" as const;
 export const DATA_DIR_ENV = "BRANCHKIT_STAGE_DATA" as const;
 
-export interface AudioChunk {
-  session_id: string;
-  timestamp_ms: number;
-}
-
-export interface AudioDeviceAdded {
-  device: AudioDeviceInfo;
-}
-
-export interface AudioDeviceDefaultChanged {
-  device_id: number;
-  direction: string;
-  name: string;
-  uid: string;
-}
-
-export interface AudioDeviceInfo {
-  device_id: number;
-  is_default_input: boolean;
-  is_default_output: boolean;
-  is_input: boolean;
-  is_output: boolean;
-  name: string;
-  uid: string;
-}
-
-export interface AudioDeviceRemoved {
-  device_id: number;
-  name: string;
-  uid: string;
-}
-
-export interface AudioDeviceSnapshot {
-  devices: AudioDeviceInfo[];
-}
-
-export interface AudioFormat {
-  channels: number;
-  rate: number;
-  width: number;
-}
-
-export interface AudioStart {
-  format: AudioFormat;
-  session_id: string;
-}
-
-export interface AudioStop {
-  /**
-   * Shared-clock position (the AudioChunk `timestamp_ms` timebase) after
-   * which buffered audio must NOT be processed. Set when the stop was
-   * triggered by something whose audio position is known — a recognized
-   * stop phrase, say — so that a consumer buffering ahead of the trigger
-   * does not process audio the user never meant to send.
-   *
-   * A source stage forwards it verbatim on its downstream AudioStop; a
-   * batch consumer truncates its buffer at it; absent = process
-   * everything.
-   */
-  cutoff_ms?: number;
-  session_id: string;
-}
-
 export interface Capability {
   audio_formats?: AudioFormat[];
   /**
@@ -130,32 +59,6 @@ export interface Capability {
   stage_type: string;
 }
 
-export interface DisplayAdded {
-  display: DisplayInfo;
-}
-
-export interface DisplayChanged {
-  display: DisplayInfo;
-}
-
-export interface DisplayInfo {
-  display_id: number;
-  height: number;
-  is_builtin: boolean;
-  is_main: boolean;
-  refresh_rate: number;
-  scale_factor: number;
-  width: number;
-}
-
-export interface DisplayRemoved {
-  display_id: number;
-}
-
-export interface DisplaySnapshot {
-  displays: DisplayInfo[];
-}
-
 export interface ErrorEvent {
   code: string;
   fatal: boolean;
@@ -166,177 +69,6 @@ export interface ErrorEvent {
 export interface FlowCredit {
   frames: number;
   session_id: string;
-}
-
-/**
- * The engine-facing wire projection of the compiled grammar DAG (Phase D2
- * contract).
- *
- * This is the JSON the actuator attaches to a `vocabulary_update` and the CTC
- * stage feeds to the patched `GrammarBuilder` to build `G`. It is a *reduced*
- * view of the DAG — exactly what FST construction needs, nothing the matcher
- * keeps:
- * - `start` (always 0) is `G`'s start AND its sole base accept state: every
- *   command-final arc returns there, so accepting at `start` accepts any
- *   sequence of complete commands.
- * - `arcs` are word-level `(from → word → to)` transitions; the builder maps
- *   `word` to the same word id `H ∘ L` emits and rides `weight` onto the arc.
- * - `open_states` are states whose continuation D1 could not enumerate (free
- *   text, dependent capture, list repeat/optional). The builder realizes each
- *   as final + a self-loop over the full word alphabet (the back-arc into a
- *   word loop), so those commands still recognize their open tail.
- *
- * D3 extends this with per-arc command ids; D2 carries words only.
- */
-export interface GrammarDagWire {
-  arcs: WireArc[];
-  /**
-   * Alternatives the compiler dropped under the empty-list policy —
-   * telemetry only, the FST builder ignores it.
-   */
-  dropped_alts?: number;
-  num_states: number;
-  open_states?: OpenState[];
-  start: number;
-}
-
-export interface HeadingUpdate {
-  heading_accuracy: number;
-  magnetic_heading: number;
-  timestamp: number;
-  true_heading: number;
-}
-
-export interface LocationError {
-  code: string;
-  message: string;
-}
-
-export interface LocationUpdate {
-  altitude: number;
-  horizontal_accuracy: number;
-  latitude: number;
-  longitude: number;
-  timestamp: number;
-  vertical_accuracy: number;
-}
-
-/**
- * A state whose continuation D1 could not fully enumerate. The builder realizes
- * it as final + a self-loop. `alphabet` bounds that self-loop when known;
- * omitted (`None`) means loop over the full recognition union — the phase-2
- * default and the always-safe fallback.
- */
-export interface OpenState {
-  alphabet?: string[];
-  state: number;
-}
-
-export interface PowerSnapshot {
-  state: PowerState;
-}
-
-export interface PowerSourceChanged {
-  state: PowerState;
-}
-
-export interface PowerState {
-  battery_level?: number;
-  is_charging: boolean;
-  source: string;
-  time_to_empty?: number;
-  time_to_full?: number;
-}
-
-export interface Transcript {
-  /**
-   * Coarse scalar confidence for the whole transcript: the MEAN of
-   * `word_scores` when the engine produces them, or its own scalar when it
-   * has no per-word signal.
-   *
-   * Deliberately coarse, and the reason matters — **a confidence GATE must
-   * read `word_scores` (the minimum), never this.** A mean hides a single
-   * badly-supported word: scores of [+8, -3] average to +2.5 and sail past
-   * a threshold the per-word data says should fail. For display and
-   * logging only.
-   */
-  confidence?: number;
-  final: boolean;
-  partial: boolean;
-  session_id: string;
-  text: string;
-  /**
-   * Shared-clock onset (ms, the AudioChunk `timestamp_ms` timebase) of each
-   * word of `text`, aligned 1:1 with its whitespace-split words. Emitted by
-   * engines that produce alignment; omitted by those that do not.
-   *
-   * Because the timebase is the shared clock rather than a per-session
-   * counter, a consumer can convert a word position into an audio position
-   * that is meaningful to OTHER concurrently-running pipelines — which is
-   * what makes `AudioStop::cutoff_ms` possible across pipelines.
-   */
-  word_onsets_ms?: number[];
-  /**
-   * Per-word acoustic score, aligned 1:1 with `text`'s whitespace-split
-   * words (same alignment contract as `word_onsets_ms`).
-   *
-   * Sign is the contract; magnitude is the engine's own scale. Positive
-   * means the audio supported the word. Negative means the decoder's
-   * language constraint outweighed weak acoustic evidence — the word was
-   * produced because the grammar allowed it, not because it was heard. A
-   * stage that computes these should document its own scale; a consumer
-   * that gates on them should read the MINIMUM, per `confidence` above.
-   *
-   * When present, `confidence` is the mean of these.
-   */
-  word_scores?: number[];
-}
-
-/**
- * The `vocabulary_update` payload: the recognition word union plus the
- * optional grammar stamps the platform attaches at delivery time.
- *
- * This struct is the typed contract; the actuator's producer side still
- * assembles the payload field-by-field (the three delivery-time grammar
- * stamps mutate the JSON per event), and an actuator-side test pins that
- * assembly to this shape so the two cannot drift silently. A consumer
- * stage should treat every field but `words` as optional and fall back
- * to the flat word list when a stamp is absent or malformed.
- */
-export interface VocabularyUpdate {
-  /**
-   * The structured word-level grammar DAG (D2), stamped when the
-   * structured-grammar toggle is on. Absent/null → the consumer falls back
-   * to the flat word-list grammar.
-   */
-  grammar_dag?: unknown;
-  /**
-   * Exclusive-mode narrowing: when present, the engine grammar is built
-   * from THIS list instead of `words`.
-   */
-  narrow_to?: string[];
-  /**
-   * Sparse per-word decoding bias (Lever E): only biased words appear;
-   * everything else is neutral. Keyed by word identity so it cannot drift
-   * out of alignment with the separately-built union.
-   */
-  word_weights?: Record<string, number>;
-  /**
-   * The full recognition word union (uppercased downstream to the model
-   * lexicon's casing by the consumer).
-   */
-  words: string[];
-}
-
-/**
- * One word-level arc in [`GrammarDagWire`]. `weight` is omitted when absent
- * (D1 leaves it unset; a later weight policy populates it).
- */
-export interface WireArc {
-  from: number;
-  to: number;
-  weight?: number;
-  word: string;
 }
 
 /**

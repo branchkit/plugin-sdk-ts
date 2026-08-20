@@ -20,6 +20,16 @@
       "bun": "./src/stage.ts",
       "import": "./dist/stage.js",
       "types": "./dist/stage.d.ts"
+    },
+    "./stage/recognition": {
+      "bun": "./src/pipeline_events_recognition_gen.ts",
+      "import": "./dist/pipeline_events_recognition_gen.js",
+      "types": "./dist/pipeline_events_recognition_gen.d.ts"
+    },
+    "./stage/monitors": {
+      "bun": "./src/pipeline_events_monitors_gen.ts",
+      "import": "./dist/pipeline_events_monitors_gen.js",
+      "types": "./dist/pipeline_events_monitors_gen.d.ts"
     }
   },
   "files": [

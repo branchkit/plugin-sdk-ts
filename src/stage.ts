@@ -42,14 +42,17 @@
 import type { Readable, Writable } from "node:stream";
 import { PipelineReader, PipelineWriter } from "./pipeline.js";
 import type { PipelineEvent } from "./pipeline.js";
+import { EventCapability, EventFlowCredit } from "./pipeline_events_gen.js";
+import type { Capability } from "./pipeline_events_gen.js";
+// The runtime names the audio session types in two places: the AudioConsumer
+// interface, and the stop request a listenForStop source reads. Both are audio
+// assumptions in an otherwise domain-free runtime — visible here on purpose.
 import {
   EventAudioChunk,
   EventAudioStart,
   EventAudioStop,
-  EventCapability,
-  EventFlowCredit,
-} from "./pipeline_events_gen.js";
-import type { AudioChunk, AudioStart, AudioStop, Capability } from "./pipeline_events_gen.js";
+} from "./pipeline_events_audio_gen.js";
+import type { AudioChunk, AudioStart, AudioStop } from "./pipeline_events_audio_gen.js";
 
 // A stage speaks this vocabulary and nothing else, so re-export it here: one
 // subpath import gets the runtime and the types together. It is deliberately
@@ -58,7 +61,14 @@ import type { AudioChunk, AudioStart, AudioStop, Capability } from "./pipeline_e
 // namespaces would collide. They are different contracts that happen to
 // describe some of the same hardware.
 export * from "./pipeline_events_gen.js";
+export * from "./pipeline_events_audio_gen.js";
 export { PipelineReader, PipelineWriter, type PipelineEvent } from "./pipeline.js";
+
+// Recognition and monitor vocabularies are deliberately NOT re-exported here.
+// A stage author writing a foot pedal or a frame source should not be handed a
+// command-grammar DAG and left to work out that it is irrelevant. Import
+// `@branchkit/plugin-sdk-ts/stage/recognition` or `/stage/monitors` if you are
+// actually building one of those.
 
 // ---------------------------------------------------------------- stage log
 
