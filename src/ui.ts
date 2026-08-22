@@ -6,29 +6,29 @@
  *
  * - the element in an expression is `el`, never `$el` ($ reads a signal)
  * - page-local interaction state is a Datastar signal declared with
- *   __ifmissing (survives morphs) and CONSUMED by the action that uses
- *   it (signals outlive rows)
+ *   __ifmissing (survives morphs) and CONSUMED by the action that uses it
  * - method URLs come from methodPost, never spelled by hand
+ * - payload values are marshaled, never quote-spliced
  *
- * Plugins own look and layout; helpers take a `style` string and return
- * fragments. Hand-written Datastar remains a full escape hatch.
+ * Plugins own look and layout: helpers accept class/style options and
+ * return fragments. Hand-written Datastar remains a full escape hatch.
  */
 
 import { methodPost } from "./settings_route.js";
 
+/** Marks a raw Datastar/JS expression inside a payload — the deliberate
+ * escape hatch from value marshaling. */
+export class Expr {
+  constructor(public readonly js: string) {}
+}
+export function expr(js: string): Expr {
+  return new Expr(js);
+}
+
 /** "The value of the input immediately before this button" — the
  * input+Save pairing. `el` is the element; `$el` silently reads an
  * undefined signal. */
-export const inputValue = "el.previousElementSibling.value";
-
-function escapeHtml(s: string): string {
-  return s
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#39;");
-}
+export const inputValue = new Expr("el.previousElementSibling.value");
 
 /** Sanitize an arbitrary seed for use inside a Datastar signal
  * identifier: alnum+underscore, with an fnv32 suffix so distinct seeds
@@ -43,57 +43,82 @@ export function signalName(seed: string): string {
   return `${clean}_${h.toString(16)}`;
 }
 
-function button(label: string, click: string, style: string): string {
-  return `<button style="${escapeHtml(style)}" data-on:click="${escapeHtml(click)}">${escapeHtml(label)}</button>`;
+export interface ButtonOptions {
+  /** Payload as key → value; values are JSON-marshaled (quotes stay
+   * data), Expr values embedded raw. */
+  payload?: Record<string, unknown>;
+  /** Raw JS object literal payload — escape hatch; caller owns escaping. */
+  payloadJS?: string;
+  /** Signal expression run AFTER the post (composed outside the payload —
+   * "save, and close the form"). */
+  then?: string;
+  class?: string;
+  style?: string;
 }
 
-/** Post to one of this plugin's methods on click. payloadJS is a JS
- * object literal ("" for none) — embedded verbatim; escape untrusted
- * values yourself, same as methodPost. */
-export function postButton(label: string, method: string, payloadJS: string, style: string): string {
-  return button(label, methodPost(method, payloadJS), style);
+export interface ConfirmOptions extends ButtonOptions {
+  /** Second-click label (default "Really <label>?"). */
+  confirmLabel?: string;
+  /** State key override (default derives from method+payload). */
+  key?: string;
 }
 
-/** Run a signal expression on click ("$renaming = true") — page-local
- * UI state, no server round-trip. */
-export function signalButton(label: string, exprJS: string, style: string): string {
-  return button(label, exprJS, style);
+function escapeHtml(s: string): string {
+  return s
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
 
-/** Post, then run a signal expression — the consume-on-use composition
- * ("save, and close the form"). Composing by hand invites putting the
- * expression inside the payload object — a syntax error that kills the
- * button silently. */
-export function postButtonThen(
-  label: string,
-  method: string,
-  payloadJS: string,
-  thenJS: string,
-  style: string,
-): string {
-  return button(label, `${methodPost(method, payloadJS)}; ${thenJS}`, style);
+function buildPayload(o: ButtonOptions): string {
+  if (o.payloadJS !== undefined) return o.payloadJS;
+  if (!o.payload) return "";
+  const parts = Object.entries(o.payload).map(([k, v]) =>
+    `${JSON.stringify(k)}:${v instanceof Expr ? v.js : JSON.stringify(v) ?? "null"}`,
+  );
+  return `{${parts.join(",")}}`;
+}
+
+function attrs(o: ButtonOptions): string {
+  let out = "";
+  if (o.class) out += ` class="${escapeHtml(o.class)}"`;
+  if (o.style) out += ` style="${escapeHtml(o.style)}"`;
+  return out;
+}
+
+function button(label: string, click: string, o: ButtonOptions): string {
+  return `<button${attrs(o)} data-on:click="${escapeHtml(click)}">${escapeHtml(label)}</button>`;
+}
+
+/** Post to one of this plugin's methods on click. */
+export function postButton(label: string, method: string, options: ButtonOptions = {}): string {
+  let click = methodPost(method, buildPayload(options));
+  if (options.then) click += `; ${options.then}`;
+  return button(label, click, options);
+}
+
+/** Run a signal expression on click ("$renaming = true") — page-local UI
+ * state, no server round-trip. */
+export function signalButton(label: string, exprJS: string, options: ButtonOptions = {}): string {
+  return button(label, exprJS, options);
 }
 
 /** Two-click destructive action: arm (page-local signal — one window's
- * half-finished delete never appears in another), confirm posts AND
- * consumes the signal in one expression, Cancel disarms. `key` scopes
- * the state — use the row's identity, e.g. signalName(name). */
-export function confirmPostButton(
-  key: string,
-  label: string,
-  confirmLabel: string,
-  method: string,
-  payloadJS: string,
-  style: string,
-): string {
+ * half-finished delete never appears in another), confirm posts and
+ * consumes the signal in one expression, Cancel disarms. */
+export function confirmButton(label: string, method: string, options: ConfirmOptions = {}): string {
+  const payload = buildPayload(options);
+  const key = options.key ?? signalName(`${method}|${payload}`);
+  const confirmLabel = options.confirmLabel ?? `Really ${label.toLowerCase()}?`;
   const sig = `$c_${key}`;
-  const arm = button(label, `${sig} = true`, style);
-  const confirm = button(
-    confirmLabel,
-    `${methodPost(method, payloadJS)}; ${sig} = false`,
-    `${style}color:#c44;border-color:#c44;`,
-  );
-  const cancel = button("Cancel", `${sig} = false`, style);
+  const arm = button(label, `${sig} = true`, options);
+  let confirmClick = `${methodPost(method, payload)}; ${sig} = false`;
+  if (options.then) confirmClick += `; ${options.then}`;
+  const danger: ButtonOptions = { ...options, style: `${options.style ?? ""}color:#c44;border-color:#c44;` };
+  const confirm = button(confirmLabel, confirmClick, danger);
+  const cancel = button("Cancel", `${sig} = false`, options);
   return (
     `<span data-signals:c_${key}__ifmissing="false">` +
     `<span data-show="!${sig}">${arm}</span>` +
