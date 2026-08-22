@@ -38,6 +38,7 @@ import "./debug.js"; // module augmentation — per-plugin debug log helper
 import "./mirror.js"; // module augmentation — consumed-collection mirror
 export { CollectionMirror } from "./mirror.js";
 import "./settings.js"; // module augmentation — typed settings mirror
+import "./hud.js";
 export { SettingsMirror } from "./settings.js";
 export { methodURL, methodPost } from "./settings_route.js";
 export { postButton, signalButton, confirmButton, expr, Expr, inputValue, signalName } from "./ui.js";

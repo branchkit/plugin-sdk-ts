@@ -57,6 +57,31 @@ describe("settings mirror write/read-through", () => {
     expect(s.get()?.editor).toBe("dev.zed.Zed");
   });
 
+  test("unpatchUser relays and refreshes", async () => {
+    const store: Record<string, unknown> = { editor: "custom" };
+    const p2 = new (await import("../plugin.js")).Plugin();
+    let sawUnpatch = false;
+    // @ts-expect-error stub
+    p2.call = async (method: string, params: unknown) => {
+      if (method === "overrides.apply") {
+        const req = params as { action: string; field?: string; tenant?: string };
+        expect(req.action).toBe("unpatch");
+        expect(req.field).toBe("editor");
+        expect(req.tenant).toBe("_user");
+        store.editor = "";
+        sawUnpatch = true;
+        return { ok: true };
+      }
+      if (method === "collection.get") return { name: "plugin.test.config", data: store };
+      throw new Error("unexpected " + method);
+    };
+    p2.on = () => {};
+    const s2 = p2.settings<TestConfig>("plugin.test.config");
+    await s2.unpatchUser("editor");
+    expect(sawUnpatch).toBe(true);
+    expect(s2.get()?.editor).toBe("");
+  });
+
   test("load reads through to the store's current state", async () => {
     const store: Record<string, unknown> = { editor: "stale" };
     const { plugin } = fakePlugin(store);

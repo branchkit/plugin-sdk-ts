@@ -106,6 +106,25 @@ export class SettingsMirror<T> {
   }
 
   /**
+   * Remove the user's override for one field so it resumes tracking the
+   * plugin's shipped default (a change back to the default must not pin
+   * a copy of it). Same contract as setUser: one relayed user gesture,
+   * refreshed before resolving.
+   */
+  async unpatchUser(field: string): Promise<void> {
+    await this.#plugin.overridesApply(
+      "unpatch",
+      this.#name,
+      field,
+      undefined,
+      this.#name,
+      undefined,
+      "_user",
+    );
+    await this.refresh();
+  }
+
+  /**
    * The composed settings via a synchronous read-through, updating the
    * mirror. Use at the top of render paths (`render_settings`): a render
    * must read state at least as fresh as whatever triggered it, and the
