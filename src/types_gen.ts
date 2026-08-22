@@ -4522,3 +4522,247 @@ export interface TrialSamplesRequest {
 export interface TrialSamplesResponse {
   prompts: string[];
 }
+
+// ===== Platform event payload types =====
+
+/** Payload of the `_platform.action.executed` event. */
+export interface ActionExecutedEventParams {
+  action: string;
+}
+
+/** Payload of the `_platform.app.focused` event. */
+export interface AppFocusedEventParams {
+  bundle_id: string;
+}
+
+/** Payload of the `_platform.audio_devices.changed` event. */
+export interface AudioDevicesChangedEventParams {
+  device_id: number;
+  direction?: string;
+  is_input?: boolean;
+  is_output?: boolean;
+  kind: string;
+  name: string;
+  uid: string;
+}
+
+/** Payload of the `_platform.ble.notification` event. */
+export interface BleNotificationEventParams {
+  characteristic_uuid: string;
+  data: number[];
+  device_identifier: string;
+  service_uuid: string;
+}
+
+/** Payload of the `_platform.capture.progress` event. */
+export interface CaptureProgressEventParams {
+  captured: Record<string, unknown>;
+  command_phrase: string;
+  next_capture: string;
+  next_collection: string;
+  owner_plugin: string;
+}
+
+/** Payload of the `_platform.clipboard.changed` event. */
+export interface ClipboardChangedEventParams {
+  change_count: number;
+  types: string[];
+}
+
+/** Payload of the `_platform.collection.updated` event. */
+export interface CollectionUpdatedEventParams {
+  collection: string;
+  writer: string;
+}
+
+/** Payload of the `_platform.display.changed` event. */
+export interface DisplayChangedEventParams {
+  displays: DisplayInfo[];
+}
+
+/** Payload of the `_platform.effect.displaced` event. */
+export interface EffectDisplacedEventParams {
+  displaced_owner: string;
+  effect: string;
+  new_owner: string;
+}
+
+/** Payload of the `_platform.hid.connected` event. */
+export interface HidConnectedEventParams {
+  axes: number;
+  ble_uuid?: string;
+  buttons: number;
+  device_id: string;
+  product: string;
+  product_id: number;
+  transport: string;
+  vendor_id: number;
+}
+
+/** Payload of the `_platform.hid.disconnected` event. */
+export interface HidDisconnectedEventParams {
+  device_id: string;
+  product: string;
+  transport: string;
+}
+
+/** Payload of the `_platform.hid.input` event. */
+export interface HidInputEventParams {
+  device_id: string;
+  product: string;
+  timestamp: number;
+  usage: number;
+  usage_page: number;
+  value: number;
+}
+
+/** Payload of the `_platform.hid.report` event. */
+export interface HidReportEventParams {
+  data: number[];
+  device_id: string;
+  product: string;
+  report_id: number;
+  report_type: number;
+  timestamp: number;
+}
+
+/** Payload of the `_platform.keyboard.layout_changed` event. */
+export interface KeyboardLayoutChangedEventParams {
+  new_layout_id: string;
+  old_layout_id: string;
+}
+
+/** Payload of the `_platform.memory_pressure.changed` event. */
+export interface MemoryPressureChangedEventParams {
+  level: string;
+}
+
+/** Payload of the `_platform.network.changed` event. */
+export interface NetworkChangedEventParams {
+  constrained: boolean;
+  expensive: boolean;
+  interface: string;
+  reachable: boolean;
+}
+
+/** Payload of the `_platform.permission.changed` event. */
+export interface PermissionChangedEventParams {
+  granted: boolean;
+  permission: string;
+}
+
+/** Payload of the `_platform.pipeline.error` event. */
+export interface PipelineErrorEventParams {
+  error: string;
+  pipeline: string;
+}
+
+/** Payload of the `_platform.pipeline.started` event. */
+export interface PipelineStartedEventParams {
+  ephemeral?: boolean;
+  pipeline: string;
+}
+
+/** Payload of the `_platform.pipeline.stopped` event. */
+export interface PipelineStoppedEventParams {
+  pipeline: string;
+}
+
+/** Payload of the `_platform.pipeline.transcript` event. */
+export interface PipelineTranscriptEventParams {
+  confidence?: number;
+  dictation_profile?: string;
+  is_final: boolean;
+  pipeline: string;
+  text: string;
+  word_onsets_ms?: unknown;
+  word_scores?: unknown;
+}
+
+/** Payload of the `_platform.pipeline.warmed` event. */
+export interface PipelineWarmedEventParams {
+  pipeline: string;
+}
+
+/** Payload of the `_platform.plugin.degraded` event. */
+export interface PluginDegradedEventParams {
+  consecutive_timeouts: number;
+  plugin_id: string;
+}
+
+/** Payload of the `_platform.plugin.disabled` event. */
+export interface PluginDisabledEventParams {
+  plugin_id: string;
+}
+
+/** Payload of the `_platform.plugin.enabled` event. */
+export interface PluginEnabledEventParams {
+  plugin_id: string;
+}
+
+/** Payload of the `_platform.power.changed` event. */
+export interface PowerChangedEventParams {
+  battery_level?: number;
+  is_charging: boolean;
+  source: string;
+  time_to_empty?: number;
+  time_to_full?: number;
+}
+
+/** Payload of the `_platform.selection.picked` event. */
+export interface SelectionPickedEventParams {
+  item_id: string;
+  tag: string;
+}
+
+/** Payload of the `_platform.thermal.changed` event. */
+export interface ThermalChangedEventParams {
+  state: string;
+}
+
+/** Payload of the `_platform.window.closed` event. */
+export interface WindowClosedEventParams {
+  app_id: string;
+  window_id: string;
+}
+
+/** Payload of the `_platform.window.created` event. */
+export interface WindowCreatedEventParams {
+  app_id: string;
+  app_name?: string;
+  frame: Frame;
+  window_id: string;
+}
+
+/** Payload of the `_platform.window.focused` event. */
+export interface WindowFocusedEventParams {
+  app_id: string;
+  window_id: string;
+}
+
+/** Payload of the `_platform.window.frame_changed` event. */
+export interface WindowFrameChangedEventParams {
+  new: Frame;
+  old: Frame;
+  window_id: string;
+}
+
+/** Payload of the `_platform.window.title_changed` event. */
+export interface WindowTitleChangedEventParams {
+  new_title: string;
+  old_title: string;
+  window_id: string;
+}
+
+/** Payload of the `_platform.workspace.changed` event. */
+export interface WorkspaceChangedEventParams {
+  reason?: string;
+}
+
+/** Payload of the `_platform.world.updated` event. */
+export interface WorldUpdatedEventParams {
+  active_app?: string;
+  active_window_id?: string;
+  displays?: unknown;
+  windows?: unknown;
+}

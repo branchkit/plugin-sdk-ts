@@ -4,16 +4,11 @@ import type {
   ListOpts,
   CollectionRecord,
   CollectionPutEntry,
+  CollectionUpdatedEventParams,
   FieldDisplay,
 } from "./types_gen.js";
 
 export type { CollectionPutEntry };
-
-/** Payload of `_platform.collection.updated` notifications. */
-export interface CollectionChangedEvent {
-  collection: string;
-  writer: string;
-}
 
 /**
  * Bounds what a {@link Plugin.replace} is allowed to DELETE, WITHIN the records
@@ -265,7 +260,7 @@ declare module "./plugin.js" {
      */
     subscribe(
       name: string,
-      fn: (evt: CollectionChangedEvent) => void | Promise<void>,
+      fn: (evt: CollectionUpdatedEventParams) => void | Promise<void>,
     ): void;
   }
 }
@@ -405,10 +400,10 @@ Plugin.prototype.deleteMany = async function (
 
 Plugin.prototype.subscribe = function (
   name: string,
-  fn: (evt: CollectionChangedEvent) => void | Promise<void>,
+  fn: (evt: CollectionUpdatedEventParams) => void | Promise<void>,
 ): void {
   this.on(EventCollectionUpdated, (params: unknown) => {
-    const evt = params as CollectionChangedEvent | undefined;
+    const evt = params as CollectionUpdatedEventParams | undefined;
     if (evt && evt.collection === name) {
       // Return, don't discard: the ordered pump awaits this, which is what
       // keeps two rapid updates from racing.

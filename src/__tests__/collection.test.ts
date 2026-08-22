@@ -1,6 +1,7 @@
 import { describe, test, expect } from "bun:test";
 import { Plugin } from "../plugin.js";
-import { listOpts, type CollectionChangedEvent } from "../collection.js";
+import { listOpts } from "../collection.js";
+import type { CollectionUpdatedEventParams } from "../types_gen.js";
 import { EventCollectionUpdated } from "../contracts_gen.js";
 import "../methods_gen.js";
 import "../collection.js";
@@ -158,7 +159,7 @@ describe("collection state helpers", () => {
 
   test("subscribe filters notifications by collection name", async () => {
     const p = new Plugin();
-    const seen: CollectionChangedEvent[] = [];
+    const seen: CollectionUpdatedEventParams[] = [];
     p.subscribe("things", (evt) => {
       seen.push(evt);
     });

@@ -46,7 +46,6 @@ export {
   listOpts,
   scopeCollection,
   scopeGroup,
-  type CollectionChangedEvent,
   type ReplaceScope,
   type ReplaceResult,
   type ReplaceDisplay,

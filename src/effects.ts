@@ -1,10 +1,12 @@
 import { EventEffectDisplaced } from "./contracts_gen.js";
 import { Plugin } from "./plugin.js";
+import type { EffectDisplacedEventParams } from "./types_gen.js";
 
 /**
- * Payload delivered to {@link Plugin.onEffectDisplaced} callbacks.
- * Mirrors the actuator-side broadcast shape — see
- * `actuator/src/operations/registered/effects.rs`.
+ * Payload delivered to {@link Plugin.onEffectDisplaced} callbacks — the
+ * camelCased view of the generated wire type
+ * {@link EffectDisplacedEventParams} (this SDK camelCases its public
+ * event payloads; Go keeps wire snake_case).
  */
 export interface EffectDisplacedEvent {
   /** Effect name that was displaced (e.g. `"suppress_notifications"`). */
@@ -170,7 +172,10 @@ Plugin.prototype.onEffectDisplaced = function (
   const selfId = this.id;
   this.on(EventEffectDisplaced, (params: unknown) => {
     if (params == null || typeof params !== "object") return;
-    const obj = params as Record<string, unknown>;
+    // Typed against the generated wire shape so a wire-field rename fails
+    // typecheck here; the runtime guards stay because inbound payloads are
+    // still untrusted bytes.
+    const obj = params as Partial<EffectDisplacedEventParams>;
     const effect = optionalString(obj.effect);
     const displacedOwner = optionalString(obj.displaced_owner);
     // Only `effect` and `displaced_owner` are load-bearing — the first
