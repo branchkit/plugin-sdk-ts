@@ -170,6 +170,10 @@ export function errorKindOf(e: unknown): ErrorKind | undefined {
  * Handle() and on() must be called before run(). call() may be called
  * from any async context concurrently with run().
  */
+// Mirrors the Go SDK's `oversizedFrameBytes` — keep the two in step so the
+// tripwire fires at the same size whichever SDK a plugin uses.
+const OVERSIZED_FRAME_BYTES = 1024 * 1024;
+
 export class Plugin {
   private pluginId: string;
   private handlers = new Map<string, HandlerFn>();
@@ -464,6 +468,15 @@ export class Plugin {
 
     this.rl.on("line", (line: string) => {
       if (line.length === 0) return;
+
+      // Tripwire, not a limit — same posture and threshold as the Go SDK's
+      // read loop (rpc.go oversizedFrameBytes): the line is dispatched
+      // exactly as any other, but a frame this large means the platform is
+      // shipping something it probably did not intend to, and the plugin
+      // author is the person who can see it happening.
+      if (line.length > OVERSIZED_FRAME_BYTES) {
+        Log(this.pluginId, `large stdin frame: ${line.length} bytes (dispatching anyway)`);
+      }
 
       let msg: RpcMessage;
       try {
