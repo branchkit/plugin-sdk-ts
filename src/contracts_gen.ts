@@ -97,6 +97,7 @@ export const MethodNativeAppSupportDirectory = "native.app_support_directory" as
 export const MethodNativeAppVersion = "native.app_version" as const; // since 0.1.0
 export const MethodNativeAppWindows = "native.app_windows" as const; // since 0.1.0
 export const MethodNativeAppWindowsCount = "native.app_windows_count" as const; // since 0.1.0
+export const MethodNativeAppsForPath = "native.apps_for_path" as const; // since 0.1.0
 export const MethodNativeAudioDeviceVolume = "native.audio_device_volume" as const; // since 0.1.0
 export const MethodNativeAudioDevices = "native.audio_devices" as const; // since 0.1.0
 export const MethodNativeAudioInputDevice = "native.audio_input_device" as const; // since 0.1.0

@@ -96,6 +96,7 @@ import {
   MethodNativeAppVersion,
   MethodNativeAppWindows,
   MethodNativeAppWindowsCount,
+  MethodNativeAppsForPath,
   MethodNativeAudioDeviceVolume,
   MethodNativeAudioDevices,
   MethodNativeAudioInputDevice,
@@ -703,6 +704,7 @@ declare module "./plugin.js" {
     nativeAppVersion(bundleId: string): Promise<void>;
     nativeAppWindows(bundleId: string): Promise<WindowDetail[]>;
     nativeAppWindowsCount(bundleId: string): Promise<void>;
+    nativeAppsForPath(path: string): Promise<InstalledApp[]>;
     nativeAudioDeviceVolume(deviceUid: string): Promise<NativeAudioDeviceVolumeResponse>;
     nativeAudioDevices(): Promise<AudioDevice[]>;
     nativeAudioInputDevice(): Promise<NativeAudioInputDeviceResponse>;
@@ -2048,6 +2050,16 @@ Plugin.prototype.nativeAppWindowsCount = async function(bundleId: string) {
       bundle_id: bundleId,
     },
   );
+};
+
+Plugin.prototype.nativeAppsForPath = async function(path: string) {
+  const result = await this.call(
+    MethodNativeAppsForPath,
+    {
+      path,
+    },
+  );
+  return (result as any).apps;
 };
 
 Plugin.prototype.nativeAudioDeviceVolume = async function(deviceUid: string) {

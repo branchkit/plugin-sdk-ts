@@ -1481,6 +1481,14 @@ export interface NativeAppWindowsCountRequest {
   bundle_id: string;
 }
 
+export interface NativeAppsForPathRequest {
+  path: string;
+}
+
+export interface NativeAppsForPathResponse {
+  apps: InstalledApp[];
+}
+
 export interface NativeAudioDeviceVolumeRequest {
   device_uid: string;
 }
