@@ -16,12 +16,16 @@ import { Plugin } from "./plugin.js";
  * There is deliberately no save.
  */
 export class SettingsMirror<T> {
+  #plugin: Plugin;
+  #name: string;
   #mirror: CollectionMirror;
   #val: T | undefined;
   #onChange: Array<(v: T) => void> = [];
 
   /** @internal — use {@link Plugin.settings}. */
   constructor(plugin: Plugin, name: string) {
+    this.#plugin = plugin;
+    this.#name = name;
     this.#mirror = plugin.mirrorCollection(name);
     const selfId = plugin.id;
     this.#mirror.onChange(() => {
@@ -62,6 +66,54 @@ export class SettingsMirror<T> {
    * keeps the mirror fresh. */
   refresh(): Promise<void> {
     return this.#mirror.refresh();
+  }
+
+  /**
+   * Relay ONE user gesture into the settings collection. Settings are
+   * `writers: platform_only` — a plugin never saves settings on its own
+   * initiative — so this writes tenant `_user`: the choice is the user's
+   * and this plugin is the transport (the platform records it as
+   * `relayed`, visible and undoable). State your plugin decides on its
+   * own is domain data and belongs in its own collection, not here.
+   *
+   * The write and the mirror refresh are ONE operation on purpose. The
+   * actuator re-renders the settings tab the moment your handler
+   * returns, while the mirror normally catches up later via
+   * collection.updated — a re-render that reads the mirror loses that
+   * race and draws the stale value (CQRS projection lag). After setUser
+   * resolves, get() observes the write.
+   */
+  async setUser(key: string, value: unknown): Promise<void> {
+    await this.setUserFields({ [key]: value });
+  }
+
+  /**
+   * setUser for a form submit: every field in one patch, one refresh.
+   * Same contract — one user gesture, tenant `_user`, observable to
+   * get() on resolve.
+   */
+  async setUserFields(fields: Record<string, unknown>): Promise<void> {
+    await this.#plugin.overridesApply(
+      "patch",
+      this.#name,
+      undefined,
+      fields,
+      this.#name,
+      undefined,
+      "_user",
+    );
+    await this.refresh();
+  }
+
+  /**
+   * The composed settings via a synchronous read-through, updating the
+   * mirror. Use at the top of render paths (`render_settings`): a render
+   * must read state at least as fresh as whatever triggered it, and the
+   * mirror's event-driven refresh cannot promise that ordering.
+   */
+  async load(): Promise<T | undefined> {
+    await this.refresh();
+    return this.get();
   }
 }
 
