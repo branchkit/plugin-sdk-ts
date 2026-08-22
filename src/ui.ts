@@ -72,13 +72,20 @@ function escapeHtml(s: string): string {
     .replaceAll("'", "&#39;");
 }
 
-function buildPayload(o: ButtonOptions): string {
-  if (o.payloadJS !== undefined) return o.payloadJS;
-  if (!o.payload) return "";
-  const parts = Object.entries(o.payload).map(([k, v]) =>
+/** Build a JS object-literal payload string — the expression-context
+ * form of ButtonOptions.payload, for hand-composed data-on expressions
+ * calling methodPost directly. Values marshaled; Expr raw. */
+export function args(payload: Record<string, unknown>): string {
+  const parts = Object.entries(payload).map(([k, v]) =>
     `${JSON.stringify(k)}:${v instanceof Expr ? v.js : JSON.stringify(v) ?? "null"}`,
   );
   return `{${parts.join(",")}}`;
+}
+
+function buildPayload(o: ButtonOptions): string {
+  if (o.payloadJS !== undefined) return o.payloadJS;
+  if (!o.payload) return "";
+  return args(o.payload);
 }
 
 function attrs(o: ButtonOptions): string {
