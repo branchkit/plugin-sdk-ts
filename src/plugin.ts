@@ -1,7 +1,11 @@
 import { createInterface } from "node:readline";
 import { Log } from "./log.js";
 import { APIVersion, HookOnAction } from "./contracts_gen.js";
-import { type ErrorKind, ErrorKindRecordingDisabled } from "./closed_vocab_gen.js";
+import {
+  type ErrorKind,
+  type FaultData,
+  ErrorKindRecordingDisabled,
+} from "./closed_vocab_gen.js";
 import type { OnActionRequest, OnActionResponse } from "./types_gen.js";
 import { runWithCorrelation, getCurrentCorrelation } from "./correlation.js";
 
@@ -42,17 +46,8 @@ interface RpcError {
  * values — an actuator newer than this SDK may send a kind with no constant
  * here, and that must fall through a `switch` rather than fail to parse.
  */
-export interface FaultData {
-  kind: ErrorKind;
-  /** The collection verb, snake_case ("put", "append", …). */
-  op?: string;
-  /** Collection the operation targeted. */
-  collection?: string;
-  /** Record id the operation targeted. */
-  id?: string;
-  /** The reason WITHOUT the taxonomy prefix that `message` carries. */
-  detail?: string;
-}
+// FaultData itself is generated into closed_vocab_gen.ts alongside the
+// ErrorKind values.
 
 // --- Handler types ---
 

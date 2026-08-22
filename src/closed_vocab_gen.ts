@@ -81,3 +81,14 @@ export const KnownErrorKinds = [
   "invalid_params",
   "internal",
 ] as const;
+
+// FaultData is the structured payload of a JSON-RPC error's `data`
+// member. Only `kind` is guaranteed; the rest are populated when they
+// apply. Source of truth: `actuator/src/fault.rs::FaultData`.
+export interface FaultData {
+  kind: ErrorKind;
+  collection?: string;
+  detail?: string;
+  id?: string;
+  op?: string;
+}
