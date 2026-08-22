@@ -244,6 +244,14 @@ export class Plugin {
       action_types: this.registeredActionTypes() ?? [],
     }));
 
+    // Built-in introspection: registered RPC method names, fetched by the
+    // actuator at readiness so the settings-HTML validator can flag @post
+    // URLs that name no handler — otherwise a typo'd method is a dead
+    // button with no error anywhere.
+    this.handlers.set("list_methods", async () => ({
+      methods: Array.from(this.handlers.keys()).sort(),
+    }));
+
     Log(this.pluginId, "started (JSON-RPC over stdio)");
     this.startReadLoop();
   }
