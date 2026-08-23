@@ -65,6 +65,21 @@ type HandlerFn = (params: unknown) => Promise<unknown>;
  * wire order across an async listener — see {@link Plugin.on}.
  */
 type ListenerFn = (params: unknown) => void | Promise<void>;
+type PatternListenerFn = (eventType: string, params: unknown) => void | Promise<void>;
+
+/**
+ * Does `eventType` match `pattern`, where `*` is exactly one dot-separated
+ * segment? Mirrors the actuator's `event_bus::matches_topic`, which is what
+ * actually gates delivery — the two must agree or a plugin's own routing
+ * disagrees with what it receives.
+ */
+function matchesTopic(pattern: string, eventType: string): boolean {
+  if (pattern === eventType) return true;
+  const pat = pattern.split(".");
+  const evt = eventType.split(".");
+  if (pat.length !== evt.length) return false;
+  return pat.every((seg, i) => seg === "*" || seg === evt[i]);
+}
 
 /**
  * A typed on_action request where the params field is narrowed to T.
@@ -185,6 +200,10 @@ export class Plugin {
   private pluginId: string;
   private handlers = new Map<string, HandlerFn>();
   private listeners = new Map<string, ListenerFn[]>();
+  // OnPattern registrations, in registration order. An array rather than a
+  // map: the key is a pattern, so lookup is a scan either way, and order is
+  // what makes delivery deterministic.
+  private patternListeners: { pattern: string; fn: PatternListenerFn }[] = [];
   private pending = new Map<number, PendingCall>();
   // Lazily initialized when handleAction is first called.
   private actionHandlers: Map<string, ActionHandlerFn> | null = null;
@@ -366,6 +385,29 @@ export class Plugin {
     const list = this.listeners.get(method) ?? [];
     list.push(fn);
     this.listeners.set(method, list);
+  }
+
+  /**
+   * Register a listener for every notification whose method matches
+   * `pattern`, where `*` stands for exactly one dot-separated segment — the
+   * same language `consumes.events` uses in the manifest.
+   *
+   * Needed whenever a plugin subscribes to a namespace instead of a name:
+   * `on` keys listeners by exact method, so a manifest subscription like
+   * `scripts.*.*` or `browser.tab.*` had events delivered to the process and
+   * then silently dropped by the SDK. That shape is the norm for host
+   * plugins, whose hosted things name their events at runtime.
+   *
+   * The callback receives the CONCRETE event type alongside the payload — a
+   * pattern listener by definition does not know which event arrived. The
+   * manifest still bounds delivery: a pattern here can only ever see events
+   * the plugin's `consumes.events` already admits.
+   *
+   * Same wire-order contract as `on`: return the promise from an async
+   * listener.
+   */
+  onPattern(pattern: string, fn: PatternListenerFn): void {
+    this.patternListeners.push({ pattern, fn });
   }
 
   /**
@@ -637,14 +679,26 @@ export class Plugin {
     while (this.notifyQueue.length > 0) {
       const { method, params, correlationId } = this.notifyQueue.shift()!;
       const listeners = this.listeners.get(method);
-      if (!listeners) continue;
+      const patterned = this.patternListeners.filter((p) => matchesTopic(p.pattern, method));
+      if (!listeners && patterned.length === 0) continue;
       await runWithCorrelation(correlationId, async () => {
-        for (const fn of listeners) {
+        for (const fn of listeners ?? []) {
           try {
             await fn(params);
           } catch (err: unknown) {
             const message = err instanceof Error ? err.message : String(err);
             Log(this.pluginId, `listener error for ${method}: ${message}`);
+          }
+        }
+        // Exact listeners first, then pattern ones — a plugin with both
+        // registered for the same event sees the specific handler run before
+        // the catch-all, which is the order that reads correctly.
+        for (const { fn } of patterned) {
+          try {
+            await fn(method, params);
+          } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : String(err);
+            Log(this.pluginId, `pattern listener error for ${method}: ${message}`);
           }
         }
       });
