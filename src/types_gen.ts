@@ -557,6 +557,14 @@ export interface PrinterInfo {
   state: string;
 }
 
+export interface PrivilegeStatusEntry {
+  denied: boolean;
+  granted: boolean;
+  pending: boolean;
+  privilege: string;
+  required: boolean;
+}
+
 export interface ProcessInfo {
   cpu_percent?: number;
   memory_bytes?: number;
@@ -4287,6 +4295,27 @@ export interface PrivacySetRecordingResponse {
   ok: boolean;
 }
 
+export interface PrivilegesListResponse {
+  privileges: PrivilegeStatusEntry[];
+}
+
+export interface PrivilegesRelinquishRequest {
+  privilege: string;
+}
+
+export interface PrivilegesRelinquishResponse {
+  status: string;
+}
+
+export interface PrivilegesRequestRequest {
+  privilege: string;
+  reason?: string;
+}
+
+export interface PrivilegesRequestResponse {
+  status: string;
+}
+
 export interface RecognitionBiasApplyRequest {
   force?: boolean;
   strength: number;
@@ -4715,6 +4744,12 @@ export interface PowerChangedEventParams {
   source: string;
   time_to_empty?: number;
   time_to_full?: number;
+}
+
+/** Payload of the `_platform.privilege.granted` event. */
+export interface PrivilegeGrantedEventParams {
+  plugin_id: string;
+  privilege: string;
 }
 
 /** Payload of the `_platform.selection.picked` event. */
