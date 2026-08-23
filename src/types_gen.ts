@@ -141,6 +141,7 @@ export interface CollectionPutEntry {
 export interface CollectionRecord {
   group?: string;
   id: string;
+  on_behalf_of?: string;
   payload?: unknown;
   revision: number;
   timestamp_ms: number;
@@ -428,6 +429,7 @@ export interface ListeningPort {
 
 export interface LogEntry {
   id: string;
+  on_behalf_of?: string;
   payload?: unknown;
   timestamp_ms: number;
   writer: string;

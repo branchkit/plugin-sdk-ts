@@ -8,6 +8,7 @@ import {
 } from "./closed_vocab_gen.js";
 import type { OnActionRequest, OnActionResponse } from "./types_gen.js";
 import { runWithCorrelation, getCurrentCorrelation } from "./correlation.js";
+import { getCurrentActor } from "./actor.js";
 
 // --- JSON-RPC 2.0 message types ---
 
@@ -25,6 +26,12 @@ interface RpcMessage {
    * id from the wire.
    */
   correlation_id?: string;
+  /**
+   * Envelope-level actor label: which hosted thing this plugin was acting
+   * for. Observability only — the platform records it and never gates on
+   * it. See `actor.ts`.
+   */
+  on_behalf_of?: string;
 }
 
 interface RpcError {
@@ -401,6 +408,7 @@ export class Plugin {
         method,
         params,
         correlation_id: getCurrentCorrelation() || undefined,
+        on_behalf_of: getCurrentActor() || undefined,
       });
     });
   }
@@ -414,6 +422,7 @@ export class Plugin {
       method,
       params,
       correlation_id: getCurrentCorrelation() || undefined,
+      on_behalf_of: getCurrentActor() || undefined,
     });
   }
 
@@ -425,6 +434,14 @@ export class Plugin {
    */
   currentCorrelation(): string {
     return getCurrentCorrelation();
+  }
+
+  /**
+   * The actor label outbound calls currently carry, or "" if none. Hosts
+   * read it to tag their own logs with the same name the platform records.
+   */
+  currentActor(): string {
+    return getCurrentActor();
   }
 
   /**

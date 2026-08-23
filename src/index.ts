@@ -10,6 +10,7 @@ export {
   modelsDir,
 } from "./plugin.js";
 export { Log } from "./log.js";
+export { actingFor, getCurrentActor } from "./actor.js";
 export {
   PushCommands,
   command,
