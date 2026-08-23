@@ -67,7 +67,7 @@ export { PipelineReader, PipelineWriter, type PipelineEvent } from "./pipeline.j
 // Recognition and monitor vocabularies are deliberately NOT re-exported here.
 // A stage author writing a foot pedal or a frame source should not be handed a
 // command-grammar DAG and left to work out that it is irrelevant. Import
-// `@branchkit/plugin-sdk-ts/stage/recognition` or `/stage/monitors` if you are
+// `@branchkitdev/plugin-sdk-ts/stage/recognition` or `/stage/monitors` if you are
 // actually building one of those.
 
 // ---------------------------------------------------------------- stage log

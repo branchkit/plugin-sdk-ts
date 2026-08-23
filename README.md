@@ -18,7 +18,7 @@ shared conformance harness.
 ## Minimal plugin
 
 ```typescript
-import { Plugin } from "@branchkit/plugin-sdk-ts";
+import { Plugin } from "@branchkitdev/plugin-sdk-ts";
 
 const plugin = new Plugin();
 
