@@ -124,7 +124,41 @@ declare module "./plugin.js" {
      */
     getCompacted(name: string, key: string): Promise<CollectionRecord | undefined>;
 
+    /**
+     * Read ONE PAGE of records.
+     *
+     * Omitting `opts` does NOT mean "every record": the platform applies a
+     * default limit when the caller supplies none, so a large collection
+     * comes back truncated, and this method discards `total` so it cannot
+     * tell you that happened.
+     *
+     * Choose deliberately: some records → `list` with an explicit `limit`;
+     * every record → {@link Plugin.listAll}; a page plus the real count →
+     * {@link Plugin.listPage}.
+     */
     list(name: string, opts?: ListOpts): Promise<CollectionRecord[]>;
+
+    /**
+     * Read EVERY record in a collection, defeating the platform's default
+     * list limit.
+     *
+     * Use this when the read has to be exhaustive — clearing a collection,
+     * reconciling against it, counting it. {@link Plugin.list} returns one
+     * page and discards `total`, so a caller using it cannot tell a complete
+     * read from a capped one; that is a quiet correctness bug wherever
+     * completeness was assumed.
+     *
+     * Prefer `list` with an explicit `limit` when you only need some records:
+     * this one is deliberately unbounded.
+     */
+    listAll(name: string): Promise<CollectionRecord[]>;
+
+    /**
+     * {@link Plugin.listAll} over the compacted-changelog projection — every
+     * folded record, one per key. A keyed log with more live keys than the
+     * cap otherwise folds to a view its reader believes is whole.
+     */
+    listAllCompacted(name: string): Promise<CollectionRecord[]>;
 
     /**
      * Read the compacted-changelog projection of a keyed log — one folded
@@ -299,6 +333,45 @@ Plugin.prototype.listCompacted = async function (
 ): Promise<CollectionRecord[]> {
   const res = await this.collectionList(name, { ...opts, compacted: true });
   return res?.records ?? [];
+};
+
+/**
+ * At most two round trips, not a cursor walk: `total` comes back with the
+ * first page, so the second read is bounded exactly. Cursor paging would be
+ * wrong anyway on contribution-keyed storage, where `cursor` is a no-op.
+ *
+ * The probe passes an EXPLICIT limit rather than omitting one. Reading with
+ * no limit to discover `total` would trip the platform's default-limit
+ * warning on every call — this helper would manufacture the exact noise that
+ * warning exists to surface, burying real occurrences underneath it.
+ *
+ * `total` is the FOLDED count when compacted, so the short-circuit is a real
+ * one on both projections rather than a guaranteed miss.
+ */
+async function listExhaustive(
+  plugin: Plugin,
+  name: string,
+  compacted: boolean,
+): Promise<CollectionRecord[]> {
+  const FIRST_PAGE = 1000;
+  const page = (limit: number) =>
+    plugin.listPage(name, compacted ? { limit, compacted: true } : { limit });
+
+  const first = await page(FIRST_PAGE);
+  if (first.records.length >= first.total) return first.records;
+  return (await page(first.total)).records;
+}
+
+Plugin.prototype.listAll = async function (
+  name: string,
+): Promise<CollectionRecord[]> {
+  return listExhaustive(this, name, false);
+};
+
+Plugin.prototype.listAllCompacted = async function (
+  name: string,
+): Promise<CollectionRecord[]> {
+  return listExhaustive(this, name, true);
 };
 
 Plugin.prototype.listPage = async function (

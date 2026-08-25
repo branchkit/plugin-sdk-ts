@@ -78,7 +78,10 @@ export class CollectionMirror {
     let empty: boolean;
     if (this.#compacted) {
       // Folded view: one record per key.
-      const recs = await this.#plugin.listCompacted(this.#name);
+      // Exhaustive: a mirror that silently drops records past the
+      // platform's default list limit is a wrong local cache that reports
+      // itself ready, and every onChange consumer inherits the error.
+      const recs = await this.#plugin.listAllCompacted(this.#name);
       empty = recs.length === 0;
       data = recs;
     } else {

@@ -98,6 +98,48 @@ describe("collection state helpers", () => {
     expect(page.total).toBe(42);
   });
 
+  // The whole point of listAll is that it does not stop where the platform
+  // would have stopped it. Bounded by `total` rather than a cursor walk:
+  // `cursor` is a no-op on contribution-keyed storage.
+  test("listAll reads past the first page", async () => {
+    const { plugin, inbox } = fakePlugin((method, params) => {
+      expect(method).toBe("collection.list");
+      const limit = (params as { opts?: { limit?: number } }).opts?.limit;
+      expect(limit).toBeDefined();
+      const n = Math.min(limit!, 1500);
+      return {
+        records: Array.from({ length: n }, () => ({ id: "k", payload: {} })),
+        total: 1500,
+      };
+    });
+
+    const records = await plugin.listAll("things");
+    expect(records.length).toBe(1500);
+    expect(inbox.length).toBe(2);
+    expect((inbox[1]!.params as { opts: { limit: number } }).opts.limit).toBe(1500);
+  });
+
+  // Always paying two round trips would be a regression on every mirror
+  // refresh; and probing with no limit would fire the platform's
+  // default-limit diagnostic on each of them.
+  test("listAll stops at one read when the first page is whole", async () => {
+    const { plugin, inbox } = fakePlugin((_method, params) => {
+      expect((params as { opts?: { limit?: number } }).opts?.limit).toBeDefined();
+      return { records: [{ id: "k1", payload: {} }], total: 1 };
+    });
+
+    await plugin.listAll("things");
+    expect(inbox.length).toBe(1);
+  });
+
+  // Without compacted=true this silently returns raw append history and the
+  // caller has no way to tell.
+  test("listAllCompacted asks for the fold", async () => {
+    const { plugin, inbox } = fakePlugin(() => ({ records: [], total: 0 }));
+    await plugin.listAllCompacted("things");
+    expect((inbox[0]!.params as { opts: { compacted?: boolean } }).opts.compacted).toBe(true);
+  });
+
   test("count returns the record count", async () => {
     const { plugin } = fakePlugin((method) => {
       expect(method).toBe("collection.count");
