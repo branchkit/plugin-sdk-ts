@@ -132,6 +132,46 @@ describe("collection state helpers", () => {
     expect(inbox.length).toBe(1);
   });
 
+  // `total` is observed on the read that returns it, so a write landing
+  // between the probe and the second read leaves the second read short —
+  // and returning it would report a truncated set as complete, which is the
+  // bug listAll exists to prevent.
+  test("listAll re-reads when the collection grows mid-read", async () => {
+    const totals = [1500, 1600, 1600];
+    let call = 0;
+    const { plugin } = fakePlugin((_method, params) => {
+      const limit = (params as { opts?: { limit?: number } }).opts?.limit;
+      expect(limit).toBeDefined();
+      const total = totals[Math.min(call, totals.length - 1)]!;
+      call++;
+      const n = Math.min(limit!, total);
+      return {
+        records: Array.from({ length: n }, () => ({ id: "k", payload: {} })),
+        total,
+      };
+    });
+
+    expect((await plugin.listAll("things")).length).toBe(1600);
+  });
+
+  // A collection written faster than it can be read is not something to
+  // spin on. Say so rather than returning a short read as though it were
+  // whole.
+  test("listAll gives up on an endlessly growing collection", async () => {
+    let total = 1500;
+    const { plugin } = fakePlugin((_method, params) => {
+      const limit = (params as { opts?: { limit?: number } }).opts?.limit;
+      const n = Math.min(limit!, total);
+      total += 100;
+      return {
+        records: Array.from({ length: n }, () => ({ id: "k", payload: {} })),
+        total,
+      };
+    });
+
+    await expect(plugin.listAll("things")).rejects.toThrow(/kept growing/);
+  });
+
   // Without compacted=true this silently returns raw append history and the
   // caller has no way to tell.
   test("listAllCompacted asks for the fold", async () => {

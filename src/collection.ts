@@ -354,12 +354,30 @@ async function listExhaustive(
   compacted: boolean,
 ): Promise<CollectionRecord[]> {
   const FIRST_PAGE = 1000;
+  const MAX_PASSES = 5;
   const page = (limit: number) =>
     plugin.listPage(name, compacted ? { limit, compacted: true } : { limit });
 
-  const first = await page(FIRST_PAGE);
-  if (first.records.length >= first.total) return first.records;
-  return (await page(first.total)).records;
+  // Re-reads until the page covers `total`, because `total` is observed on
+  // the read that returns it and the collection can grow between reads.
+  // Taking the first `total` on faith would hand back a short result
+  // reported as complete — the same "mirror declares itself Ready over a
+  // truncated read" this helper exists to prevent, just with a narrower
+  // window: one write landing mid-refresh is enough.
+  //
+  // Bounded rather than unbounded: a collection written faster than it can
+  // be read is not a condition to spin on, and a caller waiting on a mirror
+  // refresh should get an answer. Practically it settles on the second read.
+  let limit = FIRST_PAGE;
+  for (let pass = 0; pass < MAX_PASSES; pass++) {
+    const res = await page(limit);
+    if (res.records.length >= res.total) return res.records;
+    limit = res.total;
+  }
+  throw new Error(
+    `collection "${name}" kept growing across ${MAX_PASSES} exhaustive reads; ` +
+      `read it with an explicit limit and page with cursor instead`,
+  );
 }
 
 Plugin.prototype.listAll = async function (
