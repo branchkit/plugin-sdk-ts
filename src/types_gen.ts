@@ -366,26 +366,6 @@ export interface HidElementEntry {
   usage_page: number;
 }
 
-export interface HudItem {
-  icon?: string;
-  id: string;
-  subtitle?: string;
-  tag?: string;
-  title: string;
-}
-
-export interface HudResponse {
-  content_html?: string;
-  footer: string;
-  sections?: HudSection[];
-  title: string;
-}
-
-export interface HudSection {
-  items: HudItem[];
-  title: string;
-}
-
 export interface InputSource {
   id: string;
   is_active: boolean;
@@ -4530,13 +4510,6 @@ export interface OnTranscriptRequest {
 
 export interface OnTranscriptResponse {
   actions?: unknown[];
-}
-
-export interface RenderHUDRequest {
-  footer?: string;
-  hud_mode: string;
-  sections?: HudSection[];
-  title?: string;
 }
 
 export interface RenderSettingsRequest {
