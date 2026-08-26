@@ -4519,6 +4519,21 @@ export interface OnCommandsChangedResponse {
   processed_count: number;
 }
 
+export interface OnTranscriptRequest {
+  active_tags?: string[];
+  confidence?: number;
+  dictation_profile?: string;
+  is_final?: boolean;
+  pipeline: string;
+  text: string;
+  word_onsets_ms?: number[];
+  word_scores?: number[];
+}
+
+export interface OnTranscriptResponse {
+  actions?: unknown[];
+}
+
 export interface RenderHUDRequest {
   footer?: string;
   hud_mode: string;
