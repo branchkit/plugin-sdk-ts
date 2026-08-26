@@ -645,7 +645,7 @@ declare module "./plugin.js" {
     commandsSetOverride(action: string, defaultPattern: string, newPattern: string): Promise<void>;
     controlSignal(signal: string): Promise<void>;
     discoveryClosed(): Promise<void>;
-    dispatch(action: unknown, sessionId?: string, traceId?: string): Promise<DispatchResponse>;
+    dispatch(action: unknown): Promise<DispatchResponse>;
     effectsAssert(name: string): Promise<EffectsAssertResponse>;
     effectsIsActive(name: string): Promise<EffectsIsActiveResponse>;
     effectsRetract(name: string): Promise<EffectsRetractResponse>;
@@ -1518,13 +1518,11 @@ Plugin.prototype.discoveryClosed = async function() {
   const result = await this.call(MethodDiscoveryClosed);
 };
 
-Plugin.prototype.dispatch = async function(action: unknown, sessionId?: string, traceId?: string) {
+Plugin.prototype.dispatch = async function(action: unknown) {
   const result = await this.call(
     MethodDispatch,
     {
       action,
-      session_id: sessionId,
-      trace_id: traceId,
     },
   );
   return result as DispatchResponse;
