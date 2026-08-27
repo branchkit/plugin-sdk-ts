@@ -10,9 +10,6 @@ export const InputDirectiveLiftKeysOnDispatch = "lift_keys_on_dispatch" as const
 // `consumes.effects`. Source of truth:
 // `actuator/src/effects.rs::EffectDef` inventory entries.
 export const EffectDisableScreenDim = "disable_screen_dim" as const;
-export const EffectMuteAudioToOtherApps = "mute_audio_to_other_apps" as const;
-export const EffectPauseMicrophoneIndicator = "pause_microphone_indicator" as const;
-export const EffectPreventFocusSteal = "prevent_focus_steal" as const;
 export const EffectPreventSystemSleep = "prevent_system_sleep" as const;
 export const EffectSignalClipboardInUse = "signal_clipboard_in_use" as const;
 export const EffectSignalRecordingActive = "signal_recording_active" as const;
@@ -29,9 +26,6 @@ export const KnownInputDirectives = [
 // KnownEffects lists the full closed-vocabulary set.
 export const KnownEffects = [
   "disable_screen_dim",
-  "mute_audio_to_other_apps",
-  "pause_microphone_indicator",
-  "prevent_focus_steal",
   "prevent_system_sleep",
   "signal_clipboard_in_use",
   "signal_recording_active",
