@@ -4612,6 +4612,13 @@ export interface EffectDisplacedEventParams {
   new_owner: string;
 }
 
+/** Payload of the `_platform.effect.ownership_changed` event. */
+export interface EffectOwnershipChangedEventParams {
+  effect: string;
+  owner?: string;
+  previous?: string;
+}
+
 /** Payload of the `_platform.hid.connected` event. */
 export interface HidConnectedEventParams {
   axes: number;

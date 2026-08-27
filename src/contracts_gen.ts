@@ -633,6 +633,7 @@ export const EventCollectionUpdated = "_platform.collection.updated" as const;
 export const EventDiscoveryClosed = "_platform.discovery.closed" as const;
 export const EventDisplayChanged = "_platform.display.changed" as const;
 export const EventEffectDisplaced = "_platform.effect.displaced" as const;
+export const EventEffectOwnershipChanged = "_platform.effect.ownership_changed" as const;
 export const EventHidConnected = "_platform.hid.connected" as const;
 export const EventHidDisconnected = "_platform.hid.disconnected" as const;
 export const EventHidInput = "_platform.hid.input" as const;
