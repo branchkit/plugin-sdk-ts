@@ -7,7 +7,7 @@
 export const InputDirectiveLiftKeysOnDispatch = "lift_keys_on_dispatch" as const;
 
 // Effect* are the registered effect names plugins may declare in
-// `provides.effects`. Source of truth:
+// `consumes.effects`. Source of truth:
 // `actuator/src/effects.rs::EffectDef` inventory entries.
 export const EffectDisableScreenDim = "disable_screen_dim" as const;
 export const EffectMuteAudioToOtherApps = "mute_audio_to_other_apps" as const;

@@ -92,7 +92,7 @@ declare module "./plugin.js" {
   interface Plugin {
     /**
      * Declares this plugin is asserting `name`. The plugin must have
-     * declared this effect in its manifest's `provides.effects[*].asserts`
+     * declared this effect in its manifest's `consumes.effects[*].asserts`
      * — undeclared effects reject the call.
      *
      * See `notes/DESIGN_CAPABILITY_MECHANISM.md` for the mechanism design.
