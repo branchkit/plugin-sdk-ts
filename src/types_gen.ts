@@ -289,6 +289,7 @@ export interface DisplayRotation {
 
 export interface EnumeratedCommand {
   action: string;
+  binding?: unknown;
   category?: string;
   description?: string;
   dynamic: boolean;
