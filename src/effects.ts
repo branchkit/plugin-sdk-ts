@@ -95,7 +95,7 @@ declare module "./plugin.js" {
      * declared this effect in its manifest's `consumes.effects[*].asserts`
      * — undeclared effects reject the call.
      *
-     * See `notes/DESIGN_CAPABILITY_MECHANISM.md` for the mechanism design.
+     * See `docs/design/DESIGN_CAPABILITY_MECHANISM.md` for the mechanism design.
      */
     assertEffect(name: string): Promise<AssertEffectResult>;
 
@@ -124,7 +124,7 @@ declare module "./plugin.js" {
      * system effect state) should subscribe directly via
      * `on(EventEffectDisplaced, ...)`.
      *
-     * See `notes/DESIGN_CAPABILITY_MECHANISM.md` section 10.2.
+     * See `docs/design/DESIGN_CAPABILITY_MECHANISM.md` section 10.2.
      *
      * Multiple callbacks can be registered; each fires for every event.
      */

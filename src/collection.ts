@@ -120,7 +120,7 @@ declare module "./plugin.js" {
      * merged per the collection's `merge` and that key's current record is
      * returned, or undefined if the key has no records. Throws if the collection
      * is not a keyed (`id_strategy: by_field`) log. See
-     * notes/DESIGN_LOG_ANNOTATION_PROJECTION.md.
+     * docs/design/DESIGN_LOG_ANNOTATION_PROJECTION.md.
      */
     getCompacted(name: string, key: string): Promise<CollectionRecord | undefined>;
 
@@ -167,7 +167,7 @@ declare module "./plugin.js" {
      * later non-null fields win; Collect: payloads accumulate into an array).
      * Pairs with {@link Plugin.appendKeyed}. Throws if the collection is not a
      * keyed (`id_strategy: by_field`) log. `opts` since/until/limit apply to
-     * the folded records. See notes/DESIGN_LOG_ANNOTATION_PROJECTION.md.
+     * the folded records. See docs/design/DESIGN_LOG_ANNOTATION_PROJECTION.md.
      */
     listCompacted(name: string, opts?: ListOpts): Promise<CollectionRecord[]>;
 
@@ -221,7 +221,7 @@ declare module "./plugin.js" {
      * this plugin as its introducer — the same auto-registration `put`
      * performs.
      *
-     * See notes/DESIGN_COLLECTION_REPLACE.md.
+     * See docs/design/DESIGN_COLLECTION_REPLACE.md.
      */
     replace(
       name: string,

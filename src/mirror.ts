@@ -18,7 +18,7 @@ import type { CollectionGetResponse } from "./types_gen.js";
  *   is NOT an error: the mirror stays not-ready and the update event
  *   completes it
  *
- * See `notes/DESIGN_COLLECTION_MIRROR.md`.
+ * See `docs/design/DESIGN_COLLECTION_MIRROR.md`.
  */
 export class CollectionMirror {
   #plugin: Plugin;
@@ -155,7 +155,7 @@ declare module "./plugin.js" {
      * RAW append history (every append, unfolded), almost never what a consumer
      * of a keyed log wants. The mirrored collection must declare
      * `emits_on_change: true` for the refetch-on-change to fire (logs default
-     * off — see notes/DESIGN_LOG_ANNOTATION_PROJECTION.md).
+     * off — see docs/design/DESIGN_LOG_ANNOTATION_PROJECTION.md).
      */
     mirrorCompacted(name: string): CollectionMirror;
   }

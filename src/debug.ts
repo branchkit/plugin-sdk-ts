@@ -19,7 +19,7 @@ declare module "./plugin.js" {
      * threshold is lowered. Use {@link Plugin.info} for per-operation
      * diagnostics you want visible by default.
      *
-     * See `notes/DESIGN_PLUGIN_LOG_LEVELS.md` for the level taxonomy.
+     * See `docs/design/DESIGN_PLUGIN_LOG_LEVELS.md` for the level taxonomy.
      */
     debug(tag: string, data: unknown): Promise<void>;
     /**

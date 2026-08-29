@@ -216,7 +216,7 @@ export class Plugin {
   private readyResolve!: () => void;
 
   // Inbound notifications drain through one pump so listeners observe them in
-  // wire order, matching the Go SDK. See notes/DESIGN_SDK_EVENT_ORDERING.md.
+  // wire order, matching the Go SDK. See docs/design/DESIGN_SDK_EVENT_ORDERING.md.
   private notifyQueue: Array<{
     method: string;
     params: unknown;
@@ -649,7 +649,7 @@ export class Plugin {
   // listener (and any outbound call() it makes) before the next notification —
   // so listeners observe wire order. The read loop keeps running while a
   // listener awaits, so responses still arrive; serializing cannot deadlock.
-  // See notes/DESIGN_SDK_EVENT_ORDERING.md.
+  // See docs/design/DESIGN_SDK_EVENT_ORDERING.md.
   private async drainNotifications(): Promise<void> {
     // Hold delivery until run() signals that listeners are registered — the
     // same gate handleRequest applies to inbound requests, and the one the Go

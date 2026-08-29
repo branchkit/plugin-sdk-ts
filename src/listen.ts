@@ -175,7 +175,7 @@ export function inheritedListenerCount(): number {
  * in an empty network namespace, where a self-bound "127.0.0.1" is a
  * private dead loopback — the inherited host-loopback listener is the
  * only reachable surface. See the actuator's
- * notes/DESIGN_SANDBOX_LOOPBACK_FDPASS.md.
+ * docs/design/DESIGN_SANDBOX_LOOPBACK_FDPASS.md.
  */
 export function ListenLocal(plugin: Plugin): Promise<Listener> {
   return new Promise((resolve, reject) => {

@@ -166,7 +166,7 @@ export function text(name?: string): PatternSlot {
 
 /**
  * Prefix-discovery modes for {@link CommandBuilder.discovery}.
- * See notes/DESIGN_DISCOVERABLE_PREFIX.md.
+ * See docs/design/DESIGN_DISCOVERABLE_PREFIX.md.
  *
  * - `"prefix"` — the bare prefix opens the HUD; the capture's words stay live in
  *   free context (small, acoustically safe target sets).
@@ -221,7 +221,7 @@ export class CommandBuilder {
    * Discovery-HUD display override for one capture: enumerate `collection`
    * in the HUD instead of the capture's matching collection. Matching is
    * untouched — pair a sealed/static matching collection with a live menu.
-   * (notes/DESIGN_CAPTURE_DISPLAY_FORMS.md, part A.)
+   * (docs/design/DESIGN_CAPTURE_DISPLAY_FORMS.md, part A.)
    */
   displaySource(capture: string, collection: string): this {
     this.spec.display_sources[capture] = collection;
@@ -243,7 +243,7 @@ export class CommandBuilder {
    * the bare literal prefix of a `prefix + tail-capture` pattern opens the
    * Discovery HUD when spoken alone, instead of firing. Valid only on a
    * literal-prefix + single-tail-capture pattern; the actuator rejects other
-   * shapes at load. See notes/DESIGN_DISCOVERABLE_PREFIX.md.
+   * shapes at load. See docs/design/DESIGN_DISCOVERABLE_PREFIX.md.
    */
   discovery(mode: DiscoveryMode): this {
     this.spec.discovery = mode;
