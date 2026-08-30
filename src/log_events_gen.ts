@@ -11,6 +11,8 @@ export const LogEventCaptureProgress = "capture.progress" as const;
 export const LogEventCommandMatchDecision = "command.match_decision" as const;
 export const LogEventCommandMatched = "command.matched" as const;
 export const LogEventCommandNoMatch = "command.no_match" as const;
+export const LogEventConsentDecision = "consent.decision" as const;
+export const LogEventConsentPrivilegedOp = "consent.privileged_op" as const;
 export const LogEventDiagnosticMessage = "diagnostic.message" as const;
 export const LogEventDispatchActionDispatched = "dispatch.action_dispatched" as const;
 export const LogEventDispatchActionPanicked = "dispatch.action_panicked" as const;
@@ -81,6 +83,8 @@ export const LogEventRegistry: Record<string, LogEventMeta> = {
     "command.match_decision": { name: "command.match_decision", summary: "Diagnostic snapshot of the matcher's tiebreaker choice — which category won, which gates were active, whether a gated Partial was suppressed.", since: "0.1.0", source: "dispatch", severity: "debug", redaction: "none" },
     "command.matched": { name: "command.matched", summary: "Speech recognition produced a match against a registered command.", since: "0.1.0", source: "dispatch", severity: "info", redaction: "none" },
     "command.no_match": { name: "command.no_match", summary: "Speech input did not match any registered command.", since: "0.1.0", source: "dispatch", severity: "debug", redaction: "none" },
+    "consent.decision": { name: "consent.decision", summary: "A privilege-consent decision: granted (always/once), denied, dismissed, or revoked — with the surface that produced it. Audit-eligible.", since: "0.1.0", source: "plugins", severity: "info", redaction: "none" },
+    "consent.privileged_op": { name: "consent.privileged_op", summary: "A plugin invoked (or was refused) an operation gated on a dangerous privilege. Audit-eligible.", since: "0.1.0", source: "plugins", severity: "info", redaction: "none" },
     "diagnostic.message": { name: "diagnostic.message", summary: "Catch-all for ad-hoc operational text that doesn't fit a typed variant.", since: "0.1.0", source: "generic", severity: "debug", redaction: "none" },
     "dispatch.action_dispatched": { name: "dispatch.action_dispatched", summary: "An action entered the dispatch pipeline.", since: "0.1.0", source: "dispatch", severity: "debug", redaction: "none" },
     "dispatch.action_panicked": { name: "dispatch.action_panicked", summary: "A dispatch handler panicked. Process likely degraded; investigate.", since: "0.1.0", source: "dispatch", severity: "error", redaction: "none" },
