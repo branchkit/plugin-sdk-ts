@@ -88,7 +88,9 @@ export const KnownErrorKinds = [
 export interface FaultData {
   kind: ErrorKind;
   collection?: string;
+  consent?: string;
   detail?: string;
   id?: string;
   op?: string;
+  privilege?: string;
 }

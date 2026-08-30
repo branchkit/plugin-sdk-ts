@@ -543,6 +543,7 @@ export interface PrinterInfo {
 export interface PrivilegeStatusEntry {
   denied: boolean;
   granted: boolean;
+  one_shot: boolean;
   pending: boolean;
   privilege: string;
   required: boolean;
