@@ -67,7 +67,6 @@ export const MethodInputSelectAll = "input.select_all" as const; // since 0.1.0
 export const MethodInputSwitchInputSource = "input.switch_input_source" as const; // since 0.1.0
 export const MethodInputTripleClick = "input.triple_click" as const; // since 0.1.0
 export const MethodInputTypeText = "input.type_text" as const; // since 0.1.0
-export const MethodKeyNamesSet = "key_names.set" as const; // since 0.1.0
 export const MethodKeybindsRegister = "keybinds.register" as const; // since 0.1.0
 export const MethodModelDelete = "model.delete" as const; // since 0.1.0
 export const MethodNativeAccentColor = "native.accent_color" as const; // since 0.1.0

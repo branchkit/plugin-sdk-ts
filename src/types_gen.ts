@@ -1300,15 +1300,6 @@ export interface InputTypeTextResponse {
   ok: boolean;
 }
 
-export interface KeyNamesSetRequest {
-  names?: Record<string, number>;
-}
-
-export interface KeyNamesSetResponse {
-  count: number;
-  ok: boolean;
-}
-
 export interface KeybindsRegisterRequest {
   snapshot: unknown;
 }
