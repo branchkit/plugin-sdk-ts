@@ -5,6 +5,10 @@ const HELLOWORLD_DIR = new URL(
   "../../../plugins/helloworld",
   import.meta.url,
 ).pathname;
+const APPS_PROVIDER_DIR = new URL(
+  "./testdata/apps-provider",
+  import.meta.url,
+).pathname;
 
 // These are integration tests that drive the Rust `branchkit-test-harness`
 // binary. It isn't built (or reachable) from this SDK's standalone checkout, so
@@ -25,11 +29,22 @@ describe.skipIf(!harnessBinaryAvailable())("Harness", () => {
   test("simulate command tie surfaced", async () => {
     const h = await Harness.start(HELLOWORLD_DIR);
     try {
-      // "hello branchkit" completes BOTH helloworld commands at the same
-      // length (the ["hello","branchkit"] literal and the ["hello","<text>"]
-      // capture). Equally-eligible same-length candidates are a genuine tie:
-      // the matcher declines to act and surfaces the tied set for
-      // disambiguation (DESIGN_MATCHER_COLLISION_RESOLUTION step 2).
+      // Seed the consumed `apps` vocabulary so the capture branch is live —
+      // helloworld only consumes it; in production the system plugin
+      // provides it (the stub carries the same schema, and the writer must
+      // be the introducer because named_entities pins introducer_only).
+      // With "branchkit" seeded, "hello branchkit" completes BOTH
+      // helloworld commands at the same length (the ["hello","branchkit"]
+      // literal and the ["hello","<apps>"] capture). Equally-eligible
+      // same-length candidates are a genuine tie: the matcher declines to
+      // act and surfaces the tied set for disambiguation
+      // (DESIGN_MATCHER_COLLISION_RESOLUTION step 2).
+      await h.loadManifest(APPS_PROVIDER_DIR);
+      await h.writeCollection(
+        "apps",
+        { spoken: "branchkit", bundle_id: "com.test.branchkit" },
+        "apps-provider-stub",
+      );
       const result = await h.simulateCommand("hello branchkit");
       expect(result.matched).toBe(false);
       expect(result.tied_candidates?.length).toBe(2);
@@ -54,9 +69,18 @@ describe.skipIf(!harnessBinaryAvailable())("Harness", () => {
   test("parameterized command", async () => {
     const h = await Harness.start(HELLOWORLD_DIR);
     try {
-      const result = await h.mustSimulateCommand("hello world");
+      // With the provider stub's schema loaded, the `<apps>` capture
+      // resolves the spoken key to the collection's value field, so the
+      // action's "{apps}" placeholder carries the bundle id.
+      await h.loadManifest(APPS_PROVIDER_DIR);
+      await h.writeCollection(
+        "apps",
+        { spoken: "finder", bundle_id: "com.apple.finder" },
+        "apps-provider-stub",
+      );
+      const result = await h.mustSimulateCommand("hello finder");
       const params = result.actionParams<{ name: string }>();
-      expect(params.name).toBe("world");
+      expect(params.name).toBe("com.apple.finder");
     } finally {
       await h.stop();
     }

@@ -65,7 +65,8 @@ export class SimulateResult {
 export interface CollectionResult {
   name: string;
   introducer: string;
-  contributions: Record<string, unknown>;
+  /** One JSON object per record — the same view `collection.get` serves. */
+  data: unknown[];
 }
 
 export interface PluginState {
