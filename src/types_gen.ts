@@ -726,6 +726,18 @@ export interface WindowInfo {
   y: number;
 }
 
+export interface WiringCollection {
+  access: string;
+  deny_reason?: string;
+  fields: string[];
+  introducer: string;
+  merge: string;
+  name: string;
+  readable: boolean;
+  writable: boolean;
+  writers: string;
+}
+
 export interface WorldModel {
   active_app?: string;
   active_window_id?: string;
@@ -4463,6 +4475,10 @@ export interface TrialResolveSamplesResponse {
 
 export interface VocabularyCommitResponse {
   ok: boolean;
+}
+
+export interface WiringDescribeResponse {
+  collections: WiringCollection[];
 }
 
 // ===== Actuator → Plugin request/response types =====

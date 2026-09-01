@@ -611,6 +611,7 @@ export const MethodTrialEnterContext = "trial.enter_context" as const; // since 
 export const MethodTrialRegisterFixture = "trial.register_fixture" as const; // since 0.1.0
 export const MethodTrialResolveSamples = "trial.resolve_samples" as const; // since 0.1.0
 export const MethodVocabularyCommit = "vocabulary.commit" as const; // since 0.1.0
+export const MethodWiringDescribe = "wiring.describe" as const; // since 0.1.0
 
 // RPC method names: actuator → plugin (use with plugin.handle()).
 export const HookOnAction = "on_action" as const; // since 0.1.0
