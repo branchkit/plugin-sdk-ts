@@ -1245,6 +1245,23 @@ export interface InputMouseButtonResponse {
   ok: boolean;
 }
 
+export interface InputParseKeyEventRequest {
+  alt?: boolean;
+  code?: string;
+  ctrl?: boolean;
+  key?: string;
+  meta?: boolean;
+  shift?: boolean;
+}
+
+export interface InputParseKeyEventResponse {
+  combo: string;
+  has_modifiers: boolean;
+  is_bare_modifier: boolean;
+  is_escape: boolean;
+  key_name: string;
+}
+
 export interface InputPressKeyRequest {
   code?: number;
   modifiers?: string[];

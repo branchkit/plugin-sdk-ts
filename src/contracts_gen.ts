@@ -59,6 +59,7 @@ export const MethodInputDoubleClick = "input.double_click" as const; // since 0.
 export const MethodInputDrag = "input.drag" as const; // since 0.1.0
 export const MethodInputListInputSources = "input.list_input_sources" as const; // since 0.1.0
 export const MethodInputMouseButton = "input.mouse_button" as const; // since 0.1.0
+export const MethodInputParseKeyEvent = "input.parse_key_event" as const; // since 0.1.0
 export const MethodInputPressKey = "input.press_key" as const; // since 0.1.0
 export const MethodInputRawKey = "input.raw_key" as const; // since 0.1.0
 export const MethodInputRightClick = "input.right_click" as const; // since 0.1.0
