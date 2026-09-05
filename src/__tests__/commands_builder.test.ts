@@ -37,7 +37,11 @@ describe("command builder", () => {
     const m = wire(spec);
 
     expect(m.pattern).toEqual(["focus", "<app:apps>"]);
-    expect(m.action).toEqual({ type: "input.focus_app", strategy: "frontmost" });
+    // One params dialect: the payload nests under "params", never flat.
+    expect(m.action).toEqual({
+      type: "input.focus_app",
+      params: { strategy: "frontmost" },
+    });
   });
 
   test("capture default name and text slots", () => {

@@ -195,10 +195,12 @@ export class CommandBuilder {
   /**
    * Set the action fired on match. `type` is the action's type (a built-in
    * like "key" or a dotted plugin action like "browser.refresh"); optional
-   * `params` are merged into the action object.
+   * `params` nest under the action object's `params` key — one dialect,
+   * see DESIGN_ONE_PARAMS_DIALECT.md.
    */
   action(type: string, params?: Record<string, unknown>): this {
-    this.spec.action = { type, ...(params ?? {}) };
+    this.spec.action =
+      params && Object.keys(params).length > 0 ? { type, params } : { type };
     return this;
   }
 
