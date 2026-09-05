@@ -417,7 +417,11 @@ function findHarnessBinary(): string {
   const env = process.env.BRANCHKIT_TEST_HARNESS;
   if (env) return env;
 
+  // The installed app ships the harness in its Resources; the cargo
+  // target paths serve app-repo checkouts.
   const candidates = [
+    "/Applications/BranchKit.app/Contents/Resources/branchkit-test-harness",
+    `${process.env.HOME ?? ""}/Applications/BranchKit.app/Contents/Resources/branchkit-test-harness`,
     "target/debug/branchkit-test-harness",
     "target/release/branchkit-test-harness",
     "../target/debug/branchkit-test-harness",
@@ -439,7 +443,8 @@ function findHarnessBinary(): string {
   }
 
   throw new Error(
-    "harness: cannot find branchkit-test-harness binary. " +
-      "Set BRANCHKIT_TEST_HARNESS or run 'cargo build -p branchkit-test-harness'",
+    "harness: cannot find branchkit-test-harness binary. It ships inside " +
+      "BranchKit.app (Contents/Resources); install the app, or set " +
+      "BRANCHKIT_TEST_HARNESS to a harness binary.",
   );
 }
