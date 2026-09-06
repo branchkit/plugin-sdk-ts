@@ -172,8 +172,13 @@ export function text(name?: string): PatternSlot {
  *   free context (small, acoustically safe target sets).
  * - `"exclusive"` — the bare prefix enters an auto-minted exclusive mode so the
  *   capture's words only decode while it holds (large/dynamic sets, e.g. tabs).
+ * - `"select"` — exclusive-mode lifecycle, but entries are POINTED AT via
+ *   platform-assigned alphabet codewords instead of spoken by name — item
+ *   names never enter the grammar (promotion is the per-record opt-out). For
+ *   churning sets whose names can't be pre-vetted acoustically (snippets,
+ *   prompts, files). See DESIGN_SELECTION_PRIMITIVE.md.
  */
-export type DiscoveryMode = "prefix" | "exclusive";
+export type DiscoveryMode = "prefix" | "exclusive" | "select";
 
 /** Accumulates a CommandSpec via chained setters; finish with build(). */
 export class CommandBuilder {
