@@ -240,6 +240,7 @@ export interface DirectoryEntry {
 
 export interface DiscoverItem {
   id: string;
+  speakable: boolean;
   subtitle?: string;
   tag: string;
   title: string;
