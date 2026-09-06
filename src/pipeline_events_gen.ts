@@ -43,6 +43,35 @@ export const MODELS_DIR_ENV = "BRANCHKIT_MODELS_DIR" as const;
 export const DATA_DIR_ENV = "BRANCHKIT_STAGE_DATA" as const;
 
 export interface Capability {
+  /**
+   * Custom event types this stage accepts as CONFIGURATION from the plugin
+   * that ships it — exact `ext.<vendor>.<name>` types, or `ext.<vendor>.*`
+   * globs.
+   *
+   * Distinct from [`Capability::consumes`], and deliberately not folded
+   * into it. `consumes` is the stage-to-stage valve: its types arrive from
+   * the stage ABOVE in the pipeline, and the wiring check fails loudly when
+   * the upstream neighbour does not emit a declared type. Plugin config has
+   * no upstream neighbour, so reusing `consumes` would make every stage
+   * that wants config fail to wire. Two different relations, two fields.
+   *
+   * The direction this opens is plugin → a stage it ships. It does not
+   * loosen the bus rule: plugin emits of `ext.*` ONTO THE EVENT BUS stay
+   * rejected, because a bus subscriber trusts the source attribution. A
+   * message sent here never reaches the bus — it is written to one stage's
+   * stdin, the recipient is named by the sender, and the platform checks
+   * that the sender ships that stage. There is no attribution to forge.
+   *
+   * A stage should apply config it receives and keep working without it.
+   * Gate on config only when the stage cannot be CORRECT without it (an
+   * unseeded recognition grammar decodes to garbage, so `sherpa_commands`
+   * drops audio until seeded); config that only improves QUALITY — a
+   * decoder bias list, say — must never block the stage's real work.
+   *
+   * Empty = the stage accepts no plugin configuration, which is every
+   * pre-existing stage.
+   */
+  accepts_config?: string[];
   audio_formats?: AudioFormat[];
   /**
    * Custom event types this stage accepts from the stage ABOVE it in a
