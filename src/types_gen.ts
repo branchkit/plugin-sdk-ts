@@ -4220,6 +4220,7 @@ export interface PipelinesInjectRequest {
   data?: unknown;
   event_type: string;
   name: string;
+  stage: string;
 }
 
 export interface PipelinesInjectResponse {

@@ -1191,7 +1191,7 @@ declare module "./plugin.js" {
     overridesApply(action: string, collection: string, field?: string, fields?: unknown, id?: string, newId?: string, tenant?: string): Promise<OverridesApplyResponse>;
     overridesList(): Promise<OverlayRow[]>;
     pipelinesGrammar(full?: boolean): Promise<PipelinesGrammarResponse>;
-    pipelinesInject(eventType: string, name: string, data?: unknown): Promise<PipelinesInjectResponse>;
+    pipelinesInject(eventType: string, name: string, stage: string, data?: unknown): Promise<PipelinesInjectResponse>;
     pipelinesRun(name: string, ephemeral?: boolean, paramOverrides?: Record<string, unknown>): Promise<PipelinesRunResponse>;
     pipelinesStatus(): Promise<PipelinesStatusResponse>;
     pipelinesStop(name: string, audioCutoffMs?: number): Promise<PipelinesStopResponse>;
@@ -5444,12 +5444,13 @@ Plugin.prototype.pipelinesGrammar = async function(full?: boolean) {
   return result as PipelinesGrammarResponse;
 };
 
-Plugin.prototype.pipelinesInject = async function(eventType: string, name: string, data?: unknown) {
+Plugin.prototype.pipelinesInject = async function(eventType: string, name: string, stage: string, data?: unknown) {
   const result = await this.call(
     MethodPipelinesInject,
     {
       event_type: eventType,
       name,
+      stage,
       data,
     },
   );
