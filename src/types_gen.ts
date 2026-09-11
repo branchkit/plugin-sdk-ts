@@ -4330,6 +4330,23 @@ export interface RecognitionBiasApplyResponse {
   previous_provenance: string;
 }
 
+export interface RecognitionBiasGetResponse {
+  enabled: boolean;
+  provenance: string;
+  strength: number;
+}
+
+export interface RecognitionBiasSetRequest {
+  enabled?: boolean;
+  strength?: number;
+}
+
+export interface RecognitionBiasSetResponse {
+  enabled: boolean;
+  provenance: string;
+  strength: number;
+}
+
 export interface RecognitionRedecodeRequest {
   items: RedecodeItem[];
   max_active?: number;
