@@ -4282,6 +4282,15 @@ export interface PluginDebugResponse {
   ok: boolean;
 }
 
+export interface PluginReportHealthRequest {
+  degraded: boolean;
+  reason?: string;
+}
+
+export interface PluginReportHealthResponse {
+  ok: boolean;
+}
+
 export interface PrivacyGetRecordingRequest {
   name: string;
 }

@@ -586,6 +586,7 @@ import {
   MethodPipelinesWarm,
   MethodPluginDataExport,
   MethodPluginDebug,
+  MethodPluginReportHealth,
   MethodPrivacyGetRecording,
   MethodPrivacySetRecording,
   MethodPrivilegesList,
@@ -1200,6 +1201,7 @@ declare module "./plugin.js" {
     pipelinesWarm(name: string, paramOverrides?: Record<string, unknown>): Promise<PipelinesWarmResponse>;
     pluginDataExport(path: string, filename?: string): Promise<PluginDataExportResponse>;
     pluginDebug(data?: unknown, level?: unknown, tag?: string): Promise<void>;
+    pluginReportHealth(degraded: boolean, reason?: string): Promise<void>;
     privacyGetRecording(name: string): Promise<PrivacyGetRecordingResponse>;
     privacySetRecording(enabled: boolean, name: string): Promise<void>;
     privilegesList(): Promise<PrivilegeStatusEntry[]>;
@@ -5518,6 +5520,16 @@ Plugin.prototype.pluginDebug = async function(data?: unknown, level?: unknown, t
       data,
       level,
       tag,
+    },
+  );
+};
+
+Plugin.prototype.pluginReportHealth = async function(degraded: boolean, reason?: string) {
+  const result = await this.call(
+    MethodPluginReportHealth,
+    {
+      degraded,
+      reason,
     },
   );
 };
