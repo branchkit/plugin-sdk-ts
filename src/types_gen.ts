@@ -4774,6 +4774,7 @@ export interface PipelineWarmedEventParams {
 export interface PluginDegradedEventParams {
   consecutive_timeouts: number;
   plugin_id: string;
+  reason?: string;
 }
 
 /** Payload of the `_platform.plugin.disabled` event. */
