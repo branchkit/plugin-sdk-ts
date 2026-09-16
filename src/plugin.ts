@@ -212,6 +212,9 @@ const OVERSIZED_FRAME_BYTES = 1024 * 1024;
 
 export class Plugin {
   private pluginId: string;
+  // A plugin with no platform behind it (`new Plugin({ detached: true })`):
+  // every call rejects at once, nothing is written, run() returns.
+  private detached = false;
   private handlers = new Map<string, HandlerFn>();
   private listeners = new Map<string, ListenerFn[]>();
   // OnPattern registrations, in registration order. An array rather than a
@@ -264,8 +267,17 @@ export class Plugin {
     return this.pluginId;
   }
 
-  constructor() {
-    this.pluginId = process.env.BRANCHKIT_PLUGIN_ID ?? "unknown";
+  /**
+   * `detached` builds a plugin with no platform behind it, for tests. It
+   * never touches stdin or stdout: every call rejects at once with
+   * "detached plugin", notifications go nowhere, mirrors never fetch, and
+   * run() resolves immediately. A host built on it exercises the plugin's
+   * own logic without a live actuator; swap a seam or a mirror for the
+   * platform behaviour a test needs.
+   */
+  constructor(opts: { detached?: boolean } = {}) {
+    this.detached = opts.detached === true;
+    this.pluginId = this.detached ? "detached" : (process.env.BRANCHKIT_PLUGIN_ID ?? "unknown");
 
     this.shutdownPromise = new Promise((resolve) => {
       this.shutdownResolve = resolve;
@@ -280,8 +292,10 @@ export class Plugin {
       Log(this.pluginId, "shutting down (signal)");
       this.shutdown();
     };
-    process.on("SIGTERM", this.onSignal);
-    process.on("SIGINT", this.onSignal);
+    if (!this.detached) {
+      process.on("SIGTERM", this.onSignal);
+      process.on("SIGINT", this.onSignal);
+    }
 
     // Built-in introspection: the actuator calls list_action_types after the
     // plugin reaches readiness to validate that handlers match the manifest's
@@ -300,7 +314,7 @@ export class Plugin {
     }));
 
     Log(this.pluginId, "started (JSON-RPC over stdio)");
-    this.startReadLoop();
+    if (!this.detached) this.startReadLoop();
   }
 
   /**
@@ -520,6 +534,7 @@ export class Plugin {
    * Default timeout: 10s (T1). Override with timeoutMs (T3).
    */
   call<T = unknown>(method: string, params?: unknown, timeoutMs = 10_000): Promise<T> {
+    if (this.detached) return Promise.reject(new Error(`detached plugin: no platform behind ${method}`));
     return new Promise<T>((resolve, reject) => {
       if (this.closed) {
         reject(new Error("plugin shutting down"));
@@ -597,6 +612,7 @@ export class Plugin {
    */
   async run(): Promise<void> {
     this.readyResolve();
+    if (this.detached) return;
     this.notify("plugin.initialized");
     await this.shutdownPromise;
   }
@@ -604,7 +620,7 @@ export class Plugin {
   // --- Internal ---
 
   private write(msg: RpcMessage): void {
-    if (this.closed) return;
+    if (this.closed || this.detached) return;
     // JSON.stringify never produces embedded newlines for non-string values,
     // and escapes \n inside strings (W9). Add trailing \n for NDJSON (W2).
     process.stdout.write(JSON.stringify(msg) + "\n");

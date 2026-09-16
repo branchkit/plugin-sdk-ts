@@ -135,3 +135,16 @@ describe("settings tabs", () => {
   });
 });
 
+
+// The no-platform contract tests build hosts on: calls reject at once,
+// notify and run are inert, a settings mirror can be constructed.
+describe("detached plugin", () => {
+  test("rejects calls, swallows notifies, run resolves", async () => {
+    const p = new Plugin({ detached: true });
+    await expect(p.call("collection.get", { name: "x" })).rejects.toThrow("detached plugin");
+    p.notify("events.emit", { x: 1 });
+    const m = p.settings<TestConfig>("plugin.test.config");
+    expect(m.ready).toBe(false);
+    await p.run();
+  });
+});
