@@ -1,12 +1,19 @@
 import { createInterface } from "node:readline";
 import { Log } from "./log.js";
-import { APIVersion, HookOnAction } from "./contracts_gen.js";
+import { APIVersion, HookOnAction, HookRenderSettings } from "./contracts_gen.js";
+
 import {
   type ErrorKind,
   type FaultData,
   ErrorKindRecordingDisabled,
 } from "./closed_vocab_gen.js";
-import type { OnActionRequest, OnActionResponse } from "./types_gen.js";
+import type {
+  OnActionRequest,
+  OnActionResponse,
+  RenderSettingsRequest,
+  RenderSettingsResponse,
+} from "./types_gen.js";
+
 import { runWithCorrelation, getCurrentCorrelation } from "./correlation.js";
 import { getCurrentActor } from "./actor.js";
 
@@ -97,7 +104,14 @@ export interface ActionRequest<T = unknown> {
  * `{ status: "ok" }`. Returning an OnActionResponse passes it through.
  * Any other return is sent back as the JSON-RPC result verbatim.
  */
+/**
+ * Renders one settings tab: the tab's HTML fragment for a render_settings
+ * request. Registered with {@link Plugin.settingsTab}.
+ */
+export type SettingsTabFn = (req: RenderSettingsRequest) => string | Promise<string>;
+
 export type ActionHandlerFn<T = unknown> = (
+
   req: ActionRequest<T>,
 ) => Promise<unknown> | unknown;
 
@@ -207,6 +221,13 @@ export class Plugin {
   private pending = new Map<number, PendingCall>();
   // Lazily initialized when handleAction is first called.
   private actionHandlers: Map<string, ActionHandlerFn> | null = null;
+  // Non-null once settingsTab has installed the SDK's own render_settings
+  // handler; settingsMirrors are refreshed by that handler before every
+  // render (see settingsTab).
+  private settingsTabs: Map<string, SettingsTabFn> | null = null;
+  private settingsCss = "";
+  private settingsMirrors: Array<{ refresh(): Promise<void> }> = [];
+
   private nextId = 1;
   private closed = false;
   private onSignal!: () => void;
@@ -288,16 +309,100 @@ export class Plugin {
    *
    * handle("on_action", ...) and handleAction(...) are mutually exclusive —
    * both install a handler for the same RPC method. Calling either after the
-   * other has been registered throws, regardless of order.
+   * other has been registered throws, regardless of order. The same holds
+   * for handle("render_settings", ...) and settingsTab(...).
    */
   handle(method: string, fn: HandlerFn): void {
+
     if (method === HookOnAction && this.actionHandlers !== null) {
       throw new Error(
         'plugin-sdk-ts: cannot mix handle("on_action", ...) and handleAction(...) — pick one',
       );
     }
+    if (method === HookRenderSettings && this.settingsTabs !== null) {
+      throw new Error(
+        'plugin-sdk-ts: cannot mix handle("render_settings", ...) and settingsTab(...) — pick one',
+      );
+    }
     this.handlers.set(method, fn);
   }
+
+  /**
+   * Register the renderer for the manifest-declared settings tab `key`.
+   * The renderer returns the tab's HTML FRAGMENT — the platform's frame
+   * owns the container it is morphed into — and the SDK attaches the
+   * stylesheet registered with {@link Plugin.settingsCSS}.
+   *
+   * The first call installs the SDK's own `render_settings` handler,
+   * which on every render:
+   *
+   *  1. refreshes every settings mirror created with
+   *     {@link Plugin.settings}, so the render reads state at least as
+   *     fresh as whatever woke it (the stream re-renders on collection
+   *     writes that may arrive before the mirror's collection.updated);
+   *  2. dispatches on `tab_key`; a key with no renderer is an error, which
+   *     the platform shows as the tab's error state instead of a blank body;
+   *  3. returns the fragment with the registered stylesheet.
+   *
+   * The platform's method proxy discards a settings method's result and
+   * answers 204: a method that changed something returns nothing and lets
+   * the re-render that follows draw it. Rendering inside a method is
+   * wasted.
+   *
+   * settingsTab and handle("render_settings", ...) are mutually exclusive
+   * — both install a handler for the same RPC method. Calling either after
+   * the other throws, regardless of order.
+   */
+  settingsTab(key: string, fn: SettingsTabFn): void {
+    if (this.settingsTabs === null) {
+      if (this.handlers.has(HookRenderSettings)) {
+        throw new Error(
+          'plugin-sdk-ts: cannot mix handle("render_settings", ...) and settingsTab(...) — pick one',
+        );
+      }
+      this.settingsTabs = new Map();
+      this.handlers.set(HookRenderSettings, (params) => this.renderSettingsTab(params));
+    }
+    this.settingsTabs.set(key, fn);
+  }
+
+  /**
+   * Register the stylesheet returned with every tab this plugin renders.
+   * One sheet per plugin: the platform places it in a `<style>` element it
+   * owns, outside the morph target, so it is sent once per change rather
+   * than inside every fragment.
+   */
+  settingsCSS(css: string): void {
+    this.settingsCss = css;
+  }
+
+  /** @internal — called by {@link Plugin.settings}; the render hook
+   * refreshes every registered mirror before a tab draws. */
+  registerSettingsMirror(mirror: { refresh(): Promise<void> }): void {
+    this.settingsMirrors.push(mirror);
+  }
+
+  private async renderSettingsTab(params: unknown): Promise<RenderSettingsResponse> {
+    const req = (params ?? {}) as RenderSettingsRequest;
+    const fn = this.settingsTabs?.get(req.tab_key);
+    if (!fn) {
+      throw new Error(`no renderer registered for settings tab "${req.tab_key}"`);
+    }
+    // Read through before drawing. A refresh failure is logged, not
+    // fatal: the mirror keeps its last snapshot and the tab still draws.
+    for (const m of [...this.settingsMirrors]) {
+      try {
+        await m.refresh();
+      } catch (err) {
+        Log(this.pluginId, `settings read-through failed: ${err}`);
+      }
+    }
+    const html = await fn(req);
+    const resp: RenderSettingsResponse = { html };
+    if (this.settingsCss !== "") resp.css = this.settingsCss;
+    return resp;
+  }
+
 
   /**
    * Register a handler for a single dispatched action type

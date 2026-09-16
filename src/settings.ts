@@ -27,6 +27,11 @@ export class SettingsMirror<T> {
     this.#plugin = plugin;
     this.#name = name;
     this.#mirror = plugin.mirrorCollection(name);
+    // The SDK's render_settings hook refreshes every settings mirror before
+    // a tab draws (Plugin.settingsTab) — the read-through render paths used
+    // to hand-roll.
+    plugin.registerSettingsMirror(this);
+
     const selfId = plugin.id;
     this.#mirror.onChange(() => {
       const raw = this.#mirror.raw();
@@ -123,18 +128,8 @@ export class SettingsMirror<T> {
     );
     await this.refresh();
   }
-
-  /**
-   * The composed settings via a synchronous read-through, updating the
-   * mirror. Use at the top of render paths (`render_settings`): a render
-   * must read state at least as fresh as whatever triggered it, and the
-   * mirror's event-driven refresh cannot promise that ordering.
-   */
-  async load(): Promise<T | undefined> {
-    await this.refresh();
-    return this.get();
-  }
 }
+
 
 declare module "./plugin.js" {
   interface Plugin {

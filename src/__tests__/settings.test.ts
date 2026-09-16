@@ -82,13 +82,56 @@ describe("settings mirror write/read-through", () => {
     expect(s2.get()?.editor).toBe("");
   });
 
-  test("load reads through to the store's current state", async () => {
+});
+
+// The SDK-owned render_settings hook: one renderer per tab key, the
+// registered stylesheet on every response, an error for a key nobody
+// registered, and every settings mirror refreshed before the tab draws.
+describe("settings tabs", () => {
+  async function render(plugin: Plugin, tab_key: string): Promise<{ html: string; css?: string }> {
+    // @ts-expect-error — reaching the private handler table for the test
+    const fn = plugin.handlers.get("render_settings");
+    expect(fn).toBeDefined();
+    return (await fn!({ tab_key, search: "" })) as { html: string; css?: string };
+  }
+
+  test("dispatches by tab_key, attaches css, refreshes mirrors first", async () => {
     const store: Record<string, unknown> = { editor: "stale" };
     const { plugin } = fakePlugin(store);
-    const s = plugin.settings<TestConfig>("plugin.test.config");
+    const mirror = plugin.settings<TestConfig>("plugin.test.config");
+    plugin.settingsCSS(".alpha{}");
+    plugin.settingsTab("alpha", () => `<p id="alpha">${mirror.get()?.editor ?? ""}</p>`);
+    plugin.settingsTab("beta", async (req) => `<p id="beta">${req.tab_key}</p>`);
 
-    store.editor = "fresh-behind-the-mirrors-back";
-    const got = await s.load();
-    expect(got?.editor).toBe("fresh-behind-the-mirrors-back");
+    // The store moved behind the mirror's back (no collection.updated);
+    // the render must still see the current value.
+    store.editor = "fresh";
+    const alpha = await render(plugin, "alpha");
+    expect(alpha.html).toBe('<p id="alpha">fresh</p>');
+    expect(alpha.css).toBe(".alpha{}");
+
+    const beta = await render(plugin, "beta");
+    expect(beta.html).toBe('<p id="beta">beta</p>');
+
+    await expect(render(plugin, "nope")).rejects.toThrow('"nope"');
+  });
+
+  test("renderer errors propagate rather than becoming an empty tab", async () => {
+    const { plugin } = fakePlugin({});
+    plugin.settingsTab("broken", () => {
+      throw new Error("cannot draw");
+    });
+    await expect(render(plugin, "broken")).rejects.toThrow("cannot draw");
+  });
+
+  test("settingsTab and handle(render_settings) are mutually exclusive", () => {
+    const a = fakePlugin({}).plugin;
+    a.settingsTab("x", () => "");
+    expect(() => a.handle("render_settings", async () => ({}))).toThrow("pick one");
+
+    const b = fakePlugin({}).plugin;
+    b.handle("render_settings", async () => ({}));
+    expect(() => b.settingsTab("x", () => "")).toThrow("pick one");
   });
 });
+
