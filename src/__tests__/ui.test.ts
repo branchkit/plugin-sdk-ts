@@ -1,5 +1,6 @@
 import { describe, test, expect } from "bun:test";
-import { postButton, signalButton, confirmButton, expr, inputValue, signalName } from "../ui.js";
+import { postButton, signalButton, confirmButton, expr, inputValue, signalName, js } from "../ui.js";
+
 
 describe("settings ui helpers", () => {
   test("postButton escapes and routes", () => {
@@ -31,7 +32,13 @@ describe("settings ui helpers", () => {
     expect(h).toContain("; $c_");
     expect(h).toContain(">Really delete?<");
     expect(h).toContain(">Cancel<");
+    expect(h).toContain('class="danger"');
+    expect(h).not.toContain("#c44");
+    expect(confirmButton("Delete", "d", { class: "sc-btn" })).toContain('class="sc-btn danger"');
+    expect(js("it's")).toBe('"it\'s"');
+    expect(js(true)).toBe("true");
     const h2 = confirmButton("Delete", "delete_thing", { payload: { id: "x" } });
+
     const h3 = confirmButton("Delete", "delete_thing", { payload: { id: "y" } });
     const keyOf = (s: string) => s.slice(s.indexOf("c_"), s.indexOf("__ifmissing"));
     expect(keyOf(h)).toBe(keyOf(h2));

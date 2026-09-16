@@ -123,7 +123,10 @@ export function confirmButton(label: string, method: string, options: ConfirmOpt
   const arm = button(label, `${sig} = true`, options);
   let confirmClick = `${methodPost(method, payload)}; ${sig} = false`;
   if (options.then) confirmClick += `; ${options.then}`;
-  const danger: ButtonOptions = { ...options, style: `${options.style ?? ""}color:#c44;border-color:#c44;` };
+  // The confirm click is the destructive one; `danger` is the platform
+  // stylesheet's variant class (button.danger), never an inline colour.
+  const danger: ButtonOptions = { ...options, class: `${options.class ?? ""} danger`.trim() };
+
   const confirm = button(confirmLabel, confirmClick, danger);
   const cancel = button("Cancel", `${sig} = false`, options);
   return (
@@ -132,4 +135,15 @@ export function confirmButton(label: string, method: string, options: ConfirmOpt
     `<span data-show="${sig}" style="display:none;">${confirm}${cancel}</span>` +
     `</span>`
   );
+}
+
+/**
+ * Marshal one value to a JavaScript literal for a Datastar expression — a
+ * string becomes a quoted string, a boolean `true`, a number itself. The
+ * value-position twin of {@link args}: a user string spliced into
+ * `$sig = '...'` must not be able to end the quote.
+ */
+export function js(v: unknown): string {
+  const out = JSON.stringify(v);
+  return out === undefined ? "null" : out;
 }
