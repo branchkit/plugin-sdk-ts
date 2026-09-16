@@ -124,14 +124,15 @@ describe("settings tabs", () => {
     await expect(render(plugin, "broken")).rejects.toThrow("cannot draw");
   });
 
-  test("settingsTab and handle(render_settings) are mutually exclusive", () => {
+  // The tab API is the only way in: a hand-written render_settings handler
+  // throws at registration whether or not a tab was registered first.
+  test("handle(render_settings) is rejected", () => {
     const a = fakePlugin({}).plugin;
-    a.settingsTab("x", () => "");
-    expect(() => a.handle("render_settings", async () => ({}))).toThrow("pick one");
+    expect(() => a.handle("render_settings", async () => ({}))).toThrow("settingsTab");
 
     const b = fakePlugin({}).plugin;
-    b.handle("render_settings", async () => ({}));
-    expect(() => b.settingsTab("x", () => "")).toThrow("pick one");
+    b.settingsTab("x", () => "");
+    expect(() => b.handle("render_settings", async () => ({}))).toThrow("settingsTab");
   });
 });
 

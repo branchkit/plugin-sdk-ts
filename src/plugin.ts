@@ -323,8 +323,11 @@ export class Plugin {
    *
    * handle("on_action", ...) and handleAction(...) are mutually exclusive —
    * both install a handler for the same RPC method. Calling either after the
-   * other has been registered throws, regardless of order. The same holds
-   * for handle("render_settings", ...) and settingsTab(...).
+   * other has been registered throws, regardless of order.
+   *
+   * "render_settings" is not registrable here at all: the SDK owns that hook
+   * and installs it through {@link Plugin.settingsTab}, one renderer per
+   * manifest tab. handle throws on it so a plugin cannot bypass the dispatch.
    */
   handle(method: string, fn: HandlerFn): void {
 
@@ -333,9 +336,9 @@ export class Plugin {
         'plugin-sdk-ts: cannot mix handle("on_action", ...) and handleAction(...) — pick one',
       );
     }
-    if (method === HookRenderSettings && this.settingsTabs !== null) {
+    if (method === HookRenderSettings) {
       throw new Error(
-        'plugin-sdk-ts: cannot mix handle("render_settings", ...) and settingsTab(...) — pick one',
+        "plugin-sdk-ts: render_settings is the SDK's hook — register each tab with settingsTab(key, fn)",
       );
     }
     this.handlers.set(method, fn);
@@ -363,17 +366,12 @@ export class Plugin {
    * the re-render that follows draw it. Rendering inside a method is
    * wasted.
    *
-   * settingsTab and handle("render_settings", ...) are mutually exclusive
-   * — both install a handler for the same RPC method. Calling either after
-   * the other throws, regardless of order.
+   * This is the only way to install a render_settings handler:
+   * handle("render_settings", ...) throws, so every tab goes through this
+   * dispatch.
    */
   settingsTab(key: string, fn: SettingsTabFn): void {
     if (this.settingsTabs === null) {
-      if (this.handlers.has(HookRenderSettings)) {
-        throw new Error(
-          'plugin-sdk-ts: cannot mix handle("render_settings", ...) and settingsTab(...) — pick one',
-        );
-      }
       this.settingsTabs = new Map();
       this.handlers.set(HookRenderSettings, (params) => this.renderSettingsTab(params));
     }
