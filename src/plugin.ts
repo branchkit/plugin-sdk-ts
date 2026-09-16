@@ -361,10 +361,10 @@ export class Plugin {
    *     the platform shows as the tab's error state instead of a blank body;
    *  3. returns the fragment with the registered stylesheet.
    *
-   * The platform's method proxy discards a settings method's result and
-   * answers 204: a method that changed something returns nothing and lets
-   * the re-render that follows draw it. Rendering inside a method is
-   * wasted.
+   * A settings method returns nothing. The platform's method proxy refuses
+   * any result — 422 with the `settings-method-result` diagnostic, shown as
+   * a banner in the tab and logged to the plugin's log — and re-renders the
+   * tab: a method changes state, and the re-render that follows draws it.
    *
    * This is the only way to install a render_settings handler:
    * handle("render_settings", ...) throws, so every tab goes through this
