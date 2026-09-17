@@ -54,6 +54,7 @@ export class Listener {
   private _addr: string;
   private serving = false;
   readonly plugin: Plugin;
+  private stopped = false;
 
   /** @internal — use ListenLocal() to create */
   constructor(server: Server, token: string, addr: string, plugin: Plugin) {
@@ -61,6 +62,10 @@ export class Listener {
     this.token = token;
     this._addr = addr;
     this.plugin = plugin;
+    // The plugin's shutdown closes this listener. Without it the server keeps
+    // the event loop alive and the process never exits after SIGTERM or stdin
+    // close. Optional call: tests hand in a bare object for the plugin.
+    plugin._registerCloser?.(() => this.shutdown());
   }
 
   /**
@@ -105,6 +110,8 @@ export class Listener {
 
   /** Gracefully stop the listener and remove the discovery file. */
   shutdown(): void {
+    if (this.stopped) return;
+    this.stopped = true;
     this.server.close();
     // close() alone stops new connections but waits on idle keep-alive
     // sockets, which can hang process exit. Go's Shutdown(ctx) bounds this

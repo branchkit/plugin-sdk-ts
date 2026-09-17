@@ -645,9 +645,30 @@ export class Plugin {
     process.stdout.write(JSON.stringify(msg) + "\n");
   }
 
+  // Resources the SDK opened on the plugin's behalf that hold the event loop
+  // open — today, ListenLocal's HTTP server. `shutdown` below promises the
+  // process "can exit naturally"; a listening server breaks that promise, and
+  // the plugin then outlives its own shutdown: RPC closed, port still held,
+  // the platform still showing it Running until something SIGKILLs it.
+  private closers: Array<() => void> = [];
+
+  /** @internal — register a teardown to run when the plugin shuts down. */
+  _registerCloser(fn: () => void): void {
+    this.closers.push(fn);
+  }
+
   private shutdown(): void {
     if (this.closed) return;
     this.closed = true;
+
+    for (const close of this.closers.splice(0)) {
+      try {
+        close();
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : String(err);
+        Log(this.pluginId, `shutdown: a closer failed: ${message}`);
+      }
+    }
 
     // Remove signal listeners and close readline so the process can exit naturally
     process.off("SIGTERM", this.onSignal);

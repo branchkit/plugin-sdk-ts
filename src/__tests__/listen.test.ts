@@ -156,6 +156,39 @@ describe("ListenLocal", () => {
   });
 });
 
+describe("plugin shutdown closes its listeners", () => {
+  // A listening server holds the event loop open. Before this, a plugin that
+  // had called ListenLocal logged "stdin closed, exiting" and then never
+  // exited: RPC gone, port still bound, the platform still showing Running.
+  test("the listener stops serving and its discovery file goes", async () => {
+    setup();
+    const orig = process.env.BRANCHKIT_PLUGIN_DIR;
+    process.env.BRANCHKIT_PLUGIN_DIR = FIXTURE_DIR;
+    try {
+      const { Plugin } = await import("../plugin.js");
+      const plugin = new Plugin({ detached: true });
+      const listener = await ListenLocal(plugin);
+      listener.handleFunc("GET", "/ping", (_req, res) => res.end("pong"));
+      listener.serve();
+      const url = `http://${listener.addr()}/ping`;
+      const auth = { headers: { Authorization: `Bearer ${listener.getToken()}` } };
+      expect(await (await fetch(url, auth)).text()).toBe("pong");
+      expect(existsSync(join(FIXTURE_DIR, "connect.json"))).toBe(true);
+
+      (plugin as unknown as { shutdown(): void }).shutdown();
+
+      await expect(fetch(url, auth)).rejects.toThrow();
+      expect(existsSync(join(FIXTURE_DIR, "connect.json"))).toBe(false);
+      // Idempotent: a plugin author calling it too is not an error.
+      listener.shutdown();
+    } finally {
+      if (orig === undefined) delete process.env.BRANCHKIT_PLUGIN_DIR;
+      else process.env.BRANCHKIT_PLUGIN_DIR = orig;
+      teardown();
+    }
+  });
+});
+
 describe("ListenLocal under Bun with a granted listener", () => {
   test("refuses loudly instead of silently self-binding", async () => {
     // This suite runs under bun:test, so process.versions.bun is set —
