@@ -3,7 +3,7 @@
  * see the actuator's docs/design/DESIGN_SANDBOX_HOST_PROXY.md).
  *
  * When a plugin declares `"network": {"hosts": [...]}`, platforms without an
- * in-kernel per-host primitive (Linux, later Windows) run the plugin in a
+ * in-kernel per-host primitive (all three: Linux, macOS, Windows) run the plugin in a
  * no-network sandbox whose only egress is an actuator-run HTTP CONNECT proxy
  * enforcing the declared hostname allowlist. The actuator advertises the
  * endpoint in BRANCHKIT_PROXY:
@@ -434,7 +434,7 @@ export function proxiedFetchVia(
 
 /**
  * Patch `globalThis.fetch` to route through BRANCHKIT_PROXY. No-op when the
- * env var is unset (direct egress: macOS in-kernel per-host, dev runs).
+ * env var is unset (direct egress: no `hosts` policy, or a dev run).
  * Called once from the SDK entry module.
  */
 export function installProxyFromEnv(): void {
