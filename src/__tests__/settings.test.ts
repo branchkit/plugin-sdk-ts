@@ -149,3 +149,22 @@ describe("detached plugin", () => {
     await p.run();
   });
 });
+
+// A command answers with no result however its handler is written — the
+// proxy refuses anything else with 422; this is the SDK's half.
+describe("commands", () => {
+  test("handleCommand drops whatever the handler returns", async () => {
+    const plugin = fakePlugin({}).plugin;
+    let seen: unknown = null;
+    plugin.handleCommand<{ volume: number }>("set_volume", (req) => {
+      seen = req.volume;
+      // A sloppy handler that returns a value anyway.
+      return { leak: true } as unknown as void;
+    });
+    // @ts-expect-error — reaching the private handler table for the test
+    const fn = plugin.handlers.get("set_volume");
+    expect(fn).toBeDefined();
+    expect(await fn!({ volume: 3 })).toBeNull();
+    expect(seen).toBe(3);
+  });
+});

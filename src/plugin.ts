@@ -453,6 +453,27 @@ export class Plugin {
   }
 
   /**
+   * Register a command: a method a settings control posts to. A command
+   * changes state and returns nothing — the platform's method proxy answers
+   * the post with 204 and re-renders the tab through its stream, and refuses
+   * any result with 422 and the settings-method-result diagnostic. Whatever
+   * `fn` returns is dropped here; the response carries `result: null`.
+   *
+   *     plugin.handleCommand<{ volume: number }>("set_volume", async (req) => {
+   *       await setVolume(req.volume);
+   *     });
+   *
+   * Use handle() for a method whose result another caller reads — a platform
+   * hook, or another plugin — never for a settings control.
+   */
+  handleCommand<Req = unknown>(method: string, fn: (req: Req) => void | Promise<void>): void {
+    this.handle(method, async (params) => {
+      await fn((params ?? {}) as Req);
+      return null;
+    });
+  }
+
+  /**
    * Returns the list of action types registered via handleAction.
    * Useful for the (future) list_action_types RPC and for tests.
    * Returns null if no per-action handlers have been registered.
