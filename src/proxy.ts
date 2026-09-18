@@ -10,7 +10,9 @@
  *
  *   unix:///path/to/endpoint.sock  — UNIX socket (Linux; bind-mounted into
  *                                    the sandbox at the same path)
- *   http://127.0.0.1:<port>        — localhost TCP (Windows, P3)
+ *   http://127.0.0.1:<port>        — localhost TCP (legacy Windows path)
+ *   npipe://\\.\pipe\name          — named pipe ACL'd to the plugin's
+ *                                    container SID (Windows; no exemption)
  *
  * The SDK patches `globalThis.fetch` at import time so a plugin author
  * writes ordinary `fetch()` calls and the platform routes and enforces.
@@ -35,8 +37,8 @@ const REDIRECT_STATUS = new Set([301, 302, 303, 307, 308]);
 const MAX_REDIRECTS = 20;
 
 interface ProxyEndpoint {
-  kind: "unix" | "tcp";
-  path: string; // unix: socket path
+  kind: "unix" | "tcp" | "npipe";
+  path: string; // unix: socket path; npipe: \\.\pipe\ name
   host: string; // tcp: proxy host
   port: number; // tcp: proxy port
 }
@@ -57,8 +59,16 @@ export function parseProxyUrl(v: string): ProxyEndpoint {
     }
     return { kind: "tcp", path: "", host: rest.slice(0, i), port };
   }
+  if (v.startsWith("npipe://")) {
+    // Windows: a named pipe ACL'd to the plugin's container SID, reached
+    // with no loopback exemption. net.connect(path) speaks both a Unix
+    // socket and a Windows pipe, so the dial is the same as unix.
+    const path = v.slice("npipe://".length);
+    if (!path) throw new Error(`empty proxy pipe name in ${JSON.stringify(v)}`);
+    return { kind: "npipe", path, host: "", port: 0 };
+  }
   throw new Error(
-    `unsupported BRANCHKIT_PROXY ${JSON.stringify(v)} (want unix:// or http://)`,
+    `unsupported BRANCHKIT_PROXY ${JSON.stringify(v)} (want unix://, http:// or npipe://)`,
   );
 }
 
@@ -78,9 +88,9 @@ function connectTunnel(
       return;
     }
     const sock =
-      endpoint.kind === "unix"
-        ? netConnect(endpoint.path)
-        : netConnect(endpoint.port, endpoint.host);
+      endpoint.kind === "tcp"
+        ? netConnect(endpoint.port, endpoint.host)
+        : netConnect(endpoint.path); // unix socket or Windows named pipe
     let head = Buffer.alloc(0);
     let settled = false;
 

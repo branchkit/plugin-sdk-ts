@@ -68,9 +68,16 @@ describe("parseProxyUrl", () => {
       host: "127.0.0.1",
       port: 9999,
     });
+    expect(parseProxyUrl("npipe://\\\\.\\pipe\\branchkit-proxy-x")).toEqual({
+      kind: "npipe",
+      path: "\\\\.\\pipe\\branchkit-proxy-x",
+      host: "",
+      port: 0,
+    });
     expect(() => parseProxyUrl("socks5://x")).toThrow();
     expect(() => parseProxyUrl("unix://")).toThrow();
     expect(() => parseProxyUrl("http://nohost")).toThrow();
+    expect(() => parseProxyUrl("npipe://")).toThrow();
   });
 });
 

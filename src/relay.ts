@@ -26,7 +26,9 @@ const RETRY_MIN_MS = 200;
 const RETRY_MAX_MS = 2000;
 
 export interface RelayEnv {
-  rendezvous: { host: string; port: number };
+  // Loopback TCP on unix, or a Windows named pipe (npipe://) ACL'd to the
+  // plugin's container SID — reached with no loopback exemption.
+  rendezvous: { host: string; port: number } | { path: string };
   token: string;
 }
 
@@ -34,11 +36,24 @@ export interface RelayEnv {
 export function relayEnv(): RelayEnv | null {
   const raw = process.env.BRANCHKIT_LISTEN_RELAY ?? "";
   const token = process.env.BRANCHKIT_LISTEN_RELAY_TOKEN ?? "";
+  if (!raw || !token) return null;
+  if (raw.startsWith("npipe://")) {
+    const path = raw.slice("npipe://".length);
+    if (!path) return null;
+    return { rendezvous: { path }, token };
+  }
   const i = raw.lastIndexOf(":");
-  if (!raw || !token || i === -1) return null;
+  if (i === -1) return null;
   const port = Number.parseInt(raw.slice(i + 1), 10);
   if (!Number.isFinite(port) || port <= 0) return null;
   return { rendezvous: { host: raw.slice(0, i), port }, token };
+}
+
+/** Dial the rendezvous — a Windows pipe path or a loopback host:port. */
+function dialRendezvous(env: RelayEnv): Socket {
+  return "path" in env.rendezvous
+    ? connect(env.rendezvous.path)
+    : connect(env.rendezvous.port, env.rendezvous.host);
 }
 
 /** Declared listeners as the actuator published them: `id=port,…`. */
@@ -68,7 +83,7 @@ export function startRelayPool(server: Server, env: RelayEnv, listenerId: string
 
   const park = (attempt = 0) => {
     if (stopped) return;
-    const socket = connect(env.rendezvous.port, env.rendezvous.host);
+    const socket = dialRendezvous(env);
     parked.add(socket);
     let seen = Buffer.alloc(0);
     let paired = false;

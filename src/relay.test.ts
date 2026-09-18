@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { createServer as createTcpServer, type Socket } from "node:net";
 import { request } from "node:http";
 import { ListenLocal } from "./listen.js";
-import { RELAY_HEADER_PREFIX } from "./relay.js";
+import { RELAY_HEADER_PREFIX, relayEnv } from "./relay.js";
 
 // A stand-in for the actuator's relay (listener_relay.rs): parks plugin
 // connections presenting the right header, and for each client on the public
@@ -102,6 +102,32 @@ describe("relay", () => {
     } finally {
       process.env = saved;
       relay.stop();
+    }
+  });
+});
+
+describe("relayEnv", () => {
+  test("parses a Windows npipe:// rendezvous as a pipe path", () => {
+    const prevR = process.env.BRANCHKIT_LISTEN_RELAY;
+    const prevT = process.env.BRANCHKIT_LISTEN_RELAY_TOKEN;
+    try {
+      process.env.BRANCHKIT_LISTEN_RELAY = "npipe://\\\\.\\pipe\\branchkit-relay-x";
+      process.env.BRANCHKIT_LISTEN_RELAY_TOKEN = "deadbeef";
+      const env = relayEnv();
+      expect(env).not.toBeNull();
+      expect(env!.rendezvous).toEqual({ path: "\\\\.\\pipe\\branchkit-relay-x" });
+      expect(env!.token).toBe("deadbeef");
+      // a loopback rendezvous still parses as host:port
+      process.env.BRANCHKIT_LISTEN_RELAY = "127.0.0.1:54321";
+      expect(relayEnv()!.rendezvous).toEqual({ host: "127.0.0.1", port: 54321 });
+      // an empty pipe name is rejected
+      process.env.BRANCHKIT_LISTEN_RELAY = "npipe://";
+      expect(relayEnv()).toBeNull();
+    } finally {
+      if (prevR === undefined) delete process.env.BRANCHKIT_LISTEN_RELAY;
+      else process.env.BRANCHKIT_LISTEN_RELAY = prevR;
+      if (prevT === undefined) delete process.env.BRANCHKIT_LISTEN_RELAY_TOKEN;
+      else process.env.BRANCHKIT_LISTEN_RELAY_TOKEN = prevT;
     }
   });
 });
