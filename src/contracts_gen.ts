@@ -6,6 +6,7 @@ export const APIVersion = "0.1.0" as const;
 
 // RPC method names: plugin → actuator (use with plugin.call()).
 export const MethodActionsList = "actions.list" as const; // since 0.1.0
+export const MethodArtifactDelete = "artifact.delete" as const; // since 0.1.0
 export const MethodCollectionAppend = "collection.append" as const; // stable, since 0.1.0
 export const MethodCollectionAppendKeyed = "collection.append_keyed" as const; // since 0.1.0
 export const MethodCollectionCount = "collection.count" as const; // stable, since 0.1.0
@@ -69,7 +70,6 @@ export const MethodInputSwitchInputSource = "input.switch_input_source" as const
 export const MethodInputTripleClick = "input.triple_click" as const; // since 0.1.0
 export const MethodInputTypeText = "input.type_text" as const; // since 0.1.0
 export const MethodKeybindsRegister = "keybinds.register" as const; // since 0.1.0
-export const MethodModelDelete = "model.delete" as const; // since 0.1.0
 export const MethodNativeAccentColor = "native.accent_color" as const; // since 0.1.0
 export const MethodNativeAccessibilityDisplayInvert = "native.accessibility_display_invert" as const; // since 0.1.0
 export const MethodNativeAccessibilityEnabled = "native.accessibility_enabled" as const; // since 0.1.0

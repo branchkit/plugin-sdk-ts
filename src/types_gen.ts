@@ -753,6 +753,14 @@ export interface ActionsListResponse {
   actions: Record<string, ActionTypeSchema>;
 }
 
+export interface ArtifactDeleteRequest {
+  ref: string;
+}
+
+export interface ArtifactDeleteResponse {
+  ok: boolean;
+}
+
 export interface CollectionAppendRequest {
   name: string;
   payload: unknown;
@@ -1336,14 +1344,6 @@ export interface KeybindsRegisterRequest {
 
 export interface KeybindsRegisterResponse {
   count: number;
-  ok: boolean;
-}
-
-export interface ModelDeleteRequest {
-  ref: string;
-}
-
-export interface ModelDeleteResponse {
   ok: boolean;
 }
 

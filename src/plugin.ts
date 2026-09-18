@@ -941,8 +941,14 @@ export function pluginDataDir(): string {
  * model named `m` lives at `<modelsDir()>/m` and its platform-wide ref is
  * `<plugin id>/m`.
  */
+export function artifactsDir(): string {
+  return process.env.BRANCHKIT_ARTIFACTS_DIR ?? process.env.BRANCHKIT_MODELS_DIR ?? "";
+}
+
+/** @deprecated Use {@link artifactsDir}. `models` was renamed to `artifacts`
+ * (DESIGN_ARTIFACTS_RENAME.md); removed one release later. */
 export function modelsDir(): string {
-  return process.env.BRANCHKIT_MODELS_DIR ?? "";
+  return artifactsDir();
 }
 
 export { Log } from "./log.js";

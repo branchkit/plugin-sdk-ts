@@ -7,6 +7,7 @@ export {
   apiVersion,
   pluginDir,
   pluginDataDir,
+  artifactsDir,
   modelsDir,
 } from "./plugin.js";
 export { Log } from "./log.js";
