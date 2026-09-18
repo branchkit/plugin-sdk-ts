@@ -72,11 +72,47 @@ export function parseProxyUrl(v: string): ProxyEndpoint {
   );
 }
 
+/**
+ * The platform proxy's refusal of a connection: the target is not a host the
+ * plugin's manifest declares. Thrown by `dial()` and by the proxied `fetch`
+ * for the same case. Branch on the class, not on the message:
+ *
+ * ```ts
+ * try {
+ *   sock = await dial("homeassistant.local", 1883);
+ * } catch (e) {
+ *   if (e instanceof HostRefusedError) notDeclared(e.host);
+ * }
+ * ```
+ *
+ * A refusal is by-name and happens before any dial, so it is not a
+ * reachability failure — a declared host that is down is an ordinary
+ * network error, not this.
+ */
+export class HostRefusedError extends Error {
+  readonly host: string;
+  readonly port: number;
+  /** The proxy's status line as received, e.g. "HTTP/1.1 403 Forbidden". */
+  readonly status: string;
+  constructor(host: string, port: number, status: string) {
+    super(
+      `branchkit proxy refused CONNECT ${host}:${port}: ${status} ` +
+        `(host not in the plugin's declared allowlist)`,
+    );
+    this.name = "HostRefusedError";
+    this.host = host;
+    this.port = port;
+    this.status = status;
+  }
+}
+
 /** Dial the proxy endpoint and complete the CONNECT handshake to host:port.
  * Resolves with a socket that is an opaque tunnel to the target. The target
  * hostname travels BY NAME — the proxy resolves it host-side (inside the
- * sandbox there is no DNS) and refuses hosts outside the allowlist. */
-function connectTunnel(
+ * sandbox there is no DNS) and refuses hosts outside the allowlist.
+ * Shared by the proxied `fetch` and by `dial()` — one handshake, one
+ * refusal shape. */
+export function connectTunnel(
   endpoint: ProxyEndpoint,
   host: string,
   port: number,
@@ -126,13 +162,15 @@ function connectTunnel(
       }
       const status = head.subarray(0, end).toString("latin1").split("\r\n")[0] ?? "";
       const code = status.split(/\s+/)[1];
+      if (code === "403") {
+        // The allowlist refusal (host_proxy's RESP_FORBIDDEN) — typed, so a
+        // caller can tell "not declared" from "declared but unreachable"
+        // (a 400, below) without reading prose.
+        fail(new HostRefusedError(host, port, status));
+        return;
+      }
       if (code !== "200") {
-        fail(
-          new Error(
-            `branchkit proxy refused CONNECT ${host}:${port}: ${status} ` +
-              `(host not in the plugin's declared allowlist?)`,
-          ),
-        );
+        fail(new Error(`branchkit proxy could not connect ${host}:${port}: ${status}`));
         return;
       }
       if (settled) return;
@@ -144,7 +182,7 @@ function connectTunnel(
   });
 }
 
-function abortError(): Error {
+export function abortError(): Error {
   return new DOMException("This operation was aborted", "AbortError");
 }
 

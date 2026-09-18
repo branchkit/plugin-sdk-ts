@@ -45,6 +45,8 @@ manifest's `action_types`.
 | Events | manifest `consumes.events` + `plugin.on(event, fn)` |
 | Settings UI tab | `settings_tab` manifest field + render method |
 | Logging | shared actuator log helpers, `plugin.debug` (per-plugin file) |
+| Outbound HTTP | `fetch` (patched to be proxy-aware), `UpstreamClient` |
+| Raw TCP (MQTT, telnet, a local daemon) | `dial(host, port)` — the same proxy; `HostRefusedError` for an undeclared host |
 
 ## Building
 
