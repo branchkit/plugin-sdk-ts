@@ -3,6 +3,7 @@ import { randomBytes, timingSafeEqual } from "node:crypto";
 import { writeFileSync, unlinkSync } from "node:fs";
 import { join } from "node:path";
 import type { Plugin } from "./plugin.js";
+import { relayEnv, grantedListeners, startRelayPool, type RelayPool } from "./relay.js";
 
 /**
  * Discovery file format written to connect.json.
@@ -55,6 +56,8 @@ export class Listener {
   private serving = false;
   readonly plugin: Plugin;
   private stopped = false;
+  /** @internal — the relay pool feeding this server, when the actuator relays. */
+  _relay: RelayPool | null = null;
 
   /** @internal — use ListenLocal() to create */
   constructor(server: Server, token: string, addr: string, plugin: Plugin) {
@@ -112,7 +115,8 @@ export class Listener {
   shutdown(): void {
     if (this.stopped) return;
     this.stopped = true;
-    this.server.close();
+    this._relay?.stop();
+    if (this.server.listening) this.server.close();
     // close() alone stops new connections but waits on idle keep-alive
     // sockets, which can hang process exit. Go's Shutdown(ctx) bounds this
     // with the caller's deadline; Node needs the explicit sweep.
@@ -260,6 +264,38 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
 
       settleOk(listener);
     };
+
+    // No fd, but the actuator bound the listener outside the sandbox and
+    // relays to us (Windows — see relay.ts): feed the server from the pool
+    // instead of listening. The address is the PUBLIC port it published.
+    const relay = usingInherited ? null : relayEnv();
+    if (relay) {
+      const granted = grantedListeners();
+      if (granted.length === 0) {
+        settleErr(new Error("BRANCHKIT_LISTEN_RELAY is set but BRANCHKIT_LISTEN_PORTS names no listener"));
+        return;
+      }
+      const { id, port } = granted[0];
+      const listener = new Listener(server, token, `127.0.0.1:${port}`, plugin);
+      server.on("request", (req, res) => {
+        listener._dispatch(req, res);
+      });
+      try {
+        writeDiscovery({ port: String(port), token });
+      } catch (err: unknown) {
+        settleErr(
+          new Error(
+            `failed to write connect.json discovery file: ${
+              err instanceof Error ? err.message : String(err)
+            }`,
+          ),
+        );
+        return;
+      }
+      listener._relay = startRelayPool(server, relay, id);
+      settleOk(listener);
+      return;
+    }
 
     if (usingInherited) {
       // Bun cannot serve an inherited fd: node:net's listen({fd}) throws
