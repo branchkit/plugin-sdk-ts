@@ -607,6 +607,9 @@ import {
   MethodSettingsRefresh,
   MethodSettingsRulesCreate,
   MethodSettingsRulesUpdate,
+  MethodSpeechAnnounce,
+  MethodSpeechSay,
+  MethodSpeechStop,
   MethodSystemLaunchApp,
   MethodSystemNotify,
   MethodSystemRunShell,
@@ -3552,6 +3555,22 @@ declare module "./plugin.js" {
      * @param newrulesetstags default null
      */
     settingsRulesUpdate(canonical: string, newruleactionjson?: string, newruleactiontype?: string, newruleactionval?: string, newrulecategory?: string, newruleclearstags?: string, newruledescription?: string, newrulephrase?: string, newrulerequirestags?: string, newrulesetstags?: string): Promise<SettingsRulesUpdateResponse>;
+    /**
+     * Post a VoiceOver announcement (spoken in the person's VoiceOver voice when VoiceOver is running; ignored otherwise)
+     */
+    speechAnnounce(text: string): Promise<void>;
+    /**
+     * Speak words through the system voice (a primitive: the platform makes the sound and reports the span for echo suppression; what to say is the caller's policy)
+     * @param priority `"normal"` queues behind whatever is playing; `"high"` cuts it off
+     *   and speaks now. Defaults to normal.
+     *   default null
+     * @param text The words. Plain language, no markup; the system voice reads it as is.
+     */
+    speechSay(text: string, priority?: string): Promise<void>;
+    /**
+     * Stop the system voice now and drop anything queued behind it
+     */
+    speechStop(): Promise<void>;
     /**
      * Launch an app and post a 'Launching' notification to the HUD
      * @param bundleId Bundle ID of the application to launch (e.g. "com.apple.Safari").
@@ -8102,6 +8121,29 @@ Plugin.prototype.settingsRulesUpdate = async function(canonical: string, newrule
     },
   );
   return result as SettingsRulesUpdateResponse;
+};
+
+Plugin.prototype.speechAnnounce = async function(text: string) {
+  const result = await this.call(
+    MethodSpeechAnnounce,
+    {
+      text,
+    },
+  );
+};
+
+Plugin.prototype.speechSay = async function(text: string, priority?: string) {
+  const result = await this.call(
+    MethodSpeechSay,
+    {
+      text,
+      priority,
+    },
+  );
+};
+
+Plugin.prototype.speechStop = async function() {
+  const result = await this.call(MethodSpeechStop);
 };
 
 Plugin.prototype.systemLaunchApp = async function(bundleId: string, newInstance?: boolean) {

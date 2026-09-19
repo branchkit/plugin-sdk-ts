@@ -7411,6 +7411,35 @@ export interface SettingsRulesUpdateResponse {
   ok: boolean;
 }
 
+export interface SpeechAnnounceRequest {
+  text: string;
+}
+
+export interface SpeechAnnounceResponse {
+  ok: boolean;
+}
+
+export interface SpeechSayRequest {
+  /**
+   * `"normal"` queues behind whatever is playing; `"high"` cuts it off
+   * and speaks now. Defaults to normal.
+   * default null
+   */
+  priority?: string;
+  /**
+   * The words. Plain language, no markup; the system voice reads it as is.
+   */
+  text: string;
+}
+
+export interface SpeechSayResponse {
+  ok: boolean;
+}
+
+export interface SpeechStopResponse {
+  ok: boolean;
+}
+
 export interface SystemLaunchAppRequest {
   /**
    * Bundle ID of the application to launch (e.g. "com.apple.Safari").
