@@ -620,617 +620,2983 @@ import {
 
 declare module "./plugin.js" {
   interface Plugin {
+    /**
+     * Return all action type schemas keyed by fully-qualified name
+     */
     actionsList(): Promise<ActionsListResponse>;
+    /**
+     * Delete an installed model from the caller's own model namespace (ref: <plugin>/<model>)
+     */
     artifactDelete(ref: string): Promise<void>;
+    /**
+     * Append an entry to a log-kind collection
+     * @param name Collection name. Must be a `kind: "log"` collection.
+     * @param payload Entry payload — validated against the collection's `fields` schema.
+     */
     collectionAppend(name: string, payload: unknown): Promise<LogEntry | undefined>;
+    /**
+     * Append a keyed annotation to a keyed log (compacted-changelog shape)
+     * @param key The fold key — stamped into the payload's key field. Appending another
+     *   record with the same key annotates the first (compacted-changelog
+     *   shape); a compacted read folds them into one record.
+     * @param name Collection name. Must be a keyed (`id_strategy: by_field`) `log`
+     *   collection.
+     * @param payload Entry payload — validated against the collection's `fields` schema (the
+     *   key field is supplied via `key`, not here).
+     */
     collectionAppendKeyed(key: string, name: string, payload: unknown): Promise<LogEntry | undefined>;
+    /**
+     * Total record count for a collection
+     */
     collectionCount(name: string): Promise<CollectionCountResponse>;
+    /**
+     * Delete records from a collection by id (bulk).
+     * @param ids Record ids to remove. Always an array; single-record callers wrap
+     *   one id. SDK helpers (`Delete` vs `DeleteMany`) hide the wrapping.
+     *   default []
+     */
     collectionDeleteRecords(name: string, ids?: string[]): Promise<CollectionDeleteRecordsResponse>;
+    /**
+     * Fetch a single record from a collection by id
+     */
     collectionFetch(id: string, name: string): Promise<CollectionFetchResponse>;
+    /**
+     * Fetch a keyed log's folded current state for one key (compacted point-read)
+     */
     collectionFetchCompacted(id: string, name: string): Promise<CollectionFetchCompactedResponse>;
+    /**
+     * Read collection data with optional merge metadata
+     */
     collectionGet(name: string): Promise<CollectionGetResponse>;
+    /**
+     * List records in a collection (paginated)
+     * @param opts default {}
+     */
     collectionList(name: string, opts?: ListOpts): Promise<CollectionListResponse>;
+    /**
+     * Partial update of an existing record
+     * @param fields Object of fields to merge over the existing record.
+     */
     collectionPatch(fields: unknown, id: string, name: string): Promise<void>;
+    /**
+     * Upsert records by id (bulk). Auto-registers the target as a record-keyed dynamic collection on first plugin call to an unknown name.
+     * @param entries Records to upsert. Always an array; single-record callers wrap one
+     *   entry. The wire format is uniform across single and bulk callers;
+     *   the SDK helpers (`Put` vs `PutMany`) hide the wrapping for the
+     *   single-record case. See docs/design/DESIGN_BROWSER_HINT_SILENT_EVICTION.md
+     *   for the rationale.
+     *   default []
+     * @param group Writer-chosen group label stamped on EVERY entry in this call — which
+     *   of the caller's named replace-sets these records belong to. See the
+     *   record envelope's `group`: last-write placement, meaningful only
+     *   within a writer. Absent = ungrouped, the common case. Call-level
+     *   rather than per-entry because a put that mixes groups is a caller
+     *   composing two writes, not one write with two meanings.
+     * @param label Optional human-readable label for the collection as a whole — the
+     *   friendly category name shown on the Discovery HUD's tag badge and in
+     *   the Settings UI, in place of the raw collection id (`Badge` instead of
+     *   `browser_hints_arch_strict`). This is the dynamic-collection counterpart
+     *   to a manifest-declared collection's `schema.label`; a plugin creating a
+     *   collection at runtime declares its label here. Same persistence
+     *   semantics as `roles`: last-write-wins, and a put omitting `label`
+     *   leaves the prior setting in place. See
+     *   `docs/design/DESIGN_COLLECTION_FIELD_ROLES.md`.
+     * @param roles Optional per-payload-field display roles. Used by the Settings
+     *   UI / discovery HUD to know which payload field is the primary
+     *   label, which is the subtitle, etc. Equivalent to the `roles`
+     *   argument on `collection.push`. Mostly meaningful for
+     *   auto-registered dynamic collections — manifest-declared
+     *   collections get their roles from the schema. On the first
+     *   `collection.put` to a not-yet-registered name, the roles are
+     *   stored alongside the auto-registered schema. Subsequent puts
+     *   with `roles` overwrite the prior setting; puts omitting
+     *   `roles` leave roles unchanged.
+     *
+     *   Wire-lenient: an entry whose role string this host doesn't know
+     *   binds nothing but does NOT fail the put — see `DisplayRoles`.
+     */
     collectionPut(name: string, entries?: CollectionPutEntry[], group?: string, label?: string, roles?: Record<string, FieldDisplay>): Promise<CollectionPutResponse>;
+    /**
+     * Make the records in scope exactly the given set: upsert changed, delete absent, skip byte-identical. Scope is required and bounds what may be deleted.
+     * @param entries The desired set. After the call, the records in scope are exactly these.
+     *   default []
+     * @param label Same semantics as `collection.put`'s `label`.
+     * @param roles Same semantics as `collection.put`'s `roles`.
+     * @param scope What the call is allowed to delete. Required — see `ReplaceScope`.
+     */
     collectionReplace(name: string, scope: ReplaceScope, entries?: CollectionPutEntry[], label?: string, roles?: Record<string, FieldDisplay>): Promise<CollectionReplaceResponse>;
+    /**
+     * Create a simple user list of words (name + words_text, one entry per line, optional `word = value`) and seed its entries
+     * @param description default ""
+     * @param name Collection name (lowercase, underscores).
+     * @param wordsText default ""
+     */
     collectionsCreateUser(name: string, description?: string, wordsText?: string): Promise<CollectionsCreateUserResponse>;
+    /**
+     * List collections with entries for display, optionally filtered by kind
+     * @param kind Filter by collection kind: "entity", "data", "commands", "log". If omitted, returns all.
+     *   default null
+     */
     collectionsList(kind?: string): Promise<CollectionsListSection[]>;
+    /**
+     * List the collections holding records the caller owns, with per-group counts — the enumeration half of per-record ownership
+     */
     collectionsOwned(): Promise<OwnedCollection[]>;
+    /**
+     * Add an extra spoken form (alias) for an existing command
+     */
     commandsAddAlias(action: string, defaultPattern: string, newPattern: string): Promise<void>;
+    /**
+     * Author-time acoustic confusability for a phrase: existing command words it may be misheard as that are co-eligible in its context
+     * @param requiresTags The command's context (its `requires_tags`); empty = free context. Used by
+     *   tier-2 so a warning only fires when the confuser is co-eligible here.
+     *   default []
+     * @param words The literal spoken words of the phrase being authored.
+     *   default []
+     */
     commandsConfusability(requiresTags?: string[], words?: string[]): Promise<ConfusabilityFinding[]>;
+    /**
+     * Delete a user command by canonical name
+     */
     commandsDelete(canonical: string): Promise<void>;
+    /**
+     * Flat enumeration of every registered command with dynamic/static classification — calibration host source of truth
+     */
     commandsEnumerate(): Promise<EnumeratedCommand[]>;
+    /**
+     * Return all commands grouped by category for HUD display
+     */
     commandsList(): Promise<CommandsListResponse>;
+    /**
+     * List the current user command-phrase aliases (added spoken forms)
+     */
     commandsListAliases(): Promise<CommandOverride[]>;
+    /**
+     * List the current user command-phrase overrides
+     */
     commandsListOverrides(): Promise<CommandOverride[]>;
+    /**
+     * Register commands with the matching engine to the matching engine
+     * @param commands Array of `CommandSpec` JSON objects to push to the matching
+     *   engine. Replaces the current commands contributed by the
+     *   calling plugin. Wire-level type is opaque
+     *   (`serde_json::Value`) to keep the deserializer flexible; see
+     *   `CommandSpec` for the canonical field list including
+     *   `cancels_bridge`.
+     *   default null
+     * @param group Optional named group this push owns. Absent replaces the plugin's
+     *   ENTIRE command set (the original semantics, unchanged); present
+     *   replaces only the records in that group and leaves the plugin's other
+     *   groups intact.
+     *
+     *   Exists because the single implicit slot is a race whenever a plugin has
+     *   more than one command source. Browser has five (scroll, find,
+     *   references, hint skeleton, palette) and each used to push
+     *   independently — whichever landed last was the only set the matcher saw,
+     *   and the hint skeleton routinely lost. Its workaround is a mutex plus
+     *   rebuilding the union from every builder on each call. With groups each
+     *   source owns its own, and dropping a source drops its group.
+     *
+     *   See docs/design/PRINCIPLE_PLUGIN_HELD_STATE.md — this is the same
+     *   "can two of these coexist?" failure that `collection.replace`'s scope
+     *   fixes for records.
+     */
     commandsPush(commands?: unknown, group?: string): Promise<CommandsPushResponse>;
+    /**
+     * Remove an added spoken form (alias) from a command
+     */
     commandsRemoveAlias(action: string, defaultPattern: string, newPattern: string): Promise<CommandsRemoveAliasResponse>;
+    /**
+     * Reset a command override to the plugin default
+     */
     commandsReset(canonical: string): Promise<void>;
+    /**
+     * Remove a user command-phrase override (revert to the plugin default)
+     */
     commandsResetOverride(action: string, defaultPattern: string): Promise<CommandsResetOverrideResponse>;
+    /**
+     * Resolve words against the command registry — returns dispatch decision, partial-match feedback, and tiebreaker telemetry in one envelope
+     * @param activeTags Active tags for tag-based scoping. If None, uses the state's active_tags.
+     *   default null
+     * @param collections Narrow completions to commands contributed by these collections'
+     *   contributors. None or empty = all.
+     *   default null
+     * @param preferOwner Tiebreak hint for a genuine tie. When resolution reduces to 2+ equally-
+     *   eligible commands the matcher cannot separate, and exactly one of them
+     *   is owned by this plugin, that candidate is dispatched as a normal single
+     *   winner instead of the tie being surfaced. It selects *only* among the
+     *   already-tied candidates — it never overrides normal precedence
+     *   (longest-match, gated-over-ungated, scope) and has no effect when there
+     *   is no tie or when zero/multiple tied candidates match. Transient and
+     *   per-resolve; the caller supplies it for one call, it is not a stored
+     *   preference.
+     * @param preview Dry-run / verify-don't-execute mode. When true, the matcher computes
+     *   the full decision (winner, completions, telemetry) but commits
+     *   nothing: no tag writes are applied, no `sets_on_partial` bridge is
+     *   seeded, and no `command_matched`/`command_no_match` telemetry is
+     *   emitted. The action is never dispatched by `resolve` in either mode —
+     *   `preview` additionally suppresses the *side effects* of resolution so
+     *   a consumer (e.g. calibration command-practice) can score "would this
+     *   fire the right command?" without mutating live state or polluting the
+     *   no-match dashboards. Default false: normal resolve commits as before.
+     *   default false
+     * @param requireTag Restrict completions to commands requiring this tag.
+     *   default null
+     * @param sessionId Audio session ID from the Swift shell. Informational — links audio
+     *   lifecycle events to command matches.
+     * @param source Input source: "command_hold", "continuous", "selection", "api".
+     * @param words Words to match against the command registry.
+     *   default []
+     */
     commandsResolve(activeTags?: string[], collections?: string[], preferOwner?: string, preview?: boolean, requireTag?: string, sessionId?: string, source?: string, words?: string[]): Promise<CommandsResolveResponse>;
+    /**
+     * Set a user command-phrase override (replace a command's spoken form)
+     */
     commandsSetOverride(action: string, defaultPattern: string, newPattern: string): Promise<void>;
+    /**
+     * Send a control signal to the Swift shell via the control stream
+     * @param signal Raw control-stream signal string (e.g. "open hud", "hide discovery").
+     *   Forwarded verbatim to the Swift shell via the actuator's control stream.
+     */
     controlSignal(signal: string): Promise<void>;
+    /**
+     * Notify that the discovery HUD closed; emits _platform.discovery.closed
+     */
     discoveryClosed(): Promise<void>;
+    /**
+     * Dispatch a typed Action to a plugin or platform builtin
+     * @param action Typed `Action` variant to dispatch. Schema is loose
+     *   (`serde_json::Value`) — see module-level docs for the rationale.
+     *   The runtime closure still deserializes the typed
+     *   `crate::actions::Action` from this field.
+     */
     dispatch(action: unknown): Promise<DispatchResponse>;
+    /**
+     * Assert an exclusivity-shape platform effect on behalf of this plugin
+     * @param name Registered effect name (e.g. `suppress_notifications`). Must be
+     *   declared in the plugin's manifest `consumes.effects.asserts` and
+     *   match an entry in the closed `effects::REGISTERED_EFFECTS` registry.
+     */
     effectsAssert(name: string): Promise<EffectsAssertResponse>;
+    /**
+     * Query whether this plugin holds top-of-stack for the named effect
+     * @param name Registered effect name to query.
+     */
     effectsIsActive(name: string): Promise<EffectsIsActiveResponse>;
+    /**
+     * Retract this plugin's assertion of an exclusivity-shape platform effect
+     * @param name Registered effect name to retract. The plugin's frame is removed
+     *   from this effect's ownership stack. If no frame exists, the call
+     *   is a no-op (`retracted=false`, no error).
+     */
     effectsRetract(name: string): Promise<EffectsRetractResponse>;
+    /**
+     * Append an event to the structured event log
+     * @param data Free-form event payload. Stored as a raw JSON object on the event
+     *   log line.
+     *   default null
+     * @param eventType Event type discriminator (e.g. "session_start", "match", "miss").
+     * @param sessionId Logical session id this event belongs to (8-char prefix used by
+     *   the event-stream tooling). Defaults to "?" if absent.
+     *   default "?"
+     */
     eventsAppend(eventType: string, data?: unknown, sessionId?: string): Promise<void>;
+    /**
+     * Emit a plugin event on the event bus
+     * @param correlationId Optional correlation id linking related events together for
+     *   debugging. Auto-generated by the platform when omitted and the
+     *   emitting plugin is processing an event that already carried one.
+     *   default null · pattern ^tr_[0-9A-Za-z]{11}$
+     * @param data Free-form event payload published to subscribers.
+     *   default null
+     * @param eventType Convention-based event type (e.g. "clipboard.copied"). The
+     *   `_platform.*` namespace is reserved for the actuator.
+     */
     eventsEmit(eventType: string, correlationId?: string, data?: unknown): Promise<void>;
+    /**
+     * Create a new HUD broadcast channel at runtime
+     * @param acceptsInput Whether the channel's window receives keyboard/mouse input.
+     *   Defaults to false.
+     *   default false
+     * @param anchor Anchor position on screen (`Anchor` enum, kebab-case strings:
+     *   `"top-left"`, `"top-right"`, `"bottom-left"`, `"bottom-right"`,
+     *   `"bottom-center"`, `"center"`). Defaults to `"top-right"`.
+     *   default null
+     * @param channel Channel name. Must be unique across all plugins.
+     * @param description Optional human-readable description shown in dev tooling.
+     *   default ""
+     * @param draggable Whether the shell lets the user drag this window and remembers its
+     *   position. Draggable windows should also set `follows_focus: false`.
+     *   Defaults to false.
+     *   default false
+     * @param followsFocus Whether this channel follows the active display on focus changes.
+     *   Defaults to true. Set to false for user-initiated HUDs that should
+     *   stay pinned to the display where they were opened.
+     *   default true
+     * @param minHeight Minimum window height in points. Defaults to 100.
+     *   wire uint32 · default 100 · min 0
+     * @param onPointer Pointer-dodge behavior: "none" (default) or "fade" (dodge the mouse —
+     *   fade to near-transparent while the pointer is inside the frame).
+     *   default "none"
+     * @param stackOrder Stack position among windows sharing this anchor: offsets ascend from the
+     *   anchor edge, so the lowest pins at the corner (a persistent status window)
+     *   and higher values stack away (transient toasts). Ties broken by channel
+     *   name. Defaults to 0.
+     *   wire int32 · default 0
+     * @param transparent Fully transparent window — the shell skips its frosted vibrancy panel
+     *   and window shadow, so only the plugin's own markup paints. Defaults
+     *   to false (frosted).
+     *   default false
+     * @param width Window width in points. Defaults to 320.
+     *   wire uint32 · default 320 · min 0
+     */
     hudCreateChannel(channel: string, acceptsInput?: boolean, anchor?: unknown, description?: string, draggable?: boolean, followsFocus?: boolean, minHeight?: number, onPointer?: OnPointer, stackOrder?: number, transparent?: boolean, width?: number): Promise<void>;
+    /**
+     * Hide a HUD channel's window
+     * @param channel Channel name to hide. Sends a `close <channel>` (or
+     *   `hide <channel>` for built-in channels) to the Swift shell.
+     */
     hudHide(channel: string): Promise<void>;
+    /**
+     * Push HTML fragments to a named HUD channel
+     * @param channel Name of the HUD channel to push fragments into. Must be owned by
+     *   the calling plugin (verified via
+     *   `HudChannelRegistry::verify_owner`).
+     * @param fragments Array of `HudFragment` objects: `{ target_id, html, raw? }`.
+     */
     hudPush(channel: string, fragments: unknown): Promise<void>;
+    /**
+     * Remove a HUD broadcast channel
+     * @param channel Channel name to remove. Must be owned by the calling plugin.
+     */
     hudRemoveChannel(channel: string): Promise<HUDRemoveChannelResponse>;
+    /**
+     * Report actual rendered size for a HUD channel window
+     * @param channel Channel name whose actual rendered size is being reported.
+     * @param height Actual rendered height in points (used by world-model entries
+     *   instead of `min_height` when known).
+     *   wire uint32 · min 0
+     */
     hudSetSize(channel: string, height: number): Promise<void>;
+    /**
+     * Show a HUD channel's window
+     * @param channel Channel name to show. Sends an `open <channel>` message to the
+     *   Swift shell.
+     */
     hudShow(channel: string): Promise<void>;
+    /**
+     * Click a mouse button
+     * @param button Mouse button: "left", "right", or "middle". Defaults to "left".
+     *   default "left"
+     */
     inputClick(button?: string): Promise<void>;
+    /**
+     * Perform a clipboard action (copy, paste, or set text)
+     * @param action Action: "copy", "paste", or "set".
+     * @param text Text to set (only used by `action: "set"`).
+     *   default null
+     */
     inputClipboardAction(action: string, text?: string): Promise<void>;
+    /**
+     * Get recent clipboard entries (if available)
+     */
     inputClipboardHistory(): Promise<string[]>;
+    /**
+     * Read clipboard contents by type
+     */
     inputClipboardRead(contentType: string): Promise<InputClipboardReadResponse>;
+    /**
+     * Read all items from the clipboard
+     */
     inputClipboardReadAll(): Promise<ClipboardContents[]>;
+    /**
+     * Read clipboard contents in a specific pasteboard type (UTI)
+     */
     inputClipboardReadFormat(format: string): Promise<InputClipboardReadFormatResponse>;
+    /**
+     * Write typed content to clipboard
+     */
     inputClipboardWrite(contentType: string, data: string): Promise<void>;
+    /**
+     * Write multiple typed items to the clipboard
+     * @param items default []
+     */
     inputClipboardWriteItems(items?: ClipboardWriteItem[]): Promise<void>;
+    /**
+     * Double-click at position
+     * @param x wire int32 · default null
+     * @param y wire int32 · default null
+     */
     inputDoubleClick(x?: number, y?: number): Promise<void>;
+    /**
+     * Atomic drag: mouse down, move, mouse up
+     * @param durationMs wire uint64 (64-bit) · default 0 · min 0
+     * @param fromX wire int32
+     * @param fromY wire int32
+     * @param toX wire int32
+     * @param toY wire int32
+     */
     inputDrag(fromX: number, fromY: number, toX: number, toY: number, durationMs?: number): Promise<void>;
+    /**
+     * List available keyboard input sources
+     */
     inputListInputSources(): Promise<InputSource[]>;
+    /**
+     * Press, release, or drag-latch a mouse button (for drag operations, etc.)
+     * @param button Button: "left", "right", or "middle". Defaults to "left".
+     *   default "left"
+     * @param direction Direction: "press", "release", or "drag". "drag" posts a
+     *   zero-distance dragged event at the current cursor position — macOS
+     *   only treats a window as grabbed once a dragged event follows the
+     *   press, so drag-based operations need it between press and release.
+     */
     inputMouseButton(direction: string, button?: string): Promise<void>;
+    /**
+     * Parse a browser key event into a BranchKit combo string
+     * @param alt default false
+     * @param code `KeyboardEvent.code` — the physical key, layout-independent.
+     *   default ""
+     * @param ctrl default false
+     * @param key `KeyboardEvent.key` — used only to spot a bare modifier press.
+     *   default ""
+     * @param meta default false
+     * @param shift default false
+     */
     inputParseKeyEvent(alt?: boolean, code?: string, ctrl?: boolean, key?: string, meta?: boolean, shift?: boolean): Promise<InputParseKeyEventResponse>;
+    /**
+     * Press a key by raw keycode or name, with optional modifiers
+     * @param code Raw keycode (takes priority over `name` if both are present).
+     *   wire uint16 · default null · min 0 · max 65535
+     * @param modifiers Modifier keys to hold during the tap (e.g. "command", "shift").
+     *   default []
+     * @param name Named key (e.g. "return", "tab"). Resolved via `resolve_key_name`.
+     *   Required if `code` is absent.
+     *   default null
+     */
     inputPressKey(code?: number, modifiers?: string[], name?: string): Promise<void>;
+    /**
+     * Send a raw key event (press, release, or click) without modifier lifting
+     * @param code Raw macOS keycode.
+     *   wire uint16 · min 0 · max 65535
+     * @param direction One of "press", "release", or "click".
+     */
     inputRawKey(code: number, direction: string): Promise<void>;
+    /**
+     * Right-click at position
+     * @param x wire int32 · default null
+     * @param y wire int32 · default null
+     */
     inputRightClick(x?: number, y?: number): Promise<void>;
+    /**
+     * Scroll the mouse wheel
+     * @param amount Amount in pixels/units. Defaults to 5.
+     *   wire int32 · default 5
+     * @param direction Direction: "up", "down", "left", or "right".
+     * @param unit Scroll unit: "line" (discrete, default) or "pixel" (continuous/smooth).
+     *   Pixel units are needed for horizontal scroll in most browsers.
+     *   default "line"
+     */
     inputScroll(direction: string, amount?: number, unit?: string): Promise<void>;
+    /**
+     * Select all content (Cmd+A)
+     */
     inputSelectAll(): Promise<void>;
+    /**
+     * Switch keyboard input source
+     */
     inputSwitchInputSource(sourceId: string): Promise<boolean>;
+    /**
+     * Triple-click at position (select paragraph/line)
+     * @param x wire int32 · default null
+     * @param y wire int32 · default null
+     */
     inputTripleClick(x?: number, y?: number): Promise<void>;
+    /**
+     * Type text into the active application via clipboard paste
+     * @param text Text to type into the active application.
+     */
     inputTypeText(text: string): Promise<void>;
+    /**
+     * Register keybind snapshot with the platform (caches and sends to Swift shell)
+     * @param snapshot `RegistrySnapshot` JSON: `{ entries: [...], listen_up: [...] }`.
+     *   Each entry is `{ combo, action, source }`.
+     */
     keybindsRegister(snapshot: unknown): Promise<KeybindsRegisterResponse>;
+    /**
+     * Get the system accent color name
+     */
     nativeAccentColor(): Promise<NativeAccentColorResponse>;
+    /**
+     * Check if display colors are inverted
+     */
     nativeAccessibilityDisplayInvert(): Promise<NativeAccessibilityDisplayInvertResponse>;
+    /**
+     * Check if accessibility access is granted for this app
+     */
     nativeAccessibilityEnabled(): Promise<NativeAccessibilityEnabledResponse>;
+    /**
+     * Bring an app to front by bundle ID
+     * @param allWindows default false
+     */
     nativeActivateApp(bundleId: string, allWindows?: boolean): Promise<void>;
+    /**
+     * Get the primary active network service name
+     */
     nativeActiveNetworkService(): Promise<NativeActiveNetworkServiceResponse>;
+    /**
+     * List processes with listening TCP/UDP ports
+     */
     nativeActivePorts(): Promise<ListeningPort[]>;
+    /**
+     * Get the active space per display
+     */
     nativeActiveSpace(): Promise<ActiveSpace[]>;
+    /**
+     * Check if AirDrop discoverability is enabled
+     */
     nativeAirdropEnabled(): Promise<NativeAirdropEnabledResponse>;
+    /**
+     * Check if Wi-Fi (AirPort) is powered on
+     */
     nativeAirportPower(): Promise<NativeAirportPowerResponse>;
+    /**
+     * Get the system alert sound name
+     */
     nativeAlertSound(): Promise<NativeAlertSoundResponse>;
+    /**
+     * Get the alert volume (0.0-1.0)
+     */
     nativeAlertVolume(): Promise<void>;
+    /**
+     * List all on-screen window IDs
+     */
     nativeAllWindowIds(): Promise<string[]>;
+    /**
+     * List APFS local snapshots as `tmutil listlocalsnapshots` prints them — a header line followed by one snapshot name per line, NOT JSON
+     */
     nativeApfsSnapshots(): Promise<NativeApfsSnapshotsResponse>;
+    /**
+     * Get the filesystem path to an app bundle by bundle ID
+     */
     nativeAppBundlePath(bundleId: string): Promise<NativeAppBundlePathResponse>;
+    /**
+     * Get focused window ID for app by bundle ID
+     */
     nativeAppFocusedWindowID(bundleId: string): Promise<void>;
+    /**
+     * Get app icon as PNG (base64)
+     * @param size wire uint32 · default 64 · min 0
+     */
     nativeAppIcon(bundleId: string, size?: number): Promise<NativeAppIconResponse>;
+    /**
+     * Get path to app icon
+     */
     nativeAppIconPath(bundleId: string): Promise<void>;
+    /**
+     * Check if app is an LSUIElement (agent/background)
+     */
     nativeAppIsAgent(bundleId: string): Promise<NativeAppIsAgentResponse>;
+    /**
+     * Check if an app is running by bundle ID
+     */
     nativeAppIsRunning(bundleId: string): Promise<NativeAppIsRunningResponse>;
+    /**
+     * Check if app is in login items
+     */
     nativeAppLaunchAtLogin(bundleId: string): Promise<NativeAppLaunchAtLoginResponse>;
+    /**
+     * Get bundle metadata for an application
+     */
     nativeAppMetadata(bundleId: string): Promise<NativeAppMetadataResponse>;
+    /**
+     * Get an app path by bundle ID
+     */
     nativeAppPath(bundleId: string): Promise<void>;
+    /**
+     * Get PID of running app by bundle ID
+     */
     nativeAppPid(bundleId: string): Promise<void>;
+    /**
+     * Get the user's Application Support directory path
+     */
     nativeAppSupportDirectory(): Promise<NativeAppSupportDirectoryResponse>;
+    /**
+     * Get an app version by bundle ID
+     */
     nativeAppVersion(bundleId: string): Promise<void>;
+    /**
+     * List all windows belonging to a specific app by bundle ID
+     */
     nativeAppWindows(bundleId: string): Promise<WindowDetail[]>;
+    /**
+     * Count windows for an app by bundle ID
+     */
     nativeAppWindowsCount(bundleId: string): Promise<void>;
+    /**
+     * Applications the OS registers as able to open a given file (Launch Services)
+     */
     nativeAppsForPath(path: string): Promise<InstalledApp[]>;
+    /**
+     * Get volume state for a specific audio device by UID
+     */
     nativeAudioDeviceVolume(deviceUid: string): Promise<NativeAudioDeviceVolumeResponse>;
+    /**
+     * List all audio input and output devices
+     */
     nativeAudioDevices(): Promise<AudioDevice[]>;
+    /**
+     * Get the default audio input device name
+     */
     nativeAudioInputDevice(): Promise<NativeAudioInputDeviceResponse>;
+    /**
+     * Get the system audio input volume (0.0-1.0)
+     */
     nativeAudioInputLevel(): Promise<void>;
+    /**
+     * Get the default audio output device name
+     */
     nativeAudioOutputDevice(): Promise<NativeAudioOutputDeviceResponse>;
+    /**
+     * Check if auto-brightness is enabled
+     */
     nativeAutoBrightness(): Promise<NativeAutoBrightnessResponse>;
+    /**
+     * Check if Spaces auto-rearrange based on usage
+     */
     nativeAutoRearrangeSpaces(): Promise<NativeAutoRearrangeSpacesResponse>;
+    /**
+     * Check if automatic timezone is enabled
+     */
     nativeAutoTimezone(): Promise<NativeAutoTimezoneResponse>;
+    /**
+     * Check if auto-correction is enabled
+     */
     nativeAutocorrectEnabled(): Promise<NativeAutocorrectEnabledResponse>;
+    /**
+     * Get automatic login username if configured
+     */
     nativeAutomaticLoginUser(): Promise<NativeAutomaticLoginUserResponse>;
+    /**
+     * Check if automation permission is granted for target app
+     */
     nativeAutomationPermission(bundleId: string): Promise<NativeAutomationPermissionResponse>;
+    /**
+     * Get the accessibility element at a screen point
+     * @param pid wire int32
+     * @param x wire int32
+     * @param y wire int32
+     */
     nativeAxElementAtPoint(pid: number, x: number, y: number): Promise<NativeAxElementAtPointResponse>;
+    /**
+     * Get the accessibility element tree rooted at an element
+     * @param depth wire uint32 · default 3 · min 0
+     */
     nativeAxElementTree(element: AXElementRef, depth?: number): Promise<AXElementNode>;
+    /**
+     * Start observing AX notifications (STUB -- not yet implemented)
+     * @param notifications default []
+     * @param pid wire int32
+     */
     nativeAxObserve(pid: number, notifications?: string[]): Promise<NativeAxObserveResponse>;
+    /**
+     * Perform an action on an accessibility element
+     */
     nativeAxPerformAction(action: string, element: AXElementRef): Promise<boolean>;
+    /**
+     * Read specific attributes from an accessibility element
+     * @param attributes default []
+     */
     nativeAxReadAttributes(element: AXElementRef, attributes?: string[]): Promise<void>;
+    /**
+     * Set an attribute on an accessibility element
+     */
     nativeAxSetAttribute(attribute: string, element: AXElementRef, value: unknown): Promise<boolean>;
+    /**
+     * Stop observing AX notifications (STUB)
+     */
     nativeAxUnobserve(subscriptionId: string): Promise<boolean>;
+    /**
+     * Check which windows can be tiled
+     * @param windowIds default []
+     */
     nativeBatchIsTileable(windowIds?: string[]): Promise<TileableEntry[]>;
+    /**
+     * Set positions/sizes for multiple windows
+     * @param frames default []
+     * @param readback If true, sleep 10ms after applying frames and read back the actual
+     *   positions (defaults to true). Set false to skip the readback round-trip.
+     *   default true
+     */
     nativeBatchSetFrames(frames?: WindowFrame[], readback?: boolean): Promise<WindowFrame[]>;
+    /**
+     * Get battery status information
+     */
     nativeBattery(): Promise<NativeBatteryResponse>;
+    /**
+     * Get battery cycle count
+     */
     nativeBatteryCycleCount(): Promise<void>;
+    /**
+     * Get battery health status
+     */
     nativeBatteryHealth(): Promise<NativeBatteryHealthResponse>;
+    /**
+     * Get battery maximum capacity percentage
+     */
     nativeBatteryMaxCapacity(): Promise<void>;
+    /**
+     * Discover GATT services and characteristics on a paired BLE device
+     * @param deviceIdentifier Identifier for the paired BLE device. Accepts a CoreBluetooth
+     *   peripheral UUID (e.g. "12345678-...") or a device name to match
+     *   among connected BLE HID peripherals (e.g. "Shortcut Remote").
+     */
     nativeBleDiscoverServices(deviceIdentifier: string): Promise<BleService[]>;
+    /**
+     * Subscribe to GATT notifications on a BLE characteristic
+     * @param characteristicUuid GATT characteristic UUID to subscribe to (must support notify).
+     * @param deviceIdentifier CoreBluetooth peripheral UUID or device name.
+     * @param serviceUuid GATT service UUID containing the characteristic.
+     */
     nativeBleSubscribe(characteristicUuid: string, deviceIdentifier: string, serviceUuid: string): Promise<NativeBleSubscribeResponse>;
+    /**
+     * Subscribe to all notify characteristics on listed services, then write — single GATT cycle
+     * @param deviceIdentifier CoreBluetooth peripheral UUID or device name.
+     * @param subscribeServices GATT service UUIDs to subscribe to all notify characteristics on.
+     *   default []
+     * @param writes Writes to perform after subscribing. The last `with_response` write
+     *   determines when the operation completes.
+     */
     nativeBleSubscribeAllThenWrite(deviceIdentifier: string, subscribeServices?: string[], writes?: BleWriteEntry[]): Promise<NativeBleSubscribeAllThenWriteResponse>;
+    /**
+     * Write bytes to a GATT characteristic on a paired BLE device
+     * @param characteristicUuid GATT characteristic UUID (e.g. "FFF1").
+     * @param data Bytes to write to the characteristic.
+     *   default []
+     * @param deviceIdentifier Identifier for the paired BLE device. Accepts a CoreBluetooth
+     *   peripheral UUID or a device name (see ble_discover_services).
+     * @param serviceUuid GATT service UUID (e.g. "FFF0").
+     * @param writeType Write type: "with_response" (default, reliable) or "without_response" (fire-and-forget).
+     *   default "with_response"
+     */
     nativeBleWrite(characteristicUuid: string, deviceIdentifier: string, serviceUuid: string, data?: number[], writeType?: string): Promise<NativeBleWriteResponse>;
+    /**
+     * List paired/connected Bluetooth devices
+     */
     nativeBluetoothDevices(): Promise<BluetoothDevice[]>;
+    /**
+     * Check if Bluetooth is powered on
+     */
     nativeBluetoothPower(): Promise<NativeBluetoothPowerResponse>;
+    /**
+     * Check if bold text is enabled in accessibility
+     */
     nativeBoldTextEnabled(): Promise<NativeBoldTextEnabledResponse>;
+    /**
+     * Get the boot volume name
+     */
     nativeBootVolume(): Promise<NativeBootVolumeResponse>;
+    /**
+     * Draw window border overlays (forwarded to Swift shell)
+     */
     nativeBorders(): Promise<void>;
+    /**
+     * Get display brightness (0.0-1.0)
+     * @param displayId wire uint32 · default null · min 0
+     */
     nativeBrightness(displayId?: number): Promise<NativeBrightnessResponse>;
+    /**
+     * Resolve a loopback TCP connection's remote port to the owning process's app bundle ID
+     * @param remotePort wire int32
+     */
     nativeBundleForRemotePort(remotePort: number): Promise<NativeBundleForRemotePortResponse>;
+    /**
+     * Get calendar events in a date range (ISO 8601)
+     */
     nativeCalendarEventsRange(end: string, start: string): Promise<CalendarEvent[]>;
+    /**
+     * Get today's calendar events
+     */
     nativeCalendarEventsToday(): Promise<CalendarEvent[]>;
+    /**
+     * Check if calendar access is available
+     */
     nativeCalendarPermission(): Promise<NativeCalendarPermissionResponse>;
+    /**
+     * Check if camera access is available
+     */
     nativeCameraPermission(): Promise<NativeCameraPermissionResponse>;
+    /**
+     * List available camera devices
+     */
     nativeCameras(): Promise<CameraDevice[]>;
+    /**
+     * Check if Caps Lock is currently on
+     */
     nativeCapsLockState(): Promise<NativeCapsLockStateResponse>;
+    /**
+     * Capture a single window as PNG (base64)
+     */
     nativeCaptureWindow(windowId: string): Promise<NativeCaptureWindowResponse>;
+    /**
+     * Cascade all windows for an app
+     */
     nativeCascadeWindows(bundleId: string): Promise<void>;
+    /**
+     * Center a window on its current display
+     */
     nativeCenterWindow(windowId: string): Promise<void>;
+    /**
+     * Check a permission status (screen_recording, camera, etc.)
+     */
     nativeCheckPermission(permission: string): Promise<NativeCheckPermissionResponse>;
+    /**
+     * Remove the quarantine extended attribute from a file
+     */
     nativeClearFileQuarantine(path: string): Promise<void>;
+    /**
+     * Clear all delivered notifications for an app
+     */
     nativeClearNotifications(bundleId: string): Promise<void>;
+    /**
+     * Click a menu item by navigating the menu bar path
+     * @param path default []
+     * @param pid wire int32
+     */
     nativeClickMenuItem(pid: number, path?: string[]): Promise<boolean>;
+    /**
+     * Get the clipboard change count
+     */
     nativeClipboardChangeCount(): Promise<NativeClipboardChangeCountResponse>;
+    /**
+     * Get file URLs from clipboard as JSON array
+     */
     nativeClipboardFileUrls(): Promise<NativeClipboardFileUrlsResponse>;
+    /**
+     * Check if clipboard contains an image
+     */
     nativeClipboardHasImage(): Promise<NativeClipboardHasImageResponse>;
+    /**
+     * Check if clipboard contains text
+     */
     nativeClipboardHasText(): Promise<NativeClipboardHasTextResponse>;
+    /**
+     * Get HTML content from clipboard
+     */
     nativeClipboardHTML(): Promise<NativeClipboardHTMLResponse>;
+    /**
+     * Get dimensions of clipboard image as WxH
+     */
     nativeClipboardImageDimensions(): Promise<NativeClipboardImageDimensionsResponse>;
+    /**
+     * Get rich text (RTF) from clipboard
+     */
     nativeClipboardRichText(): Promise<NativeClipboardRichTextResponse>;
+    /**
+     * Set HTML content on clipboard
+     */
     nativeClipboardSetHTML(html: string): Promise<void>;
+    /**
+     * Set clipboard text content
+     */
     nativeClipboardSetText(text: string): Promise<void>;
+    /**
+     * List available pasteboard types on the clipboard
+     * @param pasteboard default ""
+     */
     nativeClipboardTypes(pasteboard?: string): Promise<string[]>;
+    /**
+     * Close a window by ID
+     */
     nativeCloseWindow(windowId: string): Promise<void>;
+    /**
+     * Sample pixel color at screen coordinate
+     * @param x wire int32
+     * @param y wire int32
+     */
     nativeColorAtPoint(x: number, y: number): Promise<NativeColorAtPointResponse>;
+    /**
+     * Get the computer name
+     */
     nativeComputerName(): Promise<NativeComputerNameResponse>;
+    /**
+     * Get computer sleep timeout in minutes, for the power source the machine is currently on
+     */
     nativeComputerSleepTime(): Promise<void>;
+    /**
+     * Check if contacts access is available
+     */
     nativeContactsPermission(): Promise<NativeContactsPermissionResponse>;
+    /**
+     * Copy a file or directory
+     */
     nativeCopyFile(destination: string, source: string): Promise<void>;
+    /**
+     * Get CPU chip name, core count, and architecture
+     */
     nativeCpuInfo(): Promise<NativeCpuInfoResponse>;
+    /**
+     * Get CPU temperature in Celsius. Requires the third-party `osx-cpu-temp`; a reading without an explicit scale marker is rejected rather than assumed
+     */
     nativeCpuTemperature(): Promise<void>;
+    /**
+     * Get current CPU usage percentage
+     */
     nativeCpuUsage(): Promise<void>;
+    /**
+     * Create a directory (with intermediate directories)
+     */
     nativeCreateDirectory(path: string): Promise<void>;
+    /**
+     * List the current user crontab entries
+     */
     nativeCronJobs(): Promise<string[]>;
+    /**
+     * Get the system currency code (e.g. USD)
+     */
     nativeCurrencyCode(): Promise<NativeCurrencyCodeResponse>;
+    /**
+     * Get current date, time, and timezone in ISO 8601
+     */
     nativeCurrentDatetime(): Promise<NativeCurrentDatetimeResponse>;
+    /**
+     * Get current user session info
+     */
     nativeCurrentUser(): Promise<NativeCurrentUserResponse>;
+    /**
+     * Check if the current user has admin privileges
+     */
     nativeCurrentUserAdmin(): Promise<NativeCurrentUserAdminResponse>;
+    /**
+     * Get the current desktop wallpaper path
+     */
     nativeCurrentWallpaper(): Promise<NativeCurrentWallpaperResponse>;
+    /**
+     * Get the current cursor position
+     */
     nativeCursor(): Promise<NativeCursorResponse>;
+    /**
+     * Get current cursor type and position
+     */
     nativeCursorInfo(): Promise<NativeCursorInfoResponse>;
+    /**
+     * Check if shake mouse to locate cursor is enabled
+     */
     nativeCursorShakeToLocate(): Promise<NativeCursorShakeToLocateResponse>;
+    /**
+     * Check if dark mode is active
+     */
     nativeDarkMode(): Promise<NativeDarkModeResponse>;
+    /**
+     * Get user date format string
+     */
     nativeDateFormat(): Promise<NativeDateFormatResponse>;
+    /**
+     * Get the default application for a UTI
+     */
     nativeDefaultAppForUti(uti: string): Promise<NativeDefaultAppForUtiResponse>;
+    /**
+     * Get the default browser bundle ID
+     */
     nativeDefaultBrowser(): Promise<NativeDefaultBrowserResponse>;
+    /**
+     * Get the default email client bundle ID
+     */
     nativeDefaultEmailClient(): Promise<NativeDefaultEmailClientResponse>;
+    /**
+     * Get the default printer name
+     */
     nativeDefaultPrinter(): Promise<NativeDefaultPrinterResponse>;
+    /**
+     * Delete a file or empty directory
+     */
     nativeDeleteFile(path: string): Promise<void>;
+    /**
+     * Get the user's Desktop directory path
+     */
     nativeDesktopDirectory(): Promise<NativeDesktopDirectoryResponse>;
+    /**
+     * Detect barcodes and QR codes from the screen
+     */
     nativeDetectBarcodes(): Promise<BarcodeResult[]>;
+    /**
+     * Detect barcodes and QR codes from an image file
+     */
     nativeDetectBarcodesFile(path: string): Promise<BarcodeResult[]>;
+    /**
+     * Check if Dictation is enabled
+     */
     nativeDictationEnabled(): Promise<NativeDictationEnabledResponse>;
+    /**
+     * Check if differentiate without color is enabled
+     */
     nativeDifferentiateWithoutColor(): Promise<NativeDifferentiateWithoutColorResponse>;
+    /**
+     * List files and directories at a path
+     * @param includeHidden default false
+     */
     nativeDirectoryContents(path: string, includeHidden?: boolean): Promise<DirectoryEntry[]>;
+    /**
+     * Get disk space for a volume (default: /)
+     * @param path default ""
+     */
     nativeDiskSpace(path?: string): Promise<NativeDiskSpaceResponse>;
+    /**
+     * Get disk usage for a path (like du -sh)
+     */
     nativeDiskUsage(path: string): Promise<NativeDiskUsageResponse>;
+    /**
+     * Dismiss a delivered notification (partial — no-op)
+     */
     nativeDismissNotification(id: string): Promise<void>;
+    /**
+     * Get current display brightness (0.0-1.0)
+     */
     nativeDisplayBrightness(): Promise<void>;
+    /**
+     * Get color profile for each connected display
+     */
     nativeDisplayColorProfiles(): Promise<DisplayColorProfile[]>;
+    /**
+     * Get the number of connected displays
+     */
     nativeDisplayCount(): Promise<NativeDisplayCountResponse>;
+    /**
+     * Check if display mirroring is active
+     */
     nativeDisplayMirroring(): Promise<NativeDisplayMirroringResponse>;
+    /**
+     * Get display refresh rate in Hz
+     * @param displayId wire uint32 · min 0
+     */
     nativeDisplayRefreshRate(displayId: number): Promise<void>;
+    /**
+     * Get rotation for each connected display
+     */
     nativeDisplayRotation(): Promise<DisplayRotation[]>;
+    /**
+     * Get display scale factor
+     * @param displayId wire uint32 · min 0
+     */
     nativeDisplayScaleFactor(displayId: number): Promise<void>;
+    /**
+     * Get primary display serial number
+     */
     nativeDisplaySerialNumber(): Promise<NativeDisplaySerialNumberResponse>;
+    /**
+     * Get display sleep timeout in minutes, for the power source the machine is currently on
+     */
     nativeDisplaySleepTime(): Promise<void>;
+    /**
+     * Get metadata for all connected displays
+     */
     nativeDisplays(): Promise<DisplayMetadata[]>;
+    /**
+     * Get Do Not Disturb / Focus state (via the BranchKit Focus helper shortcut)
+     */
     nativeDnd(): Promise<NativeDndResponse>;
+    /**
+     * List configured DNS server addresses
+     */
     nativeDnsServers(): Promise<string[]>;
+    /**
+     * Check if Dock auto-hide is enabled
+     */
     nativeDockAutoHide(): Promise<NativeDockAutoHideResponse>;
+    /**
+     * Check if Dock magnification is enabled
+     */
     nativeDockMagnification(): Promise<NativeDockMagnificationResponse>;
+    /**
+     * Get Dock minimize animation. Returns one of: genie, scale, suck
+     */
     nativeDockMinimizeEffect(): Promise<NativeDockMinimizeEffectResponse>;
+    /**
+     * Check if windows minimize into app icon
+     */
     nativeDockMinimizeToApp(): Promise<NativeDockMinimizeToAppResponse>;
+    /**
+     * Get the Dock position (left, bottom, right)
+     */
     nativeDockPosition(): Promise<NativeDockPositionResponse>;
+    /**
+     * Check if Dock shows running app indicators
+     */
     nativeDockShowIndicators(): Promise<NativeDockShowIndicatorsResponse>;
+    /**
+     * Check if Dock shows recent apps
+     */
     nativeDockShowRecents(): Promise<NativeDockShowRecentsResponse>;
+    /**
+     * Get the Dock tile size (0-128)
+     */
     nativeDockSize(): Promise<void>;
+    /**
+     * Get the user's Documents directory path
+     */
     nativeDocumentsDirectory(): Promise<NativeDocumentsDirectoryResponse>;
+    /**
+     * Get the user's Downloads directory path
+     */
     nativeDownloadsDirectory(): Promise<NativeDownloadsDirectoryResponse>;
+    /**
+     * Eject a mounted volume by path
+     */
     nativeEjectDisk(mountPoint: string): Promise<void>;
+    /**
+     * Empty the Trash
+     */
     nativeEmptyTrash(): Promise<void>;
+    /**
+     * Read an environment variable
+     */
     nativeEnvVar(name: string): Promise<NativeEnvVarResponse>;
+    /**
+     * Get current Unix epoch time in seconds
+     */
     nativeEpochTime(): Promise<NativeEpochTimeResponse>;
+    /**
+     * Read extended attributes (xattrs) from a file
+     */
     nativeExtendedAttributes(path: string): Promise<void>;
+    /**
+     * List mounted external/removable disks
+     */
     nativeExternalDisks(): Promise<ExternalDisk[]>;
+    /**
+     * Get names of connected external displays
+     */
     nativeExternalDisplayNames(): Promise<string[]>;
+    /**
+     * Get raw SMC fan lines as reported by powermetrics or ioreg — free-form text, NOT JSON, and unavailable unless a fan source can be read
+     */
     nativeFanSpeeds(): Promise<NativeFanSpeedsResponse>;
+    /**
+     * Check if fast user switching is enabled
+     */
     nativeFastUserSwitching(): Promise<NativeFastUserSwitchingResponse>;
+    /**
+     * Get file ACL as string
+     */
     nativeFileAcl(path: string): Promise<void>;
+    /**
+     * Get file creation date as ISO string
+     */
     nativeFileCreationDate(path: string): Promise<void>;
+    /**
+     * Check if a file or directory exists
+     */
     nativeFileExists(path: string): Promise<NativeFileExistsResponse>;
+    /**
+     * List extended attributes on a file
+     */
     nativeFileExtendedAttributes(path: string): Promise<string[]>;
+    /**
+     * Compute SHA-256 hash of a file
+     * @param algorithm default ""
+     */
     nativeFileHash(path: string, algorithm?: string): Promise<NativeFileHashResponse>;
+    /**
+     * Get metadata for a file or directory (size, dates, permissions)
+     */
     nativeFileMetadata(path: string): Promise<NativeFileMetadataResponse>;
+    /**
+     * Get file modification date as ISO string
+     */
     nativeFileModificationDate(path: string): Promise<void>;
+    /**
+     * Get the owner user and group of a file
+     */
     nativeFileOwner(path: string): Promise<NativeFileOwnerResponse>;
+    /**
+     * Check if a file has a quarantine flag
+     */
     nativeFileQuarantine(path: string): Promise<NativeFileQuarantineResponse>;
+    /**
+     * Check if file sharing (SMB) is enabled
+     */
     nativeFileSharingEnabled(): Promise<NativeFileSharingEnabledResponse>;
+    /**
+     * Get file size in bytes
+     */
     nativeFileSize(path: string): Promise<void>;
+    /**
+     * Read or write Finder tags on a file
+     * @param tags default null
+     */
     nativeFileTags(path: string, tags?: string[]): Promise<void>;
+    /**
+     * Get the UTI type of a file
+     */
     nativeFileType(path: string): Promise<NativeFileTypeResponse>;
+    /**
+     * Get the UTI (Uniform Type Identifier) for a file
+     */
     nativeFileUti(path: string): Promise<void>;
+    /**
+     * Check if FileVault disk encryption is enabled
+     */
     nativeFilevaultStatus(): Promise<NativeFilevaultStatusResponse>;
+    /**
+     * Get Finder default view style
+     */
     nativeFinderDefaultView(): Promise<NativeFinderDefaultViewResponse>;
+    /**
+     * Get Finder new window default location
+     */
     nativeFinderNewWindowTarget(): Promise<NativeFinderNewWindowTargetResponse>;
+    /**
+     * Get the currently selected files in Finder
+     */
     nativeFinderSelection(): Promise<string[]>;
+    /**
+     * Check if Finder shows file extensions
+     */
     nativeFinderShowExtensions(): Promise<NativeFinderShowExtensionsResponse>;
+    /**
+     * Check if Finder shows hidden files
+     */
     nativeFinderShowHidden(): Promise<NativeFinderShowHiddenResponse>;
+    /**
+     * Check if Finder shows path bar
+     */
     nativeFinderShowPathBar(): Promise<NativeFinderShowPathBarResponse>;
+    /**
+     * Check if Finder shows status bar
+     */
     nativeFinderShowStatusBar(): Promise<NativeFinderShowStatusBarResponse>;
+    /**
+     * Get the path of the frontmost Finder window
+     */
     nativeFinderWindowPath(): Promise<NativeFinderWindowPathResponse>;
+    /**
+     * Check if macOS firewall is enabled
+     */
     nativeFirewallEnabled(): Promise<NativeFirewallEnabledResponse>;
+    /**
+     * Get the first day of the week (1=Sunday, 2=Monday)
+     */
     nativeFirstDayOfWeek(): Promise<void>;
+    /**
+     * Flush DNS cache
+     */
     nativeFlushDns(): Promise<void>;
+    /**
+     * Get function key default behavior
+     */
     nativeFnKeyFunction(): Promise<NativeFnKeyFunctionResponse>;
+    /**
+     * Get configured Focus modes as the raw `com.apple.ncprefs` preference value — macOS plist text, NOT JSON
+     */
     nativeFocusModes(): Promise<NativeFocusModesResponse>;
+    /**
+     * Get the currently focused UI element (text field, button, etc.)
+     */
     nativeFocusedElement(): Promise<NativeFocusedElementResponse>;
+    /**
+     * Get the currently focused window ID
+     */
     nativeFocusedWindowID(): Promise<NativeFocusedWindowIDResponse>;
+    /**
+     * Check if font smoothing (anti-aliasing) is enabled
+     */
     nativeFontSmoothing(): Promise<NativeFontSmoothingResponse>;
+    /**
+     * Force-quit an app by bundle ID
+     */
     nativeForceQuitApp(bundleId: string): Promise<boolean>;
+    /**
+     * Get the currently active (frontmost) application
+     */
     nativeFrontmostApp(): Promise<NativeFrontmostAppResponse>;
+    /**
+     * Check if full disk access is granted
+     */
     nativeFullDiskAccess(): Promise<NativeFullDiskAccessResponse>;
+    /**
+     * Check if function keys are set to standard behavior (not media)
+     */
     nativeFunctionKeysStandard(): Promise<NativeFunctionKeysStandardResponse>;
+    /**
+     * Check if Gatekeeper is enabled
+     */
     nativeGatekeeperStatus(): Promise<NativeGatekeeperStatusResponse>;
+    /**
+     * Get the default gateway IP address
+     */
     nativeGatewayAddress(): Promise<NativeGatewayAddressResponse>;
+    /**
+     * Generate a PDF from HTML content
+     */
     nativeGeneratePdf(html: string, outputPath: string): Promise<void>;
+    /**
+     * Get detailed info for a single window
+     */
     nativeGetWindowInfo(windowId: string): Promise<NativeGetWindowInfoResponse>;
+    /**
+     * Find files matching a glob pattern
+     * @param maxResults wire uint32 · default 0 · min 0
+     */
     nativeGlobFiles(pattern: string, maxResults?: number): Promise<string[]>;
+    /**
+     * Get GPU name and VRAM info
+     */
     nativeGpuInfo(): Promise<NativeGpuInfoResponse>;
+    /**
+     * Check if grayscale display is enabled
+     */
     nativeGrayscaleEnabled(): Promise<NativeGrayscaleEnabledResponse>;
+    /**
+     * Check if Mission Control groups windows by app
+     */
     nativeGroupWindowsByApp(): Promise<NativeGroupWindowsByAppResponse>;
+    /**
+     * Check if Handoff is enabled
+     */
     nativeHandoffEnabled(): Promise<NativeHandoffEnabledResponse>;
+    /**
+     * Get the hardware model identifier (e.g. Mac14,2)
+     */
     nativeHardwareModel(): Promise<NativeHardwareModelResponse>;
+    /**
+     * Get the hardware UUID
+     */
     nativeHardwareUuid(): Promise<NativeHardwareUuidResponse>;
+    /**
+     * Seize exclusive access to a HID device, suppressing native macOS events
+     * @param deviceId Device ID (e.g. "0x28bd:0x0202:0x48f42695").
+     */
     nativeHidClaim(deviceId: string): Promise<NativeHidClaimResponse>;
+    /**
+     * List all connected non-Apple HID devices
+     */
     nativeHidDevices(): Promise<HidDeviceEntry[]>;
+    /**
+     * Return the parsed HID element tree (buttons, axes, dials) for a connected device
+     * @param deviceId Device ID (e.g. "0x28bd:0x0202:0x48f42695").
+     */
     nativeHidElements(deviceId: string): Promise<HidElementEntry[]>;
+    /**
+     * Release exclusive access to a HID device, restoring native macOS behavior
+     * @param deviceId Device ID (e.g. "0x28bd:0x0202:0x48f42695").
+     */
     nativeHidRelease(deviceId: string): Promise<NativeHidReleaseResponse>;
+    /**
+     * Send an output or feature report to a connected HID device
+     * @param data Raw report bytes to send.
+     *   default []
+     * @param deviceId Device ID (e.g. "0x28bd:0x0202:0x48f42695").
+     * @param reportId HID report ID.
+     *   wire uint32 · min 0
+     * @param reportType Report type: "output" or "feature".
+     */
     nativeHidSendReport(deviceId: string, reportId: number, reportType: string, data?: number[]): Promise<NativeHidSendReportResponse>;
+    /**
+     * Hide an app by bundle ID
+     */
     nativeHideApp(bundleId: string): Promise<void>;
+    /**
+     * Get the system highlight/selection color
+     */
     nativeHighlightColor(): Promise<NativeHighlightColorResponse>;
+    /**
+     * Get the current user's home directory path
+     */
     nativeHomeDirectory(): Promise<NativeHomeDirectoryResponse>;
+    /**
+     * Get the Homebrew installation prefix
+     */
     nativeHomebrewPrefix(): Promise<NativeHomebrewPrefixResponse>;
+    /**
+     * Get the system hostname
+     */
     nativeHostname(): Promise<NativeHostnameResponse>;
+    /**
+     * Resolve a hostname to IP addresses
+     */
     nativeHostnameResolve(hostname: string): Promise<string[]>;
+    /**
+     * Get hot corner actions as JSON string
+     */
     nativeHotCorners(): Promise<NativeHotCornersResponse>;
+    /**
+     * Check if iCloud Desktop & Documents sync is enabled
+     */
     nativeIcloudDesktopSync(): Promise<NativeIcloudDesktopSyncResponse>;
+    /**
+     * Get the local path to iCloud Drive
+     */
     nativeIcloudDrivePath(): Promise<NativeIcloudDrivePathResponse>;
+    /**
+     * Check if the user is signed into iCloud
+     */
     nativeIcloudSignedIn(): Promise<NativeIcloudSignedInResponse>;
+    /**
+     * Check if Increase Contrast is enabled
+     */
     nativeIncreaseContrast(): Promise<NativeIncreaseContrastResponse>;
+    /**
+     * List installed keyboard input sources
+     */
     nativeInputSources(): Promise<InputSource[]>;
+    /**
+     * List all installed applications by scanning the filesystem
+     */
     nativeInstalledApps(): Promise<InstalledApp[]>;
+    /**
+     * Get auto appearance switching setting
+     */
     nativeInterfaceStyleSwitcher(): Promise<NativeInterfaceStyleSwitcherResponse>;
+    /**
+     * Get primary IPv6 address
+     */
     nativeIpv6Address(): Promise<NativeIpv6AddressResponse>;
+    /**
+     * Check if an application is hidden
+     */
     nativeIsAppHidden(bundleId: string): Promise<boolean>;
+    /**
+     * Check if a path is a directory
+     */
     nativeIsDirectory(path: string): Promise<NativeIsDirectoryResponse>;
+    /**
+     * Check if file has hidden flag
+     */
     nativeIsFileHidden(path: string): Promise<NativeIsFileHiddenResponse>;
+    /**
+     * Get the Darwin kernel version string
+     */
     nativeKernelVersion(): Promise<NativeKernelVersionResponse>;
+    /**
+     * Get initial key repeat delay
+     */
     nativeKeyRepeatDelay(): Promise<void>;
+    /**
+     * Get the keyboard repeat rate (keys per second)
+     */
     nativeKeyRepeatRate(): Promise<void>;
+    /**
+     * Get keyboard backlight brightness (0.0-1.0)
+     */
     nativeKeyboardBrightness(): Promise<void>;
+    /**
+     * Get the current keyboard layout and key mappings
+     */
     nativeKeyboardLayout(): Promise<NativeKeyboardLayoutResponse>;
+    /**
+     * Delete a keychain item by service and account
+     */
     nativeKeychainDelete(account: string, service: string): Promise<void>;
+    /**
+     * Read a password from the keychain by service and account
+     */
     nativeKeychainRead(account: string, service: string): Promise<NativeKeychainReadResponse>;
+    /**
+     * Store a password in the keychain for a service and account
+     */
     nativeKeychainWrite(account: string, password: string, service: string): Promise<void>;
+    /**
+     * Send a signal to a process by PID
+     * @param pid wire int32
+     * @param signal wire int32 · default 0
+     */
     nativeKillProcess(pid: number, signal?: number): Promise<void>;
+    /**
+     * Get the last reboot date/time
+     */
     nativeLastReboot(): Promise<NativeLastRebootResponse>;
+    /**
+     * Launch an application by bundle ID
+     * @param newInstance default false
+     */
     nativeLaunchApp(bundleId: string, newInstance?: boolean): Promise<void>;
+    /**
+     * List user launch agents
+     */
     nativeLaunchdAgents(): Promise<string[]>;
+    /**
+     * List system launch daemons
+     */
     nativeLaunchdDaemons(): Promise<string[]>;
+    /**
+     * List available audio input device names
+     */
     nativeListAudioInputDevices(): Promise<string[]>;
+    /**
+     * List available audio output device names
+     */
     nativeListAudioOutputDevices(): Promise<string[]>;
+    /**
+     * List delivered notifications (partial — returns empty)
+     */
     nativeListNotifications(): Promise<DeliveredNotification[]>;
+    /**
+     * List available Shortcuts.app shortcuts
+     */
     nativeListShortcuts(): Promise<ShortcutInfo[]>;
+    /**
+     * List all spaces across all displays
+     */
     nativeListSpaces(): Promise<SpaceInfo[]>;
+    /**
+     * Check if Live Text is enabled
+     */
     nativeLiveTextEnabled(): Promise<NativeLiveTextEnabledResponse>;
+    /**
+     * Get the primary local/LAN IP address
+     */
     nativeLocalIP(): Promise<NativeLocalIPResponse>;
+    /**
+     * Get current system locale identifier
+     */
     nativeLocale(): Promise<NativeLocaleResponse>;
+    /**
+     * Check if Location Services is enabled
+     */
     nativeLocationEnabled(): Promise<NativeLocationEnabledResponse>;
+    /**
+     * Log out current user
+     */
     nativeLogOut(): Promise<void>;
+    /**
+     * List currently logged-in users
+     */
     nativeLoggedInUsers(): Promise<string[]>;
+    /**
+     * List login items (launch-at-login entries)
+     */
     nativeLoginItems(): Promise<LoginItem[]>;
+    /**
+     * List modern login items (SMAppService)
+     */
     nativeLoginItemsModern(): Promise<string[]>;
+    /**
+     * Check if Low Power Mode is enabled
+     */
     nativeLowPowerMode(): Promise<NativeLowPowerModeResponse>;
+    /**
+     * Get primary network interface MAC address
+     */
     nativeMacAddress(): Promise<NativeMacAddressResponse>;
+    /**
+     * Maximize window to fill screen
+     */
     nativeMaximizeWindow(windowId: string): Promise<void>;
+    /**
+     * Get the measurement system. Returns one of: metric, us
+     */
     nativeMeasurementSystem(): Promise<NativeMeasurementSystemResponse>;
+    /**
+     * Skip to next track in the current media player
+     */
     nativeMediaNextTrack(): Promise<void>;
+    /**
+     * Toggle play/pause for the current media player
+     */
     nativeMediaPlayPause(): Promise<void>;
+    /**
+     * Skip to previous track in the current media player
+     */
     nativeMediaPreviousTrack(): Promise<void>;
+    /**
+     * Get total and available system memory
+     */
     nativeMemoryInfo(): Promise<NativeMemoryInfoResponse>;
+    /**
+     * Get memory pressure level. Unavailable when `memory_pressure -Q` names no level, which is the stock macOS 15 case — it reports only a free-percentage summary. Returns one of: nominal, warn, critical
+     */
     nativeMemoryPressure(): Promise<NativeMemoryPressureResponse>;
+    /**
+     * Read the menu bar structure of an application by PID
+     * @param pid wire int32
+     */
     nativeMenuBar(pid: number): Promise<MenuItem[]>;
+    /**
+     * Check if menu bar auto-hide is enabled
+     */
     nativeMenuBarAutoHide(): Promise<NativeMenuBarAutoHideResponse>;
+    /**
+     * Check if battery percentage is shown in menu bar
+     */
     nativeMenuBarBatteryPercent(): Promise<NativeMenuBarBatteryPercentResponse>;
+    /**
+     * Get menu bar clock format string
+     */
     nativeMenuBarClockFormat(): Promise<NativeMenuBarClockFormatResponse>;
+    /**
+     * Check if microphone access is available
+     */
     nativeMicrophonePermission(): Promise<NativeMicrophonePermissionResponse>;
+    /**
+     * Minimize a window by ID
+     */
     nativeMinimizeWindow(windowId: string): Promise<void>;
+    /**
+     * Get the hardware model name (e.g. MacBook Pro 14-inch 2023)
+     */
     nativeModelName(): Promise<NativeModelNameResponse>;
+    /**
+     * List mounted volumes
+     */
     nativeMountPoints(): Promise<string[]>;
+    /**
+     * Click a specific mouse button (middle, button4, etc.)
+     * @param button wire uint32 · min 0
+     * @param x wire int32 · default null
+     * @param y wire int32 · default null
+     */
     nativeMouseButtonClick(button: number, x?: number, y?: number): Promise<void>;
+    /**
+     * Get the mouse tracking speed (0.0-3.0)
+     */
     nativeMouseSpeed(): Promise<void>;
+    /**
+     * Move or rename a file or directory
+     */
     nativeMoveFile(destination: string, source: string): Promise<void>;
+    /**
+     * Move a window to a different display
+     * @param displayId wire uint32 · min 0
+     */
     nativeMoveWindowToDisplay(displayId: number, windowId: string): Promise<void>;
+    /**
+     * DEPRECATED, silent no-op on modern macOS: the private CGS move APIs this calls are dead (verified on Sequoia 2026-07-25) — the window does not move and the call still reports true. Kept for older systems. For a working move, drive the visible path the bundled windows plugin uses: mouse-hold the title bar + Ctrl+N. space_id here is an opaque CGS space id from native.list_spaces, NOT the 1-based ordinal that native.switch_space takes
+     * @param spaceId wire uint64 (64-bit) · min 0
+     */
     nativeMoveWindowToSpace(spaceId: number, windowId: string): Promise<boolean>;
+    /**
+     * Set mute state on default output device
+     */
     nativeMute(muted: boolean): Promise<void>;
+    /**
+     * Get network link speed
+     */
     nativeNetworkBandwidth(): Promise<NativeNetworkBandwidthResponse>;
+    /**
+     * Get DNS search domain
+     */
     nativeNetworkDnsDomain(): Promise<NativeNetworkDnsDomainResponse>;
+    /**
+     * List network interfaces with IP addresses
+     */
     nativeNetworkInterfaces(): Promise<NetworkInterface[]>;
+    /**
+     * Check if any network proxy is configured
+     */
     nativeNetworkProxyEnabled(): Promise<NativeNetworkProxyEnabledResponse>;
+    /**
+     * Run a quick network quality test (upload/download Mbps)
+     */
     nativeNetworkQuality(): Promise<NativeNetworkQualityResponse>;
+    /**
+     * Check if a host is reachable via network
+     */
     nativeNetworkReachable(host: string): Promise<NativeNetworkReachableResponse>;
+    /**
+     * Get Wi-Fi signal strength in dBm
+     */
     nativeNetworkSignalStrength(): Promise<void>;
+    /**
+     * Get currently connected Wi-Fi SSID
+     */
     nativeNetworkSsid(): Promise<NativeNetworkSsidResponse>;
+    /**
+     * Open a new window of an app on the current Space, without switching to an existing window on another Space
+     */
     nativeNewAppWindow(bundleId: string): Promise<void>;
+    /**
+     * Check if Night Shift is currently enabled
+     */
     nativeNightShift(): Promise<NativeNightShiftResponse>;
+    /**
+     * Check if notification sounds are enabled
+     */
     nativeNotificationSoundEnabled(): Promise<NativeNotificationSoundEnabledResponse>;
+    /**
+     * Post a rich notification (osascript fallback)
+     * @param body default null
+     * @param sound default null
+     * @param subtitle default null
+     */
     nativeNotify(title: string, body?: string, sound?: string, subtitle?: string): Promise<NativeNotifyResponse>;
+    /**
+     * Get currently playing media info (title, artist, album, app)
+     */
     nativeNowPlaying(): Promise<NativeNowPlayingResponse>;
+    /**
+     * Get decimal separator character
+     */
     nativeNumberFormatDecimal(): Promise<NativeNumberFormatDecimalResponse>;
+    /**
+     * Start observing window events for a PID (STUB -- not yet implemented)
+     * @param pid wire int32
+     */
     nativeObserveWindows(pid: number): Promise<NativeObserveWindowsResponse>;
+    /**
+     * OCR text from the clipboard image
+     */
     nativeOcrClipboard(): Promise<OcrRegion[]>;
+    /**
+     * OCR text from an image file path
+     */
     nativeOcrFile(path: string): Promise<OcrRegion[]>;
+    /**
+     * OCR text from the current screen
+     */
     nativeOcrScreen(): Promise<OcrRegion[]>;
+    /**
+     * OCR text from a screen region (x, y, width, height)
+     * @param height wire double
+     * @param width wire double
+     * @param x wire double
+     * @param y wire double
+     */
     nativeOcrScreenRegion(height: number, width: number, x: number, y: number): Promise<OcrRegion[]>;
+    /**
+     * OCR text from a specific window by ID
+     * @param windowId wire uint32 · min 0
+     */
     nativeOcrWindow(windowId: number): Promise<OcrRegion[]>;
+    /**
+     * Open an app's preferences window
+     */
     nativeOpenAppSettings(bundleId: string): Promise<void>;
+    /**
+     * Open a Finder window at a specific path
+     */
     nativeOpenFinderWindow(path: string): Promise<void>;
+    /**
+     * Open System Settings to a specific pane (e.g. 'Privacy_Accessibility')
+     * @param pane default null
+     */
     nativeOpenSystemSettings(pane?: string): Promise<void>;
+    /**
+     * Open a URL or file path with the default handler
+     */
     nativeOpenTarget(target: string): Promise<void>;
+    /**
+     * Open a URL in the default handler
+     */
     nativeOpenURL(url: string): Promise<void>;
+    /**
+     * Open a URL or path with a specific application
+     */
     nativeOpenWithApp(bundleId: string, target: string): Promise<void>;
+    /**
+     * Check if optimized battery charging is enabled
+     */
     nativeOptimizedCharging(): Promise<NativeOptimizedChargingResponse>;
+    /**
+     * Extract text from a PDF file
+     * @param page wire uint64 (64-bit) · default 0 · min 0
+     */
     nativePdfExtractText(path: string, page?: number): Promise<void>;
+    /**
+     * Get the page count of a PDF file
+     */
     nativePdfPageCount(path: string): Promise<void>;
+    /**
+     * Pin or unpin a window above all others
+     */
     nativePinWindowAbove(pinned: boolean, windowId: string): Promise<void>;
+    /**
+     * Check if pinch-to-zoom gesture is enabled
+     */
     nativePinchToZoom(): Promise<NativePinchToZoomResponse>;
+    /**
+     * Ping a host and return latency in milliseconds
+     */
     nativePing(host: string): Promise<void>;
+    /**
+     * Check if volume change feedback sound is enabled
+     */
     nativePlayFeedbackWhenVolumeChanged(): Promise<NativePlayFeedbackWhenVolumeChangedResponse>;
+    /**
+     * Play a named system sound
+     */
     nativePlaySound(name: string): Promise<void>;
+    /**
+     * Request burst-mode world model polling (200ms intervals)
+     */
     nativePollBurst(): Promise<void>;
+    /**
+     * Check if power adapter is connected
+     */
     nativePowerAdapterConnected(): Promise<NativePowerAdapterConnectedResponse>;
+    /**
+     * Get current power source type. Returns one of: AC, Battery, UPS, Unknown
+     */
     nativePowerSource(): Promise<NativePowerSourceResponse>;
+    /**
+     * Check if press-and-hold for accented characters is enabled
+     */
     nativePressAndHoldEnabled(): Promise<NativePressAndHoldEnabledResponse>;
+    /**
+     * Assert or release sleep prevention
+     * @param assertionId default null
+     * @param reason default "BranchKit plugin"
+     */
     nativePreventSleep(assertionId?: string, reason?: string): Promise<NativePreventSleepResponse>;
+    /**
+     * Get metadata for the primary display
+     */
     nativePrimaryDisplay(): Promise<NativePrimaryDisplayResponse>;
+    /**
+     * Get primary display ID
+     */
     nativePrimaryDisplayID(): Promise<NativePrimaryDisplayIDResponse>;
+    /**
+     * Check if printer sharing is enabled
+     */
     nativePrinterSharingEnabled(): Promise<NativePrinterSharingEnabledResponse>;
+    /**
+     * List available printers
+     */
     nativePrinters(): Promise<PrinterInfo[]>;
+    /**
+     * Get total number of running processes
+     */
     nativeProcessCount(): Promise<NativeProcessCountResponse>;
+    /**
+     * Get CPU usage for process by PID
+     * @param pid wire int32
+     */
     nativeProcessCpuUsage(pid: number): Promise<void>;
+    /**
+     * Check if a process with given PID exists
+     * @param pid wire int32
+     */
     nativeProcessExists(pid: number): Promise<NativeProcessExistsResponse>;
+    /**
+     * Get info about a process by PID (name, cpu, memory, path)
+     * @param pid wire int32
+     */
     nativeProcessInfo(pid: number): Promise<NativeProcessInfoResponse>;
+    /**
+     * List all running processes with PID, name, and user
+     */
     nativeProcessList(): Promise<ProcessInfo[]>;
+    /**
+     * Get memory usage in bytes for process by PID
+     * @param pid wire int32
+     */
     nativeProcessMemoryUsage(pid: number): Promise<void>;
+    /**
+     * Get process name by PID
+     * @param pid wire int32
+     */
     nativeProcessName(pid: number): Promise<void>;
+    /**
+     * Get parent PID of a process
+     * @param pid wire int32
+     */
     nativeProcessParentPid(pid: number): Promise<void>;
+    /**
+     * Get the executable path for a PID
+     * @param pid wire int32
+     */
     nativeProcessPath(pid: number): Promise<void>;
+    /**
+     * Get process start time as ISO string
+     * @param pid wire int32
+     */
     nativeProcessStartTime(pid: number): Promise<void>;
+    /**
+     * Get system proxy configuration
+     */
     nativeProxySettings(): Promise<NativeProxySettingsResponse>;
+    /**
+     * Get the external/public IP address via a DNS lookup (no HTTP)
+     */
     nativePublicIP(): Promise<NativePublicIPResponse>;
+    /**
+     * Purge inactive memory
+     */
     nativePurgeMemory(): Promise<void>;
+    /**
+     * Get purgeable disk space in bytes
+     */
     nativePurgeableSpace(): Promise<void>;
+    /**
+     * Generate Quick Look thumbnail as PNG (base64)
+     * @param size wire uint32 · default 512 · min 0
+     */
     nativeQuickLook(path: string, size?: number): Promise<NativeQuickLookResponse>;
+    /**
+     * Gracefully quit an app by bundle ID
+     */
     nativeQuitApp(bundleId: string): Promise<boolean>;
+    /**
+     * Raise a window to the front
+     */
     nativeRaiseWindow(windowId: string): Promise<void>;
+    /**
+     * Generate a random UUID v4
+     */
     nativeRandomUuid(): Promise<NativeRandomUuidResponse>;
+    /**
+     * Read a preference value for an app domain
+     */
     nativeReadAppPreference(domain: string, key: string): Promise<void>;
+    /**
+     * Read file contents as UTF-8 string
+     */
     nativeReadFile(path: string): Promise<NativeReadFileResponse>;
+    /**
+     * Read a file as base64-encoded binary
+     * @param maxBytes wire uint64 (64-bit) · default null · min 0
+     */
     nativeReadFileBinary(path: string, maxBytes?: number): Promise<NativeReadFileBinaryResponse>;
+    /**
+     * Read a property list file as JSON
+     */
     nativeReadPlist(path: string): Promise<void>;
+    /**
+     * Get recent documents for an app (by bundle ID)
+     */
     nativeRecentDocuments(bundleId: string): Promise<string[]>;
+    /**
+     * Check if Reduce Motion is enabled
+     */
     nativeReduceMotion(): Promise<NativeReduceMotionResponse>;
+    /**
+     * Check if Reduce Transparency is enabled
+     */
     nativeReduceTransparency(): Promise<NativeReduceTransparencyResponse>;
+    /**
+     * Get incomplete reminders
+     */
     nativeRemindersIncomplete(): Promise<ReminderItem[]>;
+    /**
+     * Check if Remote Login (SSH) is enabled
+     */
     nativeRemoteLoginEnabled(): Promise<NativeRemoteLoginEnabledResponse>;
+    /**
+     * Rename a file or directory (same parent, new name)
+     */
     nativeRenameFile(newName: string, path: string): Promise<void>;
+    /**
+     * Request screen capture permission (shows system dialog)
+     */
     nativeRequestScreenCapture(): Promise<NativeRequestScreenCaptureResponse>;
+    /**
+     * Get CPU and memory usage snapshot
+     */
     nativeResourceUsage(): Promise<NativeResourceUsageResponse>;
+    /**
+     * Quit and relaunch an app by bundle ID
+     */
     nativeRestartApp(bundleId: string): Promise<void>;
+    /**
+     * Reveal file in Finder
+     */
     nativeRevealInFinder(path: string): Promise<void>;
+    /**
+     * Check if Rosetta 2 is installed (Apple Silicon)
+     */
     nativeRosettaInstalled(): Promise<NativeRosettaInstalledResponse>;
+    /**
+     * Execute an AppleScript via osascript
+     * @param script AppleScript source to execute via `osascript`.
+     */
     nativeRunApplescript(script: string): Promise<NativeRunApplescriptResponse>;
+    /**
+     * Run JavaScript for Automation (JXA) code
+     */
     nativeRunJxa(script: string): Promise<NativeRunJxaResponse>;
+    /**
+     * Run a Shortcuts.app shortcut by name
+     * @param input default null
+     */
     nativeRunShortcut(name: string, input?: string): Promise<NativeRunShortcutResponse>;
+    /**
+     * List all running applications
+     */
     nativeRunningApps(): Promise<RunningApp[]>;
+    /**
+     * Check screen capture permission status (Sonoma 14+)
+     */
     nativeScreenCapturePermission(): Promise<NativeScreenCapturePermissionResponse>;
+    /**
+     * Get number of connected displays
+     */
     nativeScreenCount(): Promise<NativeScreenCountResponse>;
+    /**
+     * Lock the screen
+     */
     nativeScreenLock(): Promise<void>;
+    /**
+     * Check if screen is currently locked
+     */
     nativeScreenLocked(): Promise<NativeScreenLockedResponse>;
+    /**
+     * Get primary display resolution as 'WxH'
+     */
     nativeScreenResolution(): Promise<NativeScreenResolutionResponse>;
+    /**
+     * Check if password required after screen saver
+     */
     nativeScreenSaverAskPassword(): Promise<NativeScreenSaverAskPasswordResponse>;
+    /**
+     * Get delay before password required after screen saver
+     */
     nativeScreenSaverDelay(): Promise<void>;
+    /**
+     * Start the screen saver
+     */
     nativeScreenSaverStart(): Promise<void>;
+    /**
+     * Check if the screen saver is currently active
+     */
     nativeScreenSaverStatus(): Promise<NativeScreenSaverStatusResponse>;
+    /**
+     * Check if screen sharing is enabled
+     */
     nativeScreenSharingEnabled(): Promise<NativeScreenSharingEnabledResponse>;
+    /**
+     * Capture a screenshot as base64-encoded PNG
+     * @param displayId wire uint32 · default null · min 0
+     * @param windowId default null
+     */
     nativeScreenshot(displayId?: number, region?: ScreenshotRegion, windowId?: string): Promise<NativeScreenshotResponse>;
+    /**
+     * Get screenshot file format
+     */
     nativeScreenshotFormat(): Promise<NativeScreenshotFormatResponse>;
+    /**
+     * Check if screenshots include window shadow
+     */
     nativeScreenshotIncludeShadow(): Promise<NativeScreenshotIncludeShadowResponse>;
+    /**
+     * Get the configured screenshot save location
+     */
     nativeScreenshotLocation(): Promise<NativeScreenshotLocationResponse>;
+    /**
+     * Check if screenshot thumbnail is shown
+     */
     nativeScreenshotShowThumbnail(): Promise<NativeScreenshotShowThumbnailResponse>;
+    /**
+     * Check if natural (inverted) scroll direction is enabled
+     */
     nativeScrollDirection(): Promise<NativeScrollDirectionResponse>;
+    /**
+     * Check if scroll direction is natural
+     */
     nativeScrollDirectionNatural(): Promise<NativeScrollDirectionNaturalResponse>;
+    /**
+     * Search contacts by name
+     */
     nativeSearchContacts(query: string): Promise<ContactInfo[]>;
+    /**
+     * Check if Secure Input is currently enabled (blocks key events)
+     */
     nativeSecureInputEnabled(): Promise<NativeSecureInputEnabledResponse>;
+    /**
+     * Get Finder selection
+     */
     nativeSelectedFinderItems(): Promise<string[]>;
+    /**
+     * Get the currently selected text from the frontmost app
+     */
     nativeSelectedText(): Promise<NativeSelectedTextResponse>;
+    /**
+     * Get the hardware serial number
+     */
     nativeSerialNumber(): Promise<NativeSerialNumberResponse>;
+    /**
+     * Turn Wi-Fi (AirPort) on or off
+     */
     nativeSetAirportPower(on: boolean): Promise<void>;
+    /**
+     * Hide or unhide an app
+     */
     nativeSetAppHidden(bundleId: string, hidden: boolean): Promise<void>;
+    /**
+     * Set the default audio input or output device
+     * @param deviceType "input" or "output".
+     */
     nativeSetAudioDevice(deviceType: string, uid: string): Promise<void>;
+    /**
+     * Set volume for a specific audio device by UID
+     * @param volume wire double
+     */
     nativeSetAudioDeviceVolume(deviceUid: string, volume: number): Promise<void>;
+    /**
+     * Set active audio input device by name
+     */
     nativeSetAudioInputDevice(name: string): Promise<void>;
+    /**
+     * Set active audio output device by name
+     */
     nativeSetAudioOutputDevice(name: string): Promise<void>;
+    /**
+     * Enable or disable auto-rearrange Spaces
+     */
     nativeSetAutoRearrangeSpaces(enabled: boolean): Promise<void>;
+    /**
+     * Turn Bluetooth on or off
+     */
     nativeSetBluetoothPower(on: boolean): Promise<void>;
+    /**
+     * Set display brightness (0.0-1.0)
+     * @param brightness wire double
+     * @param displayId wire uint32 · default null · min 0
+     */
     nativeSetBrightness(brightness: number, displayId?: number): Promise<void>;
+    /**
+     * Set the computer name
+     */
     nativeSetComputerName(name: string): Promise<void>;
+    /**
+     * Set dark or light mode
+     */
     nativeSetDarkMode(dark: boolean): Promise<void>;
+    /**
+     * Set Do Not Disturb on or off (idempotent; via the BranchKit Focus helper shortcut)
+     */
     nativeSetDnd(enabled: boolean): Promise<void>;
+    /**
+     * Enable or disable Dock auto-hide
+     */
     nativeSetDockAutoHide(enabled: boolean): Promise<void>;
+    /**
+     * Enable or disable Dock magnification
+     */
     nativeSetDockMagnification(enabled: boolean): Promise<void>;
+    /**
+     * Set Dock minimize animation (genie/scale)
+     */
     nativeSetDockMinimizeEffect(effect: string): Promise<void>;
+    /**
+     * Set the Dock position (left, bottom, right)
+     */
     nativeSetDockPosition(position: string): Promise<void>;
+    /**
+     * Show or hide recent apps in Dock
+     */
     nativeSetDockShowRecents(enabled: boolean): Promise<void>;
+    /**
+     * Set Dock tile size
+     * @param size wire double
+     */
     nativeSetDockSize(size: number): Promise<void>;
+    /**
+     * Set an extended attribute on a file
+     */
     nativeSetExtendedAttribute(name: string, path: string, value: string): Promise<void>;
+    /**
+     * Set file hidden flag
+     */
     nativeSetFileHidden(hidden: boolean, path: string): Promise<void>;
+    /**
+     * Set file permissions (chmod octal mode)
+     */
     nativeSetFilePermissions(mode: string, path: string): Promise<void>;
+    /**
+     * Show or hide file extensions in Finder
+     */
     nativeSetFinderShowExtensions(enabled: boolean): Promise<void>;
+    /**
+     * Show or hide hidden files in Finder
+     */
     nativeSetFinderShowHidden(enabled: boolean): Promise<void>;
+    /**
+     * Set system highlight/accent color
+     */
     nativeSetHighlightColor(color: string): Promise<void>;
+    /**
+     * Set a hot corner action
+     * @param action wire uint32 · min 0
+     */
     nativeSetHotCorner(action: number, corner: string): Promise<void>;
+    /**
+     * Switch to a keyboard input source by ID
+     */
     nativeSetInputSource(sourceId: string): Promise<void>;
+    /**
+     * Set initial key repeat delay
+     * @param delay wire double
+     */
     nativeSetKeyRepeatDelay(delay: number): Promise<void>;
+    /**
+     * Set key repeat rate
+     * @param rate wire double
+     */
     nativeSetKeyRepeatRate(rate: number): Promise<void>;
+    /**
+     * Enable or disable menu bar auto-hide
+     */
     nativeSetMenuBarAutoHide(enabled: boolean): Promise<void>;
+    /**
+     * Set mouse tracking speed
+     * @param speed wire double
+     */
     nativeSetMouseSpeed(speed: number): Promise<void>;
+    /**
+     * Enable or disable Night Shift
+     */
     nativeSetNightShift(enabled: boolean): Promise<void>;
+    /**
+     * Set screenshot file format (png/jpg/pdf/tiff)
+     */
     nativeSetScreenshotFormat(format: string): Promise<void>;
+    /**
+     * Enable or disable window shadow in screenshots
+     */
     nativeSetScreenshotIncludeShadow(enabled: boolean): Promise<void>;
+    /**
+     * Set the screenshot save location
+     */
     nativeSetScreenshotLocation(path: string): Promise<void>;
+    /**
+     * Set natural scroll direction
+     */
     nativeSetScrollDirectionNatural(enabled: boolean): Promise<void>;
+    /**
+     * Set sidebar icon size (1=small,2=medium,3=large)
+     * @param size wire uint32 · min 0
+     */
     nativeSetSidebarIconSize(size: number): Promise<void>;
+    /**
+     * Enable or disable Stage Manager
+     */
     nativeSetStageManager(enabled: boolean): Promise<void>;
+    /**
+     * Enable or disable tap-to-click
+     */
     nativeSetTapToClick(enabled: boolean): Promise<void>;
+    /**
+     * Set trackpad tracking speed
+     * @param speed wire double
+     */
     nativeSetTrackpadSpeed(speed: number): Promise<void>;
+    /**
+     * Register an application as the handler for a URL scheme
+     */
     nativeSetURLSchemeHandler(bundleId: string, scheme: string): Promise<void>;
+    /**
+     * Set system volume (0.0–1.0)
+     * @param volume wire double
+     */
     nativeSetVolume(volume: number): Promise<void>;
+    /**
+     * Set the desktop wallpaper to an image file
+     */
     nativeSetWallpaper(path: string): Promise<void>;
+    /**
+     * Set window transparency
+     * @param alpha wire double
+     */
     nativeSetWindowAlpha(alpha: number, windowId: string): Promise<void>;
+    /**
+     * Set a window's level (floating, normal, below)
+     */
     nativeSetWindowLevel(level: string, windowId: string): Promise<boolean>;
+    /**
+     * Move a window to x,y without changing size
+     * @param x wire int32
+     * @param y wire int32
+     */
     nativeSetWindowPosition(windowId: string, x: number, y: number): Promise<void>;
+    /**
+     * Enable or disable the drop shadow for a window
+     */
     nativeSetWindowShadow(enabled: boolean, windowId: string): Promise<void>;
+    /**
+     * Resize a window without changing position
+     * @param h wire int32
+     * @param w wire int32
+     */
     nativeSetWindowSize(h: number, w: number, windowId: string): Promise<void>;
+    /**
+     * Set a window to appear on all spaces (sticky)
+     */
     nativeSetWindowSticky(sticky: boolean, windowId: string): Promise<void>;
+    /**
+     * Get the local network sharing name
+     */
     nativeSharingName(): Promise<NativeSharingNameResponse>;
+    /**
+     * Get scroll bar visibility setting
+     */
     nativeShowScrollBars(): Promise<NativeShowScrollBarsResponse>;
+    /**
+     * Get sidebar icon size. Returns one of: small, medium, large
+     */
     nativeSidebarIconSize(): Promise<NativeSidebarIconSizeResponse>;
+    /**
+     * Check if System Integrity Protection is enabled
+     */
     nativeSipStatus(): Promise<NativeSipStatusResponse>;
+    /**
+     * Check if Siri is enabled
+     */
     nativeSiriEnabled(): Promise<NativeSiriEnabledResponse>;
+    /**
+     * Put the system to sleep immediately
+     */
     nativeSleepNow(): Promise<void>;
+    /**
+     * Check if Slow Keys is enabled
+     */
     nativeSlowKeys(): Promise<NativeSlowKeysResponse>;
+    /**
+     * Check if smart quotes are enabled
+     */
     nativeSmartQuotesEnabled(): Promise<NativeSmartQuotesEnabledResponse>;
+    /**
+     * Check if smart zoom (double-tap) is enabled
+     */
     nativeSmartZoom(): Promise<NativeSmartZoomResponse>;
+    /**
+     * Check if UI sound effects are enabled
+     */
     nativeSoundEffectsEnabled(): Promise<NativeSoundEffectsEnabledResponse>;
+    /**
+     * Check if Spaces span displays independently
+     */
     nativeSpacesSpanDisplays(): Promise<NativeSpacesSpanDisplaysResponse>;
+    /**
+     * Speak text using the system text-to-speech engine
+     * @param rate wire double · default null
+     * @param voice default null
+     */
     nativeSpeak(text: string, rate?: number, voice?: string): Promise<void>;
+    /**
+     * List available speech recognition locales
+     */
     nativeSpeechLocales(): Promise<SpeechLocale[]>;
+    /**
+     * Check if on-device speech recognition is available
+     */
     nativeSpeechRecognitionAvailable(): Promise<NativeSpeechRecognitionAvailableResponse>;
+    /**
+     * Recognize speech from an audio file (returns transcript)
+     * @param locale default ""
+     */
     nativeSpeechRecognizeFile(path: string, locale?: string): Promise<void>;
+    /**
+     * Get current spelling language
+     */
     nativeSpellingLanguage(): Promise<NativeSpellingLanguageResponse>;
+    /**
+     * Search files via Spotlight
+     * @param limit wire uint32 · default 20 · min 0
+     * @param scope default null
+     */
     nativeSpotlight(query: string, limit?: number, scope?: string[]): Promise<SpotlightResult[]>;
+    /**
+     * Check if Stage Manager is enabled
+     */
     nativeStageManagerEnabled(): Promise<NativeStageManagerEnabledResponse>;
+    /**
+     * Get the boot volume name and path
+     */
     nativeStartupDisk(): Promise<NativeStartupDiskResponse>;
+    /**
+     * Check if startup sound is enabled
+     */
     nativeStartupSoundEnabled(): Promise<NativeStartupSoundEnabledResponse>;
+    /**
+     * Whether a visible status-indicator surface (tray/status item) exists that can show recording state
+     */
     nativeStatusIndicator(): Promise<NativeStatusIndicatorResponse>;
+    /**
+     * Check if Sticky Keys is enabled
+     */
     nativeStickyKeys(): Promise<NativeStickyKeysResponse>;
+    /**
+     * Check if swipe between pages gesture is enabled
+     */
     nativeSwipeBetweenPages(): Promise<NativeSwipeBetweenPagesResponse>;
+    /**
+     * Switch to a Mission Control desktop by number (1-16) via the user's Switch-to-Desktop symbolic hotkey (respects remaps, auto-enables disabled shortcuts; falls back to default Ctrl+N)
+     * @param spaceId wire uint64 (64-bit) · min 0
+     */
     nativeSwitchSpace(spaceId: number): Promise<void>;
+    /**
+     * Check if switching to app switches to its Space
+     */
     nativeSwitchSpaceWhenSwitchingApp(): Promise<NativeSwitchSpaceWhenSwitchingAppResponse>;
+    /**
+     * Create a symbolic link
+     */
     nativeSymlink(link: string, source: string): Promise<void>;
+    /**
+     * Get system appearance info (accent color, highlight color, reduce motion, reduce transparency)
+     */
     nativeSystemAppearance(): Promise<NativeSystemAppearanceResponse>;
+    /**
+     * Get system identity (macOS version, model, serial)
+     */
     nativeSystemInfo(): Promise<NativeSystemInfoResponse>;
+    /**
+     * Get SIP and security policy details
+     */
     nativeSystemIntegrityInfo(): Promise<NativeSystemIntegrityInfoResponse>;
+    /**
+     * Get the system language code (e.g. en)
+     */
     nativeSystemLanguage(): Promise<NativeSystemLanguageResponse>;
+    /**
+     * Get the system region code (e.g. US)
+     */
     nativeSystemRegion(): Promise<NativeSystemRegionResponse>;
+    /**
+     * List available system alert sounds
+     */
     nativeSystemSounds(): Promise<string[]>;
+    /**
+     * Get system uptime
+     */
     nativeSystemUptime(): Promise<NativeSystemUptimeResponse>;
+    /**
+     * Get system uptime in seconds
+     */
     nativeSystemUptimeSeconds(): Promise<NativeSystemUptimeSecondsResponse>;
+    /**
+     * Check if tap-to-click is enabled on trackpad
+     */
     nativeTapToClick(): Promise<NativeTapToClickResponse>;
+    /**
+     * Get the system temporary directory path
+     */
     nativeTempDirectory(): Promise<NativeTempDirectoryResponse>;
+    /**
+     * Get temperature unit preference
+     */
     nativeTemperatureUnit(): Promise<NativeTemperatureUnitResponse>;
+    /**
+     * Get user text replacements as the raw `NSUserDictionaryReplacementItems` preference value — macOS plist text, NOT JSON
+     */
     nativeTextReplacements(): Promise<NativeTextReplacementsResponse>;
+    /**
+     * Get coarse CPU throttling state from `pmset -g therm`. NOT ProcessInfo.thermalState — for the four-level nominal/fair/serious/critical reading, subscribe to _platform.thermal.changed. Returns one of: nominal, throttled
+     */
     nativeThermalState(): Promise<NativeThermalStateResponse>;
+    /**
+     * Check if three-finger drag is enabled
+     */
     nativeThreeFingerDrag(): Promise<NativeThreeFingerDragResponse>;
+    /**
+     * List connected Thunderbolt devices
+     */
     nativeThunderboltDevices(): Promise<NativeThunderboltDevicesResponse>;
+    /**
+     * Get user time format string
+     */
     nativeTimeFormat(): Promise<NativeTimeFormatResponse>;
+    /**
+     * Get the last Time Machine backup date
+     */
     nativeTimeMachineLastBackup(): Promise<NativeTimeMachineLastBackupResponse>;
+    /**
+     * Check if Time Machine is enabled and get destination
+     */
     nativeTimeMachineStatus(): Promise<NativeTimeMachineStatusResponse>;
+    /**
+     * Get time on battery in minutes since last unplug
+     */
     nativeTimeOnBattery(): Promise<void>;
+    /**
+     * Get current system timezone identifier
+     */
     nativeTimezone(): Promise<NativeTimezoneResponse>;
+    /**
+     * Toggle Bluetooth on/off
+     */
     nativeToggleBluetooth(enabled: boolean): Promise<void>;
+    /**
+     * Toggle native fullscreen for a window
+     */
     nativeToggleFullscreen(windowId: string): Promise<void>;
+    /**
+     * Toggle Wi-Fi on/off
+     */
     nativeToggleWifi(enabled: boolean): Promise<void>;
+    /**
+     * Check if Touch ID / biometric auth hardware is available
+     */
     nativeTouchIDAvailable(): Promise<NativeTouchIDAvailableResponse>;
+    /**
+     * Get the trackpad tracking speed (0.0-3.0)
+     */
     nativeTrackpadSpeed(): Promise<void>;
+    /**
+     * Check TCC consent status for a service (e.g. kTCCServiceAccessibility)
+     */
     nativeTransparencyConsent(service: string): Promise<void>;
+    /**
+     * Move file to Trash
+     */
     nativeTrash(path: string): Promise<boolean>;
+    /**
+     * Check if True Tone is enabled. KNOWN LIMITATION: the `corebrightnessdiag` probe this depends on is absent from macOS 15, where this always reports false
+     */
     nativeTrueTone(): Promise<NativeTrueToneResponse>;
+    /**
+     * List available text-to-speech voices
+     */
     nativeTtsVoices(): Promise<TtsVoice[]>;
+    /**
+     * Check if 24-hour clock is enabled
+     */
     nativeTwentyFourHourClock(): Promise<NativeTwentyFourHourClockResponse>;
+    /**
+     * Unhide a hidden application
+     */
     nativeUnhideApp(bundleId: string): Promise<void>;
+    /**
+     * Restore a minimized window by ID
+     */
     nativeUnminimizeWindow(windowId: string): Promise<void>;
+    /**
+     * Stop observing window events (STUB)
+     */
     nativeUnobserveWindows(subscriptionId: string): Promise<boolean>;
+    /**
+     * Extract a zip archive to a directory
+     */
     nativeUnzip(destination: string, source: string): Promise<void>;
+    /**
+     * Get the bundle ID registered as the handler for a URL scheme
+     */
     nativeURLSchemeHandler(scheme: string): Promise<NativeURLSchemeHandlerResponse>;
+    /**
+     * List connected USB devices
+     */
     nativeUsbDevices(): Promise<UsbDevice[]>;
+    /**
+     * Get the current user account avatar as base64 PNG
+     */
     nativeUserAvatar(): Promise<NativeUserAvatarResponse>;
+    /**
+     * Get the current user's display name
+     */
     nativeUserName(): Promise<NativeUserNameResponse>;
+    /**
+     * Get the current user's login shell path
+     */
     nativeUserShell(): Promise<NativeUserShellResponse>;
+    /**
+     * Check if VoiceOver is enabled
+     */
     nativeVoiceoverEnabled(): Promise<NativeVoiceoverEnabledResponse>;
+    /**
+     * Get system volume and mute state
+     */
     nativeVolume(): Promise<NativeVolumeResponse>;
+    /**
+     * Check if a VPN connection is active
+     */
     nativeVpnStatus(): Promise<NativeVpnStatusResponse>;
+    /**
+     * Move the cursor to a position
+     * @param x wire int32
+     * @param y wire int32
+     */
     nativeWarpCursor(x: number, y: number): Promise<void>;
+    /**
+     * Get WiFi interface information
+     */
     nativeWifi(): Promise<NativeWifiResponse>;
+    /**
+     * Scan for nearby Wi-Fi networks
+     */
     nativeWifiNetworks(): Promise<string[]>;
+    /**
+     * Get the owning app bundle ID for a window
+     */
     nativeWindowApp(windowId: string): Promise<void>;
+    /**
+     * Get a window position and size by ID
+     */
     nativeWindowBounds(windowId: string): Promise<NativeWindowBoundsResponse>;
+    /**
+     * Get display ID for window
+     */
     nativeWindowDisplayID(windowId: string): Promise<void>;
+    /**
+     * Check if window is fullscreen
+     */
     nativeWindowIsFullscreen(windowId: string): Promise<NativeWindowIsFullscreenResponse>;
+    /**
+     * Check if window is minimized
+     */
     nativeWindowIsMinimized(windowId: string): Promise<NativeWindowIsMinimizedResponse>;
+    /**
+     * Get window layer level
+     */
     nativeWindowLayer(windowId: string): Promise<void>;
+    /**
+     * Take a screenshot of a specific window as base64 PNG
+     * @param windowId wire uint32 · min 0
+     */
     nativeWindowScreenshot(windowId: number): Promise<void>;
+    /**
+     * Get window subrole
+     */
     nativeWindowSubrole(windowId: string): Promise<void>;
+    /**
+     * Get a window title by ID
+     */
     nativeWindowTitle(windowId: string): Promise<void>;
+    /**
+     * Get a snapshot of all windows and displays (with managed HUD windows)
+     * @param onScreen If true, only return windows visible on screen.
+     *   default false
+     */
     nativeWorldModel(onScreen?: boolean): Promise<WorldModel>;
+    /**
+     * Write a preference value for an app domain
+     */
     nativeWriteAppPreference(domain: string, key: string, value: unknown): Promise<void>;
+    /**
+     * Write string contents to a file
+     */
     nativeWriteFile(contents: string, path: string): Promise<void>;
+    /**
+     * Get the active Xcode developer directory path
+     */
     nativeXcodePath(): Promise<NativeXcodePathResponse>;
+    /**
+     * Get the installed Xcode version
+     */
     nativeXcodeVersion(): Promise<NativeXcodeVersionResponse>;
+    /**
+     * Create a zip archive from files or a directory
+     */
     nativeZip(destination: string, source: string): Promise<void>;
+    /**
+     * Check if Zoom accessibility is enabled
+     */
     nativeZoomEnabled(): Promise<NativeZoomEnabledResponse>;
+    /**
+     * Set a HUD channel's current semantic output state — a document of what is true for the person, in human language, consumed by every renderer; supersedes the previous state
+     * @param state The document that becomes the channel's current state. Its `channel`
+     *   must be owned by the calling plugin.
+     */
     outputState(state: OutputState): Promise<OutputStateResponse>;
+    /**
+     * Add, remove, restore, patch, rename, revert (reset one entry to its plugin default), or reset user overrides for a collection
+     * @param action Action: "add", "remove", "restore", "reset", "patch", "rename", or
+     *   "revert".
+     * @param collection Collection name to override.
+     * @param field Field key for the "unpatch" action — removes ONE field from the
+     *   tenant's patch of `id` (the per-field inverse of "patch"; the patch
+     *   entry is dropped when its last field goes). The settings form's
+     *   per-field revert: sparse by construction, so the reverted field
+     *   resumes tracking the shipped default. Ignored by other actions.
+     *   default null
+     * @param fields Partial record fields for "patch", or complete record for "add".
+     *   default null
+     * @param id Record ID (id_field value) for patch/remove/restore actions. For
+     *   "rename" it is the entry's *current* key (surface form) to replace; for
+     *   "revert" the current key of the entry to reset to its plugin default.
+     *   default null
+     * @param newId New key (id_field value) for the "rename" action — the entry is re-added
+     *   under this key with every other field (value, aliases) preserved.
+     *   Ignored by other actions.
+     *   default null
+     * @param tenant Which overlay tenant this mutation targets — a writer-namespace value
+     *   (`"_user"` or a plugin id). Defaults: a plugin caller targets its OWN
+     *   overlay; a host caller targets `"_user"`. A plugin transporting a user
+     *   gesture from its settings tab says `"_user"` explicitly; it may never
+     *   target another plugin's overlay. Plugin overlays carry per-field
+     *   patches only (`patch`/`restore`/`reset`) — annotation, not authorship
+     *   (docs/design/DESIGN_WRITER_SCOPED_OVERLAY.md).
+     *   default null
+     */
     overridesApply(action: string, collection: string, field?: string, fields?: unknown, id?: string, newId?: string, tenant?: string): Promise<OverridesApplyResponse>;
+    /**
+     * List overlay entries — a plugin sees which collections carry its annotations (including dangling ids to prune); the host sees every tenant
+     */
     overridesList(): Promise<OverlayRow[]>;
+    /**
+     * Get the current command grammar word list — or, with full=true, the complete vocabulary_update seed payload (words, narrow_to, weights, DAG)
+     * @param full When true, also return the full `vocabulary_update` payload a starting
+     *   recognition pipeline would be seeded with — words plus narrow_to,
+     *   word_weights, and the structured grammar DAG. Read-only: exporting
+     *   does not touch the committed-vocab accounting. Used by the
+     *   voice-regress harness to decode against the exact live grammar.
+     *   default false
+     */
     pipelinesGrammar(full?: boolean): Promise<PipelinesGrammarResponse>;
+    /**
+     * Send a custom configuration event to one stage of a running pipeline
+     * @param data default null
+     * @param eventType Must be a custom event type — `ext.<vendor>.<name>`. The typed families
+     *   (`audio_*`, `transcript`, `vocabulary_update`) are the platform's to
+     *   send; a plugin forging one into its own pipeline was previously
+     *   unchecked here.
+     * @param name Pipeline to configure. The caller must have introduced it.
+     * @param stage Stage within that pipeline, spelled as the pipeline definition spells
+     *   it — a role like `_platform.stt` or a qualified stage name. Required:
+     *   before per-stage channels existed this operation could only ever reach
+     *   the terminal stage, and silently did nothing for any other.
+     */
     pipelinesInject(eventType: string, name: string, stage: string, data?: unknown): Promise<PipelinesInjectResponse>;
+    /**
+     * Start a named pipeline
+     * @param ephemeral default false
+     * @param paramOverrides default {}
+     */
     pipelinesRun(name: string, ephemeral?: boolean, paramOverrides?: Record<string, unknown>): Promise<PipelinesRunResponse>;
+    /**
+     * List currently running pipelines
+     */
     pipelinesStatus(): Promise<PipelinesStatusResponse>;
+    /**
+     * Stop a running pipeline by name
+     * @param audioCutoffMs Shared-clock position (the AudioChunk timestamp_ms timebase) after
+     *   which buffered audio must not be processed — e.g. the onset of a
+     *   detected dictation stop phrase, from the transcript's word_onsets_ms.
+     *   Absent = process everything.
+     *   wire uint64 (64-bit) · default null · min 0
+     */
     pipelinesStop(name: string, audioCutoffMs?: number): Promise<PipelinesStopResponse>;
+    /**
+     * Pre-spawn + pre-load a pipeline's recognizer stages (grammar built off the hold path)
+     * @param paramOverrides Per-stage param overrides applied to the warmed consumer stages, mirroring
+     *   `pipelines.run`. Lets a caller prewarm the model it will actually run (e.g.
+     *   a user-selected STT model) instead of only the pipeline's default.
+     *   default {}
+     */
     pipelinesWarm(name: string, paramOverrides?: Record<string, unknown>): Promise<PipelinesWarmResponse>;
+    /**
+     * Copy one file out of the caller's own data dir into Downloads and reveal it (the one egress a plugin cannot perform itself)
+     * @param filename Name to save it under. Defaults to the source file's name. A path
+     *   separator here is refused rather than resolved — this names a file in
+     *   Downloads, not a location.
+     *   default null
+     * @param path Path of the file to export, relative to the caller's data dir.
+     */
     pluginDataExport(path: string, filename?: string): Promise<PluginDataExportResponse>;
+    /**
+     * Write a diagnostic line to this plugin's per-plugin log file. Use shared.Logf instead for cross-cutting coordination lines that belong in actuator.log.
+     * @param data Arbitrary JSON payload — serialized to one line in the log file
+     *   so `tail -f` and `grep` work, while `jq` can still operate on
+     *   the payload column.
+     *   default null
+     * @param level Severity level for the line. v1 callers omit this and the handler
+     *   falls through to `Debug`; v2 callers pass one of
+     *   `trace`/`debug`/`info`/`warn`/`error`. Lines below the per-plugin
+     *   threshold are dropped at the handler; `warn`/`error` additionally
+     *   cross-post to `actuator.log` via the `plugin.diagnostic` event.
+     * @param tag Optional structural tag (e.g. `BK_ACTIVATE_PATH`, `STT_BATCH`).
+     *   Renders between the timestamp and the payload in the per-plugin
+     *   log file, matching the actuator log's `[TAG]` column convention.
+     *   Empty/missing renders as `[<ts>] <payload>` with no tag bracket.
+     *   default null
+     */
     pluginDebug(data?: unknown, level?: PluginLogLevel, tag?: string): Promise<void>;
+    /**
+     * Report whether this plugin can do its job. For a standing condition the platform cannot see from outside — a companion app disconnected, a device unplugged — not for a call that failed once.
+     * @param degraded `true` when the plugin is running but cannot do its job — an external
+     *   dependency it needs is gone, a device it drives is unplugged, a
+     *   companion it talks to has disconnected. `false` clears the report.
+     *
+     *   This is NOT for "something failed once": a failed call is a failed
+     *   call. It is for a standing condition the user can act on and would
+     *   otherwise have to guess at.
+     * @param reason One user-facing sentence saying what is wrong and, where possible, what
+     *   to do about it — "Chrome — extension disconnected; reload it at
+     *   chrome://extensions". The plugin owns this text; the platform invents
+     *   no copy for a plugin's failure.
+     *
+     *   Required when `degraded` is true and ignored otherwise. Truncated to
+     *   200 characters (one status line; a plugin with more to say has
+     *   `plugin.debug`) and rendered as data, never markup.
+     *   default null
+     */
     pluginReportHealth(degraded: boolean, reason?: string): Promise<void>;
+    /**
+     * Read the effective recording flag for a log-kind collection (privacy control plane)
+     */
     privacyGetRecording(name: string): Promise<PrivacyGetRecordingResponse>;
+    /**
+     * Toggle the recording flag on a log-kind collection (privacy control plane)
+     */
     privacySetRecording(enabled: boolean, name: string): Promise<void>;
+    /**
+     * The caller's own declared privileges with live granted/pending/denied state
+     */
     privilegesList(): Promise<PrivilegeStatusEntry[]>;
+    /**
+     * Give back one of the caller's optional privileges: returns a live grant and/or withdraws a pending request; de-escalation, no consent needed
+     * @param privilege Privilege name — must appear in the calling plugin's
+     *   `optional_privileges`.
+     */
     privilegesRelinquish(privilege: string): Promise<PrivilegesRelinquishResponse>;
+    /**
+     * Request one of the caller's declared optional privileges; lands as an Approve/Dismiss to-do on the Plugins page
+     * @param privilege Privilege name — must appear in the calling plugin's
+     *   `optional_privileges`.
+     * @param reason Short attributed reason shown to the user next to the Approve
+     *   button (e.g. "script 'headphones' uses query:power"). Untrusted
+     *   text; capped server-side.
+     *   default ""
+     */
     privilegesRequest(privilege: string, reason?: string): Promise<PrivilegesRequestResponse>;
+    /**
+     * Apply a calibration-measured strength to the never-standalone recognition bias (provenance: calibration); refuses over a manually-set value unless force
+     * @param force Overwrite a manually-set value. Without it, `manual` provenance refuses
+     *   (`applied: false`) so the caller can confirm with the user first — a
+     *   calibration apply must never silently clobber a hand-set value.
+     *   default false
+     * @param strength Strength to apply (> 0; the setting is also switched on).
+     *   wire double
+     */
     recognitionBiasApply(strength: number, force?: boolean): Promise<RecognitionBiasApplyResponse>;
+    /**
+     * Read the never-standalone recognition bias (enabled, strength, provenance)
+     */
     recognitionBiasGet(): Promise<RecognitionBiasGetResponse>;
+    /**
+     * Manually set the never-standalone recognition bias (provenance: manual); the write path behind the Recordings tab's control
+     * @param enabled Omitted = leave the on/off half unchanged.
+     *   default null
+     * @param strength Omitted = leave the stored strength unchanged. Negative → 0.
+     *   wire double · default null
+     */
     recognitionBiasSet(enabled?: boolean, strength?: number): Promise<RecognitionBiasSetResponse>;
+    /**
+     * Re-decode the caller's own captured audio through a registered recognizer stage against the LIVE grammar (the fragility ladder) — the actuator runs it because the grammar is platform state and plugins cannot exec
+     * @param maxActive wire uint32 · default null · min 0
+     * @param model Model dir name under app-support `models/` (single component, no
+     *   traversal), e.g. `"sherpa-offline-nemo"`.
+     * @param stage Registered stage id whose binary's `probe` subcommand runs the re-decode,
+     *   e.g. `"voice.sherpa_commands"`. Validated against the stage registry.
+     */
     recognitionRedecode(items: RedecodeItem[], model: string, stage: string, maxActive?: number): Promise<RecognitionRedecodeResponse>;
+    /**
+     * Resolve a selection pick by index — clears selection state, emits event, closes HUD
+     * @param index Zero-based index into the previously-set selection items array.
+     *   wire uint64 (64-bit) · min 0
+     */
     selectionPick(index: number): Promise<SelectionPickResponse>;
+    /**
+     * Show the selection HUD with items for the user to pick from
+     * @param channel HUD channel to show the selection in. Defaults to `"main"`.
+     *   default null
+     * @param items Array of `HUDItem` objects: `{ id, tag?, title, subtitle?, icon? }`.
+     *   default null
+     * @param title Optional title displayed at the top of the selection HUD.
+     *   default null
+     */
     selectionSet(channel?: string, items?: unknown, title?: string): Promise<void>;
+    /**
+     * Emit _platform.input.session_boundary at actual session boundaries
+     */
     sessionBoundary(): Promise<void>;
+    /**
+     * Tear down input-session HUD/tag state and emit session_ended event
+     */
     sessionEndCleanup(): Promise<SessionEndCleanupResponse>;
+    /**
+     * Push Datastar signal patches to the calling plugin's active settings SSE streams
+     * @param signals Datastar signal expression, e.g. `{activeGroup: 2, activeDialModeIndex: 1}`.
+     *   Sent as a `datastar-patch-signals` SSE event to all active settings streams.
+     */
     settingsPatchSignals(signals: string): Promise<void>;
+    /**
+     * Navigate the settings UI to a tab declared by the calling plugin
+     */
     settingsRedirect(tab: string): Promise<void>;
+    /**
+     * Trigger a full re-render of all active settings SSE streams
+     */
     settingsRefresh(): Promise<void>;
+    /**
+     * Create a new user voice command from settings-UI signals
+     * @param newruleactionjson Raw JSON action body, used when `newruleactiontype = "json"`.
+     *   default null
+     * @param newruleactiontype Action variant (dotted type like "system.volume_up", "sequence", "json", ...).
+     *   Determines which other `newruleaction*` fields are consumed.
+     *   default null
+     * @param newruleactionval Action value used by simple action types (e.g. text for "input.type").
+     *   default null
+     * @param newrulecategory Category bucket the rule belongs to. Defaults to "User".
+     *   default null
+     * @param newruleclearstags Comma-separated tags the rule clears when it fires.
+     *   default null
+     * @param newruledescription Optional human-readable description shown in the rules table.
+     *   default null
+     * @param newrulephrase The phrase the user wants matched (with optional `<slot>` placeholders).
+     *   Required — `build_command_from_signals` rejects an empty phrase.
+     *   default null
+     * @param newrulerequirestags Comma-separated tags required for the rule to match.
+     *   default null
+     * @param newrulesetstags Comma-separated tags the rule sets when it fires.
+     *   default null
+     */
     settingsRulesCreate(newruleactionjson?: string, newruleactiontype?: string, newruleactionval?: string, newrulecategory?: string, newruleclearstags?: string, newruledescription?: string, newrulephrase?: string, newrulerequirestags?: string, newrulesetstags?: string): Promise<SettingsRulesCreateResponse>;
+    /**
+     * Update an existing user voice command from settings-UI signals
+     * @param canonical Existing canonical command id (the previous canonical phrase) of
+     *   the rule being updated. Required.
+     * @param newruleactionjson default null
+     * @param newruleactiontype default null
+     * @param newruleactionval default null
+     * @param newrulecategory default null
+     * @param newruleclearstags default null
+     * @param newruledescription default null
+     * @param newrulephrase default null
+     * @param newrulerequirestags default null
+     * @param newrulesetstags default null
+     */
     settingsRulesUpdate(canonical: string, newruleactionjson?: string, newruleactiontype?: string, newruleactionval?: string, newrulecategory?: string, newruleclearstags?: string, newruledescription?: string, newrulephrase?: string, newrulerequirestags?: string, newrulesetstags?: string): Promise<SettingsRulesUpdateResponse>;
+    /**
+     * Launch an app and post a 'Launching' notification to the HUD
+     * @param bundleId Bundle ID of the application to launch (e.g. "com.apple.Safari").
+     * @param newInstance Whether to launch a fresh instance even if the app is already running.
+     *   default false
+     */
     systemLaunchApp(bundleId: string, newInstance?: boolean): Promise<void>;
+    /**
+     * Show a HUD notification with title and body text
+     * @param body Notification body text (rendered inside `<div id="body-text">`).
+     * @param durationSecs Auto-dismiss duration in seconds. When absent, defaults to
+     *   [`DEFAULT_NOTIFY_DURATION_SECS`] (5s). Pass `0` for a sticky
+     *   notification that only closes when the user clicks Dismiss.
+     *   Pass any positive integer for a custom duration.
+     *   wire uint32 · default null · min 0
+     * @param title Notification title (rendered as `<h1 id="title">`).
+     */
     systemNotify(body: string, title: string, durationSecs?: number): Promise<void>;
+    /**
+     * Run a shell command via /bin/bash -c (security-sensitive)
+     * @param command Shell command to execute via `/bin/bash -c`.
+     */
     systemRunShell(command: string): Promise<void>;
+    /**
+     * Open a calibration trial — writes _platform.calibration.active, returns a trial_id
+     */
     trialBegin(): Promise<TrialBeginResponse>;
+    /**
+     * Close a calibration trial — clears the tag and spawns release RPCs to fixture owners
+     */
     trialEnd(trialId: string): Promise<TrialEndResponse>;
+    /**
+     * Enter a command's context for a trial — writes mode-gated requires_tags (platform write) or forwards trial_apply_fixture to a dynamic command's owner — and returns the entered context (kind + tags + fixture_handle)
+     * @param commandId Command id from `commands.enumerate` — `<owner_plugin>:<pattern>`.
+     */
     trialEnterContext(commandId: string, trialId: string): Promise<TrialEnterContextResponse>;
+    /**
+     * Register a fixture handle under an open trial so trial_end can release it
+     */
     trialRegisterFixture(fixtureHandle: string, ownerPluginId: string, trialId: string): Promise<void>;
+    /**
+     * Resolve concrete prompt phrases for a command whose vocabulary the caller can't derive — forwards trial_samples to a dynamic command's owner (empty when the owner doesn't implement the optional hook; the host then falls back to its own default).
+     * @param commandId Command id from `commands.enumerate` — `<owner_plugin>:<pattern>`.
+     */
     trialResolveSamples(commandId: string): Promise<string[]>;
+    /**
+     * Commit pending vocabulary additions to the recognition pipeline
+     */
     vocabularyCommit(): Promise<void>;
+    /**
+     * Describe the resolved collection graph as the caller can see it
+     */
     wiringDescribe(): Promise<WiringCollection[]>;
   }
 }

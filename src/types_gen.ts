@@ -3,9 +3,15 @@
 
 // ===== Shared types (from components/schemas) =====
 
+/**
+ * Detailed info about an accessibility element.
+ */
 export interface AXElementInfo {
   actions: string[];
   attributes: string[];
+  /**
+   * wire uint32 · min 0
+   */
   children_count: number;
   description?: string;
   enabled: boolean;
@@ -19,46 +25,163 @@ export interface AXElementInfo {
   value?: unknown;
 }
 
+/**
+ * A tree node of accessibility elements (recursive).
+ *
+ * schemars handles the self-reference automatically via a `$defs`
+ * entry — no `#[schema(no_recursion)]` annotation needed (that was
+ * utoipa-specific and was dropped in Phase 2j-utoipa-removal).
+ */
 export interface AXElementNode {
   children: AXElementNode[];
   element: AXElementInfo;
 }
 
+/**
+ * A reference to an accessibility element by PID + path from the application root.
+ */
 export interface AXElementRef {
+  /**
+   * default []
+   */
   path?: AXPathSegment[];
+  /**
+   * wire int32
+   */
   pid: number;
 }
 
+/**
+ * A segment of an accessibility element path (role + index among siblings with that role).
+ */
 export interface AXPathSegment {
+  /**
+   * wire uint32 · min 0
+   */
   index: number;
   role: string;
 }
 
+/**
+ * Schema for a single field within an action type.
+ */
 export interface ActionFieldSchema {
+  /**
+   * Shipped default value. REQUIRED on every field of a
+   * `preset: settings` collection — the settings base record is
+   * materialized from these at read time, which is what makes default
+   * evolution work (an untouched field always reads the CURRENT shipped
+   * default, never a stale saved copy). Validated against `field_type`
+   * at manifest load. Advisory elsewhere (generic UIs may prefill).
+   */
   default?: unknown;
+  /**
+   * One line saying what this setting DOES, rendered under the label
+   * wherever the platform draws the field — the Collections view, and any
+   * generic form.
+   *
+   * A label names a setting; this says why you would touch it. Every
+   * hand-written settings tab in this repo carries such a line
+   * ("Auto-correct when Whisper outputs entirely in UPPERCASE"), and a
+   * field described here is described identically in every surface that
+   * renders it, including your own.
+   */
   description: string;
+  /**
+   * Optional display role for generic UI rendering. See `FieldDisplay`.
+   * Currently consumed by the Collections tab's log-kind timeline view
+   * to pick which fields appear in the row summary.
+   *
+   * Deserialization is deliberately LENIENT: an unrecognized role string
+   * degrades to `None` instead of failing the whole manifest parse.
+   * Display roles are guaranteed display-only (the matcher never reads
+   * them), so a plugin built against a newer SDK that declares a role
+   * this host predates must still load — strictness tracks blast
+   * radius. The typo-catching strictness lives at publish time
+   * (branchkit-gen validates against the schema's closed enum) and in
+   * the load-time validator, which walks the raw JSON and emits a loud
+   * warning for every unknown role it degraded. See
+   * docs/design/DESIGN_COLLECTION_FIELD_ROLES.md, Decision 5.
+   */
   display?: FieldDisplay;
+  /**
+   * Allowed string values for `field_type: "enum"`. Ignored otherwise.
+   */
   enum_values: string[];
+  /**
+   * Declared type for this field. See `FieldType`.
+   * default "string"
+   */
   field_type: FieldType;
+  /**
+   * Nested field list for `field_type: "object"` (recursive). Ignored
+   * for other field types.
+   */
   fields: ActionFieldSchema[];
+  /**
+   * JSON key name (e.g. "selector", "direction").
+   */
   key: string;
+  /**
+   * Human-readable label for UI rendering.
+   * default ""
+   */
   label: string;
+  /**
+   * Placeholder text for input fields.
+   */
   placeholder?: string;
+  /**
+   * Whether this field is required.
+   * default false
+   */
   required: boolean;
 }
 
+/**
+ * Schema declaration for a plugin-defined action type.
+ * Enables generic UI rendering (structured editor fields) for any plugin's actions.
+ */
 export interface ActionTypeSchema {
+  /**
+   * Ordered list of fields for this action type.
+   */
   fields: ActionFieldSchema[];
+  /**
+   * Human-readable label (e.g. "Click Element", "Snap Window").
+   * default ""
+   */
   label: string;
+  /**
+   * Supported interaction modes: "tap" (single press), "hold" (start/stop via phase),
+   * and/or "toggle" (start/stop cycle). Defaults to ["tap"] if omitted.
+   */
   modes: string[];
 }
 
+/**
+ * The currently active space per display.
+ */
 export interface ActiveSpace {
+  /**
+   * The display ID.
+   * wire uint32 · min 0
+   */
   display_id: number;
+  /**
+   * The currently active space ID on that display.
+   * wire uint64 (64-bit) · min 0
+   */
   space_id: number;
 }
 
+/**
+ * An audio input/output device.
+ */
 export interface AudioDevice {
+  /**
+   * wire uint32 · min 0
+   */
   id: number;
   is_default_input: boolean;
   is_default_output: boolean;
@@ -69,36 +192,89 @@ export interface AudioDevice {
 }
 
 export interface BarcodeResult {
+  /**
+   * wire double
+   */
   height: number;
   payload: string;
   symbology: string;
+  /**
+   * wire double
+   */
   width: number;
+  /**
+   * wire double
+   */
   x: number;
+  /**
+   * wire double
+   */
   y: number;
 }
 
+/**
+ * A GATT characteristic.
+ */
 export interface BleCharacteristic {
   properties: string[];
   uuid: string;
 }
 
+/**
+ * A GATT service with its characteristics.
+ */
 export interface BleService {
   characteristics: BleCharacteristic[];
   uuid: string;
 }
 
+/**
+ * A write to perform during the subscribe-and-write GATT cycle.
+ */
 export interface BleWriteEntry {
+  /**
+   * Characteristic UUID to write to.
+   */
   characteristic_uuid: string;
+  /**
+   * Data bytes to write.
+   * default []
+   */
   data?: number[];
+  /**
+   * GATT service UUID containing the target characteristic.
+   */
   service_uuid: string;
+  /**
+   * Write type: "with_response" (default) or "without_response".
+   * default "with_response"
+   */
   write_type?: string;
 }
 
+/**
+ * A paired or connected Bluetooth device.
+ */
 export interface BluetoothDevice {
+  /**
+   * Device MAC address.
+   */
   address: string;
+  /**
+   * Device type hint (e.g. "headphones", "keyboard"), if available.
+   */
   device_type?: string;
+  /**
+   * Whether the device is currently connected.
+   */
   is_connected: boolean;
+  /**
+   * Whether the device is paired.
+   */
   is_paired: boolean;
+  /**
+   * Device name.
+   */
   name: string;
 }
 
@@ -118,6 +294,9 @@ export interface CameraDevice {
   unique_id: string;
 }
 
+/**
+ * Clipboard contents read from the OS.
+ */
 export interface ClipboardContents {
   available_types: string[];
   content_type: string;
@@ -126,6 +305,9 @@ export interface ClipboardContents {
   text?: string;
 }
 
+/**
+ * An item to write to the clipboard with typed content.
+ */
 export interface ClipboardWriteItem {
   content_type: string;
   file_urls?: string[];
@@ -133,29 +315,130 @@ export interface ClipboardWriteItem {
   text?: string;
 }
 
+/**
+ * One record to upsert. Same shape as the older single-record wire form
+ * `{id, payload}`; bulk callers pass multiple entries in one call.
+ * `payload` is optional on the wire (OpenRPC marks only `id` as
+ * required); a missing payload deserializes as `Value::Null` so
+ * schema-driven SDK codegen can omit it without tripping a
+ * `missing field` parse error here.
+ */
 export interface CollectionPutEntry {
   id: string;
+  /**
+   * default null
+   */
   payload?: unknown;
 }
 
+/**
+ * One record as returned by a backend. The `id` field is whatever the
+ * collection's `id_strategy` resolves to (auto-ulid string, by-field value,
+ * key/value composite, or "singleton" for singleton collections).
+ *
+ * The wire / schema name is `CollectionRecord` to avoid colliding with
+ * TypeScript's builtin `Record<K, V>` utility type (the codegen emits
+ * `Record<string, T>` map shapes alongside our own types).
+ */
 export interface CollectionRecord {
+  /**
+   * Writer-chosen group label — which of the writer's named replace-sets
+   * this record belongs to. `None` = ungrouped, the common case.
+   *
+   * Groups exist so one plugin can maintain several independent record sets
+   * in one collection, each replaced without touching the others — command
+   * sources are the motivating case (`commands.push`'s `group` stamps
+   * this). Meaningful only WITHIN a writer: (writer, group) is the scope a
+   * grouped replace computes its complement over, so two plugins using the
+   * same group label never interact.
+   *
+   * **Last write, unlike `writer`.** Ownership is creation-stamped because
+   * a record must not change hands by being touched; group is a placement,
+   * and re-putting a record under a different group MOVES it — the old
+   * group's next replace must not still count it.
+   *
+   * Storage support varies by backend shape: backends without a per-record
+   * envelope (shared_overrides' contribution blobs) REFUSE writes carrying
+   * a group rather than dropping it silently — see `backend_conformance`.
+   */
   group?: string;
   id: string;
+  /**
+   * Actor label of the writer that CREATED this record — which hosted
+   * thing the `writer` plugin was acting for. `None` for the ordinary
+   * case: a plugin acting only for itself.
+   *
+   * Creation-stamped, exactly like `writer` and for the same reason: it
+   * is the finer-grained half of the same answer ("whose record is
+   * this"), so touching a record must not relabel it. Last-touch
+   * attribution is the audit log's job, and it carries the label too.
+   *
+   * **Not an ownership axis.** `collection.replace` scopes its
+   * complement by `writer` alone; two scripts hosted by one plugin share
+   * one owner, because the platform grants and enforces at the plugin.
+   * Making this a scoping key would turn an observability label into a
+   * sub-principal, which `docs/design/DESIGN_HOST_PLUGINS.md` forbids. Per-
+   * hosted-thing separation is the host's job — one host-owned
+   * collection namespaced by script, not a platform ownership rule.
+   */
   on_behalf_of?: string;
   payload?: unknown;
+  /**
+   * Monotonic per-record write counter, backend-maintained. Increments
+   * on every put/patch of the same id; starts at 1. Reserved as the
+   * compare-and-swap anchor (`put` opt `if_version`) so optimistic
+   * concurrency never needs a breaking envelope change. `0` = written
+   * before this field existed.
+   * wire uint64 (64-bit) · default 0 · min 0
+   */
   revision: number;
+  /**
+   * Unix-milliseconds write time, backend-maintained. Log-shaped
+   * records carry their append time (ULID-aligned); keyed records the
+   * last write. `0` = written before this field existed.
+   * wire uint64 (64-bit) · default 0 · min 0
+   */
   timestamp_ms: number;
+  /**
+   * Who owns this record: the plugin id that CREATED it, or `_platform`
+   * for host writes. Backend-maintained. `""` = written before this field
+   * existed.
+   *
+   * **Creation, not last touch** — deliberately unlike `revision` and
+   * `timestamp_ms`, which both track the most recent write. A later write
+   * by a different plugin does not transfer ownership, because the
+   * question this field answers is "whose record is this", not "who
+   * touched it last". Last-touch is already served by the audit log; what
+   * the platform had no answer for was ownership.
+   *
+   * This is what lets a write be scoped to its author.
+   * `collection.replace` computes its complement over records whose writer
+   * is the caller, so a replace can only ever delete what that caller
+   * created — which is why a collection-wide replace is safe for any
+   * writer the collection accepts, not just its introducer, and why
+   * another plugin's records (and the user's) are invisible to the diff.
+   * `ListOpts.writer` is the read-side twin: ask for your own records.
+   *
+   * See docs/design/DESIGN_RECORD_OWNERSHIP.md.
+   * default ""
+   */
   writer: string;
 }
 
 export interface CollectionsListItem {
   id: string;
+  /**
+   * Plugin ID that contributed this item.
+   */
   source: string;
   subtitle?: string;
   title: string;
 }
 
 export interface CollectionsListSection {
+  /**
+   * wire uint · min 0
+   */
   entry_count: number;
   items: CollectionsListItem[];
   label: string;
@@ -163,6 +446,27 @@ export interface CollectionsListSection {
   plugin: string;
 }
 
+/**
+ * A user override of a command's *spoken phrase* — "say `new_pattern` instead
+ * of `default_pattern` for `action`." A keyed delta on top of the contributed
+ * defaults, owned by the platform and applied when the command union is built
+ * (`rebuild_commands_cache`), so it wins over the default and survives the
+ * contributing plugin/extension re-contributing on reconnect.
+ *
+ * Keyed by the stable `(action, default_pattern)` identity, NOT by the phrase
+ * (which changes the instant you override it):
+ *  - `action` — the full action id (`Action::type_label`, e.g.
+ *    `browser.scroll`), carrying the plugin prefix so the layer stays
+ *    plugin-agnostic across browser/tiling/system.
+ *  - `default_pattern` — the default spoken form this replaces
+ *    (`Command::display_name`, the actuator's canonical `<capture>` notation).
+ *    Needed because one action can carry several patterns, each with its own
+ *    params; the key names which one.
+ *
+ * A stale override (default renamed/removed upstream) simply stops matching
+ * and the new default applies — single source + derived delta, no dual-sync.
+ * See `docs/design/DESIGN_COMMAND_PHRASE_OVERRIDES.md`.
+ */
 export interface CommandOverride {
   action: string;
   default_pattern: string;
@@ -171,10 +475,17 @@ export interface CommandOverride {
 
 export interface CommandRowData {
   action: string;
+  /**
+   * Raw action JSON for editor decomposition (complements the display `action` string).
+   */
   action_json?: unknown;
   canonical: string;
   category: string;
   clears_tags: string[];
+  /**
+   * Optional "what it does / use case" text from the command definition —
+   * the same field used as the HUD subtitle, shown in the command editor row.
+   */
   description?: string;
   is_user: boolean;
   pattern: string;
@@ -182,28 +493,113 @@ export interface CommandRowData {
   requires_tags: string[];
   sets_tags: string[];
   tier: string;
+  /**
+   * All expanded spoken forms (cartesian product of pattern alternatives).
+   */
   variants: string[];
 }
 
+/**
+ * One Command in a `commands.push` payload — published purely for
+ * discoverability. Wire deserialization goes through
+ * `commands::parse_commands_with_templates` against the opaque JSON
+ * value, so adding/removing a field here doesn't change runtime
+ * behavior. Edit `commands::PartialCommand` first; mirror here.
+ */
 export interface CommandSpec {
+  /**
+   * Action fired on match. Plugin-typed: `{"type":"plugin", "action_type":"...","params":{...}}`
+   * or a built-in like `{"type":"key","code":36}`.
+   */
   action: unknown;
+  /**
+   * When true, this gated command is allowed to win during a
+   * mid-bridge restricted resolve. Default false: gated sibling
+   * commands (`show_hints`, `dismiss`-style) are suppressed while
+   * the user is mid-codeword. Set true on explicit cancel words
+   * (`dismiss`, `cancel`, `exit`) that should be able to abort an
+   * in-progress bridge. See
+   * `docs/design/DESIGN_MULTI_CANDIDATE_BRIDGE.md`.
+   */
   cancels_bridge?: boolean;
+  /**
+   * Category shown in Settings UI command lists.
+   */
   category?: string;
+  /**
+   * Tags this command clears from active_gates on match.
+   */
   clears_tags?: string[];
+  /**
+   * One-line help text. Surfaced in Settings UI.
+   */
   description?: string;
+  /**
+   * Prefix-discovery affordance for a `literal-prefix + tail-capture`
+   * command (e.g. `["jump", "<browser_tabs>"]`). Declaring it makes the
+   * bare prefix ("jump") speakable on its own: instead of firing, it opens
+   * the Discovery HUD over the capture's entries. One of:
+   * `"prefix"` (non-exclusive — the capture's words stay live in free
+   * context) or `"exclusive"` (entering the prefix flips an auto-minted
+   * mode so the words only decode while it holds — for large/dynamic sets).
+   * Only valid when the pattern is literal word(s) followed by a single
+   * tail capture; other shapes are rejected at load. See
+   * `docs/design/DESIGN_DISCOVERABLE_PREFIX.md`.
+   */
   discovery?: string;
+  /**
+   * Discovery-HUD display override per capture binding name: when the
+   * HUD renders a capture slot of this command, enumerate the named
+   * collection instead of the matching one. Matching is untouched — a
+   * sealed/static matching collection can pair with a live display menu.
+   * Unknown capture names are inert. See
+   * `docs/design/DESIGN_CAPTURE_DISPLAY_FORMS.md`.
+   */
   display_sources?: Record<string, string>;
+  /**
+   * Spoken pattern, e.g. `["switch", "<apps>"]`. Tokens are either
+   * literal strings or capture references like `<name:collection>`.
+   */
   pattern: unknown[];
+  /**
+   * Tags that must ALL be active for this command to match. Empty
+   * means the command is ungated (a global).
+   */
   requires_tags?: string[];
+  /**
+   * Tags this command sets when it Partial-matches (mid-capture
+   * mode tag). Bound to the bridge's lifecycle; cleared on
+   * completion. See `docs/design/DESIGN_SETS_ON_PARTIAL.md`.
+   */
   sets_on_partial?: string[];
+  /**
+   * Tags this command sets in active_gates on match.
+   */
   sets_tags?: string[];
+  /**
+   * Optional command-variant declarations (alternate phrasings).
+   * Each variant inherits the parent's tags/action unless overridden.
+   */
   variants?: unknown[];
 }
 
+/**
+ * One acoustic collision: `target` (a candidate word) sounds like `confuser`
+ * (an existing command word) and the two compete in the candidate's context.
+ */
 export interface ConfusabilityFinding {
   confuser: string;
+  /**
+   * wire uint · min 0
+   */
   distance: number;
+  /**
+   * That command's display phrase, to name it in the warning.
+   */
   example: string;
+  /**
+   * Owning plugin of a command that emits the confuser.
+   */
   owner: string;
   target: string;
 }
@@ -218,15 +614,39 @@ export interface ContactInfo {
 export interface CpuInfo {
   architecture: string;
   chip: string;
+  /**
+   * wire uint32 · min 0
+   */
   core_count: number;
+  /**
+   * wire uint32 · min 0
+   */
   efficiency_cores?: number;
+  /**
+   * wire uint32 · min 0
+   */
   performance_cores?: number;
 }
 
+/**
+ * A delivered notification.
+ */
 export interface DeliveredNotification {
+  /**
+   * Notification body text.
+   */
   body?: string;
+  /**
+   * Delivery timestamp (ISO 8601).
+   */
   delivered_at: string;
+  /**
+   * Notification identifier.
+   */
   id: string;
+  /**
+   * Notification title.
+   */
   title: string;
 }
 
@@ -235,11 +655,19 @@ export interface DirectoryEntry {
   is_symlink: boolean;
   name: string;
   path: string;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   size: number;
 }
 
 export interface DiscoverItem {
   id: string;
+  /**
+   * The subtitle is itself a matchable spoken form — the entry has an
+   * alias equal to its display name (e.g. a promoted selection record).
+   * Browse surfaces may mark the row so the user knows the name works.
+   */
   speakable: boolean;
   subtitle?: string;
   tag: string;
@@ -248,55 +676,181 @@ export interface DiscoverItem {
 
 export interface DisplayColorProfile {
   color_space: string;
+  /**
+   * wire uint32 · min 0
+   */
   display_id: number;
   profile_name: string;
 }
 
 export interface DisplayInfo {
+  /**
+   * wire int32
+   */
   h: number;
+  /**
+   * wire uint32 · min 0
+   */
   id: number;
+  /**
+   * wire int32 · default 0
+   */
   visible_h: number;
+  /**
+   * wire int32 · default 0
+   */
   visible_w: number;
+  /**
+   * Visible bounds (excluding menu bar and dock), in top-left origin coordinates.
+   * Zero if not available.
+   * wire int32 · default 0
+   */
   visible_x: number;
+  /**
+   * wire int32 · default 0
+   */
   visible_y: number;
+  /**
+   * wire int32
+   */
   w: number;
+  /**
+   * wire int32
+   */
   x: number;
+  /**
+   * wire int32
+   */
   y: number;
 }
 
+/**
+ * Full display metadata — richer than WorldModel's DisplayInfo.
+ */
 export interface DisplayMetadata {
+  /**
+   * CoreGraphics display ID.
+   * wire uint32 · min 0
+   */
   display_id: number;
+  /**
+   * wire int32
+   */
   h: number;
+  /**
+   * Whether this is a built-in display (laptop screen).
+   */
   is_builtin: boolean;
+  /**
+   * Whether this is the primary display.
+   */
   is_primary: boolean;
+  /**
+   * Human-readable display name (e.g. "Built-in Retina Display").
+   */
   name: string;
+  /**
+   * Display refresh rate in Hz (e.g. 60.0, 120.0).
+   * wire double
+   */
   refresh_rate: number;
+  /**
+   * Native pixel resolution height.
+   * wire uint32 · min 0
+   */
   resolution_h: number;
+  /**
+   * Native pixel resolution width.
+   * wire uint32 · min 0
+   */
   resolution_w: number;
+  /**
+   * Retina scale factor (e.g. 2.0 for HiDPI).
+   * wire double
+   */
   scale_factor: number;
+  /**
+   * wire int32
+   */
   visible_h: number;
+  /**
+   * wire int32
+   */
   visible_w: number;
+  /**
+   * Visible bounds (excluding menu bar and dock).
+   * wire int32
+   */
   visible_x: number;
+  /**
+   * wire int32
+   */
   visible_y: number;
+  /**
+   * wire int32
+   */
   w: number;
+  /**
+   * Full bounds in top-left origin screen coordinates.
+   * wire int32
+   */
   x: number;
+  /**
+   * wire int32
+   */
   y: number;
 }
 
 export interface DisplayRotation {
+  /**
+   * wire uint32 · min 0
+   */
   degrees: number;
+  /**
+   * wire uint32 · min 0
+   */
   display_id: number;
 }
 
 export interface EnumeratedCommand {
+  /**
+   * Dispatch action type, e.g. `"browser.scroll"` (template-resolved). The
+   * stable identity of what the command does — lets a companion correlate a
+   * spoken command with the action it triggers (the pattern is display text,
+   * not an identifier).
+   */
   action: string;
+  /**
+   * The ready-to-store keybind value (`{"action": "<dotted.type>",
+   * "params": {…}}`) when the command's action is statically bindable —
+   * a concrete plugin action with no capture template, no sequence, and
+   * no intrinsic phase. Absent otherwise. This is what the Keybinds
+   * tab's bind-a-command flow copies.
+   */
   binding?: unknown;
+  /**
+   * Optional grouping label from the command definition (e.g. "Navigation").
+   */
   category?: string;
+  /**
+   * Optional human-readable "what it does / use case" text from the command
+   * definition — the same field used as the HUD subtitle.
+   */
   description?: string;
   dynamic: boolean;
+  /**
+   * Same as `owner_plugin` when dynamic; omitted when static. Surfaced
+   * separately so callers can pattern-match `if let Some(owner) = ...`.
+   */
   dynamic_owner?: string;
+  /**
+   * `<owner_plugin>:<display_pattern>` — stable across reloads.
+   */
   id: string;
   owner_plugin: string;
+  /**
+   * Human-readable pattern (first option of each slot).
+   */
   pattern: string;
   requires_tags: string[];
   sets_tags: string[];
@@ -304,10 +858,16 @@ export interface EnumeratedCommand {
 
 export interface ExternalDisk {
   file_system?: string;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   free_bytes: number;
   is_removable: boolean;
   mount_point: string;
   name: string;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   total_bytes: number;
 }
 
@@ -336,51 +896,135 @@ export type FieldDisplay = "primary" | "secondary" | "group" | "description" | "
  */
 export type FieldType = "string" | "int" | "number" | "boolean" | "string[]" | "enum" | "object" | "json";
 
+/**
+ * Integer rectangle for window position and size. Mirrors the `Frame`
+ * component in the Plugin RPC schema (used by `_platform.window.created` and
+ * `_platform.window.frame_changed` event payloads).
+ */
 export interface Frame {
+  /**
+   * wire int32
+   */
   h: number;
+  /**
+   * wire int32
+   */
   w: number;
+  /**
+   * wire int32
+   */
   x: number;
+  /**
+   * wire int32
+   */
   y: number;
 }
 
 export interface HidDeviceEntry {
+  /**
+   * wire uint32 · min 0
+   */
   axes: number;
   ble_uuid?: string;
+  /**
+   * wire uint32 · min 0
+   */
   buttons: number;
   id: string;
   product: string;
+  /**
+   * wire uint32 · min 0
+   */
   product_id: number;
   seized: boolean;
   transport: string;
+  /**
+   * wire uint32 · min 0
+   */
   vendor_id: number;
 }
 
+/**
+ * A single input element from a HID device's report descriptor.
+ */
 export interface HidElementEntry {
+  /**
+   * wire uint32 · min 0
+   */
   bit_offset: number;
+  /**
+   * wire uint32 · min 0
+   */
   byte_offset: number;
+  /**
+   * wire int64 (64-bit)
+   */
   logical_max: number;
+  /**
+   * wire int64 (64-bit)
+   */
   logical_min: number;
+  /**
+   * wire uint32 · min 0
+   */
   report_count: number;
+  /**
+   * wire uint32 · min 0
+   */
   report_id: number;
+  /**
+   * wire uint32 · min 0
+   */
   report_size: number;
   type: string;
+  /**
+   * wire uint32 · min 0
+   */
   usage: number;
+  /**
+   * wire uint32 · min 0
+   */
   usage_page: number;
 }
 
+/**
+ * An available keyboard input source.
+ */
 export interface InputSource {
+  /**
+   * Input source identifier (e.g. "com.apple.keylayout.US").
+   */
   id: string;
+  /**
+   * Whether this is the currently active input source.
+   */
   is_active: boolean;
+  /**
+   * Localized display name.
+   */
   name: string;
 }
 
+/**
+ * An installed application discovered by scanning the filesystem.
+ */
 export interface InstalledApp {
   bundle_id: string;
   name: string;
 }
 
 export interface ListCommandItem {
+  /**
+   * True iff this command's vocabulary depends on runtime state pushes
+   * (DependentCapture, or a capture against a collection no plugin
+   * declares in provides.collections). Calibration consumers use this
+   * to decide whether to invoke a fixture RPC.
+   */
   dynamic: boolean;
+  /**
+   * Owning plugin when `dynamic` is true — the plugin to ask for a
+   * calibration fixture. Omitted for static commands.
+   */
   dynamic_owner?: string;
   id: string;
   subtitle?: string;
@@ -393,30 +1037,138 @@ export interface ListCommandSection {
   title: string;
 }
 
+/**
+ * Listing parameters for `list`. All fields optional — an empty `ListOpts`
+ * asks a BACKEND for every record in default ordering. That is not what an
+ * RPC caller gets: `StateService::list` substitutes
+ * `StateService::DEFAULT_LIST_LIMIT` when the caller passed no `limit`, so
+ * "every record" is the backend contract and never the plugin-visible one.
+ * See docs/design/DESIGN_PLATFORM_LOAD_SAFEGUARDS.md.
+ * CLOSED vocabulary (verb-surface consolidation, 2026-06-11): every
+ * added opt must be shape-generic or explicitly shape-scoped and
+ * documented in DESIGN_PLATFORM_STATE.md section 3.2 — an undisciplined
+ * opts bag becomes a hidden taxonomy that defeats the eight-verb thesis.
+ */
 export interface ListOpts {
+  /**
+   * Shape-scoped to `by_field` log collections (the compacted-changelog
+   * projection — see `docs/design/DESIGN_LOG_ANNOTATION_PROJECTION.md`, and
+   * DESIGN_PLATFORM_STATE.md §3.2). When true, a keyed log's raw appends
+   * are folded by their key field per the collection's `merge` and one
+   * record per key is returned (the record's current state) instead of the
+   * raw append history. Ignored by non-log backends; a validation error on
+   * an auto-ulid log (no key field to fold on). Absent/false = raw read.
+   */
   compacted?: boolean;
+  /**
+   * Opaque pagination cursor. Backends define the format; callers pass
+   * back the cursor value returned by a prior `list` call.
+   */
   cursor?: string;
+  /**
+   * Maximum records to return. None = no limit AT THE BACKEND; over RPC,
+   * `StateService::list` substitutes `StateService::DEFAULT_LIST_LIMIT`
+   * for a caller that passed none, and emits a `LIST_TRUNCATED` diagnostic
+   * if that bound actually cut the result short. An explicit limit is
+   * honored either way, above or below the default.
+   * wire uint · min 0
+   */
   limit?: number;
+  /**
+   * Inclusive lower bound on `timestamp_ms` (or equivalent ordering key).
+   * wire uint64 (64-bit) · min 0
+   */
   since_ms?: number;
+  /**
+   * Exclusive upper bound on `timestamp_ms`.
+   * wire uint64 (64-bit) · min 0
+   */
   until_ms?: number;
+  /**
+   * Shape-generic equality filter on `Record::writer` — return only records
+   * owned by this writer. Absent = every record, whoever owns it.
+   *
+   * This is the ONE in-verb extension DESIGN_PLATFORM_STATE.md section 3.2
+   * reserved ("the only in-verb extension we would entertain is equality
+   * filters on list opts"), spent here rather than on a general predicate
+   * language: it is exact equality on one structural envelope field, so it
+   * cannot compose into a query engine every backend must reimplement.
+   *
+   * It exists so a caller can ask for its OWN records — the read half of
+   * scoped writes. `collection.replace` computes its complement from this,
+   * which is what lets a replace be safe on a multi-writer collection
+   * without the introducer restriction. See docs/design/DESIGN_RECORD_OWNERSHIP.md.
+   *
+   * Filtering happens BEFORE `limit`, so a limited+filtered read returns up
+   * to `limit` MATCHING records rather than the matches within the first
+   * `limit` records. Backends are free to filter earlier as an optimization
+   * (skipping a whole non-matching contribution, say) as long as the
+   * observable result is identical — `backend_conformance` pins that.
+   */
   writer?: string;
 }
 
 export interface ListeningPort {
+  /**
+   * wire int32
+   */
   pid?: number;
+  /**
+   * wire uint16 · min 0 · max 65535
+   */
   port: number;
   process_name?: string;
   protocol: string;
 }
 
+/**
+ * One record in a log collection.
+ */
 export interface LogEntry {
+  /**
+   * ULID — Crockford base32, sortable by creation time. Acts as the
+   * entry's primary key for `get(id)` and `delete(id)` calls.
+   */
   id: string;
+  /**
+   * Actor label of the writer that appended this entry — see
+   * `Record::on_behalf_of`. `None` for entries whose writer was acting
+   * only for itself, and for anything written before the field existed.
+   *
+   * Follows `writer` through the fold: the INTRODUCING entry's label
+   * stays on a folded record, so an annotation by another script does not
+   * relabel the record it annotates.
+   */
   on_behalf_of?: string;
+  /**
+   * Plugin-defined entry payload. Validated against the collection's
+   * `fields` schema at append time by the service layer (not here).
+   */
   payload?: unknown;
+  /**
+   * Unix milliseconds. Duplicated from the ULID's embedded timestamp for
+   * cheap range queries that don't want to decode the ULID.
+   * wire uint64 (64-bit) · min 0
+   */
   timestamp_ms: number;
+  /**
+   * Plugin id that appended this entry, or `_platform` for host writes.
+   * `""` for entries written before this field existed — `serde(default)`
+   * so already-persisted logs rehydrate rather than failing to parse.
+   *
+   * Logs are append-once per ULID, so for a raw entry "creation writer"
+   * and "last writer" are the same thing. On a KEYED log they are not:
+   * the folded record keeps its INTRODUCING entry's writer, so an
+   * annotation by another plugin does not transfer ownership of the
+   * record it annotates. See `Record::writer`.
+   * default ""
+   */
   writer: string;
 }
 
+/**
+ * A login item (launch-at-login entry).
+ */
 export interface LoginItem {
   bundle_id?: string;
   hidden: boolean;
@@ -424,11 +1176,24 @@ export interface LoginItem {
   path: string;
 }
 
+/**
+ * One `(record, field)` a tenant set, with the provenance of the decision.
+ */
 export interface ManagedFieldRow {
+  /**
+   * Who applied it: a plugin id, or `_host` for the Settings UI.
+   */
   actor: string;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   at_unix_ms: number;
   field: string;
   id: string;
+  /**
+   * `user` | `relayed` | `plugin` — whose intent this represents. `relayed`
+   * is a plugin's unverified claim to be carrying a user gesture.
+   */
   origin: string;
 }
 
@@ -442,18 +1207,57 @@ export interface ManagedFieldRow {
 export type MatchWinner = "gated_scoped" | "gated_unscoped" | "ungated" | "no_match";
 
 export interface MemoryInfo {
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   available_bytes: number;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   swap_total_bytes: number;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   swap_used_bytes: number;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   total_bytes: number;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   used_bytes: number;
 }
 
+/**
+ * A menu bar item (or submenu) from an application.
+ *
+ * Self-referential via `children: Vec<MenuItem>`. schemars handles
+ * the recursion via a `$defs` entry; the previous utoipa-specific
+ * `#[schema(no_recursion)]` annotation was dropped in
+ * Phase 2j-utoipa-removal.
+ */
 export interface MenuItem {
+  /**
+   * Child menu items (submenus).
+   */
   children: MenuItem[];
+  /**
+   * Whether the menu item is enabled.
+   */
   enabled: boolean;
+  /**
+   * Zero-based index within the parent menu.
+   * wire uint32 · min 0
+   */
   index: number;
+  /**
+   * Keyboard shortcut string (e.g. "⌘S"), if any.
+   */
   shortcut?: string;
+  /**
+   * The title of the menu item.
+   */
   title: string;
 }
 
@@ -483,18 +1287,39 @@ export interface NowPlayingInfo {
   album?: string;
   app_bundle_id?: string;
   artist?: string;
+  /**
+   * wire double
+   */
   duration?: number;
+  /**
+   * wire double
+   */
   elapsed?: number;
   is_playing: boolean;
   title?: string;
 }
 
 export interface OcrRegion {
+  /**
+   * wire double
+   */
   confidence: number;
+  /**
+   * wire double
+   */
   height: number;
   text: string;
+  /**
+   * wire double
+   */
   width: number;
+  /**
+   * wire double
+   */
   x: number;
+  /**
+   * wire double
+   */
   y: number;
 }
 
@@ -505,58 +1330,237 @@ export type OnActionStatus = "ok" | "error" | "not_handled";
  */
 export type OnPointer = "none" | "fade";
 
+/**
+ * What confirming an item does — EXACTLY ONE of `say` or `dispatch`.
+ *
+ * `say` is the common case for commands: the words are routed through the
+ * same matcher the person's voice would reach, so confirming an item is
+ * indistinguishable from speaking it. `dispatch` names an action type
+ * directly, for items that are not commands.
+ */
 export interface OutputAction {
+  /**
+   * An action type to dispatch — `windows.desk`.
+   */
   dispatch?: string;
+  /**
+   * Parameters for `dispatch`. Meaningless with `say`.
+   */
   params?: unknown;
+  /**
+   * Words to inject as if spoken.
+   */
   say?: string;
 }
 
+/**
+ * One thing the person can know about or act on.
+ *
+ * Every item has a `phrase`; an item with an `action` can be confirmed, and
+ * confirming it does what the action says. Without an action, an item is
+ * information, and a renderer that offers items in turn skips it.
+ */
 export interface OutputItem {
+  /**
+   * What confirming this item does. Absent means information only.
+   */
   action?: OutputAction;
+  /**
+   * Open extension, namespaced by plugin id — see [`OutputState::extra`].
+   */
   extra?: Record<string, unknown>;
+  /**
+   * Stable within the document — what a renderer reports back as chosen.
+   */
   id: string;
+  /**
+   * The item in human words — "snap left", "desk two". The utterance, the
+   * cells, the text — and the words injected when the item is confirmed
+   * through the same matcher a voice would use.
+   */
   phrase: string;
+  /**
+   * A second line — "move the window to the left half".
+   */
   subtitle?: string;
+  /**
+   * The item as a label — "snap left".
+   */
   title: string;
 }
 
+/**
+ * How far along something measurable is, in time.
+ */
 export interface OutputProgress {
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   remaining_ms: number;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   total_ms: number;
 }
 
+/**
+ * A titled group of items.
+ */
 export interface OutputSection {
+  /**
+   * default []
+   */
   items?: OutputItem[];
+  /**
+   * The group's name — "Windows". May be empty for an ungrouped list.
+   */
   title: string;
 }
 
+/**
+ * A superseding statement of what is true for the person on one channel.
+ *
+ * A push REPLACES the channel's current state; it is never appended. The
+ * person needs what is true now, never a transcript of what was true, and a
+ * renderer mid-utterance abandons it when the next state arrives.
+ *
+ * Core (every renderer must understand): `kind`, `title`, `phrase`, each
+ * item's `phrase` and `action`, `urgency`, `locale`, `v`. Beside it, `extra`
+ * is open and namespaced by plugin id for what the shape did not
+ * anticipate; a renderer ignores what it does not understand, so an
+ * extension never breaks a modality.
+ */
 export interface OutputState {
+  /**
+   * The HUD channel this state belongs to. Declared by the calling plugin
+   * in its manifest (`hud_windows`) or created at runtime; the platform
+   * verifies ownership exactly as it does for `hud.push`.
+   */
   channel: string;
+  /**
+   * Open extension, namespaced by plugin id (`{"voice": {...}}`). Nothing
+   * in core may depend on it; the platform promotes what gets used into
+   * core deliberately, as a versioned addition.
+   */
   extra?: Record<string, unknown>;
+  /**
+   * A trailing line — "say a command, or wait".
+   */
   footer?: string;
+  /**
+   * One of the closed [`OutputKind`] vocabulary: `choices`, `mode`,
+   * `outcome`, `problem`, `progress`. Carried as a string so a kind this
+   * platform does not know degrades to `outcome` instead of failing.
+   */
   kind: string;
+  /**
+   * BCP 47 language tag of every phrase in this document — "en", "pt-BR".
+   */
   locale: string;
+  /**
+   * The state in human words — "twelve commands", "snapped left". The
+   * carrier of meaning for every receiver, named after none of them.
+   */
   phrase: string;
+  /**
+   * How far along something measurable is. Usually with `kind: progress`.
+   */
   progress?: OutputProgress;
+  /**
+   * Grouped items, when the state has parts — the commands open to the
+   * person, the entries in a selection. Empty for a state with none.
+   * `null` is accepted as empty: a Go producer's nil slice marshals to
+   * `null` (`operations::types::serde_compat`).
+   * default []
+   */
   sections?: OutputSection[];
+  /**
+   * The state in a few words — what a screen shows as the heading.
+   */
   title: string;
+  /**
+   * One of the closed [`OutputUrgency`] vocabulary: `ambient`, `notable`,
+   * `interrupt`. A string for the same reason `kind` is; unknown degrades
+   * to `ambient`.
+   */
   urgency: string;
+  /**
+   * The contract version this document was written against
+   * ([`OUTPUT_STATE_V`]). Information for a renderer, never a gate.
+   * wire uint32 · min 0
+   */
   v: number;
 }
 
+/**
+ * One (tenant, collection) overlay entry with content.
+ */
 export interface OverlayRow {
+  /**
+   * User band only (plugin overlays cannot add or remove records).
+   * wire uint · min 0
+   */
   added: number;
   collection: string;
+  /**
+   * Which field of which record this tenant currently manages, and the
+   * decision that set it. Named for Kubernetes Server-Side Apply's
+   * `managedFields`, whose SHAPE this is — per-field ownership records —
+   * but deliberately not its vocabulary: SSA's `conflict` and `force` are
+   * answers to two managers claiming one field, and annotations are
+   * namespaced per tenant, so that situation does not arise here. Importing
+   * those names would name behaviour this platform does not have.
+   */
   managed_fields: ManagedFieldRow[];
+  /**
+   * Record ids this tenant patches — INCLUDING dangling ones whose record
+   * no longer exists. Annotations key on identity, so a patch survives its
+   * record being unpublished (and resurrects if the id returns); this list
+   * is how a tenant finds strays to `restore`.
+   */
   patched_ids: string[];
+  /**
+   * wire uint · min 0
+   */
   removed: number;
+  /**
+   * Whose overlay: `"_user"` or a plugin id.
+   */
   tenant: string;
 }
 
+/**
+ * One (collection, group) pair the caller owns records in.
+ *
+ * (collection, group) PAIRS rather than bare collection names because
+ * `(writer, group)` is already the ownership key everything else reasons in:
+ * a plugin sweeping per-collection state wants the name, one managing named
+ * replace-sets wants the group, and one surface serves both. A collection
+ * holding both grouped and ungrouped records of the same writer yields one
+ * row per distinct group.
+ */
 export interface OwnedCollection {
+  /**
+   * How many of the caller's records carry this (collection, group).
+   *
+   * A count rather than a bare existence flag because it distinguishes
+   * "registered but empty" from "absent", which is what the sweeps
+   * actually want — wiping an already-empty collection is a wasted
+   * replace. Never zero: a group with no records yields no row.
+   * wire uint · min 0
+   */
   count: number;
+  /**
+   * The writer-chosen group label, or null for the ungrouped records —
+   * see `Record::group`. Null is the ungrouped bucket, not "any group".
+   */
   group?: string;
   name: string;
+  /**
+   * Who owns these records. Redundant on `collections.owned` (always the
+   * caller) but not on the unfiltered census the ownership diagnostics
+   * run, which is the same walk — so the row is self-describing either way.
+   */
   writer: string;
 }
 
@@ -569,6 +1573,9 @@ export type PluginLogLevel = "trace" | "info" | "warn" | "error" | "debug";
 
 export interface PoolStageStatusEntry {
   alive: boolean;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   generation: number;
   leased: boolean;
   name: string;
@@ -580,41 +1587,104 @@ export interface PrinterInfo {
   state: string;
 }
 
+/**
+ * One privilege the caller declared, with its live state — what a plugin
+ * needs to adapt its own UI ("this feature is pending your approval")
+ * without waiting to hit a -32003.
+ */
 export interface PrivilegeStatusEntry {
+  /**
+   * The user dismissed a request for it; a grant clears this.
+   */
   denied: boolean;
+  /**
+   * In the caller's effective set right now — calls gated on it succeed.
+   */
   granted: boolean;
+  /**
+   * An allow-once grant is waiting: the next call gated on this
+   * privilege succeeds, then the grant is spent. Never reported in
+   * `granted` — a one-shot is not a standing grant.
+   * default false
+   */
   one_shot: boolean;
+  /**
+   * A privileges.request for it is awaiting the user.
+   */
   pending: boolean;
   privilege: string;
+  /**
+   * Declared in `privileges` (true) vs `optional_privileges` (false).
+   */
   required: boolean;
 }
 
 export interface ProcessInfo {
+  /**
+   * wire double
+   */
   cpu_percent?: number;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   memory_bytes?: number;
   name: string;
   path?: string;
+  /**
+   * wire int32
+   */
   pid: number;
   user?: string;
 }
 
 export interface RedecodeItem {
+  /**
+   * When set, the actuator stamps the live never-standalone Lever E penalty
+   * (`build_never_standalone_weights_inner`) onto this item so the re-decode
+   * reproduces the biased live behavior. The word set is the actuator's, not the
+   * caller's — the plugin only opts in. Off = unbiased decode.
+   * default false
+   */
   apply_bias?: boolean;
+  /**
+   * WAV path relative to the CALLER's own data dir (e.g.
+   * `calibration-capture/<game>/seg_0.wav`). Confined to that root.
+   */
   audio: string;
+  /**
+   * L2 strength sweep: when set, the actuator stamps the never-standalone word set
+   * at exactly this cost (instead of the configured live penalty), so the caller
+   * can probe the same clip across a ladder of strengths and find its flip
+   * threshold. The word set is still the actuator's — only the cost is requested.
+   * Takes precedence over `apply_bias`; <= 0 means unbiased.
+   * wire double · default null
+   */
   bias_strength?: number;
   id: string;
   noise?: RedecodeNoise;
+  /**
+   * default []
+   */
   words?: string[];
 }
 
 export interface RedecodeLine {
   error: string;
   id: string;
+  /**
+   * default ""
+   */
   text: string;
 }
 
 export interface RedecodeNoise {
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   seed: number;
+  /**
+   * wire double
+   */
   snr_db: number;
 }
 
@@ -622,6 +1692,9 @@ export interface ReminderItem {
   due_date?: string;
   is_completed: boolean;
   list_name?: string;
+  /**
+   * wire int32
+   */
   priority: number;
   title: string;
 }
@@ -646,34 +1719,78 @@ export type ReplaceScope =
   /** Narrows to the caller's own records carrying this group label, and stamps `value` on every entry written. Lets one plugin maintain several independent replace-sets in one collection — command sources are the motivating case (`commands.push`'s `group` is exactly this).  Replaces the earlier `prefix` scope, which expressed the same intent as an id-prefix convention — the id doing double duty as identity and scope, with an error class ("entry outside the declared prefix") that existed only to police the convention. A group is a real envelope attribute, so none of that polices anything: entries in a grouped replace are in its group by definition. (`prefix` shipped 2026-08-12 and accumulated zero production callers before its removal.) */
   | { kind: "group"; value: string };
 
+/**
+ * Serializable mirror of `crate::matching::MatchDecisionTelemetry`. The
+ * internal type can't derive `Serialize`/`JsonSchema` because it lives in
+ * the matching crate alongside non-serializable internals — this struct
+ * is the wire shape exposed through `commands.resolve`.
+ */
 export interface ResolveTelemetry {
+  /**
+   * True iff any gated command's Partial was observed during
+   * categorization. When `winner == Ungated` and this is `true`, the
+   * matcher's `suppress_ungated` propagation failed to fire.
+   */
   gated_partial_seen: boolean;
   winner: MatchWinner;
+  /**
+   * The pattern that won (`None` when `winner == NoMatch`). Surfaces the
+   * internal `MatchDecisionTelemetry.winning_pattern` so a consumer can
+   * confirm *which* command resolved — e.g. calibration command-practice
+   * compares this against the enumerated command it asked the user to say.
+   */
   winning_pattern?: string;
 }
 
+/**
+ * A running application as reported by the OS.
+ */
 export interface RunningApp {
   bundle_id?: string;
   is_active: boolean;
   is_hidden: boolean;
   name: string;
+  /**
+   * wire int32
+   */
   pid: number;
 }
 
 export interface ScreenshotRegion {
+  /**
+   * wire int32
+   */
   h: number;
+  /**
+   * wire int32
+   */
   w: number;
+  /**
+   * wire int32
+   */
   x: number;
+  /**
+   * wire int32
+   */
   y: number;
 }
 
+/**
+ * List schema info sent to plugins in render_settings (enriched with entry count + source).
+ */
 export interface SettingsListSchemaInfo {
   description: string;
+  /**
+   * wire uint · min 0
+   */
   entry_count: number;
   label: string;
   source_plugin: string;
 }
 
+/**
+ * Tag schema info sent to plugins in render_settings.
+ */
 export interface SettingsTagSchemaInfo {
   description: string;
   label: string;
@@ -685,10 +1802,27 @@ export interface ShortcutInfo {
   name: string;
 }
 
+/**
+ * Information about a macOS Space.
+ */
 export interface SpaceInfo {
+  /**
+   * The display ID this space belongs to.
+   * wire uint32 · min 0
+   */
   display_id: number;
+  /**
+   * Whether this is the currently active space on its display.
+   */
   is_active: boolean;
+  /**
+   * The Space ID (from CGS private APIs).
+   * wire uint64 (64-bit) · min 0
+   */
   space_id: number;
+  /**
+   * Space type: "user", "fullscreen", or "unknown".
+   */
   space_type: string;
 }
 
@@ -698,11 +1832,30 @@ export interface SpeechLocale {
   language: string;
 }
 
+/**
+ * A Spotlight search result.
+ */
 export interface SpotlightResult {
+  /**
+   * Content kind (e.g. "Document", "Image", "Folder").
+   */
   kind: string;
+  /**
+   * Last modified date (ISO 8601).
+   */
   modified: string;
+  /**
+   * File name.
+   */
   name: string;
+  /**
+   * File path.
+   */
   path: string;
+  /**
+   * File size in bytes, if available.
+   * wire uint64 (64-bit) · min 0
+   */
   size?: number;
 }
 
@@ -714,12 +1867,41 @@ export interface SystemAppearance {
   reduce_transparency: boolean;
 }
 
+/**
+ * One entry in `ResolveResult.tied_candidates` — the dispatchable subset of a
+ * resolved command, so a consumer can fire the chosen one directly after the
+ * user picks. Mirrors the dispatch fields the single-winner envelope carries
+ * (`action` is template-resolved; `args` is empty unless resolution failed),
+ * plus a human-readable `label` for the disambiguation UI. See the tie-signal
+ * protocol doc in branchkit-web.
+ */
 export interface TiedCandidate {
+  /**
+   * Template-resolved action to dispatch if this candidate is chosen.
+   * `Action` is opaque to schemars (free-form JSON value), matching
+   * `ResolveResult.action`.
+   */
   action?: unknown;
+  /**
+   * Named captures, keyed by binding name. Empty when `action` is a
+   * fully-resolved template; populated only when resolution failed.
+   */
   args: Record<string, unknown>;
   clears_tags: string[];
+  /**
+   * wire uint · min 0
+   */
   consumed_count: number;
+  /**
+   * Human-readable label for a disambiguation UI — the command's
+   * description, falling back to a summary of its phrase pattern (and, when
+   * neither is set, to the owning plugin plus action type). Pair it with
+   * `owner_plugin` to render which command this candidate is.
+   */
   label: string;
+  /**
+   * The plugin that owns this command.
+   */
   owner_plugin: string;
   requires_tags: string[];
   sets_tags: string[];
@@ -745,16 +1927,40 @@ export interface UsbDevice {
   vendor_id?: string;
 }
 
+/**
+ * Window bounds in screen coordinates.
+ */
 export interface WindowBounds {
+  /**
+   * wire int32
+   */
   h: number;
+  /**
+   * wire int32
+   */
   w: number;
+  /**
+   * wire int32
+   */
   x: number;
+  /**
+   * wire int32
+   */
   y: number;
 }
 
+/**
+ * Detailed info about a single window.
+ */
 export interface WindowDetail {
+  /**
+   * wire double
+   */
   alpha?: number;
   bounds: WindowBounds;
+  /**
+   * wire uint32 · min 0
+   */
   display_id: number;
   is_focused: boolean;
   is_fullscreen: boolean;
@@ -764,45 +1970,153 @@ export interface WindowDetail {
   window_id: string;
 }
 
+/**
+ * A target frame for a window. Used for both `batch_set_frames` input
+ * and its result (the result reuses the same shape so callers can compare
+ * requested vs actual positions).
+ */
 export interface WindowFrame {
+  /**
+   * wire int32
+   */
   h: number;
+  /**
+   * wire int32
+   */
   w: number;
   window_id: string;
+  /**
+   * wire int32
+   */
   x: number;
+  /**
+   * wire int32
+   */
   y: number;
 }
 
 export interface WindowInfo {
+  /**
+   * default ""
+   */
   app_id: string;
+  /**
+   * default ""
+   */
   app_name: string;
+  /**
+   * Desk ordinal of the window's space: user spaces counted 1..N in
+   * managed-display order (on macOS, the Mission Control / Ctrl+N index —
+   * the same convention as `windows.desk_switch`). Absent when the window
+   * is not on exactly one user space: minimized (no space), fullscreen
+   * (its space is not a user desk), or pinned to multiple spaces.
+   * wire uint32 · default null · min 0
+   */
   desk?: number;
+  /**
+   * wire int32 · default 0
+   */
   h: number;
+  /**
+   * default ""
+   */
   id: string;
+  /**
+   * "observed" = discovered via OS accessibility APIs.
+   * "managed" = HUD window created by actuator channel infrastructure.
+   * default "observed"
+   */
   source: string;
+  /**
+   * Space (virtual desktop) ids this window belongs to. Usually one;
+   * several when the window is pinned to multiple spaces; empty when the
+   * OS reports none (minimized windows) or the platform has no space
+   * support.
+   * default []
+   */
   space_ids: number[];
+  /**
+   * default ""
+   */
   title: string;
+  /**
+   * wire int32 · default 0
+   */
   w: number;
+  /**
+   * wire int32 · default 0
+   */
   x: number;
+  /**
+   * wire int32 · default 0
+   */
   y: number;
 }
 
+/**
+ * One collection in the resolved wiring graph.
+ */
 export interface WiringCollection {
   access: string;
+  /**
+   * Why the caller cannot reach it, when it cannot.
+   *
+   * Scoped to the caller's OWN denials, which is what keeps this method
+   * unprivileged. Reporting why some OTHER pair is denied would expose
+   * that pair's grant state, and no plugin-facing surface leaks that; the
+   * caller's own grant state is not a disclosure to the caller. So the
+   * teaching case is served and nothing else is.
+   */
   deny_reason?: string;
+  /**
+   * Declared field keys, in declaration order. Empty when the introducer
+   * publishes no field schema — which is itself the answer to "can I bind
+   * a shape to this".
+   */
   fields: string[];
+  /**
+   * Plugin id, `_platform`, or `_user`.
+   */
   introducer: string;
   merge: string;
   name: string;
+  /**
+   * Whether the CALLER can read it right now.
+   */
   readable: boolean;
+  /**
+   * Whether the CALLER can write it right now.
+   */
   writable: boolean;
+  /**
+   * Resolved, not declared: the preset's expansion is what actually
+   * governs, and a consumer reasoning about the declared value would be
+   * reasoning about the wrong thing.
+   */
   writers: string;
 }
 
 export interface WorldModel {
+  /**
+   * default null
+   */
   active_app?: string;
+  /**
+   * default null
+   */
   active_window_id?: string;
+  /**
+   * default []
+   */
   displays: DisplayInfo[];
+  /**
+   * Active keyboard layout ID (e.g. "com.apple.keylayout.US").
+   * default ""
+   */
   keyboard_layout_id: string;
+  /**
+   * default []
+   */
   windows: WindowInfo[];
 }
 
@@ -821,21 +2135,46 @@ export interface ArtifactDeleteResponse {
 }
 
 export interface CollectionAppendRequest {
+  /**
+   * Collection name. Must be a `kind: "log"` collection.
+   */
   name: string;
+  /**
+   * Entry payload — validated against the collection's `fields` schema.
+   */
   payload: unknown;
 }
 
 export interface CollectionAppendResponse {
+  /**
+   * The newly-appended entry, including its assigned ULID and timestamp.
+   */
   entry: LogEntry;
 }
 
 export interface CollectionAppendKeyedRequest {
+  /**
+   * The fold key — stamped into the payload's key field. Appending another
+   * record with the same key annotates the first (compacted-changelog
+   * shape); a compacted read folds them into one record.
+   */
   key: string;
+  /**
+   * Collection name. Must be a keyed (`id_strategy: by_field`) `log`
+   * collection.
+   */
   name: string;
+  /**
+   * Entry payload — validated against the collection's `fields` schema (the
+   * key field is supplied via `key`, not here).
+   */
   payload: unknown;
 }
 
 export interface CollectionAppendKeyedResponse {
+  /**
+   * The newly-appended entry, including its assigned ULID and timestamp.
+   */
   entry: LogEntry;
 }
 
@@ -844,16 +2183,32 @@ export interface CollectionCountRequest {
 }
 
 export interface CollectionCountResponse {
+  /**
+   * wire uint · min 0
+   */
   count: number;
 }
 
 export interface CollectionDeleteRecordsRequest {
+  /**
+   * Record ids to remove. Always an array; single-record callers wrap
+   * one id. SDK helpers (`Delete` vs `DeleteMany`) hide the wrapping.
+   * default []
+   */
   ids?: string[];
   name: string;
 }
 
 export interface CollectionDeleteRecordsResponse {
+  /**
+   * Number of ids that were already absent (no-op).
+   * wire uint · min 0
+   */
   already_absent: number;
+  /**
+   * Number of records that existed and were removed.
+   * wire uint · min 0
+   */
   deleted: number;
 }
 
@@ -863,6 +2218,9 @@ export interface CollectionFetchRequest {
 }
 
 export interface CollectionFetchResponse {
+  /**
+   * The record, or null if no record with that id exists.
+   */
   record?: CollectionRecord;
 }
 
@@ -872,6 +2230,9 @@ export interface CollectionFetchCompactedRequest {
 }
 
 export interface CollectionFetchCompactedResponse {
+  /**
+   * The record, or null if no record with that id exists.
+   */
   record?: CollectionRecord;
 }
 
@@ -881,6 +2242,11 @@ export interface CollectionGetRequest {
 
 export interface CollectionGetResponse {
   data: unknown;
+  /**
+   * Derived flat map (key_field → value_field) for capture collections.
+   * Only present when the collection schema has key_field and value_field.
+   * Contains bare values — no provenance metadata.
+   */
   entries?: Record<string, unknown>;
   introducer: string;
   merge: MergeStrategy;
@@ -889,15 +2255,25 @@ export interface CollectionGetResponse {
 
 export interface CollectionListRequest {
   name: string;
+  /**
+   * default {}
+   */
   opts?: ListOpts;
 }
 
 export interface CollectionListResponse {
   records: CollectionRecord[];
+  /**
+   * Total record count for the collection, independent of filter / limit.
+   * wire uint · min 0
+   */
   total: number;
 }
 
 export interface CollectionPatchRequest {
+  /**
+   * Object of fields to merge over the existing record.
+   */
   fields: unknown;
   id: string;
   name: string;
@@ -908,43 +2284,135 @@ export interface CollectionPatchResponse {
 }
 
 export interface CollectionPutRequest {
+  /**
+   * Records to upsert. Always an array; single-record callers wrap one
+   * entry. The wire format is uniform across single and bulk callers;
+   * the SDK helpers (`Put` vs `PutMany`) hide the wrapping for the
+   * single-record case. See docs/design/DESIGN_BROWSER_HINT_SILENT_EVICTION.md
+   * for the rationale.
+   * default []
+   */
   entries?: CollectionPutEntry[];
+  /**
+   * Writer-chosen group label stamped on EVERY entry in this call — which
+   * of the caller's named replace-sets these records belong to. See the
+   * record envelope's `group`: last-write placement, meaningful only
+   * within a writer. Absent = ungrouped, the common case. Call-level
+   * rather than per-entry because a put that mixes groups is a caller
+   * composing two writes, not one write with two meanings.
+   */
   group?: string;
+  /**
+   * Optional human-readable label for the collection as a whole — the
+   * friendly category name shown on the Discovery HUD's tag badge and in
+   * the Settings UI, in place of the raw collection id (`Badge` instead of
+   * `browser_hints_arch_strict`). This is the dynamic-collection counterpart
+   * to a manifest-declared collection's `schema.label`; a plugin creating a
+   * collection at runtime declares its label here. Same persistence
+   * semantics as `roles`: last-write-wins, and a put omitting `label`
+   * leaves the prior setting in place. See
+   * `docs/design/DESIGN_COLLECTION_FIELD_ROLES.md`.
+   */
   label?: string;
   name: string;
+  /**
+   * Optional per-payload-field display roles. Used by the Settings
+   * UI / discovery HUD to know which payload field is the primary
+   * label, which is the subtitle, etc. Equivalent to the `roles`
+   * argument on `collection.push`. Mostly meaningful for
+   * auto-registered dynamic collections — manifest-declared
+   * collections get their roles from the schema. On the first
+   * `collection.put` to a not-yet-registered name, the roles are
+   * stored alongside the auto-registered schema. Subsequent puts
+   * with `roles` overwrite the prior setting; puts omitting
+   * `roles` leave roles unchanged.
+   *
+   * Wire-lenient: an entry whose role string this host doesn't know
+   * binds nothing but does NOT fail the put — see `DisplayRoles`.
+   */
   roles?: Record<string, FieldDisplay>;
 }
 
 export interface CollectionPutResponse {
+  /**
+   * Number of records upserted. Equals `entries.len()` on success.
+   * wire uint · min 0
+   */
   count: number;
   ok: boolean;
 }
 
 export interface CollectionReplaceRequest {
+  /**
+   * The desired set. After the call, the records in scope are exactly these.
+   * default []
+   */
   entries?: CollectionPutEntry[];
+  /**
+   * Same semantics as `collection.put`'s `label`.
+   */
   label?: string;
   name: string;
+  /**
+   * Same semantics as `collection.put`'s `roles`.
+   */
   roles?: Record<string, FieldDisplay>;
+  /**
+   * What the call is allowed to delete. Required — see `ReplaceScope`.
+   */
   scope: ReplaceScope;
 }
 
 export interface CollectionReplaceResponse {
+  /**
+   * Records removed because they were in scope but not in `entries`.
+   * wire uint · min 0
+   */
   deleted: number;
+  /**
+   * Records written — new, or whose payload differed.
+   * wire uint · min 0
+   */
   put: number;
+  /**
+   * Records left untouched because their payload was byte-identical.
+   *
+   * Load-bearing, not a statistic: skipping identical payloads is what keeps
+   * a periodic refresh from re-firing `_platform.collection.updated` for
+   * every record and waking every subscriber. It is the property that makes
+   * this a real verb rather than sugar for put-then-delete.
+   * wire uint · min 0
+   */
   skipped: number;
 }
 
 export interface CollectionsCreateUserRequest {
+  /**
+   * default ""
+   */
   description?: string;
+  /**
+   * Collection name (lowercase, underscores).
+   */
   name: string;
+  /**
+   * default ""
+   */
   words_text?: string;
 }
 
 export interface CollectionsCreateUserResponse {
+  /**
+   * The created collection's name (echoed so callers can select it).
+   */
   name: string;
 }
 
 export interface CollectionsListRequest {
+  /**
+   * Filter by collection kind: "entity", "data", "commands", "log". If omitted, returns all.
+   * default null
+   */
   kind?: string;
 }
 
@@ -967,7 +2435,16 @@ export interface CommandsAddAliasResponse {
 }
 
 export interface CommandsConfusabilityRequest {
+  /**
+   * The command's context (its `requires_tags`); empty = free context. Used by
+   * tier-2 so a warning only fires when the confuser is co-eligible here.
+   * default []
+   */
   requires_tags?: string[];
+  /**
+   * The literal spoken words of the phrase being authored.
+   * default []
+   */
   words?: string[];
 }
 
@@ -1002,11 +2479,42 @@ export interface CommandsListOverridesResponse {
 }
 
 export interface CommandsPushRequest {
+  /**
+   * Array of `CommandSpec` JSON objects to push to the matching
+   * engine. Replaces the current commands contributed by the
+   * calling plugin. Wire-level type is opaque
+   * (`serde_json::Value`) to keep the deserializer flexible; see
+   * `CommandSpec` for the canonical field list including
+   * `cancels_bridge`.
+   * default null
+   */
   commands?: unknown;
+  /**
+   * Optional named group this push owns. Absent replaces the plugin's
+   * ENTIRE command set (the original semantics, unchanged); present
+   * replaces only the records in that group and leaves the plugin's other
+   * groups intact.
+   *
+   * Exists because the single implicit slot is a race whenever a plugin has
+   * more than one command source. Browser has five (scroll, find,
+   * references, hint skeleton, palette) and each used to push
+   * independently — whichever landed last was the only set the matcher saw,
+   * and the hint skeleton routinely lost. Its workaround is a mutex plus
+   * rebuilding the union from every builder on each call. With groups each
+   * source owns its own, and dropping a source drops its group.
+   *
+   * See docs/design/PRINCIPLE_PLUGIN_HELD_STATE.md — this is the same
+   * "can two of these coexist?" failure that `collection.replace`'s scope
+   * fixes for records.
+   */
   group?: string;
 }
 
 export interface CommandsPushResponse {
+  /**
+   * Number of commands registered with the matching engine.
+   * wire uint · min 0
+   */
   count: number;
   ok: boolean;
 }
@@ -1019,6 +2527,9 @@ export interface CommandsRemoveAliasRequest {
 
 export interface CommandsRemoveAliasResponse {
   ok: boolean;
+  /**
+   * Whether an alias actually matched and was removed.
+   */
   removed: boolean;
 }
 
@@ -1037,39 +2548,153 @@ export interface CommandsResetOverrideRequest {
 
 export interface CommandsResetOverrideResponse {
   ok: boolean;
+  /**
+   * Whether an override actually matched and was removed.
+   */
   removed: boolean;
 }
 
 export interface CommandsResolveRequest {
+  /**
+   * Active tags for tag-based scoping. If None, uses the state's active_tags.
+   * default null
+   */
   active_tags?: string[];
+  /**
+   * Narrow completions to commands contributed by these collections'
+   * contributors. None or empty = all.
+   * default null
+   */
   collections?: string[];
+  /**
+   * Tiebreak hint for a genuine tie. When resolution reduces to 2+ equally-
+   * eligible commands the matcher cannot separate, and exactly one of them
+   * is owned by this plugin, that candidate is dispatched as a normal single
+   * winner instead of the tie being surfaced. It selects *only* among the
+   * already-tied candidates — it never overrides normal precedence
+   * (longest-match, gated-over-ungated, scope) and has no effect when there
+   * is no tie or when zero/multiple tied candidates match. Transient and
+   * per-resolve; the caller supplies it for one call, it is not a stored
+   * preference.
+   */
   prefer_owner?: string;
+  /**
+   * Dry-run / verify-don't-execute mode. When true, the matcher computes
+   * the full decision (winner, completions, telemetry) but commits
+   * nothing: no tag writes are applied, no `sets_on_partial` bridge is
+   * seeded, and no `command_matched`/`command_no_match` telemetry is
+   * emitted. The action is never dispatched by `resolve` in either mode —
+   * `preview` additionally suppresses the *side effects* of resolution so
+   * a consumer (e.g. calibration command-practice) can score "would this
+   * fire the right command?" without mutating live state or polluting the
+   * no-match dashboards. Default false: normal resolve commits as before.
+   * default false
+   */
   preview?: boolean;
+  /**
+   * Restrict completions to commands requiring this tag.
+   * default null
+   */
   require_tag?: string;
+  /**
+   * Audio session ID from the Swift shell. Informational — links audio
+   * lifecycle events to command matches.
+   */
   session_id?: string;
+  /**
+   * Input source: "command_hold", "continuous", "selection", "api".
+   */
   source?: string;
+  /**
+   * Words to match against the command registry.
+   * default []
+   */
   words?: string[];
 }
 
 export interface CommandsResolveResponse {
+  /**
+   * Opaque to schemars: `Action` is a large enum whose schema is treated
+   * as a free-form JSON value in OpenAPI. The inventory closure still
+   * produces a fully-typed Action.
+   */
   action?: unknown;
+  /**
+   * All currently-active gates from `plugin.<X>.*` namespaces other than
+   * the resolving caller's own (`plugin.<caller>.*`). Lets the caller
+   * make session-end cleanup decisions ("is any other plugin's mode
+   * active?") without maintaining a parallel local view of state. Host
+   * callers see all plugin gates.
+   */
   active_plugin_gates?: string[];
+  /**
+   * Named captures, keyed by binding name. Empty when the matched action
+   * is a template the platform has already resolved into the concrete
+   * `action`; populated only when template resolution failed.
+   */
   args: Record<string, unknown>;
+  /**
+   * True when an active `PendingPartial` bridge survived this resolve
+   * (either advanced one token, or rejected the new utterance without
+   * dropping). Tells the voice plugin to leave the discovery HUD as-is
+   * — the bridge's previously-rendered items are still the correct view
+   * of what completes the in-progress capture. Without this flag the
+   * voice plugin would either replace the HUD with empty/AIR content
+   * (because `items` is empty under bridge survival) or close it via
+   * the "no match, no partial" branch. See actuator commit history for
+   * the matching `capture.progress` suppression. False by
+   * default; only true when the bridge survived.
+   */
   bridge_active?: boolean;
   clears_tags: string[];
+  /**
+   * wire uint · min 0
+   */
   consumed_count: number;
+  /**
+   * The winning command's dictated-argument descriptor, if declared: the
+   */
   has_completions: boolean;
   items: DiscoverItem[];
   matched: boolean;
   next_words: string[];
   owner_plugin?: string;
   requires_tags: string[];
+  /**
+   * Platform-wide list of namespace prefixes that mark a tag as
+   * "scoped." Voice plugin uses this to classify `sets_tags` entries
+   * from a matched command as scoped mode tags without shadowing the
+   * configuration locally.
+   */
   scoped_prefixes?: string[];
+  /**
+   * Currently active scoped tags at match time.
+   */
   scoped_tags?: string[];
   sets_tags: string[];
   telemetry: ResolveTelemetry;
+  /**
+   * The genuinely-tied candidate set, populated only when resolution
+   * reduced to 2+ equally-eligible commands the matcher could not
+   * separate (same gating + scope, same winning length). When non-empty,
+   * `matched` is `false`, NO tag writes were applied, and `command_no_match`
+   * was suppressed: rather than arbitrarily pick an iteration-order winner,
+   * the platform hands the consuming plugin the full set to disambiguate.
+   * The signal is generic — any plugin can read it and resolve the tie
+   * however its surface allows. Additive — a non-tie-aware consumer sees an
+   * empty list and a normal single-winner response.
+   */
   tied_candidates?: TiedCandidate[];
   title: string;
+  /**
+   * Trace ID generated by the actuator for causal correlation. Links
+   * this resolve result to downstream dispatch, state writes, and HUD
+   * events. Per-match — bridge-driven multi-utterance completions
+   * produce different trace_ids for seed and completion. Cross-
+   * resolve threading for the same push-to-talk hold goes through
+   * the ambient `correlation_id` derived from `session_id`. See
+   * `MatchCommandsResult.trace_id` for the full discussion.
+   */
   trace_id?: string;
 }
 
@@ -1084,6 +2709,10 @@ export interface CommandsSetOverrideResponse {
 }
 
 export interface ControlSignalRequest {
+  /**
+   * Raw control-stream signal string (e.g. "open hud", "hide discovery").
+   * Forwarded verbatim to the Swift shell via the actuator's control stream.
+   */
   signal: string;
 }
 
@@ -1096,49 +2725,147 @@ export interface DiscoveryClosedResponse {
 }
 
 export interface DispatchRequest {
+  /**
+   * Typed `Action` variant to dispatch. Schema is loose
+   * (`serde_json::Value`) — see module-level docs for the rationale.
+   * The runtime closure still deserializes the typed
+   * `crate::actions::Action` from this field.
+   */
   action: unknown;
 }
 
 export interface DispatchResponse {
+  /**
+   * Control message to forward to the Swift host (if any).
+   * Present on `status == "ok"`; absent on `status == "error"`.
+   */
   control_message?: string;
+  /**
+   * Plugin that handled the action. Present on `status == "ok"`.
+   */
   handler?: string;
+  /**
+   * Error or denial message. Omitted on success.
+   */
   message?: string;
+  /**
+   * Structured result payload from the handling plugin's action handler.
+   * Opaque to the actuator — piped through from the plugin's response.
+   */
   result?: unknown;
+  /**
+   * `"ok"` for success, `"denied"` if the caller lacks dispatch
+   * permission, `"error"` for an internal panic captured by
+   * `std::panic::catch_unwind`.
+   */
   status: string;
 }
 
 export interface EffectsAssertRequest {
+  /**
+   * Registered effect name (e.g. `suppress_notifications`). Must be
+   * declared in the plugin's manifest `consumes.effects.asserts` and
+   * match an entry in the closed `effects::REGISTERED_EFFECTS` registry.
+   */
   name: string;
 }
 
 export interface EffectsAssertResponse {
+  /**
+   * True when this plugin already held an active assertion for this
+   * effect — assert is idempotent. Implies `granted=true`.
+   */
   already_held: boolean;
+  /**
+   * When the assertion displaced an existing top-of-stack owner, this
+   * names that plugin. The displaced plugin should receive an
+   * `effect_displaced` notification (section 10.2). Notification path is
+   * stubbed in v1 — see registered handler.
+   */
   displaced?: string;
+  /**
+   * True when the platform actually delivers this effect's semantics
+   * while you hold ownership. Signal-shape effects (whose entire
+   * meaning is the queryable ownership stack, e.g.
+   * `signal_recording_active`) are always enforced. False means the
+   * OS/platform handler for this effect is not implemented yet: you
+   * get ownership bookkeeping, displacement events, and `is_active`
+   * queries, but the OS-level behavior (actual notification muting,
+   * focus-steal blocking, …) does NOT happen. Always serialized —
+   * this field is the honesty fence for the stub-handler era.
+   */
   enforced: boolean;
+  /**
+   * True when the assertion is now top-of-stack and effective.
+   * False when the user has revoked consent for this effect on this
+   * plugin (fail-next-assertion semantics per section 10.3) or when the
+   * effect name is unknown.
+   */
   granted: boolean;
 }
 
 export interface EffectsIsActiveRequest {
+  /**
+   * Registered effect name to query.
+   */
   name: string;
 }
 
 export interface EffectsIsActiveResponse {
+  /**
+   * True when the calling plugin currently holds top-of-stack
+   * (i.e. is the effective owner) for this effect. False otherwise —
+   * including when the plugin has a frame underneath someone else's,
+   * when the stack is empty, or when the effect name is unknown.
+   */
   active: boolean;
+  /**
+   * The current effective owner, if any. Useful for plugins that
+   * want to surface "Meeting Mode is overriding Focus Mode" UI.
+   */
   current_owner?: string;
 }
 
 export interface EffectsRetractRequest {
+  /**
+   * Registered effect name to retract. The plugin's frame is removed
+   * from this effect's ownership stack. If no frame exists, the call
+   * is a no-op (`retracted=false`, no error).
+   */
   name: string;
 }
 
 export interface EffectsRetractResponse {
+  /**
+   * Effective owner after the retract — `None` when the stack is
+   * now empty. Equal to the previous top when the retract removed
+   * a non-top frame (current top unchanged).
+   */
   new_owner?: string;
+  /**
+   * True when a frame was actually removed. False when this plugin
+   * held no assertion (idempotent retract) or when the effect name
+   * is unknown.
+   */
   retracted: boolean;
 }
 
 export interface EventsAppendRequest {
+  /**
+   * Free-form event payload. Stored as a raw JSON object on the event
+   * log line.
+   * default null
+   */
   data?: unknown;
+  /**
+   * Event type discriminator (e.g. "session_start", "match", "miss").
+   */
   event_type: string;
+  /**
+   * Logical session id this event belongs to (8-char prefix used by
+   * the event-stream tooling). Defaults to "?" if absent.
+   * default "?"
+   */
   session_id?: string;
 }
 
@@ -1147,8 +2874,22 @@ export interface EventsAppendResponse {
 }
 
 export interface EventsEmitRequest {
+  /**
+   * Optional correlation id linking related events together for
+   * debugging. Auto-generated by the platform when omitted and the
+   * emitting plugin is processing an event that already carried one.
+   * default null · pattern ^tr_[0-9A-Za-z]{11}$
+   */
   correlation_id?: string;
+  /**
+   * Free-form event payload published to subscribers.
+   * default null
+   */
   data?: unknown;
+  /**
+   * Convention-based event type (e.g. "clipboard.copied"). The
+   * `_platform.*` namespace is reserved for the actuator.
+   */
   event_type: string;
 }
 
@@ -1157,16 +2898,72 @@ export interface EventsEmitResponse {
 }
 
 export interface HUDCreateChannelRequest {
+  /**
+   * Whether the channel's window receives keyboard/mouse input.
+   * Defaults to false.
+   * default false
+   */
   accepts_input?: boolean;
+  /**
+   * Anchor position on screen (`Anchor` enum, kebab-case strings:
+   * `"top-left"`, `"top-right"`, `"bottom-left"`, `"bottom-right"`,
+   * `"bottom-center"`, `"center"`). Defaults to `"top-right"`.
+   * default null
+   */
   anchor?: unknown;
+  /**
+   * Channel name. Must be unique across all plugins.
+   */
   channel: string;
+  /**
+   * Optional human-readable description shown in dev tooling.
+   * default ""
+   */
   description?: string;
+  /**
+   * Whether the shell lets the user drag this window and remembers its
+   * position. Draggable windows should also set `follows_focus: false`.
+   * Defaults to false.
+   * default false
+   */
   draggable?: boolean;
+  /**
+   * Whether this channel follows the active display on focus changes.
+   * Defaults to true. Set to false for user-initiated HUDs that should
+   * stay pinned to the display where they were opened.
+   * default true
+   */
   follows_focus?: boolean;
+  /**
+   * Minimum window height in points. Defaults to 100.
+   * wire uint32 · default 100 · min 0
+   */
   min_height?: number;
+  /**
+   * Pointer-dodge behavior: "none" (default) or "fade" (dodge the mouse —
+   * fade to near-transparent while the pointer is inside the frame).
+   * default "none"
+   */
   on_pointer?: OnPointer;
+  /**
+   * Stack position among windows sharing this anchor: offsets ascend from the
+   * anchor edge, so the lowest pins at the corner (a persistent status window)
+   * and higher values stack away (transient toasts). Ties broken by channel
+   * name. Defaults to 0.
+   * wire int32 · default 0
+   */
   stack_order?: number;
+  /**
+   * Fully transparent window — the shell skips its frosted vibrancy panel
+   * and window shadow, so only the plugin's own markup paints. Defaults
+   * to false (frosted).
+   * default false
+   */
   transparent?: boolean;
+  /**
+   * Window width in points. Defaults to 320.
+   * wire uint32 · default 320 · min 0
+   */
   width?: number;
 }
 
@@ -1175,6 +2972,10 @@ export interface HUDCreateChannelResponse {
 }
 
 export interface HUDHideRequest {
+  /**
+   * Channel name to hide. Sends a `close <channel>` (or
+   * `hide <channel>` for built-in channels) to the Swift shell.
+   */
   channel: string;
 }
 
@@ -1183,7 +2984,15 @@ export interface HUDHideResponse {
 }
 
 export interface HUDPushRequest {
+  /**
+   * Name of the HUD channel to push fragments into. Must be owned by
+   * the calling plugin (verified via
+   * `HudChannelRegistry::verify_owner`).
+   */
   channel: string;
+  /**
+   * Array of `HudFragment` objects: `{ target_id, html, raw? }`.
+   */
   fragments: unknown;
 }
 
@@ -1192,16 +3001,31 @@ export interface HUDPushResponse {
 }
 
 export interface HUDRemoveChannelRequest {
+  /**
+   * Channel name to remove. Must be owned by the calling plugin.
+   */
   channel: string;
 }
 
 export interface HUDRemoveChannelResponse {
   ok: boolean;
+  /**
+   * Whether a channel was actually removed (false if it was already
+   * absent).
+   */
   removed: boolean;
 }
 
 export interface HUDSetSizeRequest {
+  /**
+   * Channel name whose actual rendered size is being reported.
+   */
   channel: string;
+  /**
+   * Actual rendered height in points (used by world-model entries
+   * instead of `min_height` when known).
+   * wire uint32 · min 0
+   */
   height: number;
 }
 
@@ -1210,6 +3034,10 @@ export interface HUDSetSizeResponse {
 }
 
 export interface HUDShowRequest {
+  /**
+   * Channel name to show. Sends an `open <channel>` message to the
+   * Swift shell.
+   */
   channel: string;
 }
 
@@ -1218,6 +3046,10 @@ export interface HUDShowResponse {
 }
 
 export interface InputClickRequest {
+  /**
+   * Mouse button: "left", "right", or "middle". Defaults to "left".
+   * default "left"
+   */
   button?: string;
 }
 
@@ -1226,7 +3058,14 @@ export interface InputClickResponse {
 }
 
 export interface InputClipboardActionRequest {
+  /**
+   * Action: "copy", "paste", or "set".
+   */
   action: string;
+  /**
+   * Text to set (only used by `action: "set"`).
+   * default null
+   */
   text?: string;
 }
 
@@ -1272,6 +3111,9 @@ export interface InputClipboardWriteResponse {
 }
 
 export interface InputClipboardWriteItemsRequest {
+  /**
+   * default []
+   */
   items?: ClipboardWriteItem[];
 }
 
@@ -1280,7 +3122,13 @@ export interface InputClipboardWriteItemsResponse {
 }
 
 export interface InputDoubleClickRequest {
+  /**
+   * wire int32 · default null
+   */
   x?: number;
+  /**
+   * wire int32 · default null
+   */
   y?: number;
 }
 
@@ -1289,10 +3137,25 @@ export interface InputDoubleClickResponse {
 }
 
 export interface InputDragRequest {
+  /**
+   * wire uint64 (64-bit) · default 0 · min 0
+   */
   duration_ms?: number;
+  /**
+   * wire int32
+   */
   from_x: number;
+  /**
+   * wire int32
+   */
   from_y: number;
+  /**
+   * wire int32
+   */
   to_x: number;
+  /**
+   * wire int32
+   */
   to_y: number;
 }
 
@@ -1305,7 +3168,17 @@ export interface InputListInputSourcesResponse {
 }
 
 export interface InputMouseButtonRequest {
+  /**
+   * Button: "left", "right", or "middle". Defaults to "left".
+   * default "left"
+   */
   button?: string;
+  /**
+   * Direction: "press", "release", or "drag". "drag" posts a
+   * zero-distance dragged event at the current cursor position — macOS
+   * only treats a window as grabbed once a dragged event follows the
+   * press, so drag-based operations need it between press and release.
+   */
   direction: string;
 }
 
@@ -1314,25 +3187,72 @@ export interface InputMouseButtonResponse {
 }
 
 export interface InputParseKeyEventRequest {
+  /**
+   * default false
+   */
   alt?: boolean;
+  /**
+   * `KeyboardEvent.code` — the physical key, layout-independent.
+   * default ""
+   */
   code?: string;
+  /**
+   * default false
+   */
   ctrl?: boolean;
+  /**
+   * `KeyboardEvent.key` — used only to spot a bare modifier press.
+   * default ""
+   */
   key?: string;
+  /**
+   * default false
+   */
   meta?: boolean;
+  /**
+   * default false
+   */
   shift?: boolean;
 }
 
 export interface InputParseKeyEventResponse {
+  /**
+   * `cmd+shift+k`, or the bare key name when no modifier is held. Empty
+   * when the event is not a binding (a bare modifier, escape, or a physical
+   * key the platform has no name for).
+   */
   combo: string;
   has_modifiers: boolean;
+  /**
+   * A modifier pressed on its own. A capture UI waits rather than binding.
+   */
   is_bare_modifier: boolean;
+  /**
+   * Escape, which capture UIs conventionally treat as cancel.
+   */
   is_escape: boolean;
+  /**
+   * The key name alone, resolvable through `_platform.key_names`.
+   */
   key_name: string;
 }
 
 export interface InputPressKeyRequest {
+  /**
+   * Raw keycode (takes priority over `name` if both are present).
+   * wire uint16 · default null · min 0 · max 65535
+   */
   code?: number;
+  /**
+   * Modifier keys to hold during the tap (e.g. "command", "shift").
+   * default []
+   */
   modifiers?: string[];
+  /**
+   * Named key (e.g. "return", "tab"). Resolved via `resolve_key_name`.
+   * Required if `code` is absent.
+   * default null
+   */
   name?: string;
 }
 
@@ -1341,7 +3261,14 @@ export interface InputPressKeyResponse {
 }
 
 export interface InputRawKeyRequest {
+  /**
+   * Raw macOS keycode.
+   * wire uint16 · min 0 · max 65535
+   */
   code: number;
+  /**
+   * One of "press", "release", or "click".
+   */
   direction: string;
 }
 
@@ -1350,7 +3277,13 @@ export interface InputRawKeyResponse {
 }
 
 export interface InputRightClickRequest {
+  /**
+   * wire int32 · default null
+   */
   x?: number;
+  /**
+   * wire int32 · default null
+   */
   y?: number;
 }
 
@@ -1359,8 +3292,20 @@ export interface InputRightClickResponse {
 }
 
 export interface InputScrollRequest {
+  /**
+   * Amount in pixels/units. Defaults to 5.
+   * wire int32 · default 5
+   */
   amount?: number;
+  /**
+   * Direction: "up", "down", "left", or "right".
+   */
   direction: string;
+  /**
+   * Scroll unit: "line" (discrete, default) or "pixel" (continuous/smooth).
+   * Pixel units are needed for horizontal scroll in most browsers.
+   * default "line"
+   */
   unit?: string;
 }
 
@@ -1381,7 +3326,13 @@ export interface InputSwitchInputSourceResponse {
 }
 
 export interface InputTripleClickRequest {
+  /**
+   * wire int32 · default null
+   */
   x?: number;
+  /**
+   * wire int32 · default null
+   */
   y?: number;
 }
 
@@ -1390,6 +3341,9 @@ export interface InputTripleClickResponse {
 }
 
 export interface InputTypeTextRequest {
+  /**
+   * Text to type into the active application.
+   */
   text: string;
 }
 
@@ -1398,10 +3352,18 @@ export interface InputTypeTextResponse {
 }
 
 export interface KeybindsRegisterRequest {
+  /**
+   * `RegistrySnapshot` JSON: `{ entries: [...], listen_up: [...] }`.
+   * Each entry is `{ combo, action, source }`.
+   */
   snapshot: unknown;
 }
 
 export interface KeybindsRegisterResponse {
+  /**
+   * Number of entries cached after the registration.
+   * wire uint · min 0
+   */
   count: number;
   ok: boolean;
 }
@@ -1419,6 +3381,9 @@ export interface NativeAccessibilityEnabledResponse {
 }
 
 export interface NativeActivateAppRequest {
+  /**
+   * default false
+   */
   all_windows?: boolean;
   bundle_id: string;
 }
@@ -1473,11 +3438,20 @@ export interface NativeAppFocusedWindowIDRequest {
 
 export interface NativeAppIconRequest {
   bundle_id: string;
+  /**
+   * wire uint32 · default 64 · min 0
+   */
   size?: number;
 }
 
 export interface NativeAppIconResponse {
+  /**
+   * Always `"png"` -- exposed for forward compatibility.
+   */
   format: string;
+  /**
+   * Base64-encoded PNG bytes.
+   */
   image_base64: string;
 }
 
@@ -1565,6 +3539,9 @@ export interface NativeAudioDeviceVolumeRequest {
 
 export interface NativeAudioDeviceVolumeResponse {
   is_muted: boolean;
+  /**
+   * wire double
+   */
   volume: number;
 }
 
@@ -1609,14 +3586,26 @@ export interface NativeAutomationPermissionResponse {
 }
 
 export interface NativeAxElementAtPointRequest {
+  /**
+   * wire int32
+   */
   pid: number;
+  /**
+   * wire int32
+   */
   x: number;
+  /**
+   * wire int32
+   */
   y: number;
 }
 
 export interface NativeAxElementAtPointResponse {
   actions: string[];
   attributes: string[];
+  /**
+   * wire uint32 · min 0
+   */
   children_count: number;
   description?: string;
   enabled: boolean;
@@ -1631,12 +3620,21 @@ export interface NativeAxElementAtPointResponse {
 }
 
 export interface NativeAxElementTreeRequest {
+  /**
+   * wire uint32 · default 3 · min 0
+   */
   depth?: number;
   element: AXElementRef;
 }
 
 export interface NativeAxObserveRequest {
+  /**
+   * default []
+   */
   notifications?: string[];
+  /**
+   * wire int32
+   */
   pid: number;
 }
 
@@ -1654,6 +3652,9 @@ export interface NativeAxPerformActionResponse {
 }
 
 export interface NativeAxReadAttributesRequest {
+  /**
+   * default []
+   */
   attributes?: string[];
   element: AXElementRef;
 }
@@ -1677,6 +3678,9 @@ export interface NativeAxUnobserveResponse {
 }
 
 export interface NativeBatchIsTileableRequest {
+  /**
+   * default []
+   */
   window_ids?: string[];
 }
 
@@ -1685,7 +3689,15 @@ export interface NativeBatchIsTileableResponse {
 }
 
 export interface NativeBatchSetFramesRequest {
+  /**
+   * default []
+   */
   frames?: WindowFrame[];
+  /**
+   * If true, sleep 10ms after applying frames and read back the actual
+   * positions (defaults to true). Set false to skip the readback round-trip.
+   * default true
+   */
   readback?: boolean;
 }
 
@@ -1694,10 +3706,27 @@ export interface NativeBatchSetFramesResponse {
 }
 
 export interface NativeBatteryResponse {
+  /**
+   * Whether the battery is currently charging.
+   */
   is_charging: boolean;
+  /**
+   * Whether the device is plugged in to external power.
+   */
   is_plugged_in: boolean;
+  /**
+   * Whether a battery is present (false on desktops without a UPS).
+   */
   is_present: boolean;
+  /**
+   * Battery level from 0.0 to 1.0.
+   * wire double
+   */
   level: number;
+  /**
+   * Estimated minutes until empty (or full if charging). None if unknown.
+   * wire int32
+   */
   time_remaining_minutes?: number;
 }
 
@@ -1706,6 +3735,11 @@ export interface NativeBatteryHealthResponse {
 }
 
 export interface NativeBleDiscoverServicesRequest {
+  /**
+   * Identifier for the paired BLE device. Accepts a CoreBluetooth
+   * peripheral UUID (e.g. "12345678-...") or a device name to match
+   * among connected BLE HID peripherals (e.g. "Shortcut Remote").
+   */
   device_identifier: string;
 }
 
@@ -1714,8 +3748,17 @@ export interface NativeBleDiscoverServicesResponse {
 }
 
 export interface NativeBleSubscribeRequest {
+  /**
+   * GATT characteristic UUID to subscribe to (must support notify).
+   */
   characteristic_uuid: string;
+  /**
+   * CoreBluetooth peripheral UUID or device name.
+   */
   device_identifier: string;
+  /**
+   * GATT service UUID containing the characteristic.
+   */
   service_uuid: string;
 }
 
@@ -1724,8 +3767,19 @@ export interface NativeBleSubscribeResponse {
 }
 
 export interface NativeBleSubscribeAllThenWriteRequest {
+  /**
+   * CoreBluetooth peripheral UUID or device name.
+   */
   device_identifier: string;
+  /**
+   * GATT service UUIDs to subscribe to all notify characteristics on.
+   * default []
+   */
   subscribe_services?: string[];
+  /**
+   * Writes to perform after subscribing. The last `with_response` write
+   * determines when the operation completes.
+   */
   writes?: BleWriteEntry[];
 }
 
@@ -1734,10 +3788,28 @@ export interface NativeBleSubscribeAllThenWriteResponse {
 }
 
 export interface NativeBleWriteRequest {
+  /**
+   * GATT characteristic UUID (e.g. "FFF1").
+   */
   characteristic_uuid: string;
+  /**
+   * Bytes to write to the characteristic.
+   * default []
+   */
   data?: number[];
+  /**
+   * Identifier for the paired BLE device. Accepts a CoreBluetooth
+   * peripheral UUID or a device name (see ble_discover_services).
+   */
   device_identifier: string;
+  /**
+   * GATT service UUID (e.g. "FFF0").
+   */
   service_uuid: string;
+  /**
+   * Write type: "with_response" (default, reliable) or "without_response" (fire-and-forget).
+   * default "with_response"
+   */
   write_type?: string;
 }
 
@@ -1766,14 +3838,23 @@ export interface NativeBordersResponse {
 }
 
 export interface NativeBrightnessRequest {
+  /**
+   * wire uint32 · default null · min 0
+   */
   display_id?: number;
 }
 
 export interface NativeBrightnessResponse {
+  /**
+   * wire double
+   */
   brightness: number;
 }
 
 export interface NativeBundleForRemotePortRequest {
+  /**
+   * wire int32
+   */
   remote_port: number;
 }
 
@@ -1815,7 +3896,13 @@ export interface NativeCaptureWindowRequest {
 }
 
 export interface NativeCaptureWindowResponse {
+  /**
+   * Always `"png"`.
+   */
   format: string;
+  /**
+   * Base64-encoded PNG bytes.
+   */
   image_base64: string;
 }
 
@@ -1861,7 +3948,13 @@ export interface NativeClearNotificationsResponse {
 }
 
 export interface NativeClickMenuItemRequest {
+  /**
+   * default []
+   */
   path?: string[];
+  /**
+   * wire int32
+   */
   pid: number;
 }
 
@@ -1870,6 +3963,9 @@ export interface NativeClickMenuItemResponse {
 }
 
 export interface NativeClipboardChangeCountResponse {
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   count: number;
 }
 
@@ -1914,6 +4010,9 @@ export interface NativeClipboardSetTextResponse {
 }
 
 export interface NativeClipboardTypesRequest {
+  /**
+   * default ""
+   */
   pasteboard?: string;
 }
 
@@ -1930,15 +4029,33 @@ export interface NativeCloseWindowResponse {
 }
 
 export interface NativeColorAtPointRequest {
+  /**
+   * wire int32
+   */
   x: number;
+  /**
+   * wire int32
+   */
   y: number;
 }
 
 export interface NativeColorAtPointResponse {
+  /**
+   * wire uint8 · min 0 · max 255
+   */
   a: number;
+  /**
+   * wire uint8 · min 0 · max 255
+   */
   b: number;
+  /**
+   * wire uint8 · min 0 · max 255
+   */
   g: number;
   hex: string;
+  /**
+   * wire uint8 · min 0 · max 255
+   */
   r: number;
 }
 
@@ -1998,13 +4115,30 @@ export interface NativeCurrentWallpaperResponse {
 }
 
 export interface NativeCursorResponse {
+  /**
+   * wire int32
+   */
   x: number;
+  /**
+   * wire int32
+   */
   y: number;
 }
 
 export interface NativeCursorInfoResponse {
+  /**
+   * Cursor type name (e.g. "arrow", "ibeam", "crosshair", "pointingHand").
+   */
   cursor_type: string;
+  /**
+   * Cursor X position in screen coordinates.
+   * wire int32
+   */
   x: number;
+  /**
+   * Cursor Y position in screen coordinates.
+   * wire int32
+   */
   y: number;
 }
 
@@ -2073,6 +4207,9 @@ export interface NativeDifferentiateWithoutColorResponse {
 }
 
 export interface NativeDirectoryContentsRequest {
+  /**
+   * default false
+   */
   include_hidden?: boolean;
   path: string;
 }
@@ -2082,13 +4219,25 @@ export interface NativeDirectoryContentsResponse {
 }
 
 export interface NativeDiskSpaceRequest {
+  /**
+   * default ""
+   */
   path?: string;
 }
 
 export interface NativeDiskSpaceResponse {
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   available_bytes: number;
   mount_point: string;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   total_bytes: number;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   used_bytes: number;
 }
 
@@ -2113,6 +4262,9 @@ export interface NativeDisplayColorProfilesResponse {
 }
 
 export interface NativeDisplayCountResponse {
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   count: number;
 }
 
@@ -2121,6 +4273,9 @@ export interface NativeDisplayMirroringResponse {
 }
 
 export interface NativeDisplayRefreshRateRequest {
+  /**
+   * wire uint32 · min 0
+   */
   display_id: number;
 }
 
@@ -2129,6 +4284,9 @@ export interface NativeDisplayRotationResponse {
 }
 
 export interface NativeDisplayScaleFactorRequest {
+  /**
+   * wire uint32 · min 0
+   */
   display_id: number;
 }
 
@@ -2141,7 +4299,13 @@ export interface NativeDisplaysResponse {
 }
 
 export interface NativeDndResponse {
+  /**
+   * Whether Do Not Disturb / Focus mode is enabled.
+   */
   enabled: boolean;
+  /**
+   * Name of the active Focus mode, if available.
+   */
   focus_name?: string;
 }
 
@@ -2206,6 +4370,9 @@ export interface NativeEnvVarResponse {
 }
 
 export interface NativeEpochTimeResponse {
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   seconds: number;
 }
 
@@ -2254,6 +4421,9 @@ export interface NativeFileExtendedAttributesResponse {
 }
 
 export interface NativeFileHashRequest {
+  /**
+   * default ""
+   */
   algorithm?: string;
   path: string;
 }
@@ -2267,12 +4437,24 @@ export interface NativeFileMetadataRequest {
 }
 
 export interface NativeFileMetadataResponse {
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   accessed?: number;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   created?: number;
   is_dir: boolean;
   is_symlink: boolean;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   modified?: number;
   readonly: boolean;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   size: number;
 }
 
@@ -2306,6 +4488,9 @@ export interface NativeFileSizeRequest {
 
 export interface NativeFileTagsRequest {
   path: string;
+  /**
+   * default null
+   */
   tags?: string[];
 }
 
@@ -2427,8 +4612,14 @@ export interface NativeGetWindowInfoRequest {
 }
 
 export interface NativeGetWindowInfoResponse {
+  /**
+   * wire double
+   */
   alpha?: number;
   bounds: WindowBounds;
+  /**
+   * wire uint32 · min 0
+   */
   display_id: number;
   is_focused: boolean;
   is_fullscreen: boolean;
@@ -2439,6 +4630,9 @@ export interface NativeGetWindowInfoResponse {
 }
 
 export interface NativeGlobFilesRequest {
+  /**
+   * wire uint32 · default 0 · min 0
+   */
   max_results?: number;
   pattern: string;
 }
@@ -2472,6 +4666,9 @@ export interface NativeHardwareUuidResponse {
 }
 
 export interface NativeHidClaimRequest {
+  /**
+   * Device ID (e.g. "0x28bd:0x0202:0x48f42695").
+   */
   device_id: string;
 }
 
@@ -2484,6 +4681,9 @@ export interface NativeHidDevicesResponse {
 }
 
 export interface NativeHidElementsRequest {
+  /**
+   * Device ID (e.g. "0x28bd:0x0202:0x48f42695").
+   */
   device_id: string;
 }
 
@@ -2492,6 +4692,9 @@ export interface NativeHidElementsResponse {
 }
 
 export interface NativeHidReleaseRequest {
+  /**
+   * Device ID (e.g. "0x28bd:0x0202:0x48f42695").
+   */
   device_id: string;
 }
 
@@ -2500,9 +4703,23 @@ export interface NativeHidReleaseResponse {
 }
 
 export interface NativeHidSendReportRequest {
+  /**
+   * Raw report bytes to send.
+   * default []
+   */
   data?: number[];
+  /**
+   * Device ID (e.g. "0x28bd:0x0202:0x48f42695").
+   */
   device_id: string;
+  /**
+   * HID report ID.
+   * wire uint32 · min 0
+   */
   report_id: number;
+  /**
+   * Report type: "output" or "feature".
+   */
   report_type: string;
 }
 
@@ -2609,6 +4826,9 @@ export interface NativeKernelVersionResponse {
 export interface NativeKeyboardLayoutResponse {
   layout_id: string;
   layout_name: string;
+  /**
+   * Maps keycode (as string) → character produced on the current layout.
+   */
   mappings: Record<string, string>;
 }
 
@@ -2641,7 +4861,13 @@ export interface NativeKeychainWriteResponse {
 }
 
 export interface NativeKillProcessRequest {
+  /**
+   * wire int32
+   */
   pid: number;
+  /**
+   * wire int32 · default 0
+   */
   signal?: number;
 }
 
@@ -2655,6 +4881,9 @@ export interface NativeLastRebootResponse {
 
 export interface NativeLaunchAppRequest {
   bundle_id: string;
+  /**
+   * default false
+   */
   new_instance?: boolean;
 }
 
@@ -2763,6 +4992,9 @@ export interface NativeMemoryPressureResponse {
 }
 
 export interface NativeMenuBarRequest {
+  /**
+   * wire int32
+   */
   pid: number;
 }
 
@@ -2803,8 +5035,17 @@ export interface NativeMountPointsResponse {
 }
 
 export interface NativeMouseButtonClickRequest {
+  /**
+   * wire uint32 · min 0
+   */
   button: number;
+  /**
+   * wire int32 · default null
+   */
   x?: number;
+  /**
+   * wire int32 · default null
+   */
   y?: number;
 }
 
@@ -2822,6 +5063,9 @@ export interface NativeMoveFileResponse {
 }
 
 export interface NativeMoveWindowToDisplayRequest {
+  /**
+   * wire uint32 · min 0
+   */
   display_id: number;
   window_id: string;
 }
@@ -2831,6 +5075,9 @@ export interface NativeMoveWindowToDisplayResponse {
 }
 
 export interface NativeMoveWindowToSpaceRequest {
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   space_id: number;
   window_id: string;
 }
@@ -2896,8 +5143,17 @@ export interface NativeNotificationSoundEnabledResponse {
 }
 
 export interface NativeNotifyRequest {
+  /**
+   * default null
+   */
   body?: string;
+  /**
+   * default null
+   */
   sound?: string;
+  /**
+   * default null
+   */
   subtitle?: string;
   title: string;
 }
@@ -2915,6 +5171,9 @@ export interface NativeNumberFormatDecimalResponse {
 }
 
 export interface NativeObserveWindowsRequest {
+  /**
+   * wire int32
+   */
   pid: number;
 }
 
@@ -2939,9 +5198,21 @@ export interface NativeOcrScreenResponse {
 }
 
 export interface NativeOcrScreenRegionRequest {
+  /**
+   * wire double
+   */
   height: number;
+  /**
+   * wire double
+   */
   width: number;
+  /**
+   * wire double
+   */
   x: number;
+  /**
+   * wire double
+   */
   y: number;
 }
 
@@ -2950,6 +5221,9 @@ export interface NativeOcrScreenRegionResponse {
 }
 
 export interface NativeOcrWindowRequest {
+  /**
+   * wire uint32 · min 0
+   */
   window_id: number;
 }
 
@@ -2974,6 +5248,9 @@ export interface NativeOpenFinderWindowResponse {
 }
 
 export interface NativeOpenSystemSettingsRequest {
+  /**
+   * default null
+   */
   pane?: string;
 }
 
@@ -3011,6 +5288,9 @@ export interface NativeOptimizedChargingResponse {
 }
 
 export interface NativePdfExtractTextRequest {
+  /**
+   * wire uint64 (64-bit) · default 0 · min 0
+   */
   page?: number;
   path: string;
 }
@@ -3065,7 +5345,13 @@ export interface NativePressAndHoldEnabledResponse {
 }
 
 export interface NativePreventSleepRequest {
+  /**
+   * default null
+   */
   assertion_id?: string;
+  /**
+   * default "BranchKit plugin"
+   */
   reason?: string;
 }
 
@@ -3078,6 +5364,9 @@ export interface NativePrimaryDisplayResponse {
 }
 
 export interface NativePrimaryDisplayIDResponse {
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   value: number;
 }
 
@@ -3090,14 +5379,23 @@ export interface NativePrintersResponse {
 }
 
 export interface NativeProcessCountResponse {
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   count: number;
 }
 
 export interface NativeProcessCpuUsageRequest {
+  /**
+   * wire int32
+   */
   pid: number;
 }
 
 export interface NativeProcessExistsRequest {
+  /**
+   * wire int32
+   */
   pid: number;
 }
 
@@ -3106,14 +5404,26 @@ export interface NativeProcessExistsResponse {
 }
 
 export interface NativeProcessInfoRequest {
+  /**
+   * wire int32
+   */
   pid: number;
 }
 
 export interface NativeProcessInfoResponse {
+  /**
+   * wire double
+   */
   cpu_percent?: number;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   memory_bytes?: number;
   name: string;
   path?: string;
+  /**
+   * wire int32
+   */
   pid: number;
   user?: string;
 }
@@ -3123,22 +5433,37 @@ export interface NativeProcessListResponse {
 }
 
 export interface NativeProcessMemoryUsageRequest {
+  /**
+   * wire int32
+   */
   pid: number;
 }
 
 export interface NativeProcessNameRequest {
+  /**
+   * wire int32
+   */
   pid: number;
 }
 
 export interface NativeProcessParentPidRequest {
+  /**
+   * wire int32
+   */
   pid: number;
 }
 
 export interface NativeProcessPathRequest {
+  /**
+   * wire int32
+   */
   pid: number;
 }
 
 export interface NativeProcessStartTimeRequest {
+  /**
+   * wire int32
+   */
   pid: number;
 }
 
@@ -3156,11 +5481,20 @@ export interface NativePurgeMemoryResponse {
 
 export interface NativeQuickLookRequest {
   path: string;
+  /**
+   * wire uint32 · default 512 · min 0
+   */
   size?: number;
 }
 
 export interface NativeQuickLookResponse {
+  /**
+   * Always `"png"`.
+   */
   format: string;
+  /**
+   * Base64-encoded PNG bytes.
+   */
   image_base64: string;
 }
 
@@ -3198,6 +5532,9 @@ export interface NativeReadFileResponse {
 }
 
 export interface NativeReadFileBinaryRequest {
+  /**
+   * wire uint64 (64-bit) · default null · min 0
+   */
   max_bytes?: number;
   path: string;
 }
@@ -3248,9 +5585,21 @@ export interface NativeRequestScreenCaptureResponse {
 }
 
 export interface NativeResourceUsageResponse {
+  /**
+   * wire double
+   */
   cpu_usage_percent: number;
+  /**
+   * wire double
+   */
   memory_pressure_percent: number;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   memory_total_bytes: number;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   memory_used_bytes: number;
 }
 
@@ -3275,10 +5624,16 @@ export interface NativeRosettaInstalledResponse {
 }
 
 export interface NativeRunApplescriptRequest {
+  /**
+   * AppleScript source to execute via `osascript`.
+   */
   script: string;
 }
 
 export interface NativeRunApplescriptResponse {
+  /**
+   * wire int32
+   */
   exit_code: number;
   stderr: string;
   stdout: string;
@@ -3293,6 +5648,9 @@ export interface NativeRunJxaResponse {
 }
 
 export interface NativeRunShortcutRequest {
+  /**
+   * default null
+   */
   input?: string;
   name: string;
 }
@@ -3310,6 +5668,9 @@ export interface NativeScreenCapturePermissionResponse {
 }
 
 export interface NativeScreenCountResponse {
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   count: number;
 }
 
@@ -3342,13 +5703,25 @@ export interface NativeScreenSharingEnabledResponse {
 }
 
 export interface NativeScreenshotRequest {
+  /**
+   * wire uint32 · default null · min 0
+   */
   display_id?: number;
   region?: ScreenshotRegion;
+  /**
+   * default null
+   */
   window_id?: string;
 }
 
 export interface NativeScreenshotResponse {
+  /**
+   * Always `"png"`.
+   */
   format: string;
+  /**
+   * Base64-encoded PNG bytes.
+   */
   image_base64: string;
 }
 
@@ -3418,6 +5791,9 @@ export interface NativeSetAppHiddenResponse {
 }
 
 export interface NativeSetAudioDeviceRequest {
+  /**
+   * "input" or "output".
+   */
   device_type: string;
   uid: string;
 }
@@ -3428,6 +5804,9 @@ export interface NativeSetAudioDeviceResponse {
 
 export interface NativeSetAudioDeviceVolumeRequest {
   device_uid: string;
+  /**
+   * wire double
+   */
   volume: number;
 }
 
@@ -3468,7 +5847,13 @@ export interface NativeSetBluetoothPowerResponse {
 }
 
 export interface NativeSetBrightnessRequest {
+  /**
+   * wire double
+   */
   brightness: number;
+  /**
+   * wire uint32 · default null · min 0
+   */
   display_id?: number;
 }
 
@@ -3541,6 +5926,9 @@ export interface NativeSetDockShowRecentsResponse {
 }
 
 export interface NativeSetDockSizeRequest {
+  /**
+   * wire double
+   */
   size: number;
 }
 
@@ -3601,6 +5989,9 @@ export interface NativeSetHighlightColorResponse {
 }
 
 export interface NativeSetHotCornerRequest {
+  /**
+   * wire uint32 · min 0
+   */
   action: number;
   corner: string;
 }
@@ -3618,6 +6009,9 @@ export interface NativeSetInputSourceResponse {
 }
 
 export interface NativeSetKeyRepeatDelayRequest {
+  /**
+   * wire double
+   */
   delay: number;
 }
 
@@ -3626,6 +6020,9 @@ export interface NativeSetKeyRepeatDelayResponse {
 }
 
 export interface NativeSetKeyRepeatRateRequest {
+  /**
+   * wire double
+   */
   rate: number;
 }
 
@@ -3642,6 +6039,9 @@ export interface NativeSetMenuBarAutoHideResponse {
 }
 
 export interface NativeSetMouseSpeedRequest {
+  /**
+   * wire double
+   */
   speed: number;
 }
 
@@ -3690,6 +6090,9 @@ export interface NativeSetScrollDirectionNaturalResponse {
 }
 
 export interface NativeSetSidebarIconSizeRequest {
+  /**
+   * wire uint32 · min 0
+   */
   size: number;
 }
 
@@ -3714,6 +6117,9 @@ export interface NativeSetTapToClickResponse {
 }
 
 export interface NativeSetTrackpadSpeedRequest {
+  /**
+   * wire double
+   */
   speed: number;
 }
 
@@ -3731,6 +6137,9 @@ export interface NativeSetURLSchemeHandlerResponse {
 }
 
 export interface NativeSetVolumeRequest {
+  /**
+   * wire double
+   */
   volume: number;
 }
 
@@ -3747,6 +6156,9 @@ export interface NativeSetWallpaperResponse {
 }
 
 export interface NativeSetWindowAlphaRequest {
+  /**
+   * wire double
+   */
   alpha: number;
   window_id: string;
 }
@@ -3766,7 +6178,13 @@ export interface NativeSetWindowLevelResponse {
 
 export interface NativeSetWindowPositionRequest {
   window_id: string;
+  /**
+   * wire int32
+   */
   x: number;
+  /**
+   * wire int32
+   */
   y: number;
 }
 
@@ -3784,7 +6202,13 @@ export interface NativeSetWindowShadowResponse {
 }
 
 export interface NativeSetWindowSizeRequest {
+  /**
+   * wire int32
+   */
   h: number;
+  /**
+   * wire int32
+   */
   w: number;
   window_id: string;
 }
@@ -3847,8 +6271,14 @@ export interface NativeSpacesSpanDisplaysResponse {
 }
 
 export interface NativeSpeakRequest {
+  /**
+   * wire double · default null
+   */
   rate?: number;
   text: string;
+  /**
+   * default null
+   */
   voice?: string;
 }
 
@@ -3865,6 +6295,9 @@ export interface NativeSpeechRecognitionAvailableResponse {
 }
 
 export interface NativeSpeechRecognizeFileRequest {
+  /**
+   * default ""
+   */
   locale?: string;
   path: string;
 }
@@ -3874,8 +6307,14 @@ export interface NativeSpellingLanguageResponse {
 }
 
 export interface NativeSpotlightRequest {
+  /**
+   * wire uint32 · default 20 · min 0
+   */
   limit?: number;
   query: string;
+  /**
+   * default null
+   */
   scope?: string[];
 }
 
@@ -3908,6 +6347,9 @@ export interface NativeSwipeBetweenPagesResponse {
 }
 
 export interface NativeSwitchSpaceRequest {
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   space_id: number;
 }
 
@@ -3957,11 +6399,21 @@ export interface NativeSystemSoundsResponse {
 }
 
 export interface NativeSystemUptimeResponse {
+  /**
+   * Human-readable uptime string.
+   */
   formatted: string;
+  /**
+   * Seconds since boot.
+   * wire double
+   */
   uptime_seconds: number;
 }
 
 export interface NativeSystemUptimeSecondsResponse {
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   seconds: number;
 }
 
@@ -4124,6 +6576,9 @@ export interface NativeVoiceoverEnabledResponse {
 
 export interface NativeVolumeResponse {
   is_muted: boolean;
+  /**
+   * wire double
+   */
   volume: number;
 }
 
@@ -4132,7 +6587,13 @@ export interface NativeVpnStatusResponse {
 }
 
 export interface NativeWarpCursorRequest {
+  /**
+   * wire int32
+   */
   x: number;
+  /**
+   * wire int32
+   */
   y: number;
 }
 
@@ -4141,10 +6602,26 @@ export interface NativeWarpCursorResponse {
 }
 
 export interface NativeWifiResponse {
+  /**
+   * BSSID of the connected access point, if any.
+   */
   bssid?: string;
+  /**
+   * Whether WiFi is currently connected to a network.
+   */
   is_connected: boolean;
+  /**
+   * Whether the WiFi interface is powered on.
+   */
   is_enabled: boolean;
+  /**
+   * Signal strength in dBm, if connected.
+   * wire int32
+   */
   rssi?: number;
+  /**
+   * SSID of the connected network, if any.
+   */
   ssid?: string;
 }
 
@@ -4161,9 +6638,21 @@ export interface NativeWindowBoundsRequest {
 }
 
 export interface NativeWindowBoundsResponse {
+  /**
+   * wire int32
+   */
   h: number;
+  /**
+   * wire int32
+   */
   w: number;
+  /**
+   * wire int32
+   */
   x: number;
+  /**
+   * wire int32
+   */
   y: number;
 }
 
@@ -4192,6 +6681,9 @@ export interface NativeWindowLayerRequest {
 }
 
 export interface NativeWindowScreenshotRequest {
+  /**
+   * wire uint32 · min 0
+   */
   window_id: number;
 }
 
@@ -4204,6 +6696,10 @@ export interface NativeWindowTitleRequest {
 }
 
 export interface NativeWorldModelRequest {
+  /**
+   * If true, only return windows visible on screen.
+   * default false
+   */
   on_screen?: boolean;
 }
 
@@ -4248,25 +6744,80 @@ export interface NativeZoomEnabledResponse {
 }
 
 export interface OutputStateRequest {
+  /**
+   * The document that becomes the channel's current state. Its `channel`
+   * must be owned by the calling plugin.
+   */
   state: OutputState;
 }
 
 export interface OutputStateResponse {
+  /**
+   * The generation the platform stamped on this state — monotonic, so a
+   * renderer can tell which of two states is newer.
+   * wire uint64 (64-bit) · min 0
+   */
   generation: number;
   ok: boolean;
 }
 
 export interface OverridesApplyRequest {
+  /**
+   * Action: "add", "remove", "restore", "reset", "patch", "rename", or
+   * "revert".
+   */
   action: string;
+  /**
+   * Collection name to override.
+   */
   collection: string;
+  /**
+   * Field key for the "unpatch" action — removes ONE field from the
+   * tenant's patch of `id` (the per-field inverse of "patch"; the patch
+   * entry is dropped when its last field goes). The settings form's
+   * per-field revert: sparse by construction, so the reverted field
+   * resumes tracking the shipped default. Ignored by other actions.
+   * default null
+   */
   field?: string;
+  /**
+   * Partial record fields for "patch", or complete record for "add".
+   * default null
+   */
   fields?: unknown;
+  /**
+   * Record ID (id_field value) for patch/remove/restore actions. For
+   * "rename" it is the entry's *current* key (surface form) to replace; for
+   * "revert" the current key of the entry to reset to its plugin default.
+   * default null
+   */
   id?: string;
+  /**
+   * New key (id_field value) for the "rename" action — the entry is re-added
+   * under this key with every other field (value, aliases) preserved.
+   * Ignored by other actions.
+   * default null
+   */
   new_id?: string;
+  /**
+   * Which overlay tenant this mutation targets — a writer-namespace value
+   * (`"_user"` or a plugin id). Defaults: a plugin caller targets its OWN
+   * overlay; a host caller targets `"_user"`. A plugin transporting a user
+   * gesture from its settings tab says `"_user"` explicitly; it may never
+   * target another plugin's overlay. Plugin overlays carry per-field
+   * patches only (`patch`/`restore`/`reset`) — annotation, not authorship
+   * (docs/design/DESIGN_WRITER_SCOPED_OVERLAY.md).
+   * default null
+   */
   tenant?: string;
 }
 
 export interface OverridesApplyResponse {
+  /**
+   * The entry's resulting key after the mutation, when the caller can't know
+   * it up front. Set by "revert" to the plugin-default key the entry fell
+   * back to (so a caller can re-point at it); None for other actions.
+   */
   key?: string;
   ok: boolean;
 }
@@ -4276,18 +6827,47 @@ export interface OverridesListResponse {
 }
 
 export interface PipelinesGrammarRequest {
+  /**
+   * When true, also return the full `vocabulary_update` payload a starting
+   * recognition pipeline would be seeded with — words plus narrow_to,
+   * word_weights, and the structured grammar DAG. Read-only: exporting
+   * does not touch the committed-vocab accounting. Used by the
+   * voice-regress harness to decode against the exact live grammar.
+   * default false
+   */
   full?: boolean;
 }
 
 export interface PipelinesGrammarResponse {
+  /**
+   * Full seed payload (only with `full: true`).
+   */
   vocabulary_update?: unknown;
   words: string[];
 }
 
 export interface PipelinesInjectRequest {
+  /**
+   * default null
+   */
   data?: unknown;
+  /**
+   * Must be a custom event type — `ext.<vendor>.<name>`. The typed families
+   * (`audio_*`, `transcript`, `vocabulary_update`) are the platform's to
+   * send; a plugin forging one into its own pipeline was previously
+   * unchecked here.
+   */
   event_type: string;
+  /**
+   * Pipeline to configure. The caller must have introduced it.
+   */
   name: string;
+  /**
+   * Stage within that pipeline, spelled as the pipeline definition spells
+   * it — a role like `_platform.stt` or a qualified stage name. Required:
+   * before per-stage channels existed this operation could only ever reach
+   * the terminal stage, and silently did nothing for any other.
+   */
   stage: string;
 }
 
@@ -4296,8 +6876,14 @@ export interface PipelinesInjectResponse {
 }
 
 export interface PipelinesRunRequest {
+  /**
+   * default false
+   */
   ephemeral?: boolean;
   name: string;
+  /**
+   * default {}
+   */
   param_overrides?: Record<string, unknown>;
 }
 
@@ -4313,6 +6899,13 @@ export interface PipelinesStatusResponse {
 }
 
 export interface PipelinesStopRequest {
+  /**
+   * Shared-clock position (the AudioChunk timestamp_ms timebase) after
+   * which buffered audio must not be processed — e.g. the onset of a
+   * detected dictation stop phrase, from the transcript's word_onsets_ms.
+   * Absent = process everything.
+   * wire uint64 (64-bit) · default null · min 0
+   */
   audio_cutoff_ms?: number;
   name: string;
 }
@@ -4323,6 +6916,12 @@ export interface PipelinesStopResponse {
 
 export interface PipelinesWarmRequest {
   name: string;
+  /**
+   * Per-stage param overrides applied to the warmed consumer stages, mirroring
+   * `pipelines.run`. Lets a caller prewarm the model it will actually run (e.g.
+   * a user-selected STT model) instead of only the pipeline's default.
+   * default {}
+   */
   param_overrides?: Record<string, unknown>;
 }
 
@@ -4331,18 +6930,53 @@ export interface PipelinesWarmResponse {
 }
 
 export interface PluginDataExportRequest {
+  /**
+   * Name to save it under. Defaults to the source file's name. A path
+   * separator here is refused rather than resolved — this names a file in
+   * Downloads, not a location.
+   * default null
+   */
   filename?: string;
+  /**
+   * Path of the file to export, relative to the caller's data dir.
+   */
   path: string;
 }
 
 export interface PluginDataExportResponse {
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   bytes: number;
+  /**
+   * Absolute path of the exported copy, for the caller to show the user.
+   */
   path: string;
 }
 
 export interface PluginDebugRequest {
+  /**
+   * Arbitrary JSON payload — serialized to one line in the log file
+   * so `tail -f` and `grep` work, while `jq` can still operate on
+   * the payload column.
+   * default null
+   */
   data?: unknown;
+  /**
+   * Severity level for the line. v1 callers omit this and the handler
+   * falls through to `Debug`; v2 callers pass one of
+   * `trace`/`debug`/`info`/`warn`/`error`. Lines below the per-plugin
+   * threshold are dropped at the handler; `warn`/`error` additionally
+   * cross-post to `actuator.log` via the `plugin.diagnostic` event.
+   */
   level?: PluginLogLevel;
+  /**
+   * Optional structural tag (e.g. `BK_ACTIVATE_PATH`, `STT_BATCH`).
+   * Renders between the timestamp and the payload in the per-plugin
+   * log file, matching the actuator log's `[TAG]` column convention.
+   * Empty/missing renders as `[<ts>] <payload>` with no tag bracket.
+   * default null
+   */
   tag?: string;
 }
 
@@ -4351,7 +6985,27 @@ export interface PluginDebugResponse {
 }
 
 export interface PluginReportHealthRequest {
+  /**
+   * `true` when the plugin is running but cannot do its job — an external
+   * dependency it needs is gone, a device it drives is unplugged, a
+   * companion it talks to has disconnected. `false` clears the report.
+   *
+   * This is NOT for "something failed once": a failed call is a failed
+   * call. It is for a standing condition the user can act on and would
+   * otherwise have to guess at.
+   */
   degraded: boolean;
+  /**
+   * One user-facing sentence saying what is wrong and, where possible, what
+   * to do about it — "Chrome — extension disconnected; reload it at
+   * chrome://extensions". The plugin owns this text; the platform invents
+   * no copy for a plugin's failure.
+   *
+   * Required when `degraded` is true and ignored otherwise. Truncated to
+   * 200 characters (one status line; a plugin with more to say has
+   * `plugin.debug`) and rendered as data, never markup.
+   * default null
+   */
   reason?: string;
 }
 
@@ -4364,6 +7018,10 @@ export interface PrivacyGetRecordingRequest {
 }
 
 export interface PrivacyGetRecordingResponse {
+  /**
+   * Effective recording flag — the user override if set, otherwise the
+   * manifest's `default_recording_enabled`.
+   */
   enabled: boolean;
 }
 
@@ -4377,79 +7035,184 @@ export interface PrivacySetRecordingResponse {
 }
 
 export interface PrivilegesListResponse {
+  /**
+   * Required first, then optional, manifest order within each.
+   */
   privileges: PrivilegeStatusEntry[];
 }
 
 export interface PrivilegesRelinquishRequest {
+  /**
+   * Privilege name — must appear in the calling plugin's
+   * `optional_privileges`.
+   */
   privilege: string;
 }
 
 export interface PrivilegesRelinquishResponse {
+  /**
+   * "released" — a live grant was returned (effective + persisted).
+   * "withdrawn" — only a pending request existed; it was cleared.
+   * "noop" — neither granted nor pending.
+   */
   status: string;
 }
 
 export interface PrivilegesRequestRequest {
+  /**
+   * Privilege name — must appear in the calling plugin's
+   * `optional_privileges`.
+   */
   privilege: string;
+  /**
+   * Short attributed reason shown to the user next to the Approve
+   * button (e.g. "script 'headphones' uses query:power"). Untrusted
+   * text; capped server-side.
+   * default ""
+   */
   reason?: string;
 }
 
 export interface PrivilegesRequestResponse {
+  /**
+   * "granted" — already effective, proceed (treat as a race won).
+   * "pending" — recorded as a to-do awaiting the user.
+   * "denied" — the user dismissed this request earlier; not re-asked.
+   */
   status: string;
 }
 
 export interface RecognitionBiasApplyRequest {
+  /**
+   * Overwrite a manually-set value. Without it, `manual` provenance refuses
+   * (`applied: false`) so the caller can confirm with the user first — a
+   * calibration apply must never silently clobber a hand-set value.
+   * default false
+   */
   force?: boolean;
+  /**
+   * Strength to apply (> 0; the setting is also switched on).
+   * wire double
+   */
   strength: number;
 }
 
 export interface RecognitionBiasApplyResponse {
   applied: boolean;
+  /**
+   * Provenance of the value in place before this call
+   * ("default" | "manual" | "calibration").
+   */
   previous_provenance: string;
 }
 
 export interface RecognitionBiasGetResponse {
   enabled: boolean;
+  /**
+   * "default" | "manual" | "calibration"
+   */
   provenance: string;
+  /**
+   * wire double
+   */
   strength: number;
 }
 
 export interface RecognitionBiasSetRequest {
+  /**
+   * Omitted = leave the on/off half unchanged.
+   * default null
+   */
   enabled?: boolean;
+  /**
+   * Omitted = leave the stored strength unchanged. Negative → 0.
+   * wire double · default null
+   */
   strength?: number;
 }
 
 export interface RecognitionBiasSetResponse {
   enabled: boolean;
+  /**
+   * "default" | "manual" | "calibration"
+   */
   provenance: string;
+  /**
+   * wire double
+   */
   strength: number;
 }
 
 export interface RecognitionRedecodeRequest {
   items: RedecodeItem[];
+  /**
+   * wire uint32 · default null · min 0
+   */
   max_active?: number;
+  /**
+   * Model dir name under app-support `models/` (single component, no
+   * traversal), e.g. `"sherpa-offline-nemo"`.
+   */
   model: string;
+  /**
+   * Registered stage id whose binary's `probe` subcommand runs the re-decode,
+   * e.g. `"voice.sherpa_commands"`. Validated against the stage registry.
+   */
   stage: string;
 }
 
 export interface RecognitionRedecodeResponse {
   lines: RedecodeLine[];
+  /**
+   * Stable content version of the acoustic model used for this re-decode — a
+   * hash of the model dir's `model.onnx`. Lets a per-clip fragility history
+   * distinguish re-probes across a model swap (a constant engine id can't).
+   * Empty when the model file is unreadable.
+   */
   model_version?: string;
 }
 
 export interface SelectionPickRequest {
+  /**
+   * Zero-based index into the previously-set selection items array.
+   * wire uint64 (64-bit) · min 0
+   */
   index: number;
 }
 
 export interface SelectionPickResponse {
+  /**
+   * Control message to forward to the Swift host
+   * (always `"close hud"` here).
+   */
   control_message: string;
+  /**
+   * Id of the picked item (from the original `HUDItem.id`).
+   */
   item_id: string;
   ok: boolean;
+  /**
+   * Whether the input plugin should reset its recognition engine
+   * after the pick. Always `true` for `selection.pick`.
+   */
   reset_engine: boolean;
 }
 
 export interface SelectionSetRequest {
+  /**
+   * HUD channel to show the selection in. Defaults to `"main"`.
+   * default null
+   */
   channel?: string;
+  /**
+   * Array of `HUDItem` objects: `{ id, tag?, title, subtitle?, icon? }`.
+   * default null
+   */
   items?: unknown;
+  /**
+   * Optional title displayed at the top of the selection HUD.
+   * default null
+   */
   title?: string;
 }
 
@@ -4462,12 +7225,24 @@ export interface SessionBoundaryResponse {
 }
 
 export interface SessionEndCleanupResponse {
+  /**
+   * Control message to forward to the Swift host
+   * (e.g. "hide discovery", "hide hud"), if any.
+   */
   control_message?: string;
   ok: boolean;
+  /**
+   * Whether the input plugin should reset its recognition engine after
+   * the session ends. Always `true` for `session.end_cleanup`.
+   */
   reset_engine: boolean;
 }
 
 export interface SettingsPatchSignalsRequest {
+  /**
+   * Datastar signal expression, e.g. `{activeGroup: 2, activeDialModeIndex: 1}`.
+   * Sent as a `datastar-patch-signals` SSE event to all active settings streams.
+   */
   signals: string;
 }
 
@@ -4488,42 +7263,130 @@ export interface SettingsRefreshResponse {
 }
 
 export interface SettingsRulesCreateRequest {
+  /**
+   * Raw JSON action body, used when `newruleactiontype = "json"`.
+   * default null
+   */
   newruleactionjson?: string;
+  /**
+   * Action variant (dotted type like "system.volume_up", "sequence", "json", ...).
+   * Determines which other `newruleaction*` fields are consumed.
+   * default null
+   */
   newruleactiontype?: string;
+  /**
+   * Action value used by simple action types (e.g. text for "input.type").
+   * default null
+   */
   newruleactionval?: string;
+  /**
+   * Category bucket the rule belongs to. Defaults to "User".
+   * default null
+   */
   newrulecategory?: string;
+  /**
+   * Comma-separated tags the rule clears when it fires.
+   * default null
+   */
   newruleclearstags?: string;
+  /**
+   * Optional human-readable description shown in the rules table.
+   * default null
+   */
   newruledescription?: string;
+  /**
+   * The phrase the user wants matched (with optional `<slot>` placeholders).
+   * Required — `build_command_from_signals` rejects an empty phrase.
+   * default null
+   */
   newrulephrase?: string;
+  /**
+   * Comma-separated tags required for the rule to match.
+   * default null
+   */
   newrulerequirestags?: string;
+  /**
+   * Comma-separated tags the rule sets when it fires.
+   * default null
+   */
   newrulesetstags?: string;
 }
 
 export interface SettingsRulesCreateResponse {
+  /**
+   * Terminal-command-rule conflict report: a human-readable reason if this
+   * candidate command would make another command unreachable (or be
+   * unreachable itself). **Advisory only** — the actuator does NOT block the
+   * save; the caller decides what to do. Null when there's no conflict. With
+   * `check_only: true` in the request, the candidate is checked and reported
+   * but NOT saved. See docs/design/DESIGN_COMMAND_FINALIZATION_RULE.md.
+   */
   conflict?: string;
   ok: boolean;
 }
 
 export interface SettingsRulesUpdateRequest {
+  /**
+   * Existing canonical command id (the previous canonical phrase) of
+   * the rule being updated. Required.
+   */
   canonical: string;
+  /**
+   * default null
+   */
   newruleactionjson?: string;
+  /**
+   * default null
+   */
   newruleactiontype?: string;
+  /**
+   * default null
+   */
   newruleactionval?: string;
+  /**
+   * default null
+   */
   newrulecategory?: string;
+  /**
+   * default null
+   */
   newruleclearstags?: string;
+  /**
+   * default null
+   */
   newruledescription?: string;
+  /**
+   * default null
+   */
   newrulephrase?: string;
+  /**
+   * default null
+   */
   newrulerequirestags?: string;
+  /**
+   * default null
+   */
   newrulesetstags?: string;
 }
 
 export interface SettingsRulesUpdateResponse {
+  /**
+   * See `SettingsRulesCreateResult::conflict` — advisory conflict report;
+   * the actuator reports but never blocks.
+   */
   conflict?: string;
   ok: boolean;
 }
 
 export interface SystemLaunchAppRequest {
+  /**
+   * Bundle ID of the application to launch (e.g. "com.apple.Safari").
+   */
   bundle_id: string;
+  /**
+   * Whether to launch a fresh instance even if the app is already running.
+   * default false
+   */
   new_instance?: boolean;
 }
 
@@ -4532,8 +7395,21 @@ export interface SystemLaunchAppResponse {
 }
 
 export interface SystemNotifyRequest {
+  /**
+   * Notification body text (rendered inside `<div id="body-text">`).
+   */
   body: string;
+  /**
+   * Auto-dismiss duration in seconds. When absent, defaults to
+   * [`DEFAULT_NOTIFY_DURATION_SECS`] (5s). Pass `0` for a sticky
+   * notification that only closes when the user clicks Dismiss.
+   * Pass any positive integer for a custom duration.
+   * wire uint32 · default null · min 0
+   */
   duration_secs?: number;
+  /**
+   * Notification title (rendered as `<h1 id="title">`).
+   */
   title: string;
 }
 
@@ -4542,6 +7418,9 @@ export interface SystemNotifyResponse {
 }
 
 export interface SystemRunShellRequest {
+  /**
+   * Shell command to execute via `/bin/bash -c`.
+   */
   command: string;
 }
 
@@ -4558,17 +7437,42 @@ export interface TrialEndRequest {
 }
 
 export interface TrialEndResponse {
+  /**
+   * Number of fixture-release RPCs spawned. Caller doesn't await them
+   * — best-effort cleanup that runs in the background.
+   * wire uint · min 0
+   */
   released_handle_count: number;
 }
 
 export interface TrialEnterContextRequest {
+  /**
+   * Command id from `commands.enumerate` — `<owner_plugin>:<pattern>`.
+   */
   command_id: string;
   trial_id: string;
 }
 
 export interface TrialEnterContextResponse {
+  /**
+   * Fixture handle returned by a dynamic command's owner; empty for
+   * static tiers. The actuator already registered it under the trial.
+   */
   fixture_handle: string;
+  /**
+   * `"static"` (base / mode-gated / slotted) or `"dynamic"` (hints) —
+   * matches the host-side `ContextSpec.Kind`.
+   */
   kind: string;
+  /**
+   * Active-tag set the matcher sees during the trial: a mode-gated
+   * command's `requires_tags` (empty for base/slotted). Empty for the
+   * dynamic tier, whose tags are written plugin-side by the fixture.
+   * The actuator platform-wrote these and recorded them on the trial so
+   * `trial_end` clears them. The host passes them to
+   * `commands.resolve --preview` to compute the functional (Resolves)
+   * signal.
+   */
   tags: string[];
 }
 
@@ -4579,10 +7483,20 @@ export interface TrialRegisterFixtureRequest {
 }
 
 export interface TrialResolveSamplesRequest {
+  /**
+   * Command id from `commands.enumerate` — `<owner_plugin>:<pattern>`.
+   */
   command_id: string;
 }
 
 export interface TrialResolveSamplesResponse {
+  /**
+   * Concrete prompts to walk for this command, supplied by its owning
+   * plugin's `trial_samples` hook. Empty when the command's owner
+   * doesn't implement the (optional) hook or declines — the calibration
+   * host then falls back to its own default sample derivation (codewords
+   * for dynamic commands, the generic filler for free-text slots).
+   */
   prompts: string[];
 }
 
@@ -4597,76 +7511,221 @@ export interface WiringDescribeResponse {
 // ===== Actuator → Plugin request/response types =====
 
 export interface OnActionRequest {
+  /**
+   * Fully qualified action type (e.g., 'voice.dictation', 'windows.snap').
+   */
   action: string;
+  /**
+   * Active application bundle ID.
+   * default ""
+   */
   active_app?: string;
+  /**
+   * default ""
+   */
   active_window_id?: string;
+  /**
+   * Typed action parameters.
+   * default null
+   */
   params?: unknown;
+  /**
+   * Optional phase: `"start"` or `"stop"`. Empty for non-phased actions
+   * (single-fire keybinds, tap-mode voice commands).
+   * default ""
+   */
   phase?: string;
 }
 
 export interface OnActionResponse {
+  /**
+   * Control message to forward to the Swift host (e.g., 'show commands').
+   * default ""
+   */
   control_message?: string;
+  /**
+   * Structured result payload. Opaque to the actuator — piped through
+   * to the dispatch caller as-is. Plugins use this to return data from
+   * action handlers (e.g., computed values, confirmation details).
+   */
   result?: unknown;
+  /**
+   * `"ok"`, `"error"`, or `"not_handled"`.
+   */
   status: OnActionStatus;
 }
 
 export interface OnCommandsChangedRequest {
+  /**
+   * All commands grouped by plugin ID.
+   */
   commands_by_plugin: unknown;
+  /**
+   * default []
+   */
   user_commands?: unknown[];
 }
 
 export interface OnCommandsChangedResponse {
+  /**
+   * wire int64 (64-bit)
+   */
   processed_count: number;
 }
 
 export interface OnTranscriptRequest {
+  /**
+   * Tags active when the transcript was received. Advisory: the matcher
+   * consults authoritative state during `commands.resolve`, so a tag
+   * absent here can still gate matching.
+   * default []
+   */
   active_tags?: string[];
+  /**
+   * Mean per-word acoustic margin, when the stage carried one.
+   * wire float
+   */
   confidence?: number;
+  /**
+   * What the active gates declare this utterance IS, if any declared one.
+   * Empty means none did, and the consumer's default stands.
+   * default ""
+   */
   dictation_profile?: string;
+  /**
+   * Whether the recognition stage marked this segment final.
+   *
+   * Do not read this as "the utterance is over". Command recognizers
+   * finalize per utterance and emit their recognitions NON-final,
+   * signalling end-of-hold only by stopping the pipeline — so on the
+   * command path `is_final` marks an empty end-of-stream marker, not the
+   * content. The platform does not deliver empty-text transcripts here.
+   * default false
+   */
   is_final?: boolean;
+  /**
+   * Pipeline that produced this transcript. A plugin may own several.
+   */
   pipeline: string;
+  /**
+   * Recognized text.
+   */
   text: string;
+  /**
+   * Shared-clock onset of each word, aligned 1:1 with `text`'s words.
+   * default []
+   */
   word_onsets_ms?: number[];
+  /**
+   * Per-word acoustic margin, aligned 1:1 with `text`'s words: positive =
+   * the audio supported the word, negative = the closed grammar coerced it.
+   * default []
+   */
   word_scores?: number[];
 }
 
 export interface OnTranscriptResponse {
+  /**
+   * Typed `Action` values. Loose in the schema for the same reason
+   * `dispatch`'s `action` is: the Action enum's wire shape is the
+   * dispatch contract, documented there rather than duplicated per
+   * method.
+   * default []
+   */
   actions?: unknown[];
 }
 
 export interface RenderSettingsRequest {
+  /**
+   * Action type schemas (built-in + all plugin-declared) for editor rendering.
+   * Keyed by fully-qualified action type (e.g. "voice.dictate", "keyboard.press").
+   */
   action_type_schemas?: Record<string, ActionTypeSchema>;
+  /**
+   * Collection data populated from the tab's `reads` declaration.
+   * Keyed by collection name, values are the raw collection data.
+   */
   collection_data?: Record<string, unknown>;
+  /**
+   * Filter string for the commands tab (e.g. plugin name or category).
+   */
   command_filter?: string;
+  /**
+   * Command rows for plugins that render command editors.
+   */
   commands?: CommandRowData[];
+  /**
+   * Named list schemas from plugin manifests (list_name → schema info).
+   */
   list_schemas?: Record<string, SettingsListSchemaInfo>;
+  /**
+   * Search query for filtering content (empty string when no search active).
+   */
   search: string;
+  /**
+   * Which settings tab to render (from manifest implements.settings_tabs[].key).
+   */
   tab_key: string;
+  /**
+   * Tag schemas from plugin manifests (tag_name → schema info).
+   */
   tag_schemas?: Record<string, SettingsTagSchemaInfo>;
 }
 
 export interface RenderSettingsResponse {
+  /**
+   * CSS styles scoped to this settings tab. Injected as an inline style element in the iframe.
+   * default ""
+   */
   css?: string;
+  /**
+   * HTML content for the settings tab. May include Datastar attributes for reactivity.
+   */
   html: string;
 }
 
 export interface TrialApplyFixtureRequest {
+  /**
+   * The dynamic command being calibrated — formatted as
+   * `<owner_plugin>:<display_pattern>`, matching `commands.enumerate`'s
+   * `id` field. The plugin uses this to decide which fixture recipe to
+   * run (most owners have one canonical fixture per command).
+   */
   command_id: string;
 }
 
 export interface TrialApplyFixtureResponse {
+  /**
+   * Opaque, plugin-chosen handle. The actuator hands it back via
+   * `trial_release_fixture` so the plugin can reverse this
+   * specific fixture's writes without keeping ambient state.
+   */
   fixture_handle: string;
 }
 
 export interface TrialReleaseFixtureRequest {
+  /**
+   * Handle previously returned by `trial_apply_fixture`.
+   */
   fixture_handle: string;
 }
 
 export interface TrialSamplesRequest {
+  /**
+   * The command being calibrated — `<owner_plugin>:<display_pattern>`,
+   * matching `commands.enumerate`'s `id`.
+   */
   command_id: string;
 }
 
 export interface TrialSamplesResponse {
+  /**
+   * Concrete phrases the calibration host should walk for this command —
+   * the owner's realistic sample of an otherwise un-derivable vocabulary
+   * (a runtime list, a dynamic hint cross-product, free-text examples).
+   * The owner owns the count and how slots combine; the host walks them
+   * as-is. An empty list declines — the host falls back to its own default.
+   */
   prompts: string[];
 }
 
@@ -4674,51 +7733,126 @@ export interface TrialSamplesResponse {
 
 /** Payload of the `_platform.action.executed` event. */
 export interface ActionExecutedEventParams {
+  /**
+   * Human-readable description of the executed action.
+   */
   action: string;
 }
 
 /** Payload of the `_platform.app.focused` event. */
 export interface AppFocusedEventParams {
+  /**
+   * macOS bundle identifier (e.g., `com.google.Chrome`).
+   */
   bundle_id: string;
 }
 
 /** Payload of the `_platform.audio_devices.changed` event. */
 export interface AudioDevicesChangedEventParams {
+  /**
+   * CoreAudio device id.
+   * wire uint32 · min 0
+   */
   device_id: number;
+  /**
+   * For kind="default_changed": which default moved ("input" or "output").
+   */
   direction?: string;
+  /**
+   * For kind="added": whether the device has input streams.
+   */
   is_input?: boolean;
+  /**
+   * For kind="added": whether the device has output streams.
+   */
   is_output?: boolean;
+  /**
+   * What changed: "added", "removed", or "default_changed".
+   */
   kind: string;
+  /**
+   * Device name (e.g. "External Headphones").
+   */
   name: string;
+  /**
+   * CoreAudio device UID.
+   */
   uid: string;
 }
 
 /** Payload of the `_platform.ble.notification` event. */
 export interface BleNotificationEventParams {
+  /**
+   * GATT characteristic UUID.
+   */
   characteristic_uuid: string;
+  /**
+   * Notification payload bytes.
+   */
   data: number[];
+  /**
+   * CoreBluetooth peripheral UUID.
+   */
   device_identifier: string;
+  /**
+   * GATT service UUID.
+   */
   service_uuid: string;
 }
 
 /** Payload of the `_platform.capture.progress` event. */
 export interface CaptureProgressEventParams {
+  /**
+   * All captures bound by the partial match, keyed by binding name.
+   */
   captured: Record<string, unknown>;
+  /**
+   * Display form of the command's pattern (for log readability).
+   */
   command_phrase: string;
+  /**
+   * Capture name the dependent capture is waiting to fill
+   * (e.g. `"suffix"`).
+   */
   next_capture: string;
+  /**
+   * Collection name resolved by substituting bound captures into
+   * the dependent capture's template (e.g. `"browser_hints_arch"`).
+   */
   next_collection: string;
+  /**
+   * The plugin that owns the command being partially matched.
+   * Subscribers filter on this to receive only events for their
+   * own commands.
+   */
   owner_plugin: string;
 }
 
 /** Payload of the `_platform.clipboard.changed` event. */
 export interface ClipboardChangedEventParams {
+  /**
+   * `NSPasteboard.changeCount` after the change. Monotonic per session;
+   * useful for deduping and for detecting missed changes.
+   * wire uint64 (64-bit) · min 0
+   */
   change_count: number;
+  /**
+   * Pasteboard type identifiers now available (e.g.
+   * `public.utf8-plain-text`, `public.png`). Enough to filter on without
+   * reading anything.
+   */
   types: string[];
 }
 
 /** Payload of the `_platform.collection.updated` event. */
 export interface CollectionUpdatedEventParams {
+  /**
+   * Name of the collection that was updated.
+   */
   collection: string;
+  /**
+   * Plugin ID or `_platform` that wrote the update.
+   */
   writer: string;
 }
 
@@ -4729,27 +7863,63 @@ export interface DisplayChangedEventParams {
 
 /** Payload of the `_platform.effect.displaced` event. */
 export interface EffectDisplacedEventParams {
+  /**
+   * Plugin id that lost top-of-stack ownership. Subscribers filter on
+   * this to know whether *they* are the displaced plugin (vs. another
+   * plugin's stack frame being overridden).
+   */
   displaced_owner: string;
+  /**
+   * The effect name that was displaced (e.g. "suppress_notifications").
+   */
   effect: string;
+  /**
+   * Plugin id that just took top-of-stack ownership of the effect.
+   */
   new_owner: string;
 }
 
 /** Payload of the `_platform.effect.ownership_changed` event. */
 export interface EffectOwnershipChangedEventParams {
+  /**
+   * The effect whose effective owner changed — a bare platform name or
+   * a qualified `<plugin_id>.<name>`.
+   */
   effect: string;
+  /**
+   * Plugin now holding the top of the stack. `None` means the effect
+   * went free — the transition a behaviour-applying provider unapplies
+   * on.
+   */
   owner?: string;
+  /**
+   * Plugin that held the top before this change. `None` means the
+   * effect was previously free.
+   */
   previous?: string;
 }
 
 /** Payload of the `_platform.hid.connected` event. */
 export interface HidConnectedEventParams {
+  /**
+   * wire uint32 · min 0
+   */
   axes: number;
   ble_uuid?: string;
+  /**
+   * wire uint32 · min 0
+   */
   buttons: number;
   device_id: string;
   product: string;
+  /**
+   * wire uint32 · min 0
+   */
   product_id: number;
   transport: string;
+  /**
+   * wire uint32 · min 0
+   */
   vendor_id: number;
 }
 
@@ -4764,52 +7934,127 @@ export interface HidDisconnectedEventParams {
 export interface HidInputEventParams {
   device_id: string;
   product: string;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   timestamp: number;
+  /**
+   * HID usage code within the usage page.
+   * wire uint32 · min 0
+   */
   usage: number;
+  /**
+   * HID usage page (e.g. 0x09 = Button, 0x07 = Keyboard, 0x01 = Generic Desktop).
+   * wire uint32 · min 0
+   */
   usage_page: number;
+  /**
+   * The input value (e.g. 1 = pressed, 0 = released for buttons).
+   * wire int64 (64-bit)
+   */
   value: number;
 }
 
 /** Payload of the `_platform.hid.report` event. */
 export interface HidReportEventParams {
+  /**
+   * Raw report bytes.
+   */
   data: number[];
   device_id: string;
   product: string;
+  /**
+   * HID report ID.
+   * wire uint32 · min 0
+   */
   report_id: number;
+  /**
+   * IOHIDReportType (0 = input, 1 = output, 2 = feature).
+   * wire uint32 · min 0
+   */
   report_type: number;
+  /**
+   * wire uint64 (64-bit) · min 0
+   */
   timestamp: number;
 }
 
 /** Payload of the `_platform.keyboard.layout_changed` event. */
 export interface KeyboardLayoutChangedEventParams {
+  /**
+   * New keyboard layout ID.
+   */
   new_layout_id: string;
+  /**
+   * Previous keyboard layout ID.
+   */
   old_layout_id: string;
 }
 
 /** Payload of the `_platform.memory_pressure.changed` event. */
 export interface MemoryPressureChangedEventParams {
+  /**
+   * "nominal", "warn", or "critical".
+   */
   level: string;
 }
 
 /** Payload of the `_platform.network.changed` event. */
 export interface NetworkChangedEventParams {
+  /**
+   * The user asked for reduced data use (Low Data Mode).
+   */
   constrained: boolean;
+  /**
+   * The path costs money or battery (cellular, personal hotspot).
+   */
   expensive: boolean;
+  /**
+   * Interface carrying the path: "wifi", "ethernet", "cellular", "loopback",
+   * "other", or "none" when unreachable.
+   */
   interface: string;
+  /**
+   * Whether a usable network path exists right now.
+   */
   reachable: boolean;
 }
 
 /** Payload of the `_platform.output.state` event. */
 export interface OutputStateEventParams {
+  /**
+   * The channel whose state changed.
+   */
   channel: string;
+  /**
+   * Monotonic across the actuator process. A renderer mid-utterance
+   * abandons what it is conveying when a newer generation arrives.
+   * wire uint64 (64-bit) · min 0
+   */
   generation: number;
+  /**
+   * The plugin that owns the channel and produced the state.
+   */
   plugin_id: string;
+  /**
+   * The new current state — the previous one is gone.
+   */
   state: OutputState;
 }
 
 /** Payload of the `_platform.permission.changed` event. */
 export interface PermissionChangedEventParams {
+  /**
+   * Its state after the change.
+   */
   granted: boolean;
+  /**
+   * Which permission moved: "accessibility", "microphone", "camera",
+   * "full_disk_access", "automation", "post_event" (the WindowServer
+   * accepts this process's synthesized keystrokes), "secure_input" (the
+   * keyboard is free of secure-input fields; `granted: true` = free).
+   * The shell reports every state once shortly after boot, then on change.
+   */
   permission: string;
 }
 
@@ -4821,6 +8066,9 @@ export interface PipelineErrorEventParams {
 
 /** Payload of the `_platform.pipeline.started` event. */
 export interface PipelineStartedEventParams {
+  /**
+   * default false
+   */
   ephemeral?: boolean;
   pipeline: string;
 }
@@ -4832,12 +8080,42 @@ export interface PipelineStoppedEventParams {
 
 /** Payload of the `_platform.pipeline.transcript` event. */
 export interface PipelineTranscriptEventParams {
+  /**
+   * Coarse scalar confidence. On the sherpa CTC command path this is the
+   * MEAN of `word_scores`; absent when the engine carries no confidence
+   * signal. A confidence gate must read `word_scores` (the min margin), not
+   * this — the mean hides a single deeply-coerced word. Display/logging only.
+   * wire float
+   */
   confidence?: number;
+  /**
+   * What this utterance IS, per the modes active when it was emitted:
+   * `query` (a search box, a field name — prosody punctuation is noise) or
+   * `prose` (writing — punctuation is intended). Declared by a gate
+   * collection, carried verbatim; the platform never interprets it. Absent
+   * means no active mode declared one, and the engine owner's default
+   * (prose) stands. See `docs/design/DESIGN_DICTATION_PROFILES.md`.
+   */
   dictation_profile?: string;
   is_final: boolean;
   pipeline: string;
   text: string;
+  /**
+   * Shared-clock onset (ms, the audio chunk timebase) of each word of
+   * `text`, aligned 1:1 with its whitespace-split words. Emitted by
+   * engines with time alignment (sherpa's CTC path); converts a word
+   * position into an audio position other pipelines understand — the
+   * dictation stop-phrase audio cutoff.
+   */
   word_onsets_ms?: number[];
+  /**
+   * Per-word acoustic score, aligned 1:1 with `text`'s whitespace-split
+   * words (same alignment contract as `word_onsets_ms`). Engine-defined
+   * scale; on the closed-grammar CTC command engine this is the word's
+   * min token argmax-margin — positive means the audio supported the
+   * word, negative means the grammar coerced it. When present,
+   * `confidence` is the mean of these.
+   */
   word_scores?: number[];
 }
 
@@ -4848,8 +8126,20 @@ export interface PipelineWarmedEventParams {
 
 /** Payload of the `_platform.plugin.degraded` event. */
 export interface PluginDegradedEventParams {
+  /**
+   * How many consecutive RPC timeouts drove this. `0` when the plugin
+   * reported itself degraded — accurate, not a placeholder: nothing timed
+   * out.
+   * wire int64 (64-bit)
+   */
   consecutive_timeouts: number;
   plugin_id: string;
+  /**
+   * The plugin's own sentence, present IFF this came from
+   * `plugin.report_health` rather than the timeout ladder — the
+   * discriminator between a plugin that stopped answering and one that
+   * answers fine but cannot reach something it needs.
+   */
   reason?: string;
 }
 
@@ -4865,27 +8155,61 @@ export interface PluginEnabledEventParams {
 
 /** Payload of the `_platform.power.changed` event. */
 export interface PowerChangedEventParams {
+  /**
+   * Battery charge percentage (0-100). Absent on machines with no battery.
+   * wire double
+   */
   battery_level?: number;
+  /**
+   * Whether the battery is currently charging.
+   */
   is_charging: boolean;
+  /**
+   * Power source: "battery", "ac", or "ups".
+   */
   source: string;
+  /**
+   * Estimated minutes until empty. Absent when unknown or on AC.
+   * wire int64 (64-bit)
+   */
   time_to_empty?: number;
+  /**
+   * Estimated minutes until full. Absent when unknown or not charging.
+   * wire int64 (64-bit)
+   */
   time_to_full?: number;
 }
 
 /** Payload of the `_platform.privilege.granted` event. */
 export interface PrivilegeGrantedEventParams {
+  /**
+   * The plugin the grant landed on — consumers filter to their own id.
+   */
   plugin_id: string;
+  /**
+   * The privilege name that is now effective.
+   */
   privilege: string;
 }
 
 /** Payload of the `_platform.selection.picked` event. */
 export interface SelectionPickedEventParams {
+  /**
+   * ID of the selected item.
+   */
   item_id: string;
+  /**
+   * Phonetic tag used to select the item.
+   */
   tag: string;
 }
 
 /** Payload of the `_platform.thermal.changed` event. */
 export interface ThermalChangedEventParams {
+  /**
+   * "nominal", "fair", "serious", or "critical" — `ProcessInfo.ThermalState`
+   * in ascending severity.
+   */
   state: string;
 }
 
@@ -4898,6 +8222,9 @@ export interface WindowClosedEventParams {
 /** Payload of the `_platform.window.created` event. */
 export interface WindowCreatedEventParams {
   app_id: string;
+  /**
+   * default null
+   */
   app_name?: string;
   frame: Frame;
   window_id: string;
@@ -4911,7 +8238,13 @@ export interface WindowFocusedEventParams {
 
 /** Payload of the `_platform.window.frame_changed` event. */
 export interface WindowFrameChangedEventParams {
+  /**
+   * New frame.
+   */
   new: Frame;
+  /**
+   * Previous frame.
+   */
   old: Frame;
   window_id: string;
 }
@@ -4925,13 +8258,30 @@ export interface WindowTitleChangedEventParams {
 
 /** Payload of the `_platform.workspace.changed` event. */
 export interface WorkspaceChangedEventParams {
+  /**
+   * Freeform reason hint from the host (e.g. "space_switched",
+   * "app_launched", "display_changed"). Optional — the host may
+   * not always have a specific reason.
+   */
   reason?: string;
 }
 
 /** Payload of the `_platform.world.updated` event. */
 export interface WorldUpdatedEventParams {
+  /**
+   * default null
+   */
   active_app?: string;
+  /**
+   * default null
+   */
   active_window_id?: string;
+  /**
+   * default null
+   */
   displays?: DisplayInfo[];
+  /**
+   * default null
+   */
   windows?: WindowInfo[];
 }
