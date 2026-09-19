@@ -182,6 +182,11 @@ export interface ActiveSpace {
 }
 
 /**
+ * Anchor position for a HUD window on screen.
+ */
+export type Anchor = "top-left" | "top-right" | "bottom-left" | "bottom-right" | "bottom-center" | "center";
+
+/**
  * An audio input/output device.
  */
 export interface AudioDevice {
@@ -858,13 +863,16 @@ export interface EnumeratedCommand {
    */
   action: string;
   /**
-   * The ready-to-store keybind value (`{"action": "<dotted.type>",
-   * "params": {…}}`) when the command's action is statically bindable —
-   * a concrete plugin action with no capture template, no sequence, and
-   * no intrinsic phase. Absent otherwise. This is what the Keybinds
-   * tab's bind-a-command flow copies.
+   * The ready-to-store keybind value when the command's action is
+   * statically bindable — a concrete plugin action with no capture
+   * template, no sequence, and no intrinsic phase. Absent otherwise.
+   * This is what the Keybinds tab's bind-a-command flow copies.
+   *
+   * Declared 2026-09-19 (census). It was built here as a two-key
+   * `serde_json::Map` and described in this comment; `KeybindBinding`
+   * is that shape, and `RegistryEntry` is it plus combo and source.
    */
-  binding?: unknown;
+  binding?: KeybindBinding;
   /**
    * Optional grouping label from the command definition (e.g. "Navigation").
    */
@@ -957,6 +965,14 @@ export interface Frame {
   y: number;
 }
 
+export interface HUDItem {
+  icon?: string;
+  id: string;
+  subtitle?: string;
+  tag?: string;
+  title: string;
+}
+
 export interface HidDeviceEntry {
   /**
    * wire uint32 · min 0
@@ -1025,6 +1041,20 @@ export interface HidElementEntry {
 }
 
 /**
+ * An HTML fragment pushed to a HUD channel. The `target_id` is the DOM element
+ * ID to patch (e.g. "content", "title"); `html` is the innerHTML replacement.
+ * When `raw` is true, `html` is sent as-is (multiple elements, Datastar patches each by ID).
+ */
+export interface HudFragment {
+  html: string;
+  /**
+   * default false
+   */
+  raw?: boolean;
+  target_id: string;
+}
+
+/**
  * An available keyboard input source.
  */
 export interface InputSource {
@@ -1048,6 +1078,29 @@ export interface InputSource {
 export interface InstalledApp {
   bundle_id: string;
   name: string;
+}
+
+/**
+ * The stored value of one keybind: which action it fires and with what.
+ *
+ * This is what a `keybinds` collection record holds, and what the Keybinds
+ * tab's bind-a-command flow copies out of `commands.enumerate`
+ * (`EnumeratedCommand.binding`). A `RegistryEntry` is this plus the combo
+ * and where it came from.
+ */
+export interface KeybindBinding {
+  /**
+   * Exact dotted action type, e.g. `"voice.dictation"`.
+   */
+  action: string;
+  /**
+   * Params for the dispatch; absent means `{}`.
+   *
+   * Open by design: the receiving plugin's shape, typed per-plugin by
+   * `branchkit-gen` from that plugin's `action_types`, exactly like
+   * `Action::Plugin.params`.
+   */
+  params?: unknown;
 }
 
 export interface ListCommandItem {
@@ -1733,6 +1786,27 @@ export interface RedecodeNoise {
    * wire double
    */
   snr_db: number;
+}
+
+export interface RegistryEntry {
+  action: string;
+  combo: string;
+  /**
+   * Params for the dispatch; absent means `{}`. Every fired bind
+   * executes `Action::Plugin { action_type, params, phase }` through the
+   * shared executor — the string-routing dialect is gone (2026-08-28).
+   *
+   * Open by design, and the only open field in this shape: it is the
+   * receiving plugin's params, typed per-plugin by `branchkit-gen` from
+   * that plugin's `action_types`, exactly like `Action::Plugin.params`.
+   */
+  params?: unknown;
+  source: string;
+}
+
+export interface RegistrySnapshot {
+  entries: RegistryEntry[];
+  listen_up: string[];
 }
 
 export interface ReminderItem {
@@ -2948,12 +3022,17 @@ export interface HUDCreateChannelRequest {
    */
   accepts_input?: boolean;
   /**
-   * Anchor position on screen (`Anchor` enum, kebab-case strings:
-   * `"top-left"`, `"top-right"`, `"bottom-left"`, `"bottom-right"`,
-   * `"bottom-center"`, `"center"`). Defaults to `"top-right"`.
-   * default null
+   * Anchor position on screen. Defaults to `"top-right"`.
+   *
+   * Declared 2026-09-19 (census) — the enum has existed all along and
+   * the doc comment was spelling out its variants by hand. Note the
+   * behaviour change that comes with it: an unrecognised anchor used to
+   * fall back to the default SILENTLY (`unwrap_or_else`), putting the
+   * window somewhere the caller did not ask for with nothing said; it
+   * now fails the call by name. Absent still means the default.
+   * default "top-right"
    */
-  anchor?: unknown;
+  anchor?: Anchor;
   /**
    * Channel name. Must be unique across all plugins.
    */
@@ -3034,9 +3113,14 @@ export interface HUDPushRequest {
    */
   channel: string;
   /**
-   * Array of `HudFragment` objects: `{ target_id, html, raw? }`.
+   * The fragments to patch into the channel, in order.
+   *
+   * Declared 2026-09-19 (census). The handler already deserialized
+   * exactly `Vec<HudFragment>` and failed the call otherwise, so the
+   * opaque schema described nothing the platform actually accepted.
+   * default []
    */
-  fragments: unknown;
+  fragments?: HudFragment[];
 }
 
 export interface HUDPushResponse {
@@ -3396,10 +3480,14 @@ export interface InputTypeTextResponse {
 
 export interface KeybindsRegisterRequest {
   /**
-   * `RegistrySnapshot` JSON: `{ entries: [...], listen_up: [...] }`.
-   * Each entry is `{ combo, action, source }`.
+   * The full keybind registry to install, replacing what is there.
+   *
+   * Declared 2026-09-19 (census). The handler already deserialized
+   * exactly `RegistrySnapshot` and refused anything else; the doc
+   * comment was transcribing the shape by hand, and had gone stale —
+   * an entry is `{ combo, action, source, params? }`.
    */
-  snapshot: unknown;
+  snapshot: RegistrySnapshot;
 }
 
 export interface KeybindsRegisterResponse {
@@ -7271,10 +7359,14 @@ export interface SelectionSetRequest {
    */
   channel?: string;
   /**
-   * Array of `HUDItem` objects: `{ id, tag?, title, subtitle?, icon? }`.
-   * default null
+   * The selectable items, in display order.
+   *
+   * Declared 2026-09-19 (census). The handler already deserialized
+   * exactly `Vec<HUDItem>`; the doc comment was listing the fields a
+   * generated type can list itself.
+   * default []
    */
-  items?: unknown;
+  items?: HUDItem[];
   /**
    * Optional title displayed at the top of the selection HUD.
    * default null

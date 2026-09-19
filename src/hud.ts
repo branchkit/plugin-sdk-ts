@@ -1,7 +1,9 @@
 /**
  * HUD push sugar — parity with plugin-sdk-go/hud.go. The generated
- * hudPush takes raw fragments, which proved awkward enough that callers
- * hand-rolled the envelope; these cover the two real shapes.
+ * hudPush used to take raw fragments, which proved awkward enough that
+ * callers hand-rolled the envelope; it takes `HudFragment[]` now
+ * (2026-09-19), so these two stay for the lesson they carry, not the
+ * envelope they build.
  */
 import { Plugin } from "./plugin.js";
 import "./methods_gen.js";
