@@ -28,6 +28,7 @@ export {
 export { ListenLocal, Listener, inheritedListenerCount, type ConnectInfo } from "./listen.js";
 export { UpstreamClient } from "./upstream.js";
 export { dial } from "./dial.js";
+export { sayAction, dispatchAction } from "./output.js";
 export { HostRefusedError } from "./proxy.js";
 // Closed vocabularies generated from the actuator (error kinds, input
 // directives, effect names). Go gets these for free via package `shared`.

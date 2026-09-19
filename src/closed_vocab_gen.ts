@@ -94,3 +94,42 @@ export interface FaultData {
   op?: string;
   privilege?: string;
 }
+
+// OutputKind* are the closed-vocabulary `kind` values of a semantic
+// output document (`output.state`): what a person needs in order to
+// act. A plugin never invents a kind — the actuator renders an
+// unknown one as OutputKindOutcome. `OutputKind` is `string`, not a
+// union, for the same reason ErrorKind is. Source of truth:
+// `actuator/src/output_state.rs::OutputKind`.
+export type OutputKind = string;
+export const OutputKindChoices = "choices" as const;
+export const OutputKindMode = "mode" as const;
+export const OutputKindOutcome = "outcome" as const;
+export const OutputKindProblem = "problem" as const;
+export const OutputKindProgress = "progress" as const;
+
+// KnownOutputKinds lists the full closed-vocabulary set, in the
+// platform's own order.
+export const KnownOutputKinds = [
+  "choices",
+  "mode",
+  "outcome",
+  "problem",
+  "progress",
+] as const;
+
+// OutputUrgency* are the closed-vocabulary `urgency` values of a
+// semantic output document — the producer's claim; what it means is
+// each renderer's policy. Unknown degrades to OutputUrgencyAmbient.
+// Source of truth: `actuator/src/output_state.rs::OutputUrgency`.
+export type OutputUrgency = string;
+export const OutputUrgencyAmbient = "ambient" as const;
+export const OutputUrgencyNotable = "notable" as const;
+export const OutputUrgencyInterrupt = "interrupt" as const;
+
+// KnownOutputUrgencies lists the full closed-vocabulary set.
+export const KnownOutputUrgencies = [
+  "ambient",
+  "notable",
+  "interrupt",
+] as const;

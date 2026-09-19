@@ -505,6 +505,45 @@ export type OnActionStatus = "ok" | "error" | "not_handled";
  */
 export type OnPointer = "none" | "fade";
 
+export interface OutputAction {
+  dispatch?: string;
+  params?: unknown;
+  say?: string;
+}
+
+export interface OutputItem {
+  action?: unknown;
+  extra?: unknown;
+  id: string;
+  phrase: string;
+  subtitle?: string;
+  title: string;
+}
+
+export interface OutputProgress {
+  remaining_ms: number;
+  total_ms: number;
+}
+
+export interface OutputSection {
+  items: OutputItem[];
+  title: string;
+}
+
+export interface OutputState {
+  channel: string;
+  extra?: unknown;
+  footer?: string;
+  kind: string;
+  locale: string;
+  phrase: string;
+  progress?: unknown;
+  sections: OutputSection[];
+  title: string;
+  urgency: string;
+  v: number;
+}
+
 export interface OverlayRow {
   added: number;
   collection: string;
@@ -4188,6 +4227,15 @@ export interface NativeZoomEnabledResponse {
   enabled: boolean;
 }
 
+export interface OutputStateRequest {
+  state: OutputState;
+}
+
+export interface OutputStateResponse {
+  generation: number;
+  ok: boolean;
+}
+
 export interface OverridesApplyRequest {
   action: string;
   collection: string;
@@ -4729,6 +4777,14 @@ export interface NetworkChangedEventParams {
   expensive: boolean;
   interface: string;
   reachable: boolean;
+}
+
+/** Payload of the `_platform.output.state` event. */
+export interface OutputStateEventParams {
+  channel: string;
+  generation: number;
+  plugin_id: string;
+  state: OutputState;
 }
 
 /** Payload of the `_platform.permission.changed` event. */
