@@ -37,7 +37,7 @@ export interface AXPathSegment {
 export interface ActionFieldSchema {
   default?: unknown;
   description: string;
-  display?: unknown;
+  display?: FieldDisplay;
   enum_values: string[];
   field_type: FieldType;
   fields: ActionFieldSchema[];
@@ -512,7 +512,7 @@ export interface OutputAction {
 }
 
 export interface OutputItem {
-  action?: unknown;
+  action?: OutputAction;
   extra?: unknown;
   id: string;
   phrase: string;
@@ -537,7 +537,7 @@ export interface OutputState {
   kind: string;
   locale: string;
   phrase: string;
-  progress?: unknown;
+  progress?: OutputProgress;
   sections: OutputSection[];
   title: string;
   urgency: string;
@@ -603,7 +603,7 @@ export interface RedecodeItem {
   audio: string;
   bias_strength?: number;
   id: string;
-  noise?: unknown;
+  noise?: RedecodeNoise;
   words: string[];
 }
 
@@ -843,7 +843,7 @@ export interface CollectionFetchRequest {
 }
 
 export interface CollectionFetchResponse {
-  record?: unknown;
+  record?: CollectionRecord;
 }
 
 export interface CollectionFetchCompactedRequest {
@@ -852,7 +852,7 @@ export interface CollectionFetchCompactedRequest {
 }
 
 export interface CollectionFetchCompactedResponse {
-  record?: unknown;
+  record?: CollectionRecord;
 }
 
 export interface CollectionGetRequest {
@@ -1940,7 +1940,7 @@ export interface NativeCopyFileResponse {
 }
 
 export interface NativeCpuInfoResponse {
-  cpu?: unknown;
+  cpu?: CpuInfo;
 }
 
 export interface NativeCreateDirectoryRequest {
@@ -2354,7 +2354,7 @@ export interface NativeFocusModesResponse {
 }
 
 export interface NativeFocusedElementResponse {
-  element?: unknown;
+  element?: AXElementInfo;
 }
 
 export interface NativeFocusedWindowIDResponse {
@@ -2374,7 +2374,7 @@ export interface NativeForceQuitAppResponse {
 }
 
 export interface NativeFrontmostAppResponse {
-  app?: unknown;
+  app?: RunningApp;
 }
 
 export interface NativeFullDiskAccessResponse {
@@ -2735,7 +2735,7 @@ export interface NativeMediaPreviousTrackResponse {
 }
 
 export interface NativeMemoryInfoResponse {
-  memory?: unknown;
+  memory?: MemoryInfo;
 }
 
 export interface NativeMemoryPressureResponse {
@@ -2887,7 +2887,7 @@ export interface NativeNotifyResponse {
 }
 
 export interface NativeNowPlayingResponse {
-  info?: unknown;
+  info?: NowPlayingInfo;
 }
 
 export interface NativeNumberFormatDecimalResponse {
@@ -3054,7 +3054,7 @@ export interface NativePreventSleepResponse {
 }
 
 export interface NativePrimaryDisplayResponse {
-  display?: unknown;
+  display?: DisplayMetadata;
 }
 
 export interface NativePrimaryDisplayIDResponse {
@@ -3323,7 +3323,7 @@ export interface NativeScreenSharingEnabledResponse {
 
 export interface NativeScreenshotRequest {
   display_id?: number;
-  region?: unknown;
+  region?: ScreenshotRegion;
   window_id?: string;
 }
 
@@ -3909,7 +3909,7 @@ export interface NativeSymlinkResponse {
 }
 
 export interface NativeSystemAppearanceResponse {
-  appearance?: unknown;
+  appearance?: SystemAppearance;
 }
 
 export interface NativeSystemInfoResponse {
@@ -4322,7 +4322,7 @@ export interface PluginDataExportResponse {
 
 export interface PluginDebugRequest {
   data?: unknown;
-  level?: unknown;
+  level?: PluginLogLevel;
   tag?: string;
 }
 
