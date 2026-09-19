@@ -6753,6 +6753,24 @@ export interface NativeZoomEnabledResponse {
   enabled: boolean;
 }
 
+export interface OutputClearRequest {
+  /**
+   * The channel on which nothing is true now. Must be owned by the
+   * calling plugin.
+   */
+  channel: string;
+}
+
+export interface OutputClearResponse {
+  /**
+   * The generation stamped on the clear — newer than any state a renderer
+   * holds for the channel.
+   * wire uint64 (64-bit) · min 0
+   */
+  generation: number;
+  ok: boolean;
+}
+
 export interface OutputStateRequest {
   /**
    * The document that becomes the channel's current state. Its `channel`
@@ -6768,6 +6786,11 @@ export interface OutputStateResponse {
    * wire uint64 (64-bit) · min 0
    */
   generation: number;
+  /**
+   * Whether the push changed what the channel's state means (kind, title,
+   * phrase, items) rather than only its progress, footer or urgency.
+   */
+  meaning_changed: boolean;
   ok: boolean;
 }
 
@@ -8030,6 +8053,24 @@ export interface NetworkChangedEventParams {
   reachable: boolean;
 }
 
+/** Payload of the `_platform.output.cleared` event. */
+export interface OutputClearedEventParams {
+  /**
+   * The channel that was cleared.
+   */
+  channel: string;
+  /**
+   * Monotonic, shared with `_platform.output.state` — newer than any
+   * state the renderer holds for the channel.
+   * wire uint64 (64-bit) · min 0
+   */
+  generation: number;
+  /**
+   * The plugin that owns the channel and cleared it.
+   */
+  plugin_id: string;
+}
+
 /** Payload of the `_platform.output.state` event. */
 export interface OutputStateEventParams {
   /**
@@ -8038,10 +8079,20 @@ export interface OutputStateEventParams {
   channel: string;
   /**
    * Monotonic across the actuator process. A renderer mid-utterance
-   * abandons what it is conveying when a newer generation arrives.
+   * abandons what it is conveying when a newer generation arrives —
+   * but see `meaning_changed`.
    * wire uint64 (64-bit) · min 0
    */
   generation: number;
+  /**
+   * Whether this push changed what the state MEANS — kind, title, phrase,
+   * the items and their actions — as opposed to only its progress,
+   * footer or urgency. A producer that re-pushes a countdown has not said
+   * anything new; a renderer mid-utterance keeps going when this is false
+   * and abandons the utterance when it is true. Computed by the platform
+   * so every renderer applies the same test.
+   */
+  meaning_changed: boolean;
   /**
    * The plugin that owns the channel and produced the state.
    */

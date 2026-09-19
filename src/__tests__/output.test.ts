@@ -28,7 +28,7 @@ describe("semantic output helpers", () => {
     p.call = async (method: string, params: unknown) => {
       expect(method).toBe("output.state");
       sent = params;
-      return { ok: true, generation: 7 };
+      return { ok: true, generation: 7, meaning_changed: true };
     };
     const doc: OutputState = {
       channel: "discovery",
@@ -42,6 +42,6 @@ describe("semantic output helpers", () => {
     };
     const res = await p.outputState(doc);
     expect(sent).toEqual({ state: doc });
-    expect(res).toEqual({ ok: true, generation: 7 });
+    expect(res).toEqual({ ok: true, generation: 7, meaning_changed: true });
   });
 });
