@@ -11,9 +11,9 @@ export interface AXElementInfo {
   enabled: boolean;
   focused: boolean;
   path: AXPathSegment[];
-  position?: unknown;
+  position?: unknown[];
   role: string;
-  size?: unknown;
+  size?: unknown[];
   subrole?: string;
   title?: string;
   value?: unknown;
@@ -25,7 +25,7 @@ export interface AXElementNode {
 }
 
 export interface AXElementRef {
-  path: AXPathSegment[];
+  path?: AXPathSegment[];
   pid: number;
 }
 
@@ -89,9 +89,9 @@ export interface BleService {
 
 export interface BleWriteEntry {
   characteristic_uuid: string;
-  data: number[];
+  data?: number[];
   service_uuid: string;
-  write_type: string;
+  write_type?: string;
 }
 
 export interface BluetoothDevice {
@@ -121,14 +121,14 @@ export interface CameraDevice {
 export interface ClipboardContents {
   available_types: string[];
   content_type: string;
-  file_urls?: unknown;
+  file_urls?: string[];
   image_base64?: string;
   text?: string;
 }
 
 export interface ClipboardWriteItem {
   content_type: string;
-  file_urls?: unknown;
+  file_urls?: string[];
   image_base64?: string;
   text?: string;
 }
@@ -186,18 +186,18 @@ export interface CommandRowData {
 }
 
 export interface CommandSpec {
-  action?: unknown;
-  cancels_bridge: boolean;
+  action: unknown;
+  cancels_bridge?: boolean;
   category?: string;
-  clears_tags: string[];
+  clears_tags?: string[];
   description?: string;
   discovery?: string;
-  display_sources: Record<string, string>;
+  display_sources?: Record<string, string>;
   pattern: unknown[];
-  requires_tags: string[];
-  sets_on_partial: string[];
-  sets_tags: string[];
-  variants: unknown[];
+  requires_tags?: string[];
+  sets_on_partial?: string[];
+  sets_tags?: string[];
+  variants?: unknown[];
 }
 
 export interface ConfusabilityFinding {
@@ -513,7 +513,7 @@ export interface OutputAction {
 
 export interface OutputItem {
   action?: OutputAction;
-  extra?: unknown;
+  extra?: Record<string, unknown>;
   id: string;
   phrase: string;
   subtitle?: string;
@@ -526,19 +526,19 @@ export interface OutputProgress {
 }
 
 export interface OutputSection {
-  items: OutputItem[];
+  items?: OutputItem[];
   title: string;
 }
 
 export interface OutputState {
   channel: string;
-  extra?: unknown;
+  extra?: Record<string, unknown>;
   footer?: string;
   kind: string;
   locale: string;
   phrase: string;
   progress?: OutputProgress;
-  sections: OutputSection[];
+  sections?: OutputSection[];
   title: string;
   urgency: string;
   v: number;
@@ -599,12 +599,12 @@ export interface ProcessInfo {
 }
 
 export interface RedecodeItem {
-  apply_bias: boolean;
+  apply_bias?: boolean;
   audio: string;
   bias_strength?: number;
   id: string;
   noise?: RedecodeNoise;
-  words: string[];
+  words?: string[];
 }
 
 export interface RedecodeLine {
@@ -861,7 +861,7 @@ export interface CollectionGetRequest {
 
 export interface CollectionGetResponse {
   data: unknown;
-  entries?: unknown;
+  entries?: Record<string, unknown>;
   introducer: string;
   merge: MergeStrategy;
   name: string;
@@ -892,7 +892,7 @@ export interface CollectionPutRequest {
   group?: string;
   label?: string;
   name: string;
-  roles?: unknown;
+  roles?: Record<string, FieldDisplay>;
 }
 
 export interface CollectionPutResponse {
@@ -904,7 +904,7 @@ export interface CollectionReplaceRequest {
   entries?: CollectionPutEntry[];
   label?: string;
   name: string;
-  roles?: unknown;
+  roles?: Record<string, FieldDisplay>;
   scope: unknown;
 }
 
@@ -1021,8 +1021,8 @@ export interface CommandsResetOverrideResponse {
 }
 
 export interface CommandsResolveRequest {
-  active_tags?: unknown;
-  collections?: unknown;
+  active_tags?: string[];
+  collections?: string[];
   prefer_owner?: string;
   preview?: boolean;
   require_tag?: string;
@@ -1225,7 +1225,7 @@ export interface InputClipboardReadRequest {
 export interface InputClipboardReadResponse {
   available_types: string[];
   content_type: string;
-  file_urls?: unknown;
+  file_urls?: string[];
   image_base64?: string;
   text?: string;
 }
@@ -1602,9 +1602,9 @@ export interface NativeAxElementAtPointResponse {
   enabled: boolean;
   focused: boolean;
   path: AXPathSegment[];
-  position?: unknown;
+  position?: unknown[];
   role: string;
-  size?: unknown;
+  size?: unknown[];
   subrole?: string;
   title?: string;
   value?: unknown;
@@ -2286,7 +2286,7 @@ export interface NativeFileSizeRequest {
 
 export interface NativeFileTagsRequest {
   path: string;
-  tags?: unknown;
+  tags?: string[];
 }
 
 export interface NativeFileTypeRequest {
@@ -3856,7 +3856,7 @@ export interface NativeSpellingLanguageResponse {
 export interface NativeSpotlightRequest {
   limit?: number;
   query: string;
-  scope?: unknown;
+  scope?: string[];
 }
 
 export interface NativeSpotlightResponse {
@@ -4817,8 +4817,8 @@ export interface PipelineTranscriptEventParams {
   is_final: boolean;
   pipeline: string;
   text: string;
-  word_onsets_ms?: unknown;
-  word_scores?: unknown;
+  word_onsets_ms?: number[];
+  word_scores?: number[];
 }
 
 /** Payload of the `_platform.pipeline.warmed` event. */
@@ -4912,6 +4912,6 @@ export interface WorkspaceChangedEventParams {
 export interface WorldUpdatedEventParams {
   active_app?: string;
   active_window_id?: string;
-  displays?: unknown;
-  windows?: unknown;
+  displays?: DisplayInfo[];
+  windows?: WindowInfo[];
 }

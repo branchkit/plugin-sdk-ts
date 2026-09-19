@@ -241,7 +241,7 @@ declare module "./plugin.js" {
     putManyWithRoles(
       name: string,
       entries: CollectionPutEntry[],
-      roles: Record<string, string>,
+      roles: Record<string, FieldDisplay>,
     ): Promise<number>;
 
     /**
@@ -254,7 +254,7 @@ declare module "./plugin.js" {
     putManyWithDisplay(
       name: string,
       entries: CollectionPutEntry[],
-      roles: Record<string, string> | undefined,
+      roles: Record<string, FieldDisplay> | undefined,
       label: string,
     ): Promise<number>;
 
@@ -448,7 +448,7 @@ Plugin.prototype.replace = async function (
 Plugin.prototype.putManyWithRoles = async function (
   name: string,
   entries: CollectionPutEntry[],
-  roles: Record<string, string>,
+  roles: Record<string, FieldDisplay>,
 ): Promise<number> {
   return this.putManyWithDisplay(name, entries, roles, "");
 };
@@ -456,7 +456,7 @@ Plugin.prototype.putManyWithRoles = async function (
 Plugin.prototype.putManyWithDisplay = async function (
   name: string,
   entries: CollectionPutEntry[],
-  roles: Record<string, string> | undefined,
+  roles: Record<string, FieldDisplay> | undefined,
   label: string,
 ): Promise<number> {
   if (entries.length === 0) return 0;

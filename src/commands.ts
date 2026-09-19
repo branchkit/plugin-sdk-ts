@@ -185,16 +185,12 @@ export class CommandBuilder {
   private spec: CommandSpec;
 
   constructor(slots: PatternSlot[]) {
-    this.spec = {
-      pattern: slots,
-      cancels_bridge: false,
-      requires_tags: [],
-      sets_tags: [],
-      clears_tags: [],
-      sets_on_partial: [],
-      display_sources: {},
-      variants: [],
-    };
+    // Only the pattern and the (required) action slot: every other field is
+    // optional on the wire, and an unset one is simply absent — the same
+    // shape the Go and Python builders produce, and what the actuator's
+    // defaults are for. `action` is filled by action(); until then it is
+    // undefined, which JSON.stringify drops.
+    this.spec = { pattern: slots, action: undefined };
   }
 
   /**
@@ -210,17 +206,17 @@ export class CommandBuilder {
   }
 
   requiresTags(...tags: string[]): this {
-    this.spec.requires_tags.push(...tags);
+    (this.spec.requires_tags ??= []).push(...tags);
     return this;
   }
 
   setsTags(...tags: string[]): this {
-    this.spec.sets_tags.push(...tags);
+    (this.spec.sets_tags ??= []).push(...tags);
     return this;
   }
 
   clearsTags(...tags: string[]): this {
-    this.spec.clears_tags.push(...tags);
+    (this.spec.clears_tags ??= []).push(...tags);
     return this;
   }
 
@@ -231,12 +227,12 @@ export class CommandBuilder {
    * (docs/design/DESIGN_CAPTURE_DISPLAY_FORMS.md, part A.)
    */
   displaySource(capture: string, collection: string): this {
-    this.spec.display_sources[capture] = collection;
+    (this.spec.display_sources ??= {})[capture] = collection;
     return this;
   }
 
   setsOnPartial(...tags: string[]): this {
-    this.spec.sets_on_partial.push(...tags);
+    (this.spec.sets_on_partial ??= []).push(...tags);
     return this;
   }
 

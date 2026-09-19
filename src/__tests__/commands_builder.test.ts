@@ -50,14 +50,15 @@ describe("command builder", () => {
     expect(text()).toBe("<text>");
   });
 
-  test("tag fields serialize as [] not null", () => {
+  test("unset tag fields are absent from the wire, never null", () => {
+    // Every field the schema marks optional is omitted when unset — the
+    // actuator applies its default, and the Go and Python builders produce
+    // the same shape. (The SDKs used to force `[]` by hand.)
     const m = wire(command(word("ping")).action("noop").build());
-    expect(m.requires_tags).toEqual([]);
-    expect(m.sets_tags).toEqual([]);
-    expect(m.clears_tags).toEqual([]);
-    expect(m.sets_on_partial).toEqual([]);
-    expect(m.variants).toEqual([]);
-    expect(m.cancels_bridge).toBe(false);
+    for (const k of ["requires_tags", "sets_tags", "clears_tags", "sets_on_partial", "variants", "cancels_bridge"]) {
+      expect(k in m).toBe(false);
+    }
+    expect(JSON.stringify(m)).not.toContain("null");
   });
 
   test("setsTags + cancelsBridge", () => {
