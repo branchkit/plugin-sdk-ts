@@ -73,10 +73,10 @@ describe("command builder", () => {
   });
 
   test("pushCommandSpecs coerces null array fields to [] (Go parity)", async () => {
-    let sentBody: { commands: Record<string, unknown>[] } | undefined;
+    let sent: Record<string, unknown>[] | undefined;
     const fakePlugin = {
-      call: async (_method: string, body: { commands: Record<string, unknown>[] }) => {
-        sentBody = body;
+      commandsPush: async (commands: Record<string, unknown>[]) => {
+        sent = commands;
         return { count: 1 };
       },
     } as unknown as Plugin;
@@ -93,7 +93,7 @@ describe("command builder", () => {
     } as unknown as Parameters<typeof pushCommandSpecs>[1][number];
 
     await pushCommandSpecs(fakePlugin, [raw]);
-    const c = sentBody!.commands[0];
+    const c = sent![0];
     expect(c.requires_tags).toEqual([]);
     expect(c.sets_tags).toEqual([]);
     expect(c.clears_tags).toEqual([]);

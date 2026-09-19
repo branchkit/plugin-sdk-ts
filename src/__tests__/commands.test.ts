@@ -30,8 +30,8 @@ describe("PushCommands file loading", () => {
       // Create a mock plugin that tracks calls
       const calls: any[] = [];
       const mockPlugin = {
-        call: async (method: string, params: unknown) => {
-          calls.push({ method, params });
+        commandsPush: async (commands: unknown, group?: string) => {
+          calls.push({ commands, group });
           return { count: 0 };
         },
       };
@@ -59,15 +59,15 @@ describe("PushCommands file loading", () => {
       try {
         let captured: any;
         const mockPlugin = {
-          call: async (_method: string, params: unknown) => {
-            captured = params;
+          commandsPush: async (commands: unknown) => {
+            captured = commands;
             return { count: 2 };
           },
         };
         const count = await PushCommands(mockPlugin as any);
         expect(count).toBe(2);
-        expect(captured.commands).toHaveLength(2);
-        expect(captured.commands[0].phrase).toBe("hello");
+        expect(captured).toHaveLength(2);
+        expect(captured[0].phrase).toBe("hello");
       } finally {
         if (orig !== undefined) {
           process.env.BRANCHKIT_PLUGIN_DIR = orig;
@@ -108,17 +108,17 @@ describe("PushCommands file loading", () => {
       try {
         let captured: any;
         const mockPlugin = {
-          call: async (_method: string, params: unknown) => {
-            captured = params;
+          commandsPush: async (commands: unknown) => {
+            captured = commands;
             return { count: 2 };
           },
         };
         await PushCommands(mockPlugin as any);
 
         // Context tags should be prepended
-        expect(captured.commands[0].requires_tags).toEqual(["app.dev.warp"]);
+        expect(captured[0].requires_tags).toEqual(["app.dev.warp"]);
         // Existing tags should be preserved after context tags
-        expect(captured.commands[1].requires_tags).toEqual([
+        expect(captured[1].requires_tags).toEqual([
           "app.dev.warp",
           "existing.tag",
         ]);

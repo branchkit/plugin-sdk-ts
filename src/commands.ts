@@ -2,6 +2,9 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import type { Plugin } from "./plugin.js";
 import type { CommandSpec } from "./types_gen.js";
+// Side-effect import: installs the generated wrappers on Plugin.prototype,
+// which is where `commandsPush` comes from. Same line hud.ts carries.
+import "./methods_gen.js";
 
 /**
  * Context file format: a context-scoped command file.
@@ -62,9 +65,19 @@ export async function PushCommands(plugin: Plugin): Promise<number> {
 
   if (allCommands.length === 0) return 0;
 
-  const resp = await plugin.call<{ count: number }>("commands.push", {
-    commands: allCommands,
-  });
+  // Through the generated wrapper: `commands.push` declares
+  // `CommandSpec[]` as of 2026-09-19, so the hand-rolled envelope and its
+  // inline response type are gone. Parity with Go's pushCommandSpecs.
+  //
+  // The cast is the file boundary, and it is honest: these came out of
+  // JSON on disk, so at the type level they are whatever the author wrote.
+  // The actuator validates each one INDIVIDUALLY and reports a bad command
+  // as one bad command — which is why `commands` is a runtime
+  // `serde_json::Value` there with only its schema declared. Checking the
+  // shape a second time here would duplicate that and diverge from it.
+  const resp = await plugin.commandsPush(
+    allCommands as unknown as CommandSpec[],
+  );
   return resp.count;
 }
 
@@ -333,9 +346,7 @@ export async function pushCommandSpecs(
   plugin: Plugin,
   specs: CommandSpec[],
 ): Promise<number> {
-  const resp = await plugin.call<{ count: number }>("commands.push", {
-    commands: specs.map(normalizeCommandSpec),
-  });
+  const resp = await plugin.commandsPush(specs.map(normalizeCommandSpec));
   return resp.count;
 }
 
@@ -376,9 +387,6 @@ export async function pushCommandGroup(
       "pushCommandGroup: group name is required (use pushCommandSpecs to replace the whole set)",
     );
   }
-  const resp = await plugin.call<{ count: number }>("commands.push", {
-    commands: specs.map(normalizeCommandSpec),
-    group,
-  });
+  const resp = await plugin.commandsPush(specs.map(normalizeCommandSpec), group);
   return resp.count;
 }

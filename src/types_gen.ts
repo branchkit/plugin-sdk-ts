@@ -524,6 +524,23 @@ export interface CommandRowData {
 }
 
 /**
+ * Snapshot of a command for sending to plugins (e.g. plugin command processing).
+ */
+export interface CommandSnapshot {
+  canonical: string;
+  category?: string;
+  /**
+   * Only set for key-type commands (input.key action type).
+   * wire uint16 · min 0 · max 65535
+   */
+  keycode?: number;
+  /**
+   * The actual word (from phrase slots). May differ from canonical for user overrides.
+   */
+  word: string;
+}
+
+/**
  * One Command in a `commands.push` payload — published purely for
  * discoverability. Wire deserialization goes through
  * `commands::parse_commands_with_templates` against the opaque JSON
@@ -2600,15 +2617,24 @@ export interface CommandsListOverridesResponse {
 
 export interface CommandsPushRequest {
   /**
-   * Array of `CommandSpec` JSON objects to push to the matching
-   * engine. Replaces the current commands contributed by the
-   * calling plugin. Wire-level type is opaque
-   * (`serde_json::Value`) to keep the deserializer flexible; see
-   * `CommandSpec` for the canonical field list including
-   * `cancels_bridge`.
+   * The commands to push. Replaces the commands contributed by the
+   * calling plugin (the whole set, or one `group`).
+   *
+   * The RUNTIME type stays `serde_json::Value` deliberately: each entry
+   * is parsed individually into `commands::PartialCommand` further in,
+   * so one malformed command is reported as one malformed command
+   * rather than failing the caller's whole push. The SCHEMA says what
+   * the entries are (2026-09-19 census) — this is the one place
+   * `#[schemars(with = ...)]` earns its keep, making the schema MORE
+   * precise than the declaration rather than less, which is the exact
+   * opposite of every other use of it this census deleted.
+   *
+   * Until now the generated wrapper took raw JSON, which is why all
+   * three SDKs hand-wrote a typed push beside it (Go's
+   * `PushCommandSpecs`).
    * default null
    */
-  commands?: unknown;
+  commands?: CommandSpec[];
   /**
    * Optional named group this push owns. Absent replaces the plugin's
    * ENTIRE command set (the original semantics, unchanged); present
@@ -7744,13 +7770,20 @@ export interface OnActionResponse {
 
 export interface OnCommandsChangedRequest {
   /**
-   * All commands grouped by plugin ID.
+   * Every plugin's commands, keyed by plugin id.
    */
-  commands_by_plugin: unknown;
+  commands_by_plugin: Record<string, CommandSnapshot[]>;
   /**
+   * Plugins that are installed but disabled, so a consumer can leave
+   * their words out of whatever it builds.
    * default []
    */
-  user_commands?: unknown[];
+  disabled_plugins?: string[];
+  /**
+   * The user's own commands — the matcher's second input.
+   * default []
+   */
+  user_commands?: CommandSnapshot[];
 }
 
 export interface OnCommandsChangedResponse {
