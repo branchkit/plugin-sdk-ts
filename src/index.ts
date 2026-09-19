@@ -56,7 +56,6 @@ export {
   listOpts,
   scopeCollection,
   scopeGroup,
-  type ReplaceScope,
   type ReplaceResult,
   type ReplaceDisplay,
 } from "./collection.js";

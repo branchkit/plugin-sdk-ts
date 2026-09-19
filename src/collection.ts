@@ -6,26 +6,14 @@ import type {
   CollectionPutEntry,
   CollectionUpdatedEventParams,
   FieldDisplay,
+  ReplaceScope,
 } from "./types_gen.js";
 
 export type { CollectionPutEntry };
 
-/**
- * Bounds what a {@link Plugin.replace} is allowed to DELETE, WITHIN the records
- * this plugin owns. A replace never reaches another plugin's records whatever
- * the scope says: the platform computes the complement over records whose
- * writer is the caller, so the worst a wrong scope can do is delete too much of
- * your own.
- *
- * Still required and never inferred, because "everything I own here" and "the
- * subset under this key space" are different intentions, and guessing between
- * them is how a refresh silently becomes a wipe.
- *
- * Construct with {@link scopeCollection} or {@link scopeGroup}.
- */
-export type ReplaceScope =
-  | { kind: "collection" }
-  | { kind: "group"; value: string };
+// ReplaceScope itself is generated (types_gen.ts) from the actuator's tagged
+// enum — a discriminated union, with the platform's own doc on it. Construct
+// one with scopeCollection() or scopeGroup().
 
 /**
  * Every other record THIS PLUGIN owns in the collection is the complement:

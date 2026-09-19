@@ -11,9 +11,9 @@ export interface AXElementInfo {
   enabled: boolean;
   focused: boolean;
   path: AXPathSegment[];
-  position?: unknown[];
+  position?: [number, number];
   role: string;
-  size?: unknown[];
+  size?: [number, number];
   subrole?: string;
   title?: string;
   value?: unknown;
@@ -626,6 +626,26 @@ export interface ReminderItem {
   title: string;
 }
 
+/**
+ * Which of the CALLER'S OWN records `collection.replace` may delete — the
+ * "complement" it is allowed to clear.
+ *
+ * The complement is always computed over records whose `writer` is the caller,
+ * so no scope can reach another plugin's records or the user's. Scope chooses
+ * among the caller's own; the worst a wrong one can do is clear too much of
+ * what you yourself published.
+ *
+ * Still explicit and required, never inferred: "everything I own here" and
+ * "the subset under this key space" are different intentions, and guessing
+ * between them is how a refresh silently becomes a wipe. See
+ * docs/design/DESIGN_RECORD_OWNERSHIP.md and docs/design/DESIGN_COLLECTION_REPLACE.md.
+ */
+export type ReplaceScope =
+  /** Every other record the CALLER OWNS in this collection is the complement — whatever group it carries, ungrouped included. Permitted for any writer the collection accepts, not only its introducer: a co-writer on a `writers: anyone_who_declares` collection manages its own contribution this way, and cannot touch anyone else's. */
+  | { kind: "collection" }
+  /** Narrows to the caller's own records carrying this group label, and stamps `value` on every entry written. Lets one plugin maintain several independent replace-sets in one collection — command sources are the motivating case (`commands.push`'s `group` is exactly this).  Replaces the earlier `prefix` scope, which expressed the same intent as an id-prefix convention — the id doing double duty as identity and scope, with an error class ("entry outside the declared prefix") that existed only to police the convention. A group is a real envelope attribute, so none of that polices anything: entries in a grouped replace are in its group by definition. (`prefix` shipped 2026-08-12 and accumulated zero production callers before its removal.) */
+  | { kind: "group"; value: string };
+
 export interface ResolveTelemetry {
   gated_partial_seen: boolean;
   winner: MatchWinner;
@@ -905,7 +925,7 @@ export interface CollectionReplaceRequest {
   label?: string;
   name: string;
   roles?: Record<string, FieldDisplay>;
-  scope: unknown;
+  scope: ReplaceScope;
 }
 
 export interface CollectionReplaceResponse {
@@ -1602,9 +1622,9 @@ export interface NativeAxElementAtPointResponse {
   enabled: boolean;
   focused: boolean;
   path: AXPathSegment[];
-  position?: unknown[];
+  position?: [number, number];
   role: string;
-  size?: unknown[];
+  size?: [number, number];
   subrole?: string;
   title?: string;
   value?: unknown;
