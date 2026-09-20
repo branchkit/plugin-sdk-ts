@@ -442,6 +442,18 @@ export interface CollectionsListItem {
    * Plugin ID that contributed this item.
    */
   source: string;
+  /**
+   * The subtitle is itself a matchable spoken form — the cache holds an
+   * alias equal to it resolving to this row's value (a promoted selection
+   * record). Browse surfaces mark the row so the user knows the name
+   * works. Same derivation as `expand_collections_to_items`; derived per
+   * call rather than stored, because the flat map already holds both
+   * halves.
+   *
+   * `commands.list` has no counterpart by construction: its subtitle is a
+   * variation count ("3 variations"), never a spoken alias.
+   */
+  speakable: boolean;
   subtitle?: string;
   title: string;
 }
