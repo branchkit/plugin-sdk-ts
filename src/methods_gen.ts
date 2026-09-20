@@ -1421,8 +1421,9 @@ declare module "./plugin.js" {
     nativeBootVolume(): Promise<NativeBootVolumeResponse>;
     /**
      * Draw window border overlays (forwarded to Swift shell)
+     * @param frames default []
      */
-    nativeBorders(): Promise<void>;
+    nativeBorders(frames?: WindowFrame[]): Promise<void>;
     /**
      * Get display brightness (0.0-1.0)
      * @param displayId wire uint32 · default null · min 0
@@ -4745,8 +4746,13 @@ Plugin.prototype.nativeBootVolume = async function() {
   return result as NativeBootVolumeResponse;
 };
 
-Plugin.prototype.nativeBorders = async function() {
-  const result = await this.call(MethodNativeBorders);
+Plugin.prototype.nativeBorders = async function(frames?: WindowFrame[]) {
+  const result = await this.call(
+    MethodNativeBorders,
+    {
+      frames,
+    },
+  );
 };
 
 Plugin.prototype.nativeBrightness = async function(displayId?: number) {

@@ -3990,6 +3990,13 @@ export interface NativeBootVolumeResponse {
   name: string;
 }
 
+export interface NativeBordersRequest {
+  /**
+   * default []
+   */
+  frames?: WindowFrame[];
+}
+
 export interface NativeBordersResponse {
   ok: boolean;
 }
