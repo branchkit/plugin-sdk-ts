@@ -1190,7 +1190,7 @@ declare module "./plugin.js" {
     /**
      * Get the alert volume (0.0-1.0)
      */
-    nativeAlertVolume(): Promise<void>;
+    nativeAlertVolume(): Promise<number>;
     /**
      * List all on-screen window IDs
      */
@@ -1206,7 +1206,7 @@ declare module "./plugin.js" {
     /**
      * Get focused window ID for app by bundle ID
      */
-    nativeAppFocusedWindowID(bundleId: string): Promise<void>;
+    nativeAppFocusedWindowID(bundleId: string): Promise<string>;
     /**
      * Get app icon as PNG (base64)
      * @param size wire uint32 · default 64 · min 0
@@ -1215,7 +1215,7 @@ declare module "./plugin.js" {
     /**
      * Get path to app icon
      */
-    nativeAppIconPath(bundleId: string): Promise<void>;
+    nativeAppIconPath(bundleId: string): Promise<string>;
     /**
      * Check if app is an LSUIElement (agent/background)
      */
@@ -1235,11 +1235,11 @@ declare module "./plugin.js" {
     /**
      * Get an app path by bundle ID
      */
-    nativeAppPath(bundleId: string): Promise<void>;
+    nativeAppPath(bundleId: string): Promise<string>;
     /**
      * Get PID of running app by bundle ID
      */
-    nativeAppPid(bundleId: string): Promise<void>;
+    nativeAppPid(bundleId: string): Promise<number>;
     /**
      * Get the user's Application Support directory path
      */
@@ -1247,7 +1247,7 @@ declare module "./plugin.js" {
     /**
      * Get an app version by bundle ID
      */
-    nativeAppVersion(bundleId: string): Promise<void>;
+    nativeAppVersion(bundleId: string): Promise<string>;
     /**
      * List all windows belonging to a specific app by bundle ID
      */
@@ -1255,7 +1255,7 @@ declare module "./plugin.js" {
     /**
      * Count windows for an app by bundle ID
      */
-    nativeAppWindowsCount(bundleId: string): Promise<void>;
+    nativeAppWindowsCount(bundleId: string): Promise<number>;
     /**
      * Applications the OS registers as able to open a given file (Launch Services)
      */
@@ -1275,7 +1275,7 @@ declare module "./plugin.js" {
     /**
      * Get the system audio input volume (0.0-1.0)
      */
-    nativeAudioInputLevel(): Promise<void>;
+    nativeAudioInputLevel(): Promise<number>;
     /**
      * Get the default audio output device name
      */
@@ -1359,7 +1359,7 @@ declare module "./plugin.js" {
     /**
      * Get battery cycle count
      */
-    nativeBatteryCycleCount(): Promise<void>;
+    nativeBatteryCycleCount(): Promise<number>;
     /**
      * Get battery health status
      */
@@ -1367,7 +1367,7 @@ declare module "./plugin.js" {
     /**
      * Get battery maximum capacity percentage
      */
-    nativeBatteryMaxCapacity(): Promise<void>;
+    nativeBatteryMaxCapacity(): Promise<number>;
     /**
      * Discover GATT services and characteristics on a paired BLE device
      * @param deviceIdentifier Identifier for the paired BLE device. Accepts a CoreBluetooth
@@ -1546,7 +1546,7 @@ declare module "./plugin.js" {
     /**
      * Get computer sleep timeout in minutes, for the power source the machine is currently on
      */
-    nativeComputerSleepTime(): Promise<void>;
+    nativeComputerSleepTime(): Promise<number>;
     /**
      * Check if contacts access is available
      */
@@ -1562,11 +1562,11 @@ declare module "./plugin.js" {
     /**
      * Get CPU temperature in Celsius. Requires the third-party `osx-cpu-temp`; a reading without an explicit scale marker is rejected rather than assumed
      */
-    nativeCpuTemperature(): Promise<void>;
+    nativeCpuTemperature(): Promise<number>;
     /**
      * Get current CPU usage percentage
      */
-    nativeCpuUsage(): Promise<void>;
+    nativeCpuUsage(): Promise<number>;
     /**
      * Create a directory (with intermediate directories)
      */
@@ -1676,7 +1676,7 @@ declare module "./plugin.js" {
     /**
      * Get current display brightness (0.0-1.0)
      */
-    nativeDisplayBrightness(): Promise<void>;
+    nativeDisplayBrightness(): Promise<number>;
     /**
      * Get color profile for each connected display
      */
@@ -1693,7 +1693,7 @@ declare module "./plugin.js" {
      * Get display refresh rate in Hz
      * @param displayId wire uint32 · min 0
      */
-    nativeDisplayRefreshRate(displayId: number): Promise<void>;
+    nativeDisplayRefreshRate(displayId: number): Promise<number>;
     /**
      * Get rotation for each connected display
      */
@@ -1702,7 +1702,7 @@ declare module "./plugin.js" {
      * Get display scale factor
      * @param displayId wire uint32 · min 0
      */
-    nativeDisplayScaleFactor(displayId: number): Promise<void>;
+    nativeDisplayScaleFactor(displayId: number): Promise<number>;
     /**
      * Get primary display serial number
      */
@@ -1710,7 +1710,7 @@ declare module "./plugin.js" {
     /**
      * Get display sleep timeout in minutes, for the power source the machine is currently on
      */
-    nativeDisplaySleepTime(): Promise<void>;
+    nativeDisplaySleepTime(): Promise<number>;
     /**
      * Get metadata for all connected displays
      */
@@ -1754,7 +1754,7 @@ declare module "./plugin.js" {
     /**
      * Get the Dock tile size (0-128)
      */
-    nativeDockSize(): Promise<void>;
+    nativeDockSize(): Promise<number>;
     /**
      * Get the user's Documents directory path
      */
@@ -1802,11 +1802,11 @@ declare module "./plugin.js" {
     /**
      * Get file ACL as string
      */
-    nativeFileAcl(path: string): Promise<void>;
+    nativeFileAcl(path: string): Promise<string>;
     /**
      * Get file creation date as ISO string
      */
-    nativeFileCreationDate(path: string): Promise<void>;
+    nativeFileCreationDate(path: string): Promise<string>;
     /**
      * Check if a file or directory exists
      */
@@ -1827,7 +1827,7 @@ declare module "./plugin.js" {
     /**
      * Get file modification date as ISO string
      */
-    nativeFileModificationDate(path: string): Promise<void>;
+    nativeFileModificationDate(path: string): Promise<string>;
     /**
      * Get the owner user and group of a file
      */
@@ -1843,7 +1843,7 @@ declare module "./plugin.js" {
     /**
      * Get file size in bytes
      */
-    nativeFileSize(path: string): Promise<void>;
+    nativeFileSize(path: string): Promise<number>;
     /**
      * Read or write Finder tags on a file
      * @param tags default null
@@ -1856,7 +1856,7 @@ declare module "./plugin.js" {
     /**
      * Get the UTI (Uniform Type Identifier) for a file
      */
-    nativeFileUti(path: string): Promise<void>;
+    nativeFileUti(path: string): Promise<string>;
     /**
      * Check if FileVault disk encryption is enabled
      */
@@ -1900,7 +1900,7 @@ declare module "./plugin.js" {
     /**
      * Get the first day of the week (1=Sunday, 2=Monday)
      */
-    nativeFirstDayOfWeek(): Promise<void>;
+    nativeFirstDayOfWeek(): Promise<number>;
     /**
      * Flush DNS cache
      */
@@ -2094,15 +2094,15 @@ declare module "./plugin.js" {
     /**
      * Get initial key repeat delay
      */
-    nativeKeyRepeatDelay(): Promise<void>;
+    nativeKeyRepeatDelay(): Promise<number>;
     /**
      * Get the keyboard repeat rate (keys per second)
      */
-    nativeKeyRepeatRate(): Promise<void>;
+    nativeKeyRepeatRate(): Promise<number>;
     /**
      * Get keyboard backlight brightness (0.0-1.0)
      */
-    nativeKeyboardBrightness(): Promise<void>;
+    nativeKeyboardBrightness(): Promise<number>;
     /**
      * Get the current keyboard layout and key mappings
      */
@@ -2273,7 +2273,7 @@ declare module "./plugin.js" {
     /**
      * Get the mouse tracking speed (0.0-3.0)
      */
-    nativeMouseSpeed(): Promise<void>;
+    nativeMouseSpeed(): Promise<number>;
     /**
      * Move or rename a file or directory
      */
@@ -2319,7 +2319,7 @@ declare module "./plugin.js" {
     /**
      * Get Wi-Fi signal strength in dBm
      */
-    nativeNetworkSignalStrength(): Promise<void>;
+    nativeNetworkSignalStrength(): Promise<number>;
     /**
      * Get currently connected Wi-Fi SSID
      */
@@ -2414,11 +2414,11 @@ declare module "./plugin.js" {
      * Extract text from a PDF file
      * @param page wire uint64 (64-bit) · default 0 · min 0
      */
-    nativePdfExtractText(path: string, page?: number): Promise<void>;
+    nativePdfExtractText(path: string, page?: number): Promise<string>;
     /**
      * Get the page count of a PDF file
      */
-    nativePdfPageCount(path: string): Promise<void>;
+    nativePdfPageCount(path: string): Promise<number>;
     /**
      * Pin or unpin a window above all others
      */
@@ -2430,7 +2430,7 @@ declare module "./plugin.js" {
     /**
      * Ping a host and return latency in milliseconds
      */
-    nativePing(host: string): Promise<void>;
+    nativePing(host: string): Promise<number>;
     /**
      * Check if volume change feedback sound is enabled
      */
@@ -2485,7 +2485,7 @@ declare module "./plugin.js" {
      * Get CPU usage for process by PID
      * @param pid wire int32
      */
-    nativeProcessCpuUsage(pid: number): Promise<void>;
+    nativeProcessCpuUsage(pid: number): Promise<number>;
     /**
      * Check if a process with given PID exists
      * @param pid wire int32
@@ -2504,27 +2504,27 @@ declare module "./plugin.js" {
      * Get memory usage in bytes for process by PID
      * @param pid wire int32
      */
-    nativeProcessMemoryUsage(pid: number): Promise<void>;
+    nativeProcessMemoryUsage(pid: number): Promise<number>;
     /**
      * Get process name by PID
      * @param pid wire int32
      */
-    nativeProcessName(pid: number): Promise<void>;
+    nativeProcessName(pid: number): Promise<string>;
     /**
      * Get parent PID of a process
      * @param pid wire int32
      */
-    nativeProcessParentPid(pid: number): Promise<void>;
+    nativeProcessParentPid(pid: number): Promise<number>;
     /**
      * Get the executable path for a PID
      * @param pid wire int32
      */
-    nativeProcessPath(pid: number): Promise<void>;
+    nativeProcessPath(pid: number): Promise<string>;
     /**
      * Get process start time as ISO string
      * @param pid wire int32
      */
-    nativeProcessStartTime(pid: number): Promise<void>;
+    nativeProcessStartTime(pid: number): Promise<string>;
     /**
      * Get system proxy configuration
      */
@@ -2540,7 +2540,7 @@ declare module "./plugin.js" {
     /**
      * Get purgeable disk space in bytes
      */
-    nativePurgeableSpace(): Promise<void>;
+    nativePurgeableSpace(): Promise<number>;
     /**
      * Generate Quick Look thumbnail as PNG (base64)
      * @param size wire uint32 · default 512 · min 0
@@ -2664,7 +2664,7 @@ declare module "./plugin.js" {
     /**
      * Get delay before password required after screen saver
      */
-    nativeScreenSaverDelay(): Promise<void>;
+    nativeScreenSaverDelay(): Promise<number>;
     /**
      * Start the screen saver
      */
@@ -2998,7 +2998,7 @@ declare module "./plugin.js" {
      * Recognize speech from an audio file (returns transcript)
      * @param locale default ""
      */
-    nativeSpeechRecognizeFile(path: string, locale?: string): Promise<void>;
+    nativeSpeechRecognizeFile(path: string, locale?: string): Promise<string>;
     /**
      * Get current spelling language
      */
@@ -3121,7 +3121,7 @@ declare module "./plugin.js" {
     /**
      * Get time on battery in minutes since last unplug
      */
-    nativeTimeOnBattery(): Promise<void>;
+    nativeTimeOnBattery(): Promise<number>;
     /**
      * Get current system timezone identifier
      */
@@ -3145,11 +3145,11 @@ declare module "./plugin.js" {
     /**
      * Get the trackpad tracking speed (0.0-3.0)
      */
-    nativeTrackpadSpeed(): Promise<void>;
+    nativeTrackpadSpeed(): Promise<number>;
     /**
      * Check TCC consent status for a service (e.g. kTCCServiceAccessibility)
      */
-    nativeTransparencyConsent(service: string): Promise<void>;
+    nativeTransparencyConsent(service: string): Promise<string>;
     /**
      * Move file to Trash
      */
@@ -3231,7 +3231,7 @@ declare module "./plugin.js" {
     /**
      * Get the owning app bundle ID for a window
      */
-    nativeWindowApp(windowId: string): Promise<void>;
+    nativeWindowApp(windowId: string): Promise<string>;
     /**
      * Get a window position and size by ID
      */
@@ -3239,7 +3239,7 @@ declare module "./plugin.js" {
     /**
      * Get display ID for window
      */
-    nativeWindowDisplayID(windowId: string): Promise<void>;
+    nativeWindowDisplayID(windowId: string): Promise<number>;
     /**
      * Check if window is fullscreen
      */
@@ -3251,20 +3251,20 @@ declare module "./plugin.js" {
     /**
      * Get window layer level
      */
-    nativeWindowLayer(windowId: string): Promise<void>;
+    nativeWindowLayer(windowId: string): Promise<number>;
     /**
      * Take a screenshot of a specific window as base64 PNG
      * @param windowId wire uint32 · min 0
      */
-    nativeWindowScreenshot(windowId: number): Promise<void>;
+    nativeWindowScreenshot(windowId: number): Promise<string>;
     /**
      * Get window subrole
      */
-    nativeWindowSubrole(windowId: string): Promise<void>;
+    nativeWindowSubrole(windowId: string): Promise<string>;
     /**
      * Get a window title by ID
      */
-    nativeWindowTitle(windowId: string): Promise<void>;
+    nativeWindowTitle(windowId: string): Promise<string>;
     /**
      * Get a snapshot of all windows and displays (with managed HUD windows)
      * @param onScreen If true, only return windows visible on screen.
@@ -4346,6 +4346,7 @@ Plugin.prototype.nativeAlertSound = async function() {
 
 Plugin.prototype.nativeAlertVolume = async function() {
   const result = await this.call(MethodNativeAlertVolume);
+  return result as number;
 };
 
 Plugin.prototype.nativeAllWindowIds = async function() {
@@ -4375,6 +4376,7 @@ Plugin.prototype.nativeAppFocusedWindowID = async function(bundleId: string) {
       bundle_id: bundleId,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeAppIcon = async function(bundleId: string, size?: number) {
@@ -4395,6 +4397,7 @@ Plugin.prototype.nativeAppIconPath = async function(bundleId: string) {
       bundle_id: bundleId,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeAppIsAgent = async function(bundleId: string) {
@@ -4444,6 +4447,7 @@ Plugin.prototype.nativeAppPath = async function(bundleId: string) {
       bundle_id: bundleId,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeAppPid = async function(bundleId: string) {
@@ -4453,6 +4457,7 @@ Plugin.prototype.nativeAppPid = async function(bundleId: string) {
       bundle_id: bundleId,
     },
   );
+  return result as number;
 };
 
 Plugin.prototype.nativeAppSupportDirectory = async function() {
@@ -4467,6 +4472,7 @@ Plugin.prototype.nativeAppVersion = async function(bundleId: string) {
       bundle_id: bundleId,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeAppWindows = async function(bundleId: string) {
@@ -4486,6 +4492,7 @@ Plugin.prototype.nativeAppWindowsCount = async function(bundleId: string) {
       bundle_id: bundleId,
     },
   );
+  return result as number;
 };
 
 Plugin.prototype.nativeAppsForPath = async function(path: string) {
@@ -4520,6 +4527,7 @@ Plugin.prototype.nativeAudioInputDevice = async function() {
 
 Plugin.prototype.nativeAudioInputLevel = async function() {
   const result = await this.call(MethodNativeAudioInputLevel);
+  return result as number;
 };
 
 Plugin.prototype.nativeAudioOutputDevice = async function() {
@@ -4667,6 +4675,7 @@ Plugin.prototype.nativeBattery = async function() {
 
 Plugin.prototype.nativeBatteryCycleCount = async function() {
   const result = await this.call(MethodNativeBatteryCycleCount);
+  return result as number;
 };
 
 Plugin.prototype.nativeBatteryHealth = async function() {
@@ -4676,6 +4685,7 @@ Plugin.prototype.nativeBatteryHealth = async function() {
 
 Plugin.prototype.nativeBatteryMaxCapacity = async function() {
   const result = await this.call(MethodNativeBatteryMaxCapacity);
+  return result as number;
 };
 
 Plugin.prototype.nativeBleDiscoverServices = async function(deviceIdentifier: string) {
@@ -4968,6 +4978,7 @@ Plugin.prototype.nativeComputerName = async function() {
 
 Plugin.prototype.nativeComputerSleepTime = async function() {
   const result = await this.call(MethodNativeComputerSleepTime);
+  return result as number;
 };
 
 Plugin.prototype.nativeContactsPermission = async function() {
@@ -4992,10 +5003,12 @@ Plugin.prototype.nativeCpuInfo = async function() {
 
 Plugin.prototype.nativeCpuTemperature = async function() {
   const result = await this.call(MethodNativeCpuTemperature);
+  return result as number;
 };
 
 Plugin.prototype.nativeCpuUsage = async function() {
   const result = await this.call(MethodNativeCpuUsage);
+  return result as number;
 };
 
 Plugin.prototype.nativeCreateDirectory = async function(path: string) {
@@ -5168,6 +5181,7 @@ Plugin.prototype.nativeDismissNotification = async function(id: string) {
 
 Plugin.prototype.nativeDisplayBrightness = async function() {
   const result = await this.call(MethodNativeDisplayBrightness);
+  return result as number;
 };
 
 Plugin.prototype.nativeDisplayColorProfiles = async function() {
@@ -5192,6 +5206,7 @@ Plugin.prototype.nativeDisplayRefreshRate = async function(displayId: number) {
       display_id: displayId,
     },
   );
+  return result as number;
 };
 
 Plugin.prototype.nativeDisplayRotation = async function() {
@@ -5206,6 +5221,7 @@ Plugin.prototype.nativeDisplayScaleFactor = async function(displayId: number) {
       display_id: displayId,
     },
   );
+  return result as number;
 };
 
 Plugin.prototype.nativeDisplaySerialNumber = async function() {
@@ -5215,6 +5231,7 @@ Plugin.prototype.nativeDisplaySerialNumber = async function() {
 
 Plugin.prototype.nativeDisplaySleepTime = async function() {
   const result = await this.call(MethodNativeDisplaySleepTime);
+  return result as number;
 };
 
 Plugin.prototype.nativeDisplays = async function() {
@@ -5269,6 +5286,7 @@ Plugin.prototype.nativeDockShowRecents = async function() {
 
 Plugin.prototype.nativeDockSize = async function() {
   const result = await this.call(MethodNativeDockSize);
+  return result as number;
 };
 
 Plugin.prototype.nativeDocumentsDirectory = async function() {
@@ -5345,6 +5363,7 @@ Plugin.prototype.nativeFileAcl = async function(path: string) {
       path,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeFileCreationDate = async function(path: string) {
@@ -5354,6 +5373,7 @@ Plugin.prototype.nativeFileCreationDate = async function(path: string) {
       path,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeFileExists = async function(path: string) {
@@ -5404,6 +5424,7 @@ Plugin.prototype.nativeFileModificationDate = async function(path: string) {
       path,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeFileOwner = async function(path: string) {
@@ -5438,6 +5459,7 @@ Plugin.prototype.nativeFileSize = async function(path: string) {
       path,
     },
   );
+  return result as number;
 };
 
 Plugin.prototype.nativeFileTags = async function(path: string, tags?: string[]) {
@@ -5467,6 +5489,7 @@ Plugin.prototype.nativeFileUti = async function(path: string) {
       path,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeFilevaultStatus = async function() {
@@ -5521,6 +5544,7 @@ Plugin.prototype.nativeFirewallEnabled = async function() {
 
 Plugin.prototype.nativeFirstDayOfWeek = async function() {
   const result = await this.call(MethodNativeFirstDayOfWeek);
+  return result as number;
 };
 
 Plugin.prototype.nativeFlushDns = async function() {
@@ -5817,14 +5841,17 @@ Plugin.prototype.nativeKernelVersion = async function() {
 
 Plugin.prototype.nativeKeyRepeatDelay = async function() {
   const result = await this.call(MethodNativeKeyRepeatDelay);
+  return result as number;
 };
 
 Plugin.prototype.nativeKeyRepeatRate = async function() {
   const result = await this.call(MethodNativeKeyRepeatRate);
+  return result as number;
 };
 
 Plugin.prototype.nativeKeyboardBrightness = async function() {
   const result = await this.call(MethodNativeKeyboardBrightness);
+  return result as number;
 };
 
 Plugin.prototype.nativeKeyboardLayout = async function() {
@@ -6071,6 +6098,7 @@ Plugin.prototype.nativeMouseButtonClick = async function(button: number, x?: num
 
 Plugin.prototype.nativeMouseSpeed = async function() {
   const result = await this.call(MethodNativeMouseSpeed);
+  return result as number;
 };
 
 Plugin.prototype.nativeMoveFile = async function(destination: string, source: string) {
@@ -6150,6 +6178,7 @@ Plugin.prototype.nativeNetworkReachable = async function(host: string) {
 
 Plugin.prototype.nativeNetworkSignalStrength = async function() {
   const result = await this.call(MethodNativeNetworkSignalStrength);
+  return result as number;
 };
 
 Plugin.prototype.nativeNetworkSsid = async function() {
@@ -6320,6 +6349,7 @@ Plugin.prototype.nativePdfExtractText = async function(path: string, page?: numb
       page,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativePdfPageCount = async function(path: string) {
@@ -6329,6 +6359,7 @@ Plugin.prototype.nativePdfPageCount = async function(path: string) {
       path,
     },
   );
+  return result as number;
 };
 
 Plugin.prototype.nativePinWindowAbove = async function(pinned: boolean, windowId: string) {
@@ -6353,6 +6384,7 @@ Plugin.prototype.nativePing = async function(host: string) {
       host,
     },
   );
+  return result as number;
 };
 
 Plugin.prototype.nativePlayFeedbackWhenVolumeChanged = async function() {
@@ -6431,6 +6463,7 @@ Plugin.prototype.nativeProcessCpuUsage = async function(pid: number) {
       pid,
     },
   );
+  return result as number;
 };
 
 Plugin.prototype.nativeProcessExists = async function(pid: number) {
@@ -6465,6 +6498,7 @@ Plugin.prototype.nativeProcessMemoryUsage = async function(pid: number) {
       pid,
     },
   );
+  return result as number;
 };
 
 Plugin.prototype.nativeProcessName = async function(pid: number) {
@@ -6474,6 +6508,7 @@ Plugin.prototype.nativeProcessName = async function(pid: number) {
       pid,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeProcessParentPid = async function(pid: number) {
@@ -6483,6 +6518,7 @@ Plugin.prototype.nativeProcessParentPid = async function(pid: number) {
       pid,
     },
   );
+  return result as number;
 };
 
 Plugin.prototype.nativeProcessPath = async function(pid: number) {
@@ -6492,6 +6528,7 @@ Plugin.prototype.nativeProcessPath = async function(pid: number) {
       pid,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeProcessStartTime = async function(pid: number) {
@@ -6501,6 +6538,7 @@ Plugin.prototype.nativeProcessStartTime = async function(pid: number) {
       pid,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeProxySettings = async function() {
@@ -6519,6 +6557,7 @@ Plugin.prototype.nativePurgeMemory = async function() {
 
 Plugin.prototype.nativePurgeableSpace = async function() {
   const result = await this.call(MethodNativePurgeableSpace);
+  return result as number;
 };
 
 Plugin.prototype.nativeQuickLook = async function(path: string, size?: number) {
@@ -6736,6 +6775,7 @@ Plugin.prototype.nativeScreenSaverAskPassword = async function() {
 
 Plugin.prototype.nativeScreenSaverDelay = async function() {
   const result = await this.call(MethodNativeScreenSaverDelay);
+  return result as number;
 };
 
 Plugin.prototype.nativeScreenSaverStart = async function() {
@@ -7358,6 +7398,7 @@ Plugin.prototype.nativeSpeechRecognizeFile = async function(path: string, locale
       locale,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeSpellingLanguage = async function() {
@@ -7523,6 +7564,7 @@ Plugin.prototype.nativeTimeMachineStatus = async function() {
 
 Plugin.prototype.nativeTimeOnBattery = async function() {
   const result = await this.call(MethodNativeTimeOnBattery);
+  return result as number;
 };
 
 Plugin.prototype.nativeTimezone = async function() {
@@ -7564,6 +7606,7 @@ Plugin.prototype.nativeTouchIDAvailable = async function() {
 
 Plugin.prototype.nativeTrackpadSpeed = async function() {
   const result = await this.call(MethodNativeTrackpadSpeed);
+  return result as number;
 };
 
 Plugin.prototype.nativeTransparencyConsent = async function(service: string) {
@@ -7573,6 +7616,7 @@ Plugin.prototype.nativeTransparencyConsent = async function(service: string) {
       service,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeTrash = async function(path: string) {
@@ -7710,6 +7754,7 @@ Plugin.prototype.nativeWindowApp = async function(windowId: string) {
       window_id: windowId,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeWindowBounds = async function(windowId: string) {
@@ -7729,6 +7774,7 @@ Plugin.prototype.nativeWindowDisplayID = async function(windowId: string) {
       window_id: windowId,
     },
   );
+  return result as number;
 };
 
 Plugin.prototype.nativeWindowIsFullscreen = async function(windowId: string) {
@@ -7758,6 +7804,7 @@ Plugin.prototype.nativeWindowLayer = async function(windowId: string) {
       window_id: windowId,
     },
   );
+  return result as number;
 };
 
 Plugin.prototype.nativeWindowScreenshot = async function(windowId: number) {
@@ -7767,6 +7814,7 @@ Plugin.prototype.nativeWindowScreenshot = async function(windowId: number) {
       window_id: windowId,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeWindowSubrole = async function(windowId: string) {
@@ -7776,6 +7824,7 @@ Plugin.prototype.nativeWindowSubrole = async function(windowId: string) {
       window_id: windowId,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeWindowTitle = async function(windowId: string) {
@@ -7785,6 +7834,7 @@ Plugin.prototype.nativeWindowTitle = async function(windowId: string) {
       window_id: windowId,
     },
   );
+  return result as string;
 };
 
 Plugin.prototype.nativeWorldModel = async function(onScreen?: boolean) {
