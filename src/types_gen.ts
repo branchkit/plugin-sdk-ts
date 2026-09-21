@@ -7388,6 +7388,65 @@ export interface RecognitionRedecodeResponse {
   model_version?: string;
 }
 
+export interface SecretsDeleteRequest {
+  name: string;
+}
+
+export interface SecretsDeleteResponse {
+  /**
+   * False when there was nothing to delete. Deleting a name that was
+   * never set is not an error — it leaves the caller in the state it
+   * asked for.
+   */
+  deleted: boolean;
+}
+
+export interface SecretsIsSetRequest {
+  name: string;
+}
+
+export interface SecretsIsSetResponse {
+  /**
+   * Whether a value is stored. The only question askable about a value
+   * that cannot be read.
+   */
+  is_set: boolean;
+}
+
+export interface SecretsListResponse {
+  /**
+   * The names this plugin has set, sorted. Names only — a name is what a
+   * settings row renders and what a script header refers to.
+   */
+  names: string[];
+  /**
+   * One sentence describing how these are protected on this machine, so a
+   * surface showing secrets can show the TRUE sentence rather than the
+   * flattering one. See `os`-agnostic `KeySource::describe`.
+   */
+  protection: string;
+}
+
+export interface SecretsSetRequest {
+  /**
+   * The secret's name within this plugin. What a manifest or a script
+   * header refers to.
+   */
+  name: string;
+  /**
+   * The value. This is the only direction a value travels over the wire.
+   */
+  value: string;
+}
+
+export interface SecretsSetResponse {
+  /**
+   * True when the name did not exist before, so a caller can tell a first
+   * write from an overwrite without reading anything back.
+   */
+  created: boolean;
+}
+
 export interface SelectionPickRequest {
   /**
    * Zero-based index into the previously-set selection items array.
