@@ -1509,7 +1509,7 @@ declare module "./plugin.js" {
      */
     nativeClickMenuItem(pid: number, path?: string[]): Promise<boolean>;
     /**
-     * Get the clipboard change count
+     * A number that increases when the clipboard changes. Compare two samples to detect a change; a larger value is always later. On macOS this counts copies, so re-copying identical content advances it; elsewhere it counts observed changes, so it does not
      */
     nativeClipboardChangeCount(): Promise<NativeClipboardChangeCountResponse>;
     /**
