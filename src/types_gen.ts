@@ -4212,55 +4212,8 @@ export interface NativeClipboardChangeCountResponse {
   count: number;
 }
 
-export interface NativeClipboardFileUrlsResponse {
-  value: string;
-}
-
-export interface NativeClipboardHasImageResponse {
-  has_image: boolean;
-}
-
-export interface NativeClipboardHasTextResponse {
-  has_text: boolean;
-}
-
-export interface NativeClipboardHTMLResponse {
-  value: string;
-}
-
 export interface NativeClipboardImageDimensionsResponse {
   value: string;
-}
-
-export interface NativeClipboardRichTextResponse {
-  value: string;
-}
-
-export interface NativeClipboardSetHTMLRequest {
-  html: string;
-}
-
-export interface NativeClipboardSetHTMLResponse {
-  ok: boolean;
-}
-
-export interface NativeClipboardSetTextRequest {
-  text: string;
-}
-
-export interface NativeClipboardSetTextResponse {
-  ok: boolean;
-}
-
-export interface NativeClipboardTypesRequest {
-  /**
-   * default ""
-   */
-  pasteboard?: string;
-}
-
-export interface NativeClipboardTypesResponse {
-  types: string[];
 }
 
 export interface NativeCloseWindowRequest {
