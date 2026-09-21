@@ -5010,7 +5010,6 @@ export interface NativeKeyboardLayoutResponse {
 
 export interface NativeKeychainDeleteRequest {
   account: string;
-  service: string;
 }
 
 export interface NativeKeychainDeleteResponse {
@@ -5019,7 +5018,6 @@ export interface NativeKeychainDeleteResponse {
 
 export interface NativeKeychainReadRequest {
   account: string;
-  service: string;
 }
 
 export interface NativeKeychainReadResponse {
@@ -5029,7 +5027,6 @@ export interface NativeKeychainReadResponse {
 export interface NativeKeychainWriteRequest {
   account: string;
   password: string;
-  service: string;
 }
 
 export interface NativeKeychainWriteResponse {

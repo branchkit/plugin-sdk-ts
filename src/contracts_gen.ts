@@ -2,7 +2,7 @@
 // Run: just contracts
 
 /** BranchKit API version (from contracts/api-version.json). */
-export const APIVersion = "0.1.0" as const;
+export const APIVersion = "0.2.0" as const;
 
 // RPC method names: plugin → actuator (use with plugin.call()).
 export const MethodActionsList = "actions.list" as const; // since 0.1.0

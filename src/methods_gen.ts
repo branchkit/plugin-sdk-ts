@@ -2108,17 +2108,17 @@ declare module "./plugin.js" {
      */
     nativeKeyboardLayout(): Promise<NativeKeyboardLayoutResponse>;
     /**
-     * Delete a keychain item by service and account
+     * Delete a password from this plugin's keychain drawer
      */
-    nativeKeychainDelete(account: string, service: string): Promise<void>;
+    nativeKeychainDelete(account: string): Promise<void>;
     /**
-     * Read a password from the keychain by service and account
+     * Read a password from this plugin's keychain drawer
      */
-    nativeKeychainRead(account: string, service: string): Promise<NativeKeychainReadResponse>;
+    nativeKeychainRead(account: string): Promise<NativeKeychainReadResponse>;
     /**
-     * Store a password in the keychain for a service and account
+     * Store a password in this plugin's keychain drawer
      */
-    nativeKeychainWrite(account: string, password: string, service: string): Promise<void>;
+    nativeKeychainWrite(account: string, password: string): Promise<void>;
     /**
      * Send a signal to a process by PID
      * @param pid wire int32
@@ -5859,34 +5859,31 @@ Plugin.prototype.nativeKeyboardLayout = async function() {
   return result as NativeKeyboardLayoutResponse;
 };
 
-Plugin.prototype.nativeKeychainDelete = async function(account: string, service: string) {
+Plugin.prototype.nativeKeychainDelete = async function(account: string) {
   const result = await this.call(
     MethodNativeKeychainDelete,
     {
       account,
-      service,
     },
   );
 };
 
-Plugin.prototype.nativeKeychainRead = async function(account: string, service: string) {
+Plugin.prototype.nativeKeychainRead = async function(account: string) {
   const result = await this.call(
     MethodNativeKeychainRead,
     {
       account,
-      service,
     },
   );
   return result as NativeKeychainReadResponse;
 };
 
-Plugin.prototype.nativeKeychainWrite = async function(account: string, password: string, service: string) {
+Plugin.prototype.nativeKeychainWrite = async function(account: string, password: string) {
   const result = await this.call(
     MethodNativeKeychainWrite,
     {
       account,
       password,
-      service,
     },
   );
 };
