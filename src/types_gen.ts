@@ -968,7 +968,7 @@ export type FieldDisplay = "primary" | "secondary" | "group" | "description" | "
  * variant is the documented escape hatch for shapes too dynamic to
  * declare statically.
  */
-export type FieldType = "string" | "int" | "number" | "boolean" | "string[]" | "enum" | "object" | "json";
+export type FieldType = "string" | "int" | "number" | "boolean" | "string[]" | "enum" | "object" | "json" | "secret_ref";
 
 /**
  * Integer rectangle for window position and size. Mirrors the `Frame`
