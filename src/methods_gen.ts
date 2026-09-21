@@ -3496,11 +3496,24 @@ declare module "./plugin.js" {
     secretsList(): Promise<SecretsListResponse>;
     /**
      * Store a credential for this plugin. Values are encrypted and can never be read back over the wire
+     * @param host The host this credential may be sent to, such as
+     *   `api.openweathermap.org`.
+     *
+     *   Recorded with the value and checked when the platform substitutes it
+     *   into a request. A caller that declares two hosts cannot get a secret
+     *   bound to one of them into a request to the other, which is what makes
+     *   storing a reference safer than holding the value: without it, a
+     *   credential that can never be read can still be sent to the wrong
+     *   place.
+     *
+     *   Optional today because substitution is not built yet, and a store
+     *   written before bindings existed holds none. An unbound secret is
+     *   refused at substitution rather than treated as usable anywhere.
      * @param name The secret's name within this plugin. What a manifest or a script
      *   header refers to.
      * @param value The value. This is the only direction a value travels over the wire.
      */
-    secretsSet(name: string, value: string): Promise<SecretsSetResponse>;
+    secretsSet(name: string, value: string, host?: string): Promise<SecretsSetResponse>;
     /**
      * Resolve a selection pick by index — clears selection state, emits event, closes HUD
      * @param index Zero-based index into the previously-set selection items array.
@@ -8098,12 +8111,13 @@ Plugin.prototype.secretsList = async function() {
   return result as SecretsListResponse;
 };
 
-Plugin.prototype.secretsSet = async function(name: string, value: string) {
+Plugin.prototype.secretsSet = async function(name: string, value: string, host?: string) {
   const result = await this.call(
     MethodSecretsSet,
     {
       name,
       value,
+      host,
     },
   );
   return result as SecretsSetResponse;
