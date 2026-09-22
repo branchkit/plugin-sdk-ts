@@ -2312,10 +2312,6 @@ export interface ArtifactDeleteRequest {
   ref: string;
 }
 
-export interface ArtifactDeleteResponse {
-  ok: boolean;
-}
-
 export interface BlobPublishRequest {
   /**
    * The hash of the appended range, when the provider declared
@@ -2528,10 +2524,6 @@ export interface CollectionPatchRequest {
   name: string;
 }
 
-export interface CollectionPatchResponse {
-  ok: boolean;
-}
-
 export interface CollectionPutRequest {
   /**
    * Records to upsert. Always an array; single-record callers wrap one
@@ -2679,10 +2671,6 @@ export interface CommandsAddAliasRequest {
   new_pattern: string;
 }
 
-export interface CommandsAddAliasResponse {
-  ok: boolean;
-}
-
 export interface CommandsConfusabilityRequest {
   /**
    * The command's context (its `requires_tags`); empty = free context. Used by
@@ -2703,10 +2691,6 @@ export interface CommandsConfusabilityResponse {
 
 export interface CommandsDeleteRequest {
   canonical: string;
-}
-
-export interface CommandsDeleteResponse {
-  ok: boolean;
 }
 
 export interface CommandsEnumerateResponse {
@@ -2793,10 +2777,6 @@ export interface CommandsRemoveAliasResponse {
 
 export interface CommandsResetRequest {
   canonical: string;
-}
-
-export interface CommandsResetResponse {
-  ok: boolean;
 }
 
 export interface CommandsResetOverrideRequest {
@@ -2962,24 +2942,12 @@ export interface CommandsSetOverrideRequest {
   new_pattern: string;
 }
 
-export interface CommandsSetOverrideResponse {
-  ok: boolean;
-}
-
 export interface ControlSignalRequest {
   /**
    * Raw control-stream signal string (e.g. "open hud", "hide discovery").
    * Forwarded verbatim to the Swift shell via the actuator's control stream.
    */
   signal: string;
-}
-
-export interface ControlSignalResponse {
-  ok: boolean;
-}
-
-export interface DiscoveryClosedResponse {
-  ok: boolean;
 }
 
 export interface DispatchRequest {
@@ -3124,10 +3092,6 @@ export interface EventsAppendRequest {
   session_id?: string;
 }
 
-export interface EventsAppendResponse {
-  ok: boolean;
-}
-
 export interface EventsEmitRequest {
   /**
    * Optional correlation id linking related events together for
@@ -3146,10 +3110,6 @@ export interface EventsEmitRequest {
    * `_platform.*` namespace is reserved for the actuator.
    */
   event_type: string;
-}
-
-export interface EventsEmitResponse {
-  ok: boolean;
 }
 
 export interface HUDCreateChannelRequest {
@@ -3227,20 +3187,12 @@ export interface HUDCreateChannelRequest {
   width?: number;
 }
 
-export interface HUDCreateChannelResponse {
-  ok: boolean;
-}
-
 export interface HUDHideRequest {
   /**
    * Channel name to hide. Sends a `close <channel>` (or
    * `hide <channel>` for built-in channels) to the Swift shell.
    */
   channel: string;
-}
-
-export interface HUDHideResponse {
-  ok: boolean;
 }
 
 export interface HUDPushRequest {
@@ -3259,10 +3211,6 @@ export interface HUDPushRequest {
    * default []
    */
   fragments?: HudFragment[];
-}
-
-export interface HUDPushResponse {
-  ok: boolean;
 }
 
 export interface HUDRemoveChannelRequest {
@@ -3294,10 +3242,6 @@ export interface HUDSetSizeRequest {
   height: number;
 }
 
-export interface HUDSetSizeResponse {
-  ok: boolean;
-}
-
 export interface HUDShowRequest {
   /**
    * Channel name to show. Sends an `open <channel>` message to the
@@ -3306,20 +3250,12 @@ export interface HUDShowRequest {
   channel: string;
 }
 
-export interface HUDShowResponse {
-  ok: boolean;
-}
-
 export interface InputClickRequest {
   /**
    * Mouse button: "left", "right", or "middle". Defaults to "left".
    * default "left"
    */
   button?: string;
-}
-
-export interface InputClickResponse {
-  ok: boolean;
 }
 
 export interface InputClipboardActionRequest {
@@ -3332,10 +3268,6 @@ export interface InputClipboardActionRequest {
    * default null
    */
   text?: string;
-}
-
-export interface InputClipboardActionResponse {
-  ok: boolean;
 }
 
 export interface InputClipboardHistoryResponse {
@@ -3397,10 +3329,6 @@ export interface InputDoubleClickRequest {
   y?: number;
 }
 
-export interface InputDoubleClickResponse {
-  ok: boolean;
-}
-
 export interface InputDragRequest {
   /**
    * wire uint64 (64-bit) · default 0 · min 0
@@ -3424,10 +3352,6 @@ export interface InputDragRequest {
   to_y: number;
 }
 
-export interface InputDragResponse {
-  ok: boolean;
-}
-
 export interface InputListInputSourcesResponse {
   sources: InputSource[];
 }
@@ -3445,10 +3369,6 @@ export interface InputMouseButtonRequest {
    * press, so drag-based operations need it between press and release.
    */
   direction: string;
-}
-
-export interface InputMouseButtonResponse {
-  ok: boolean;
 }
 
 export interface InputParseKeyEventRequest {
@@ -3521,10 +3441,6 @@ export interface InputPressKeyRequest {
   name?: string;
 }
 
-export interface InputPressKeyResponse {
-  ok: boolean;
-}
-
 export interface InputRawKeyRequest {
   /**
    * Raw macOS keycode.
@@ -3537,10 +3453,6 @@ export interface InputRawKeyRequest {
   direction: string;
 }
 
-export interface InputRawKeyResponse {
-  ok: boolean;
-}
-
 export interface InputRightClickRequest {
   /**
    * wire int32 · default null
@@ -3550,10 +3462,6 @@ export interface InputRightClickRequest {
    * wire int32 · default null
    */
   y?: number;
-}
-
-export interface InputRightClickResponse {
-  ok: boolean;
 }
 
 export interface InputScrollRequest {
@@ -3572,14 +3480,6 @@ export interface InputScrollRequest {
    * default "line"
    */
   unit?: string;
-}
-
-export interface InputScrollResponse {
-  ok: boolean;
-}
-
-export interface InputSelectAllResponse {
-  ok: boolean;
 }
 
 export interface InputSwitchInputSourceRequest {
@@ -3601,19 +3501,11 @@ export interface InputTripleClickRequest {
   y?: number;
 }
 
-export interface InputTripleClickResponse {
-  ok: boolean;
-}
-
 export interface InputTypeTextRequest {
   /**
    * Text to type into the active application.
    */
   text: string;
-}
-
-export interface InputTypeTextResponse {
-  ok: boolean;
 }
 
 export interface KeybindsRegisterRequest {
@@ -3655,10 +3547,6 @@ export interface NativeActivateAppRequest {
    */
   all_windows?: boolean;
   bundle_id: string;
-}
-
-export interface NativeActivateAppResponse {
-  ok: boolean;
 }
 
 export interface NativeActiveNetworkServiceResponse {
@@ -4109,10 +3997,6 @@ export interface NativeBordersRequest {
   frames?: WindowFrame[];
 }
 
-export interface NativeBordersResponse {
-  ok: boolean;
-}
-
 export interface NativeBrightnessRequest {
   /**
    * wire uint32 · default null · min 0
@@ -4192,10 +4076,6 @@ export interface NativeCascadeWindowsResponse {
 
 export interface NativeCenterWindowRequest {
   window_id: string;
-}
-
-export interface NativeCenterWindowResponse {
-  ok: boolean;
 }
 
 export interface NativeCheckPermissionRequest {
@@ -4480,10 +4360,6 @@ export interface NativeDiskUsageResponse {
 
 export interface NativeDismissNotificationRequest {
   id: string;
-}
-
-export interface NativeDismissNotificationResponse {
-  ok: boolean;
 }
 
 export interface NativeDisplayColorProfilesResponse {
@@ -4960,10 +4836,6 @@ export interface NativeHideAppRequest {
   bundle_id: string;
 }
 
-export interface NativeHideAppResponse {
-  ok: boolean;
-}
-
 export interface NativeHighlightColorResponse {
   color: string;
 }
@@ -5065,10 +4937,6 @@ export interface NativeKeychainDeleteRequest {
   account: string;
 }
 
-export interface NativeKeychainDeleteResponse {
-  ok: boolean;
-}
-
 export interface NativeKeychainReadRequest {
   account: string;
 }
@@ -5080,10 +4948,6 @@ export interface NativeKeychainReadResponse {
 export interface NativeKeychainWriteRequest {
   account: string;
   password: string;
-}
-
-export interface NativeKeychainWriteResponse {
-  ok: boolean;
 }
 
 export interface NativeKillProcessRequest {
@@ -5111,10 +4975,6 @@ export interface NativeLaunchAppRequest {
    * default false
    */
   new_instance?: boolean;
-}
-
-export interface NativeLaunchAppResponse {
-  ok: boolean;
 }
 
 export interface NativeLaunchdAgentsResponse {
@@ -5161,10 +5021,6 @@ export interface NativeLocationEnabledResponse {
   enabled: boolean;
 }
 
-export interface NativeLogOutResponse {
-  ok: boolean;
-}
-
 export interface NativeLoggedInUsersResponse {
   users: string[];
 }
@@ -5195,18 +5051,6 @@ export interface NativeMaximizeWindowResponse {
 
 export interface NativeMeasurementSystemResponse {
   system: string;
-}
-
-export interface NativeMediaNextTrackResponse {
-  ok: boolean;
-}
-
-export interface NativeMediaPlayPauseResponse {
-  ok: boolean;
-}
-
-export interface NativeMediaPreviousTrackResponse {
-  ok: boolean;
 }
 
 export interface NativeMemoryInfoResponse {
@@ -5248,10 +5092,6 @@ export interface NativeMinimizeWindowRequest {
   window_id: string;
 }
 
-export interface NativeMinimizeWindowResponse {
-  ok: boolean;
-}
-
 export interface NativeModelNameResponse {
   model: string;
 }
@@ -5275,10 +5115,6 @@ export interface NativeMouseButtonClickRequest {
   y?: number;
 }
 
-export interface NativeMouseButtonClickResponse {
-  ok: boolean;
-}
-
 export interface NativeMoveFileRequest {
   destination: string;
   source: string;
@@ -5296,10 +5132,6 @@ export interface NativeMoveWindowToDisplayRequest {
   window_id: string;
 }
 
-export interface NativeMoveWindowToDisplayResponse {
-  ok: boolean;
-}
-
 export interface NativeMoveWindowToSpaceRequest {
   /**
    * wire uint64 (64-bit) · min 0
@@ -5314,10 +5146,6 @@ export interface NativeMoveWindowToSpaceResponse {
 
 export interface NativeMuteRequest {
   muted: boolean;
-}
-
-export interface NativeMuteResponse {
-  ok: boolean;
 }
 
 export interface NativeNetworkBandwidthResponse {
@@ -5461,16 +5289,8 @@ export interface NativeOpenAppSettingsRequest {
   bundle_id: string;
 }
 
-export interface NativeOpenAppSettingsResponse {
-  ok: boolean;
-}
-
 export interface NativeOpenFinderWindowRequest {
   path: string;
-}
-
-export interface NativeOpenFinderWindowResponse {
-  ok: boolean;
 }
 
 export interface NativeOpenSystemSettingsRequest {
@@ -5480,33 +5300,17 @@ export interface NativeOpenSystemSettingsRequest {
   pane?: string;
 }
 
-export interface NativeOpenSystemSettingsResponse {
-  ok: boolean;
-}
-
 export interface NativeOpenTargetRequest {
   target: string;
-}
-
-export interface NativeOpenTargetResponse {
-  ok: boolean;
 }
 
 export interface NativeOpenURLRequest {
   url: string;
 }
 
-export interface NativeOpenURLResponse {
-  ok: boolean;
-}
-
 export interface NativeOpenWithAppRequest {
   bundle_id: string;
   target: string;
-}
-
-export interface NativeOpenWithAppResponse {
-  ok: boolean;
 }
 
 export interface NativeOptimizedChargingResponse {
@@ -5530,10 +5334,6 @@ export interface NativePinWindowAboveRequest {
   window_id: string;
 }
 
-export interface NativePinWindowAboveResponse {
-  ok: boolean;
-}
-
 export interface NativePinchToZoomResponse {
   enabled: boolean;
 }
@@ -5548,14 +5348,6 @@ export interface NativePlayFeedbackWhenVolumeChangedResponse {
 
 export interface NativePlaySoundRequest {
   name: string;
-}
-
-export interface NativePlaySoundResponse {
-  ok: boolean;
-}
-
-export interface NativePollBurstResponse {
-  ok: boolean;
 }
 
 export interface NativePowerAdapterConnectedResponse {
@@ -5736,10 +5528,6 @@ export interface NativeRaiseWindowRequest {
   window_id: string;
 }
 
-export interface NativeRaiseWindowResponse {
-  ok: boolean;
-}
-
 export interface NativeRandomUuidResponse {
   uuid: string;
 }
@@ -5841,10 +5629,6 @@ export interface NativeRevealInFinderRequest {
   path: string;
 }
 
-export interface NativeRevealInFinderResponse {
-  ok: boolean;
-}
-
 export interface NativeRosettaInstalledResponse {
   installed: boolean;
 }
@@ -5900,10 +5684,6 @@ export interface NativeScreenCountResponse {
   count: number;
 }
 
-export interface NativeScreenLockResponse {
-  ok: boolean;
-}
-
 export interface NativeScreenLockedResponse {
   enabled: boolean;
 }
@@ -5914,10 +5694,6 @@ export interface NativeScreenResolutionResponse {
 
 export interface NativeScreenSaverAskPasswordResponse {
   enabled: boolean;
-}
-
-export interface NativeScreenSaverStartResponse {
-  ok: boolean;
 }
 
 export interface NativeScreenSaverStatusResponse {
@@ -6024,20 +5800,12 @@ export interface NativeSetAudioDeviceRequest {
   uid: string;
 }
 
-export interface NativeSetAudioDeviceResponse {
-  ok: boolean;
-}
-
 export interface NativeSetAudioDeviceVolumeRequest {
   device_uid: string;
   /**
    * wire double
    */
   volume: number;
-}
-
-export interface NativeSetAudioDeviceVolumeResponse {
-  ok: boolean;
 }
 
 export interface NativeSetAudioInputDeviceRequest {
@@ -6083,10 +5851,6 @@ export interface NativeSetBrightnessRequest {
   display_id?: number;
 }
 
-export interface NativeSetBrightnessResponse {
-  ok: boolean;
-}
-
 export interface NativeSetComputerNameRequest {
   name: string;
 }
@@ -6099,16 +5863,8 @@ export interface NativeSetDarkModeRequest {
   dark: boolean;
 }
 
-export interface NativeSetDarkModeResponse {
-  ok: boolean;
-}
-
 export interface NativeSetDndRequest {
   enabled: boolean;
-}
-
-export interface NativeSetDndResponse {
-  ok: boolean;
 }
 
 export interface NativeSetDockAutoHideRequest {
@@ -6279,10 +6035,6 @@ export interface NativeSetNightShiftRequest {
   enabled: boolean;
 }
 
-export interface NativeSetNightShiftResponse {
-  ok: boolean;
-}
-
 export interface NativeSetScreenshotFormatRequest {
   format: string;
 }
@@ -6369,10 +6121,6 @@ export interface NativeSetVolumeRequest {
   volume: number;
 }
 
-export interface NativeSetVolumeResponse {
-  ok: boolean;
-}
-
 export interface NativeSetWallpaperRequest {
   path: string;
 }
@@ -6387,10 +6135,6 @@ export interface NativeSetWindowAlphaRequest {
    */
   alpha: number;
   window_id: string;
-}
-
-export interface NativeSetWindowAlphaResponse {
-  ok: boolean;
 }
 
 export interface NativeSetWindowLevelRequest {
@@ -6414,17 +6158,9 @@ export interface NativeSetWindowPositionRequest {
   y: number;
 }
 
-export interface NativeSetWindowPositionResponse {
-  ok: boolean;
-}
-
 export interface NativeSetWindowShadowRequest {
   enabled: boolean;
   window_id: string;
-}
-
-export interface NativeSetWindowShadowResponse {
-  ok: boolean;
 }
 
 export interface NativeSetWindowSizeRequest {
@@ -6439,17 +6175,9 @@ export interface NativeSetWindowSizeRequest {
   window_id: string;
 }
 
-export interface NativeSetWindowSizeResponse {
-  ok: boolean;
-}
-
 export interface NativeSetWindowStickyRequest {
   sticky: boolean;
   window_id: string;
-}
-
-export interface NativeSetWindowStickyResponse {
-  ok: boolean;
 }
 
 export interface NativeSharingNameResponse {
@@ -6470,10 +6198,6 @@ export interface NativeSipStatusResponse {
 
 export interface NativeSiriEnabledResponse {
   enabled: boolean;
-}
-
-export interface NativeSleepNowResponse {
-  ok: boolean;
 }
 
 export interface NativeSlowKeysResponse {
@@ -6506,10 +6230,6 @@ export interface NativeSpeakRequest {
    * default null
    */
   voice?: string;
-}
-
-export interface NativeSpeakResponse {
-  ok: boolean;
 }
 
 export interface NativeSpeechLocalesResponse {
@@ -6577,10 +6297,6 @@ export interface NativeSwitchSpaceRequest {
    * wire uint64 (64-bit) · min 0
    */
   space_id: number;
-}
-
-export interface NativeSwitchSpaceResponse {
-  ok: boolean;
 }
 
 export interface NativeSwitchSpaceWhenSwitchingAppResponse {
@@ -6699,10 +6415,6 @@ export interface NativeToggleFullscreenRequest {
   window_id: string;
 }
 
-export interface NativeToggleFullscreenResponse {
-  ok: boolean;
-}
-
 export interface NativeToggleWifiRequest {
   enabled: boolean;
 }
@@ -6743,16 +6455,8 @@ export interface NativeUnhideAppRequest {
   bundle_id: string;
 }
 
-export interface NativeUnhideAppResponse {
-  ok: boolean;
-}
-
 export interface NativeUnminimizeWindowRequest {
   window_id: string;
-}
-
-export interface NativeUnminimizeWindowResponse {
-  ok: boolean;
 }
 
 export interface NativeUnobserveWindowsRequest {
@@ -6821,10 +6525,6 @@ export interface NativeWarpCursorRequest {
    * wire int32
    */
   y: number;
-}
-
-export interface NativeWarpCursorResponse {
-  ok: boolean;
 }
 
 export interface NativeWifiResponse {
@@ -7221,10 +6921,6 @@ export interface PluginDebugRequest {
   tag?: string;
 }
 
-export interface PluginDebugResponse {
-  ok: boolean;
-}
-
 export interface PluginReportHealthRequest {
   /**
    * `true` when the plugin is running but cannot do its job — an external
@@ -7250,10 +6946,6 @@ export interface PluginReportHealthRequest {
   reason?: string;
 }
 
-export interface PluginReportHealthResponse {
-  ok: boolean;
-}
-
 export interface PrivacyGetRecordingRequest {
   name: string;
 }
@@ -7269,10 +6961,6 @@ export interface PrivacyGetRecordingResponse {
 export interface PrivacySetRecordingRequest {
   enabled: boolean;
   name: string;
-}
-
-export interface PrivacySetRecordingResponse {
-  ok: boolean;
 }
 
 export interface PrivilegesListResponse {
@@ -7536,14 +7224,6 @@ export interface SelectionSetRequest {
   title?: string;
 }
 
-export interface SelectionSetResponse {
-  ok: boolean;
-}
-
-export interface SessionBoundaryResponse {
-  ok: boolean;
-}
-
 export interface SessionEndCleanupResponse {
   /**
    * Control message to forward to the Swift host
@@ -7566,20 +7246,8 @@ export interface SettingsPatchSignalsRequest {
   signals: string;
 }
 
-export interface SettingsPatchSignalsResponse {
-  ok: boolean;
-}
-
 export interface SettingsRedirectRequest {
   tab: string;
-}
-
-export interface SettingsRedirectResponse {
-  ok: boolean;
-}
-
-export interface SettingsRefreshResponse {
-  ok: boolean;
 }
 
 export interface SettingsRulesCreateRequest {
@@ -7702,10 +7370,6 @@ export interface SpeechAnnounceRequest {
   text: string;
 }
 
-export interface SpeechAnnounceResponse {
-  ok: boolean;
-}
-
 export interface SpeechSayRequest {
   /**
    * `"normal"` queues behind whatever is playing; `"high"` cuts it off
@@ -7719,14 +7383,6 @@ export interface SpeechSayRequest {
   text: string;
 }
 
-export interface SpeechSayResponse {
-  ok: boolean;
-}
-
-export interface SpeechStopResponse {
-  ok: boolean;
-}
-
 export interface SystemLaunchAppRequest {
   /**
    * Bundle ID of the application to launch (e.g. "com.apple.Safari").
@@ -7737,10 +7393,6 @@ export interface SystemLaunchAppRequest {
    * default false
    */
   new_instance?: boolean;
-}
-
-export interface SystemLaunchAppResponse {
-  ok: boolean;
 }
 
 export interface SystemNotifyRequest {
@@ -7762,19 +7414,11 @@ export interface SystemNotifyRequest {
   title: string;
 }
 
-export interface SystemNotifyResponse {
-  ok: boolean;
-}
-
 export interface SystemRunShellRequest {
   /**
    * Shell command to execute via `/bin/bash -c`.
    */
   command: string;
-}
-
-export interface SystemRunShellResponse {
-  ok: boolean;
 }
 
 export interface TrialBeginResponse {
@@ -7847,10 +7491,6 @@ export interface TrialResolveSamplesResponse {
    * for dynamic commands, the generic filler for free-text slots).
    */
   prompts: string[];
-}
-
-export interface VocabularyCommitResponse {
-  ok: boolean;
 }
 
 export interface WiringDescribeResponse {

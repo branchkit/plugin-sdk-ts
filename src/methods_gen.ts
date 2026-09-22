@@ -1052,12 +1052,12 @@ declare module "./plugin.js" {
     /**
      * Write typed content to clipboard
      */
-    inputClipboardWrite(contentType: string, data: string): Promise<void>;
+    inputClipboardWrite(contentType: string, data: string): Promise<boolean>;
     /**
      * Write multiple typed items to the clipboard
      * @param items default []
      */
-    inputClipboardWriteItems(items?: ClipboardWriteItem[]): Promise<void>;
+    inputClipboardWriteItems(items?: ClipboardWriteItem[]): Promise<boolean>;
     /**
      * Double-click at position
      * @param x wire int32 · default null
@@ -1481,7 +1481,7 @@ declare module "./plugin.js" {
     /**
      * Cascade all windows for an app
      */
-    nativeCascadeWindows(bundleId: string): Promise<void>;
+    nativeCascadeWindows(bundleId: string): Promise<boolean>;
     /**
      * Center a window on its current display
      */
@@ -1493,11 +1493,11 @@ declare module "./plugin.js" {
     /**
      * Remove the quarantine extended attribute from a file
      */
-    nativeClearFileQuarantine(path: string): Promise<void>;
+    nativeClearFileQuarantine(path: string): Promise<boolean>;
     /**
      * Clear all delivered notifications for an app
      */
-    nativeClearNotifications(bundleId: string): Promise<void>;
+    nativeClearNotifications(bundleId: string): Promise<boolean>;
     /**
      * Click a menu item by navigating the menu bar path
      * @param path default []
@@ -1515,7 +1515,7 @@ declare module "./plugin.js" {
     /**
      * Close a window by ID
      */
-    nativeCloseWindow(windowId: string): Promise<void>;
+    nativeCloseWindow(windowId: string): Promise<boolean>;
     /**
      * Sample pixel color at screen coordinate
      * @param x wire int32
@@ -1537,7 +1537,7 @@ declare module "./plugin.js" {
     /**
      * Copy a file or directory
      */
-    nativeCopyFile(destination: string, source: string): Promise<void>;
+    nativeCopyFile(destination: string, source: string): Promise<boolean>;
     /**
      * Get CPU chip name, core count, and architecture
      */
@@ -1553,7 +1553,7 @@ declare module "./plugin.js" {
     /**
      * Create a directory (with intermediate directories)
      */
-    nativeCreateDirectory(path: string): Promise<void>;
+    nativeCreateDirectory(path: string): Promise<boolean>;
     /**
      * List the current user crontab entries
      */
@@ -1617,7 +1617,7 @@ declare module "./plugin.js" {
     /**
      * Delete a file or empty directory
      */
-    nativeDeleteFile(path: string): Promise<void>;
+    nativeDeleteFile(path: string): Promise<boolean>;
     /**
      * Get the user's Desktop directory path
      */
@@ -1749,11 +1749,11 @@ declare module "./plugin.js" {
     /**
      * Eject a mounted volume by path
      */
-    nativeEjectDisk(mountPoint: string): Promise<void>;
+    nativeEjectDisk(mountPoint: string): Promise<boolean>;
     /**
      * Empty the Trash
      */
-    nativeEmptyTrash(): Promise<void>;
+    nativeEmptyTrash(): Promise<boolean>;
     /**
      * Read an environment variable
      */
@@ -1887,7 +1887,7 @@ declare module "./plugin.js" {
     /**
      * Flush DNS cache
      */
-    nativeFlushDns(): Promise<void>;
+    nativeFlushDns(): Promise<boolean>;
     /**
      * Get function key default behavior
      */
@@ -1935,7 +1935,7 @@ declare module "./plugin.js" {
     /**
      * Generate a PDF from HTML content
      */
-    nativeGeneratePdf(html: string, outputPath: string): Promise<void>;
+    nativeGeneratePdf(html: string, outputPath: string): Promise<boolean>;
     /**
      * Get detailed info for a single window
      */
@@ -2107,7 +2107,7 @@ declare module "./plugin.js" {
      * @param pid wire int32
      * @param signal wire int32 · default 0
      */
-    nativeKillProcess(pid: number, signal?: number): Promise<void>;
+    nativeKillProcess(pid: number, signal?: number): Promise<boolean>;
     /**
      * Get the last reboot date/time
      */
@@ -2188,7 +2188,7 @@ declare module "./plugin.js" {
     /**
      * Maximize window to fill screen
      */
-    nativeMaximizeWindow(windowId: string): Promise<void>;
+    nativeMaximizeWindow(windowId: string): Promise<boolean>;
     /**
      * Get the measurement system. Returns one of: metric, us
      */
@@ -2260,7 +2260,7 @@ declare module "./plugin.js" {
     /**
      * Move or rename a file or directory
      */
-    nativeMoveFile(destination: string, source: string): Promise<void>;
+    nativeMoveFile(destination: string, source: string): Promise<boolean>;
     /**
      * Move a window to a different display
      * @param displayId wire uint32 · min 0
@@ -2310,7 +2310,7 @@ declare module "./plugin.js" {
     /**
      * Open a new window of an app on the current Space, without switching to an existing window on another Space
      */
-    nativeNewAppWindow(bundleId: string): Promise<void>;
+    nativeNewAppWindow(bundleId: string): Promise<boolean>;
     /**
      * Check if Night Shift is currently enabled
      */
@@ -2519,7 +2519,7 @@ declare module "./plugin.js" {
     /**
      * Purge inactive memory
      */
-    nativePurgeMemory(): Promise<void>;
+    nativePurgeMemory(): Promise<boolean>;
     /**
      * Get purgeable disk space in bytes
      */
@@ -2581,7 +2581,7 @@ declare module "./plugin.js" {
     /**
      * Rename a file or directory (same parent, new name)
      */
-    nativeRenameFile(newName: string, path: string): Promise<void>;
+    nativeRenameFile(newName: string, path: string): Promise<boolean>;
     /**
      * Request screen capture permission (shows system dialog)
      */
@@ -2593,7 +2593,7 @@ declare module "./plugin.js" {
     /**
      * Quit and relaunch an app by bundle ID
      */
-    nativeRestartApp(bundleId: string): Promise<void>;
+    nativeRestartApp(bundleId: string): Promise<boolean>;
     /**
      * Reveal file in Finder
      */
@@ -2713,11 +2713,11 @@ declare module "./plugin.js" {
     /**
      * Turn Wi-Fi (AirPort) on or off
      */
-    nativeSetAirportPower(on: boolean): Promise<void>;
+    nativeSetAirportPower(on: boolean): Promise<boolean>;
     /**
      * Hide or unhide an app
      */
-    nativeSetAppHidden(bundleId: string, hidden: boolean): Promise<void>;
+    nativeSetAppHidden(bundleId: string, hidden: boolean): Promise<boolean>;
     /**
      * Set the default audio input or output device
      * @param deviceType "input" or "output".
@@ -2731,19 +2731,19 @@ declare module "./plugin.js" {
     /**
      * Set active audio input device by name
      */
-    nativeSetAudioInputDevice(name: string): Promise<void>;
+    nativeSetAudioInputDevice(name: string): Promise<boolean>;
     /**
      * Set active audio output device by name
      */
-    nativeSetAudioOutputDevice(name: string): Promise<void>;
+    nativeSetAudioOutputDevice(name: string): Promise<boolean>;
     /**
      * Enable or disable auto-rearrange Spaces
      */
-    nativeSetAutoRearrangeSpaces(enabled: boolean): Promise<void>;
+    nativeSetAutoRearrangeSpaces(enabled: boolean): Promise<boolean>;
     /**
      * Turn Bluetooth on or off
      */
-    nativeSetBluetoothPower(on: boolean): Promise<void>;
+    nativeSetBluetoothPower(on: boolean): Promise<boolean>;
     /**
      * Set display brightness (0.0-1.0)
      * @param brightness wire double
@@ -2753,7 +2753,7 @@ declare module "./plugin.js" {
     /**
      * Set the computer name
      */
-    nativeSetComputerName(name: string): Promise<void>;
+    nativeSetComputerName(name: string): Promise<boolean>;
     /**
      * Set dark or light mode
      */
@@ -2765,80 +2765,80 @@ declare module "./plugin.js" {
     /**
      * Enable or disable Dock auto-hide
      */
-    nativeSetDockAutoHide(enabled: boolean): Promise<void>;
+    nativeSetDockAutoHide(enabled: boolean): Promise<boolean>;
     /**
      * Enable or disable Dock magnification
      */
-    nativeSetDockMagnification(enabled: boolean): Promise<void>;
+    nativeSetDockMagnification(enabled: boolean): Promise<boolean>;
     /**
      * Set Dock minimize animation (genie/scale)
      */
-    nativeSetDockMinimizeEffect(effect: string): Promise<void>;
+    nativeSetDockMinimizeEffect(effect: string): Promise<boolean>;
     /**
      * Set the Dock position (left, bottom, right)
      */
-    nativeSetDockPosition(position: string): Promise<void>;
+    nativeSetDockPosition(position: string): Promise<boolean>;
     /**
      * Show or hide recent apps in Dock
      */
-    nativeSetDockShowRecents(enabled: boolean): Promise<void>;
+    nativeSetDockShowRecents(enabled: boolean): Promise<boolean>;
     /**
      * Set Dock tile size
      * @param size wire double
      */
-    nativeSetDockSize(size: number): Promise<void>;
+    nativeSetDockSize(size: number): Promise<boolean>;
     /**
      * Set an extended attribute on a file
      */
-    nativeSetExtendedAttribute(name: string, path: string, value: string): Promise<void>;
+    nativeSetExtendedAttribute(name: string, path: string, value: string): Promise<boolean>;
     /**
      * Set file hidden flag
      */
-    nativeSetFileHidden(hidden: boolean, path: string): Promise<void>;
+    nativeSetFileHidden(hidden: boolean, path: string): Promise<boolean>;
     /**
      * Set file permissions (chmod octal mode)
      */
-    nativeSetFilePermissions(mode: string, path: string): Promise<void>;
+    nativeSetFilePermissions(mode: string, path: string): Promise<boolean>;
     /**
      * Show or hide file extensions in Finder
      */
-    nativeSetFinderShowExtensions(enabled: boolean): Promise<void>;
+    nativeSetFinderShowExtensions(enabled: boolean): Promise<boolean>;
     /**
      * Show or hide hidden files in Finder
      */
-    nativeSetFinderShowHidden(enabled: boolean): Promise<void>;
+    nativeSetFinderShowHidden(enabled: boolean): Promise<boolean>;
     /**
      * Set system highlight/accent color
      */
-    nativeSetHighlightColor(color: string): Promise<void>;
+    nativeSetHighlightColor(color: string): Promise<boolean>;
     /**
      * Set a hot corner action
      * @param action wire uint32 · min 0
      */
-    nativeSetHotCorner(action: number, corner: string): Promise<void>;
+    nativeSetHotCorner(action: number, corner: string): Promise<boolean>;
     /**
      * Switch to a keyboard input source by ID
      */
-    nativeSetInputSource(sourceId: string): Promise<void>;
+    nativeSetInputSource(sourceId: string): Promise<boolean>;
     /**
      * Set initial key repeat delay
      * @param delay wire double
      */
-    nativeSetKeyRepeatDelay(delay: number): Promise<void>;
+    nativeSetKeyRepeatDelay(delay: number): Promise<boolean>;
     /**
      * Set key repeat rate
      * @param rate wire double
      */
-    nativeSetKeyRepeatRate(rate: number): Promise<void>;
+    nativeSetKeyRepeatRate(rate: number): Promise<boolean>;
     /**
      * Enable or disable menu bar auto-hide
      */
-    nativeSetMenuBarAutoHide(enabled: boolean): Promise<void>;
+    nativeSetMenuBarAutoHide(enabled: boolean): Promise<boolean>;
     /**
      * Set mouse tracking speed
      * @param speed wire double
      */
-    nativeSetMouseSpeed(speed: number): Promise<void>;
+    nativeSetMouseSpeed(speed: number): Promise<boolean>;
     /**
      * Enable or disable Night Shift
      */
@@ -2846,41 +2846,41 @@ declare module "./plugin.js" {
     /**
      * Set screenshot file format (png/jpg/pdf/tiff)
      */
-    nativeSetScreenshotFormat(format: string): Promise<void>;
+    nativeSetScreenshotFormat(format: string): Promise<boolean>;
     /**
      * Enable or disable window shadow in screenshots
      */
-    nativeSetScreenshotIncludeShadow(enabled: boolean): Promise<void>;
+    nativeSetScreenshotIncludeShadow(enabled: boolean): Promise<boolean>;
     /**
      * Set the screenshot save location
      */
-    nativeSetScreenshotLocation(path: string): Promise<void>;
+    nativeSetScreenshotLocation(path: string): Promise<boolean>;
     /**
      * Set natural scroll direction
      */
-    nativeSetScrollDirectionNatural(enabled: boolean): Promise<void>;
+    nativeSetScrollDirectionNatural(enabled: boolean): Promise<boolean>;
     /**
      * Set sidebar icon size (1=small,2=medium,3=large)
      * @param size wire uint32 · min 0
      */
-    nativeSetSidebarIconSize(size: number): Promise<void>;
+    nativeSetSidebarIconSize(size: number): Promise<boolean>;
     /**
      * Enable or disable Stage Manager
      */
-    nativeSetStageManager(enabled: boolean): Promise<void>;
+    nativeSetStageManager(enabled: boolean): Promise<boolean>;
     /**
      * Enable or disable tap-to-click
      */
-    nativeSetTapToClick(enabled: boolean): Promise<void>;
+    nativeSetTapToClick(enabled: boolean): Promise<boolean>;
     /**
      * Set trackpad tracking speed
      * @param speed wire double
      */
-    nativeSetTrackpadSpeed(speed: number): Promise<void>;
+    nativeSetTrackpadSpeed(speed: number): Promise<boolean>;
     /**
      * Register an application as the handler for a URL scheme
      */
-    nativeSetURLSchemeHandler(bundleId: string, scheme: string): Promise<void>;
+    nativeSetURLSchemeHandler(bundleId: string, scheme: string): Promise<boolean>;
     /**
      * Set system volume (0.0–1.0)
      * @param volume wire double
@@ -2889,7 +2889,7 @@ declare module "./plugin.js" {
     /**
      * Set the desktop wallpaper to an image file
      */
-    nativeSetWallpaper(path: string): Promise<void>;
+    nativeSetWallpaper(path: string): Promise<boolean>;
     /**
      * Set window transparency
      * @param alpha wire double
@@ -3028,7 +3028,7 @@ declare module "./plugin.js" {
     /**
      * Create a symbolic link
      */
-    nativeSymlink(link: string, source: string): Promise<void>;
+    nativeSymlink(link: string, source: string): Promise<boolean>;
     /**
      * Get system appearance info (accent color, highlight color, reduce motion, reduce transparency)
      */
@@ -3112,7 +3112,7 @@ declare module "./plugin.js" {
     /**
      * Toggle Bluetooth on/off
      */
-    nativeToggleBluetooth(enabled: boolean): Promise<void>;
+    nativeToggleBluetooth(enabled: boolean): Promise<boolean>;
     /**
      * Toggle native fullscreen for a window
      */
@@ -3120,7 +3120,7 @@ declare module "./plugin.js" {
     /**
      * Toggle Wi-Fi on/off
      */
-    nativeToggleWifi(enabled: boolean): Promise<void>;
+    nativeToggleWifi(enabled: boolean): Promise<boolean>;
     /**
      * Check if Touch ID / biometric auth hardware is available
      */
@@ -3164,7 +3164,7 @@ declare module "./plugin.js" {
     /**
      * Extract a zip archive to a directory
      */
-    nativeUnzip(destination: string, source: string): Promise<void>;
+    nativeUnzip(destination: string, source: string): Promise<boolean>;
     /**
      * Get the bundle ID registered as the handler for a URL scheme
      */
@@ -3257,11 +3257,11 @@ declare module "./plugin.js" {
     /**
      * Write a preference value for an app domain
      */
-    nativeWriteAppPreference(domain: string, key: string, value: unknown): Promise<void>;
+    nativeWriteAppPreference(domain: string, key: string, value: unknown): Promise<boolean>;
     /**
      * Write string contents to a file
      */
-    nativeWriteFile(contents: string, path: string): Promise<void>;
+    nativeWriteFile(contents: string, path: string): Promise<boolean>;
     /**
      * Get the active Xcode developer directory path
      */
@@ -3273,7 +3273,7 @@ declare module "./plugin.js" {
     /**
      * Create a zip archive from files or a directory
      */
-    nativeZip(destination: string, source: string): Promise<void>;
+    nativeZip(destination: string, source: string): Promise<boolean>;
     /**
      * Check if Zoom accessibility is enabled
      */
@@ -4168,6 +4168,7 @@ Plugin.prototype.inputClipboardWrite = async function(contentType: string, data:
       data,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.inputClipboardWriteItems = async function(items?: ClipboardWriteItem[]) {
@@ -4177,6 +4178,7 @@ Plugin.prototype.inputClipboardWriteItems = async function(items?: ClipboardWrit
       items,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.inputDoubleClick = async function(x?: number, y?: number) {
@@ -4866,6 +4868,7 @@ Plugin.prototype.nativeCascadeWindows = async function(bundleId: string) {
       bundle_id: bundleId,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeCenterWindow = async function(windowId: string) {
@@ -4894,6 +4897,7 @@ Plugin.prototype.nativeClearFileQuarantine = async function(path: string) {
       path,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeClearNotifications = async function(bundleId: string) {
@@ -4903,6 +4907,7 @@ Plugin.prototype.nativeClearNotifications = async function(bundleId: string) {
       bundle_id: bundleId,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeClickMenuItem = async function(pid: number, path?: string[]) {
@@ -4933,6 +4938,7 @@ Plugin.prototype.nativeCloseWindow = async function(windowId: string) {
       window_id: windowId,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeColorAtPoint = async function(x: number, y: number) {
@@ -4969,6 +4975,7 @@ Plugin.prototype.nativeCopyFile = async function(destination: string, source: st
       source,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeCpuInfo = async function() {
@@ -4993,6 +5000,7 @@ Plugin.prototype.nativeCreateDirectory = async function(path: string) {
       path,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeCronJobs = async function() {
@@ -5082,6 +5090,7 @@ Plugin.prototype.nativeDeleteFile = async function(path: string) {
       path,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeDesktopDirectory = async function() {
@@ -5281,10 +5290,12 @@ Plugin.prototype.nativeEjectDisk = async function(mountPoint: string) {
       mount_point: mountPoint,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeEmptyTrash = async function() {
   const result = await this.call(MethodNativeEmptyTrash);
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeEnvVar = async function(name: string) {
@@ -5524,6 +5535,7 @@ Plugin.prototype.nativeFirstDayOfWeek = async function() {
 
 Plugin.prototype.nativeFlushDns = async function() {
   const result = await this.call(MethodNativeFlushDns);
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeFnKeyFunction = async function() {
@@ -5594,6 +5606,7 @@ Plugin.prototype.nativeGeneratePdf = async function(html: string, outputPath: st
       output_path: outputPath,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeGetWindowInfo = async function(windowId: string) {
@@ -5871,6 +5884,7 @@ Plugin.prototype.nativeKillProcess = async function(pid: number, signal?: number
       signal,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeLastReboot = async function() {
@@ -5979,6 +5993,7 @@ Plugin.prototype.nativeMaximizeWindow = async function(windowId: string) {
       window_id: windowId,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeMeasurementSystem = async function() {
@@ -6081,6 +6096,7 @@ Plugin.prototype.nativeMoveFile = async function(destination: string, source: st
       source,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeMoveWindowToDisplay = async function(displayId: number, windowId: string) {
@@ -6165,6 +6181,7 @@ Plugin.prototype.nativeNewAppWindow = async function(bundleId: string) {
       bundle_id: bundleId,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeNightShift = async function() {
@@ -6525,6 +6542,7 @@ Plugin.prototype.nativePublicIP = async function() {
 
 Plugin.prototype.nativePurgeMemory = async function() {
   const result = await this.call(MethodNativePurgeMemory);
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativePurgeableSpace = async function() {
@@ -6645,6 +6663,7 @@ Plugin.prototype.nativeRenameFile = async function(newName: string, path: string
       path,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeRequestScreenCapture = async function() {
@@ -6664,6 +6683,7 @@ Plugin.prototype.nativeRestartApp = async function(bundleId: string) {
       bundle_id: bundleId,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeRevealInFinder = async function(path: string) {
@@ -6843,6 +6863,7 @@ Plugin.prototype.nativeSetAirportPower = async function(on: boolean) {
       on,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetAppHidden = async function(bundleId: string, hidden: boolean) {
@@ -6853,6 +6874,7 @@ Plugin.prototype.nativeSetAppHidden = async function(bundleId: string, hidden: b
       hidden,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetAudioDevice = async function(deviceType: string, uid: string) {
@@ -6882,6 +6904,7 @@ Plugin.prototype.nativeSetAudioInputDevice = async function(name: string) {
       name,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetAudioOutputDevice = async function(name: string) {
@@ -6891,6 +6914,7 @@ Plugin.prototype.nativeSetAudioOutputDevice = async function(name: string) {
       name,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetAutoRearrangeSpaces = async function(enabled: boolean) {
@@ -6900,6 +6924,7 @@ Plugin.prototype.nativeSetAutoRearrangeSpaces = async function(enabled: boolean)
       enabled,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetBluetoothPower = async function(on: boolean) {
@@ -6909,6 +6934,7 @@ Plugin.prototype.nativeSetBluetoothPower = async function(on: boolean) {
       on,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetBrightness = async function(brightness: number, displayId?: number) {
@@ -6928,6 +6954,7 @@ Plugin.prototype.nativeSetComputerName = async function(name: string) {
       name,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetDarkMode = async function(dark: boolean) {
@@ -6955,6 +6982,7 @@ Plugin.prototype.nativeSetDockAutoHide = async function(enabled: boolean) {
       enabled,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetDockMagnification = async function(enabled: boolean) {
@@ -6964,6 +6992,7 @@ Plugin.prototype.nativeSetDockMagnification = async function(enabled: boolean) {
       enabled,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetDockMinimizeEffect = async function(effect: string) {
@@ -6973,6 +7002,7 @@ Plugin.prototype.nativeSetDockMinimizeEffect = async function(effect: string) {
       effect,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetDockPosition = async function(position: string) {
@@ -6982,6 +7012,7 @@ Plugin.prototype.nativeSetDockPosition = async function(position: string) {
       position,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetDockShowRecents = async function(enabled: boolean) {
@@ -6991,6 +7022,7 @@ Plugin.prototype.nativeSetDockShowRecents = async function(enabled: boolean) {
       enabled,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetDockSize = async function(size: number) {
@@ -7000,6 +7032,7 @@ Plugin.prototype.nativeSetDockSize = async function(size: number) {
       size,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetExtendedAttribute = async function(name: string, path: string, value: string) {
@@ -7011,6 +7044,7 @@ Plugin.prototype.nativeSetExtendedAttribute = async function(name: string, path:
       value,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetFileHidden = async function(hidden: boolean, path: string) {
@@ -7021,6 +7055,7 @@ Plugin.prototype.nativeSetFileHidden = async function(hidden: boolean, path: str
       path,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetFilePermissions = async function(mode: string, path: string) {
@@ -7031,6 +7066,7 @@ Plugin.prototype.nativeSetFilePermissions = async function(mode: string, path: s
       path,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetFinderShowExtensions = async function(enabled: boolean) {
@@ -7040,6 +7076,7 @@ Plugin.prototype.nativeSetFinderShowExtensions = async function(enabled: boolean
       enabled,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetFinderShowHidden = async function(enabled: boolean) {
@@ -7049,6 +7086,7 @@ Plugin.prototype.nativeSetFinderShowHidden = async function(enabled: boolean) {
       enabled,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetHighlightColor = async function(color: string) {
@@ -7058,6 +7096,7 @@ Plugin.prototype.nativeSetHighlightColor = async function(color: string) {
       color,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetHotCorner = async function(action: number, corner: string) {
@@ -7068,6 +7107,7 @@ Plugin.prototype.nativeSetHotCorner = async function(action: number, corner: str
       corner,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetInputSource = async function(sourceId: string) {
@@ -7077,6 +7117,7 @@ Plugin.prototype.nativeSetInputSource = async function(sourceId: string) {
       source_id: sourceId,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetKeyRepeatDelay = async function(delay: number) {
@@ -7086,6 +7127,7 @@ Plugin.prototype.nativeSetKeyRepeatDelay = async function(delay: number) {
       delay,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetKeyRepeatRate = async function(rate: number) {
@@ -7095,6 +7137,7 @@ Plugin.prototype.nativeSetKeyRepeatRate = async function(rate: number) {
       rate,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetMenuBarAutoHide = async function(enabled: boolean) {
@@ -7104,6 +7147,7 @@ Plugin.prototype.nativeSetMenuBarAutoHide = async function(enabled: boolean) {
       enabled,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetMouseSpeed = async function(speed: number) {
@@ -7113,6 +7157,7 @@ Plugin.prototype.nativeSetMouseSpeed = async function(speed: number) {
       speed,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetNightShift = async function(enabled: boolean) {
@@ -7131,6 +7176,7 @@ Plugin.prototype.nativeSetScreenshotFormat = async function(format: string) {
       format,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetScreenshotIncludeShadow = async function(enabled: boolean) {
@@ -7140,6 +7186,7 @@ Plugin.prototype.nativeSetScreenshotIncludeShadow = async function(enabled: bool
       enabled,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetScreenshotLocation = async function(path: string) {
@@ -7149,6 +7196,7 @@ Plugin.prototype.nativeSetScreenshotLocation = async function(path: string) {
       path,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetScrollDirectionNatural = async function(enabled: boolean) {
@@ -7158,6 +7206,7 @@ Plugin.prototype.nativeSetScrollDirectionNatural = async function(enabled: boole
       enabled,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetSidebarIconSize = async function(size: number) {
@@ -7167,6 +7216,7 @@ Plugin.prototype.nativeSetSidebarIconSize = async function(size: number) {
       size,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetStageManager = async function(enabled: boolean) {
@@ -7176,6 +7226,7 @@ Plugin.prototype.nativeSetStageManager = async function(enabled: boolean) {
       enabled,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetTapToClick = async function(enabled: boolean) {
@@ -7185,6 +7236,7 @@ Plugin.prototype.nativeSetTapToClick = async function(enabled: boolean) {
       enabled,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetTrackpadSpeed = async function(speed: number) {
@@ -7194,6 +7246,7 @@ Plugin.prototype.nativeSetTrackpadSpeed = async function(speed: number) {
       speed,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetURLSchemeHandler = async function(bundleId: string, scheme: string) {
@@ -7204,6 +7257,7 @@ Plugin.prototype.nativeSetURLSchemeHandler = async function(bundleId: string, sc
       scheme,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetVolume = async function(volume: number) {
@@ -7222,6 +7276,7 @@ Plugin.prototype.nativeSetWallpaper = async function(path: string) {
       path,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSetWindowAlpha = async function(alpha: number, windowId: string) {
@@ -7442,6 +7497,7 @@ Plugin.prototype.nativeSymlink = async function(link: string, source: string) {
       source,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeSystemAppearance = async function() {
@@ -7551,6 +7607,7 @@ Plugin.prototype.nativeToggleBluetooth = async function(enabled: boolean) {
       enabled,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeToggleFullscreen = async function(windowId: string) {
@@ -7569,6 +7626,7 @@ Plugin.prototype.nativeToggleWifi = async function(enabled: boolean) {
       enabled,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeTouchIDAvailable = async function() {
@@ -7652,6 +7710,7 @@ Plugin.prototype.nativeUnzip = async function(destination: string, source: strin
       source,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeURLSchemeHandler = async function(scheme: string) {
@@ -7828,6 +7887,7 @@ Plugin.prototype.nativeWriteAppPreference = async function(domain: string, key: 
       value,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeWriteFile = async function(contents: string, path: string) {
@@ -7838,6 +7898,7 @@ Plugin.prototype.nativeWriteFile = async function(contents: string, path: string
       path,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeXcodePath = async function() {
@@ -7858,6 +7919,7 @@ Plugin.prototype.nativeZip = async function(destination: string, source: string)
       source,
     },
   );
+  return (result as any).ok;
 };
 
 Plugin.prototype.nativeZoomEnabled = async function() {
