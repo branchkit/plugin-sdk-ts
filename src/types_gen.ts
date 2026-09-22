@@ -4260,7 +4260,39 @@ export interface NativeDarkModeResponse {
 }
 
 export interface NativeDateFormatResponse {
-  value: string;
+  /**
+   * The vocabulary `source` is written in: `posix_strftime` or
+   * `unicode_cldr`. Without this, `source` is an uninterpretable string.
+   */
+  dialect: string;
+  /**
+   * The locale asked for an era — the Lao Buddhist calendar, Japanese
+   * imperial eras (POSIX `%E`). Same reasoning as `native_digits`.
+   */
+  era: boolean;
+  /**
+   * The locale asked for its OWN digits rather than 0-9 — Lao, Myanmar,
+   * Odia, Eastern Arabic numerals (POSIX `%O`).
+   *
+   * A separate field because it cannot be part of a pattern: CLDR carries
+   * the numbering system in the locale identifier, which is why
+   * `resolvedOptions()` reports `numberingSystem` at the top level.
+   */
+  native_digits: boolean;
+  /**
+   * Exactly what the operating system returned, unmodified.
+   */
+  source: string;
+  /**
+   * The format as a Unicode CLDR pattern (UTS #35) — the portable
+   * answer, identical in vocabulary on every platform.
+   *
+   * `None` when the platform's own format cannot be expressed in CLDR.
+   * That is not a failure: `source` is still here, and a caller that
+   * understands `dialect` can use it. Half-converting instead would
+   * produce a pattern that parses and is wrong.
+   */
+  value?: string;
 }
 
 export interface NativeDefaultAppForUtiRequest {
@@ -6388,7 +6420,39 @@ export interface NativeThunderboltDevicesResponse {
 }
 
 export interface NativeTimeFormatResponse {
-  value: string;
+  /**
+   * The vocabulary `source` is written in: `posix_strftime` or
+   * `unicode_cldr`. Without this, `source` is an uninterpretable string.
+   */
+  dialect: string;
+  /**
+   * The locale asked for an era — the Lao Buddhist calendar, Japanese
+   * imperial eras (POSIX `%E`). Same reasoning as `native_digits`.
+   */
+  era: boolean;
+  /**
+   * The locale asked for its OWN digits rather than 0-9 — Lao, Myanmar,
+   * Odia, Eastern Arabic numerals (POSIX `%O`).
+   *
+   * A separate field because it cannot be part of a pattern: CLDR carries
+   * the numbering system in the locale identifier, which is why
+   * `resolvedOptions()` reports `numberingSystem` at the top level.
+   */
+  native_digits: boolean;
+  /**
+   * Exactly what the operating system returned, unmodified.
+   */
+  source: string;
+  /**
+   * The format as a Unicode CLDR pattern (UTS #35) — the portable
+   * answer, identical in vocabulary on every platform.
+   *
+   * `None` when the platform's own format cannot be expressed in CLDR.
+   * That is not a failure: `source` is still here, and a caller that
+   * understands `dialect` can use it. Half-converting instead would
+   * produce a pattern that parses and is wrong.
+   */
+  value?: string;
 }
 
 export interface NativeTimeMachineLastBackupResponse {
