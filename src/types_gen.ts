@@ -2179,6 +2179,22 @@ export interface WindowInfo {
    */
   id: string;
   /**
+   * Whether the window occupies its display exclusively, where the
+   * platform can say. `None` carries the same meaning as above.
+   */
+  is_fullscreen?: boolean;
+  /**
+   * Whether the window is minimized (iconified, hidden to a dock or
+   * taskbar), where the platform can say.
+   *
+   * `Option` and not `bool` for the same reason as `pid`: a platform that
+   * cannot tell has to be able to say so. `false` would assert that every
+   * window on a session with no minimize concept is on screen, which is a
+   * claim rather than an absence — and it is the claim that kept
+   * `native.window_is_minimized` refused rather than answered wrongly.
+   */
+  is_minimized?: boolean;
+  /**
    * The process that owns this window, where the platform can say.
    *
    * Advisory and often absent: on X11 it comes from `_NET_WM_PID`, which
@@ -6874,16 +6890,8 @@ export interface NativeWindowIsFullscreenRequest {
   window_id: string;
 }
 
-export interface NativeWindowIsFullscreenResponse {
-  enabled: boolean;
-}
-
 export interface NativeWindowIsMinimizedRequest {
   window_id: string;
-}
-
-export interface NativeWindowIsMinimizedResponse {
-  enabled: boolean;
 }
 
 export interface NativeWindowLayerRequest {
