@@ -1858,11 +1858,11 @@ declare module "./plugin.js" {
      */
     nativeFinderSelection(): Promise<string[]>;
     /**
-     * Check if Finder shows file extensions
+     * Whether the file manager shows file extensions
      */
     nativeFinderShowExtensions(): Promise<NativeFinderShowExtensionsResponse>;
     /**
-     * Check if Finder shows hidden files
+     * Whether the file manager shows hidden files
      */
     nativeFinderShowHidden(): Promise<NativeFinderShowHiddenResponse>;
     /**
@@ -1870,7 +1870,7 @@ declare module "./plugin.js" {
      */
     nativeFinderShowPathBar(): Promise<NativeFinderShowPathBarResponse>;
     /**
-     * Check if Finder shows status bar
+     * Whether the file manager shows a status bar
      */
     nativeFinderShowStatusBar(): Promise<NativeFinderShowStatusBarResponse>;
     /**
@@ -2232,7 +2232,7 @@ declare module "./plugin.js" {
      */
     nativeMenuBarBatteryPercent(): Promise<NativeMenuBarBatteryPercentResponse>;
     /**
-     * Get menu bar clock format string
+     * Whether the clock is 12-hour or 24-hour, as 12h or 24h
      */
     nativeMenuBarClockFormat(): Promise<NativeMenuBarClockFormatResponse>;
     /**
