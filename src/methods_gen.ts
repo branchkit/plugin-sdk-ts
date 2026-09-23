@@ -2076,7 +2076,7 @@ declare module "./plugin.js" {
      */
     nativeIsFileHidden(path: string): Promise<NativeIsFileHiddenResponse>;
     /**
-     * Get the Darwin kernel version string
+     * Get the running kernel version as a bare version string
      */
     nativeKernelVersion(): Promise<NativeKernelVersionResponse>;
     /**
