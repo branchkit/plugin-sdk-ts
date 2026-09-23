@@ -4715,6 +4715,15 @@ export interface NativeForceQuitAppResponse {
   result: boolean;
 }
 
+export interface NativeFormatDateRequest {
+  style: string;
+  when: string;
+}
+
+export interface NativeFormatDateResponse {
+  value: string;
+}
+
 export interface NativeFrontmostAppResponse {
   app?: RunningApp;
 }

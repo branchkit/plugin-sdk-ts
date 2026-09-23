@@ -247,6 +247,7 @@ export const MethodNativeFocusedElement = "native.focused_element" as const; // 
 export const MethodNativeFocusedWindowId = "native.focused_window_id" as const; // since 0.1.0
 export const MethodNativeFontSmoothing = "native.font_smoothing" as const; // since 0.1.0
 export const MethodNativeForceQuitApp = "native.force_quit_app" as const; // since 0.1.0
+export const MethodNativeFormatDate = "native.format_date" as const; // since 0.1.0
 export const MethodNativeFrontmostApp = "native.frontmost_app" as const; // since 0.1.0
 export const MethodNativeFullDiskAccess = "native.full_disk_access" as const; // since 0.1.0
 export const MethodNativeFunctionKeysStandard = "native.function_keys_standard" as const; // since 0.1.0
