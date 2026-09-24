@@ -6861,6 +6861,26 @@ export interface NativeZoomEnabledResponse {
   enabled: boolean;
 }
 
+export interface NetworkRequestHostRequest {
+  /**
+   * One exact host (no wildcard, no port, no path).
+   */
+  host: string;
+  /**
+   * Shown to the user beside the switch — why the plugin wants it.
+   * default ""
+   */
+  reason?: string;
+}
+
+export interface NetworkRequestHostResponse {
+  /**
+   * `"allowed"` — the user has it switched on; `"pending"` — it now
+   * appears on the plugin's page, off, until the user allows it.
+   */
+  status: string;
+}
+
 export interface OutputClearRequest {
   /**
    * The channel on which nothing is true now. Must be owned by the
@@ -7338,6 +7358,31 @@ export interface SecretsListResponse {
    * flattering one. See `os`-agnostic `KeySource::describe`.
    */
   protection: string;
+}
+
+export interface SecretsRequestSlotRequest {
+  /**
+   * The ONE host the value may be sent to — one this plugin may already
+   * reach (declared, or requested with `network.request_host`).
+   */
+  host: string;
+  /**
+   * What the user sees on the row, e.g. "Weather script — API key".
+   * default ""
+   */
+  label?: string;
+  /**
+   * The secret's name in this plugin's drawer (ASCII letters, digits,
+   * `_`, `-`, `.`).
+   */
+  name: string;
+}
+
+export interface SecretsRequestSlotResponse {
+  /**
+   * Whether a value is already stored under this name.
+   */
+  is_set: boolean;
 }
 
 export interface SecretsSetRequest {
