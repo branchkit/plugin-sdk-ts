@@ -125,6 +125,14 @@ export interface ActionFieldSchema {
    */
   fields: ActionFieldSchema[];
   /**
+   * `secret_ref` only: the ONE host the stored credential may be sent
+   * to. A credential saved from Settings is bound to this, and the binding
+   * comes from here — from the manifest the user consented to — never
+   * from the request that stores the value. Must be an exact host (no
+   * wildcard) that the plugin's own `requires.network` hosts allow.
+   */
+  for_host?: string;
+  /**
    * JSON key name (e.g. "selector", "direction").
    */
   key: string;
