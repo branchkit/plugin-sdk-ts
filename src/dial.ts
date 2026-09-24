@@ -1,7 +1,8 @@
 /**
  * Raw TCP to a declared host — for a protocol that is not HTTP: MQTT, a
- * telnet-controlled receiver, a Redis-like local daemon (the actuator's
- * docs/design/DESIGN_PLUGIN_NETWORK_TRANSPORTS.md, G1).
+ * telnet-controlled receiver, a Redis-like local daemon. It is the same
+ * CONNECT tunnel the HTTP transport uses, so it is enforced and recorded
+ * exactly like HTTP.
  *
  * Inside the sandbox the plugin has no direct egress; the platform's
  * filtering proxy is the only route and it enforces the manifest's declared

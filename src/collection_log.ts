@@ -44,8 +44,8 @@ declare module "./plugin.js" {
      * collection's key field, as a fresh append (the raw log is never mutated);
      * appending another record with the same `key` folds onto the first. Read
      * the merged current-state view with {@link Plugin.listCompacted}. This is
-     * the compacted-changelog primitive — see
-     * docs/design/DESIGN_LOG_ANNOTATION_PROJECTION.md.
+     * the compacted-changelog primitive: annotate a past event by appending,
+     * never by mutating it, so what was known when it happened is preserved.
      *
      * "Annotate a past record" is just "append the same key with the new
      * field." Throws if the collection is not a keyed log.

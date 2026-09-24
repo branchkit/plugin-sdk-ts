@@ -2,7 +2,7 @@
 // Run: just contracts
 //
 // BranchKit observability bus — closed log-event vocabulary.
-// See docs/design/DESIGN_OBSERVABILITY_BUS.md for the architectural contract.
+// Registered in actuator code; extended only by a platform release.
 
 /** Log event name constants. Use instead of string literals so vocabulary drift is a type error. */
 export const LogEventAudioKeybindTriggered = "audio.keybind_triggered" as const;

@@ -271,7 +271,8 @@ export class Plugin {
   private readyResolve!: () => void;
 
   // Inbound notifications drain through one pump so listeners observe them in
-  // wire order, matching the Go SDK. See docs/design/DESIGN_SDK_EVENT_ORDERING.md.
+  // wire order, matching the Go and Python SDKs; parity is held by the
+  // sdk-test ordering case.
   private notifyQueue: Array<{
     method: string;
     params: unknown;
@@ -841,7 +842,8 @@ export class Plugin {
   // listener (and any outbound call() it makes) before the next notification —
   // so listeners observe wire order. The read loop keeps running while a
   // listener awaits, so responses still arrive; serializing cannot deadlock.
-  // See docs/design/DESIGN_SDK_EVENT_ORDERING.md.
+  // Head-of-line blocking is the accepted cost: a slow listener delays later
+  // notifications.
   private async drainNotifications(): Promise<void> {
     // Hold delivery until run() signals that listeners are registered — the
     // same gate handleRequest applies to inbound requests, and the one the Go
@@ -977,7 +979,7 @@ export function artifactsDir(): string {
 }
 
 /** @deprecated Use {@link artifactsDir}. `models` was renamed to `artifacts`
- * (DESIGN_ARTIFACTS_RENAME.md); removed one release later. */
+ * and this alias is removed one release later. */
 export function modelsDir(): string {
   return artifactsDir();
 }

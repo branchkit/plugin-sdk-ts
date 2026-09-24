@@ -19,7 +19,8 @@ declare module "./plugin.js" {
      * threshold is lowered. Use {@link Plugin.info} for per-operation
      * diagnostics you want visible by default.
      *
-     * See `docs/design/DESIGN_PLUGIN_LOG_LEVELS.md` for the level taxonomy.
+     * Levels: trace < debug < info (default threshold) < warn < error; warn
+     * and error also cross-post to actuator.log.
      */
     debug(tag: string, data: unknown): Promise<void>;
     /**

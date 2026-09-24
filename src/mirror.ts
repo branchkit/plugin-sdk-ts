@@ -18,7 +18,8 @@ import type { CollectionGetResponse } from "./types_gen.js";
  *   is NOT an error: the mirror stays not-ready and the update event
  *   completes it
  *
- * See `docs/design/DESIGN_COLLECTION_MIRROR.md`.
+ * An empty read AFTER the first populated one is real emptiness (the
+ * snapshot clears, onChange fires), not the boot race.
  */
 export class CollectionMirror {
   #plugin: Plugin;
@@ -155,7 +156,7 @@ declare module "./plugin.js" {
      * RAW append history (every append, unfolded), almost never what a consumer
      * of a keyed log wants. The mirrored collection must declare
      * `emits_on_change: true` for the refetch-on-change to fire (logs default
-     * off — see docs/design/DESIGN_LOG_ANNOTATION_PROJECTION.md).
+     * off, because a high-frequency log would flood the bus).
      */
     mirrorCompacted(name: string): CollectionMirror;
   }

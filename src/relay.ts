@@ -2,7 +2,8 @@ import { connect, type Socket } from "node:net";
 import type { Server } from "node:http";
 
 /**
- * The actuator's listener relay (its docs/design/DESIGN_WINDOWS_LISTENER_RELAY.md).
+ * The actuator's listener relay. (Node cannot `listen` on an inherited socket
+ * handle on Windows, so fd-style hand-over is not an option.)
  *
  * On Windows a plugin runs in an AppContainer whose loopback exemption is
  * outbound-only: a listener the plugin binds itself is unreachable from

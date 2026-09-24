@@ -179,7 +179,6 @@ export function text(name?: string): PatternSlot {
 
 /**
  * Prefix-discovery modes for {@link CommandBuilder.discovery}.
- * See docs/design/DESIGN_DISCOVERABLE_PREFIX.md.
  *
  * - `"prefix"` — the bare prefix opens the HUD; the capture's words stay live in
  *   free context (small, acoustically safe target sets).
@@ -189,7 +188,8 @@ export function text(name?: string): PatternSlot {
  *   platform-assigned alphabet codewords instead of spoken by name — item
  *   names never enter the grammar (promotion is the per-record opt-out). For
  *   churning sets whose names can't be pre-vetted acoustically (snippets,
- *   prompts, files). See DESIGN_SELECTION_PRIMITIVE.md.
+ *   prompts, files): arbitrary names would each need acoustic vetting, and
+ *   one missing from the model lexicon is silently undecodable.
  */
 export type DiscoveryMode = "prefix" | "exclusive" | "select";
 
@@ -209,8 +209,8 @@ export class CommandBuilder {
   /**
    * Set the action fired on match. `type` is the action's type (a built-in
    * like "key" or a dotted plugin action like "browser.refresh"); optional
-   * `params` nest under the action object's `params` key — one dialect,
-   * see DESIGN_ONE_PARAMS_DIALECT.md.
+   * `params` nest under the action object's `params` key — one dialect: the
+   * envelope is closed and the platform refuses any other key at load.
    */
   action(type: string, params?: Record<string, unknown>): this {
     this.spec.action =
@@ -237,7 +237,6 @@ export class CommandBuilder {
    * Discovery-HUD display override for one capture: enumerate `collection`
    * in the HUD instead of the capture's matching collection. Matching is
    * untouched — pair a sealed/static matching collection with a live menu.
-   * (docs/design/DESIGN_CAPTURE_DISPLAY_FORMS.md, part A.)
    */
   displaySource(capture: string, collection: string): this {
     (this.spec.display_sources ??= {})[capture] = collection;
@@ -259,7 +258,7 @@ export class CommandBuilder {
    * the bare literal prefix of a `prefix + tail-capture` pattern opens the
    * Discovery HUD when spoken alone, instead of firing. Valid only on a
    * literal-prefix + single-tail-capture pattern; the actuator rejects other
-   * shapes at load. See docs/design/DESIGN_DISCOVERABLE_PREFIX.md.
+   * shapes at load.
    */
   discovery(mode: DiscoveryMode): this {
     this.spec.discovery = mode;

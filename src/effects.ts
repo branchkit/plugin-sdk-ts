@@ -95,7 +95,8 @@ declare module "./plugin.js" {
      * declared this effect in its manifest's `consumes.effects[*].asserts`
      * — undeclared effects reject the call.
      *
-     * See `docs/design/DESIGN_CAPABILITY_MECHANISM.md` for the mechanism design.
+     * Conflicts resolve per effect by an ownership stack: the last assert
+     * wins, and a retract restores the previous owner.
      */
     assertEffect(name: string): Promise<AssertEffectResult>;
 
@@ -124,7 +125,8 @@ declare module "./plugin.js" {
      * system effect state) should subscribe directly via
      * `on(EventEffectDisplaced, ...)`.
      *
-     * See `docs/design/DESIGN_CAPABILITY_MECHANISM.md` section 10.2.
+     * There is deliberately no "re-owned" counterpart: a plugin that needs
+     * to know it is back on top queries ownership.
      *
      * Multiple callbacks can be registered; each fires for every event.
      */

@@ -37,8 +37,8 @@ describe.skipIf(!harnessBinaryAvailable())("Harness", () => {
       // helloworld commands at the same length (the ["hello","branchkit"]
       // literal and the ["hello","<apps>"] capture). Equally-eligible
       // same-length candidates are a genuine tie: the matcher declines to
-      // act and surfaces the tied set for disambiguation
-      // (DESIGN_MATCHER_COLLISION_RESOLUTION step 2).
+      // act and surfaces the tied set for disambiguation rather than
+      // guessing.
       await h.loadManifest(APPS_PROVIDER_DIR);
       await h.writeCollection(
         "apps",

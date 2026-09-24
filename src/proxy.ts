@@ -1,6 +1,7 @@
 /**
- * Transparent outbound proxy (the actuator's per-host network enforcement —
- * see the actuator's docs/design/DESIGN_SANDBOX_HOST_PROXY.md).
+ * Transparent outbound proxy (the actuator's per-host network enforcement:
+ * the actuator's per-plugin filtering proxy is the only egress a hosts-tier
+ * sandbox allows).
  *
  * When a plugin declares `"network": {"hosts": [...]}`, platforms without an
  * in-kernel per-host primitive (all three: Linux, macOS, Windows) run the plugin in a

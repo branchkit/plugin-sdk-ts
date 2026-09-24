@@ -185,8 +185,8 @@ export function inheritedListenerCount(): number {
  * This is not an optimization: inside the Linux sandbox the plugin runs
  * in an empty network namespace, where a self-bound "127.0.0.1" is a
  * private dead loopback — the inherited host-loopback listener is the
- * only reachable surface. See the actuator's
- * docs/design/DESIGN_SANDBOX_LOOPBACK_FDPASS.md.
+ * only reachable surface (a socket keeps the network namespace it was
+ * created in).
  */
 export function ListenLocal(plugin: Plugin): Promise<Listener> {
   return new Promise((resolve, reject) => {
@@ -309,6 +309,14 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
       // A silent self-bind inside the sandbox serves a dead private
       // loopback, so refuse loudly — a TS plugin declaring sockets.listen
       // must run under Node until Bun grows fd support.
+      //
+      // Retirement tripwire: this guard keys on "am I Bun", not "can Bun do
+      // this", so an upstream fix (oven-sh/bun#22559) will NOT surface on its
+      // own. When bumping the pinned Bun version, run the fd-listen probe (app
+      // repo: scripts/check-bun-fd-listen.py). If Bun serves the fd:
+      // version-gate this guard, flip the conformance fd-case skip to a pass,
+      // and retire the actuator's Node substitution for `sockets.listen`
+      // plugins.
       if (process.versions.bun) {
         settleErr(
           new Error(

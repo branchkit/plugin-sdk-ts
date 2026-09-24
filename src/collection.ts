@@ -107,8 +107,9 @@ declare module "./plugin.js" {
      * {@link Plugin.listCompacted}). `key` is the fold key; same-key appends are
      * merged per the collection's `merge` and that key's current record is
      * returned, or undefined if the key has no records. Throws if the collection
-     * is not a keyed (`id_strategy: by_field`) log. See
-     * docs/design/DESIGN_LOG_ANNOTATION_PROJECTION.md.
+     * is not a keyed (`id_strategy: by_field`) log. Plain get stays raw; this
+     * folded point-read is opt-in and reuses the list fold, so the two never
+     * diverge.
      */
     getCompacted(name: string, key: string): Promise<CollectionRecord | undefined>;
 
@@ -155,7 +156,8 @@ declare module "./plugin.js" {
      * later non-null fields win; Collect: payloads accumulate into an array).
      * Pairs with {@link Plugin.appendKeyed}. Throws if the collection is not a
      * keyed (`id_strategy: by_field`) log. `opts` since/until/limit apply to
-     * the folded records. See docs/design/DESIGN_LOG_ANNOTATION_PROJECTION.md.
+     * the folded records. The default read stays raw: a timeline wants every
+     * append, a changelog wants current state.
      */
     listCompacted(name: string, opts?: ListOpts): Promise<CollectionRecord[]>;
 
@@ -209,7 +211,9 @@ declare module "./plugin.js" {
      * this plugin as its introducer — the same auto-registration `put`
      * performs.
      *
-     * See docs/design/DESIGN_COLLECTION_REPLACE.md.
+     * The complement is computed platform-side because a client-side diff
+     * needs the caller to remember what it last published, and that memory
+     * dies with the process (records orphaned on restart).
      */
     replace(
       name: string,
