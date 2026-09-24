@@ -1078,6 +1078,36 @@ export interface HidElementEntry {
 }
 
 /**
+ * One request header. Either a literal `value`, or a `secret` the platform
+ * substitutes — `prefix` + the stored value, e.g. `prefix: "Bearer "`.
+ */
+export interface HttpHeader {
+  name: string;
+  /**
+   * Text placed before the substituted secret (`"Bearer "`, `"token "`).
+   */
+  prefix?: string;
+  /**
+   * The name of one of THIS plugin's stored secrets. It is substituted
+   * only if the secret is bound to the request's host; an unbound secret
+   * is never sent.
+   */
+  secret?: string;
+  /**
+   * A literal value. Exactly one of `value` / `secret`.
+   */
+  value?: string;
+}
+
+/**
+ * One response header as received.
+ */
+export interface HttpResponseHeader {
+  name: string;
+  value: string;
+}
+
+/**
  * An HTML fragment pushed to a HUD channel. The `target_id` is the DOM element
  * ID to patch (e.g. "content", "title"); `html` is the innerHTML replacement.
  * When `raw` is true, `html` is sent as-is (multiple elements, Datastar patches each by ID).
@@ -3162,6 +3192,51 @@ export interface EventsEmitRequest {
    * `_platform.*` namespace is reserved for the actuator.
    */
   event_type: string;
+}
+
+export interface HttpRequestRequest {
+  /**
+   * A UTF-8 body. Exactly one of `body` / `body_base64`, or neither.
+   */
+  body?: string;
+  /**
+   * A binary body, base64.
+   */
+  body_base64?: string;
+  /**
+   * default []
+   */
+  headers?: HttpHeader[];
+  /**
+   * `GET` when omitted.
+   */
+  method?: string;
+  /**
+   * Overall deadline; default 30000, at most 120000.
+   * wire uint64 (64-bit) · min 0
+   */
+  timeout_ms?: number;
+  /**
+   * `https://` only, to a host this plugin declares in `requires.network`
+   * and the user has allowed.
+   */
+  url: string;
+}
+
+export interface HttpRequestResponse {
+  /**
+   * The body as text when it is valid UTF-8.
+   */
+  body?: string;
+  /**
+   * The body, base64. Always present.
+   */
+  body_base64: string;
+  headers: HttpResponseHeader[];
+  /**
+   * wire uint16 · min 0 · max 65535
+   */
+  status: number;
 }
 
 export interface HUDCreateChannelRequest {
