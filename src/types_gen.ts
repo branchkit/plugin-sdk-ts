@@ -2391,6 +2391,38 @@ export interface BlobPublishResponse {
   version: number;
 }
 
+export interface BlobStateRequest {
+  /**
+   * The blob's name, as its provider declared it in `provides.blobs`.
+   */
+  name: string;
+  /**
+   * The providing plugin. Omitted: the caller's own blob. Another
+   * plugin's blob is answerable only to a consumer granted to read it.
+   */
+  provider?: string;
+}
+
+export interface BlobStateResponse {
+  /**
+   * The generation file currently being appended to — the one a
+   * restarted provider writes next, and the one a consumer opens.
+   * wire uint64 (64-bit) · min 0
+   */
+  generation: number;
+  /**
+   * Bytes published within that generation.
+   * wire uint64 (64-bit) · min 0
+   */
+  length: number;
+  /**
+   * The latest version; it rises across generations AND across actuator
+   * restarts, so a consumer can tell new from already-seen.
+   * wire uint64 (64-bit) · min 0
+   */
+  version: number;
+}
+
 export interface CollectionAppendRequest {
   /**
    * Collection name. Must be a `kind: "log"` collection.

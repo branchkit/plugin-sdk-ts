@@ -8,6 +8,7 @@ export const APIVersion = "0.2.0" as const;
 export const MethodActionsList = "actions.list" as const; // since 0.1.0
 export const MethodArtifactDelete = "artifact.delete" as const; // since 0.1.0
 export const MethodBlobPublish = "blob.publish" as const; // since 0.2.0
+export const MethodBlobState = "blob.state" as const; // since 0.2.0
 export const MethodCollectionAppend = "collection.append" as const; // stable, since 0.1.0
 export const MethodCollectionAppendKeyed = "collection.append_keyed" as const; // since 0.1.0
 export const MethodCollectionCount = "collection.count" as const; // stable, since 0.1.0
