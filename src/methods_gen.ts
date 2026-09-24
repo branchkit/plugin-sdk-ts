@@ -3675,7 +3675,7 @@ declare module "./plugin.js" {
      */
     systemNotify(body: string, title: string, durationSecs?: number): Promise<void>;
     /**
-     * Run a shell command via /bin/bash -c (security-sensitive)
+     * Start a shell command via /bin/bash -c, run by the actuator outside any plugin sandbox (security-sensitive; not on Windows)
      * @param command Shell command to execute via `/bin/bash -c`.
      */
     systemRunShell(command: string): Promise<void>;
