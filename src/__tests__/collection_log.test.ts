@@ -3,11 +3,14 @@ import {
   Plugin,
   RpcCallError,
   RecordingDisabledError,
+  UnsupportedError,
   errorKindOf,
 } from "../plugin.js";
 import {
   ErrorKindRecordingDisabled,
   ErrorKindNotFound,
+  ErrorKindUnsupported,
+  UnsupportedReasonPlatformUnported,
 } from "../closed_vocab_gen.js";
 import { logListOpts } from "../collection_log.js";
 import "../methods_gen.js"; // ensure auto-gen methods are wired before helpers
@@ -86,6 +89,43 @@ describe("collection_log helpers", () => {
     expect(caught).toBeInstanceOf(RpcCallError);
     expect(errorKindOf(caught)).toBe(ErrorKindRecordingDisabled);
     expect((caught as RpcCallError).data?.op).toBe("append");
+  });
+
+  // A wire `unsupported` error becomes an UnsupportedError whose reason is
+  // read from `data.reason` — driven through the real response path
+  // (`routeMessage` → `rpcErrorFor`), not a hand-built instance.
+  test("a wire unsupported error becomes UnsupportedError with its reason", async () => {
+    const p = new Plugin();
+    const pending = new Promise((resolve, reject) => {
+      // @ts-expect-error — seeding a private pending call for a unit test
+      p.pending.set(7, { resolve, reject, timer: setTimeout(() => {}, 0) });
+    });
+    // @ts-expect-error — driving the private response router
+    p.routeMessage({
+      jsonrpc: "2.0",
+      id: 7,
+      error: {
+        code: -32007,
+        message: "native.dock_position is not implemented on linux yet",
+        data: {
+          kind: ErrorKindUnsupported,
+          op: "native.dock_position",
+          reason: UnsupportedReasonPlatformUnported,
+        },
+      },
+    });
+    let caught: unknown;
+    try {
+      await pending;
+    } catch (e) {
+      caught = e;
+    }
+    expect(caught).toBeInstanceOf(UnsupportedError);
+    expect(caught).toBeInstanceOf(RpcCallError);
+    expect(caught).not.toBeInstanceOf(RecordingDisabledError);
+    expect((caught as UnsupportedError).reason).toBe(UnsupportedReasonPlatformUnported);
+    expect((caught as UnsupportedError).data?.op).toBe("native.dock_position");
+    expect(errorKindOf(caught)).toBe(ErrorKindUnsupported);
   });
 
   // An actuator predating structured errors sends no `data`. The call must

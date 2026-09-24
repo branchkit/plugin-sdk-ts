@@ -3,6 +3,7 @@ export {
   Plugin,
   RpcCallError,
   RecordingDisabledError,
+  UnsupportedError,
   errorKindOf,
   apiVersion,
   pluginDir,

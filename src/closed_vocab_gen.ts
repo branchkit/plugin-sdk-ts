@@ -53,6 +53,7 @@ export const ErrorKindForbidden = "forbidden" as const;
 export const ErrorKindStorage = "storage" as const;
 export const ErrorKindMethodNotFound = "method_not_found" as const;
 export const ErrorKindInvalidParams = "invalid_params" as const;
+export const ErrorKindUnsupported = "unsupported" as const;
 export const ErrorKindInternal = "internal" as const;
 
 // ErrorCodeFor maps a kind to the JSON-RPC error code the actuator
@@ -66,6 +67,7 @@ export const ErrorCodeFor: Record<string, number> = {
   "storage": -32005,
   "method_not_found": -32601,
   "invalid_params": -32602,
+  "unsupported": -32007,
   "internal": -32603,
 };
 
@@ -79,6 +81,7 @@ export const KnownErrorKinds = [
   "storage",
   "method_not_found",
   "invalid_params",
+  "unsupported",
   "internal",
 ] as const;
 
@@ -93,7 +96,25 @@ export interface FaultData {
   id?: string;
   op?: string;
   privilege?: string;
+  reason?: string;
 }
+
+// UnsupportedReason* are the closed-vocabulary `data.reason` values
+// of an ErrorKindUnsupported error: why this platform or session
+// cannot run the op. Read one off UnsupportedError.reason.
+// `UnsupportedReason` is `string`, not a union, for the same reason
+// ErrorKind is. Source of truth: `actuator/src/fault.rs::UnsupportedReason`.
+export type UnsupportedReason = string;
+export const UnsupportedReasonPlatformNoAnalogue = "platform_no_analogue" as const;
+export const UnsupportedReasonPlatformUnported = "platform_unported" as const;
+export const UnsupportedReasonSessionUnsupported = "session_unsupported" as const;
+
+// KnownUnsupportedReasons lists the full closed-vocabulary set.
+export const KnownUnsupportedReasons = [
+  "platform_no_analogue",
+  "platform_unported",
+  "session_unsupported",
+] as const;
 
 // OutputKind* are the closed-vocabulary `kind` values of a semantic
 // output document (`output.state`): what a person needs in order to

@@ -5,7 +5,9 @@ import { APIVersion, HookOnAction, HookRenderSettings } from "./contracts_gen.js
 import {
   type ErrorKind,
   type FaultData,
+  type UnsupportedReason,
   ErrorKindRecordingDisabled,
+  ErrorKindUnsupported,
 } from "./closed_vocab_gen.js";
 import type {
   OnActionRequest,
@@ -180,12 +182,41 @@ export class RecordingDisabledError extends RpcCallError {
 }
 
 /**
+ * Sentinel subclass for an op this platform or desktop session cannot run at
+ * all — a well-formed call to a capability that is absent here (kind
+ * `unsupported`).
+ *
+ * Branch on {@link UnsupportedError.reason}, never on the message:
+ * `UnsupportedReasonPlatformNoAnalogue` (not planned on this OS — design
+ * around it), `UnsupportedReasonPlatformUnported` (not written for this OS
+ * yet), `UnsupportedReasonSessionUnsupported` (this session cannot;
+ * `data.detail` says why). Parity with Go's `errors.Is(err, ErrUnsupported)`
+ * + `UnsupportedReasonOf`.
+ */
+export class UnsupportedError extends RpcCallError {
+  /**
+   * Why the op cannot run here, from `data.reason`. Undefined only when the
+   * actuator sent none. A value newer than this SDK passes through as-is.
+   */
+  reason?: UnsupportedReason;
+
+  constructor(code: number, message: string, data?: FaultData) {
+    super(code, message, data);
+    this.reason = data?.reason;
+    this.name = "UnsupportedError";
+  }
+}
+
+/**
  * Build the right error class for a wire error. Kind-driven, so a new sentinel
  * subclass is a line here rather than a wrapper at every call site.
  */
 function rpcErrorFor(code: number, message: string, data?: FaultData): RpcCallError {
   if (data?.kind === ErrorKindRecordingDisabled) {
     return new RecordingDisabledError(code, message, data);
+  }
+  if (data?.kind === ErrorKindUnsupported) {
+    return new UnsupportedError(code, message, data);
   }
   return new RpcCallError(code, message, data);
 }
