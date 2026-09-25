@@ -13,6 +13,7 @@ export {
 } from "./plugin.js";
 export { Log } from "./log.js";
 export { actingFor, getCurrentActor } from "./actor.js";
+export { getCurrentEventOrigin, type EventOrigin } from "./origin.js";
 export {
   PushCommands,
   command,

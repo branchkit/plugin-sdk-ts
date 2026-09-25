@@ -18,6 +18,7 @@ import type {
 
 import { runWithCorrelation, getCurrentCorrelation } from "./correlation.js";
 import { getCurrentActor } from "./actor.js";
+import { type EventOrigin, runWithEventOrigin, getCurrentEventOrigin } from "./origin.js";
 
 // --- JSON-RPC 2.0 message types ---
 
@@ -38,9 +39,16 @@ interface RpcMessage {
   /**
    * Envelope-level actor label: which hosted thing this plugin was acting
    * for. Observability only — the platform records it and never gates on
-   * it. See `actor.ts`.
+   * it. See `actor.ts`. On an inbound EVENT notification it is the emitter's
+   * label instead, carried from the event beside `source` (see `origin.ts`).
    */
   on_behalf_of?: string;
+  /**
+   * The sender of an inbound event notification, as the platform
+   * authenticated it. The actuator sets it on the notifications it delivers
+   * from the event bus; nothing the plugin sends carries it.
+   */
+  source?: string;
 }
 
 interface RpcError {
@@ -277,6 +285,7 @@ export class Plugin {
     method: string;
     params: unknown;
     correlationId: string | undefined;
+    origin: EventOrigin;
   }> = [];
   private notifyPumpActive = false;
 
@@ -658,6 +667,23 @@ export class Plugin {
   }
 
   /**
+   * Who sent the event notification being handled — inside `on` and
+   * `onPattern` listeners — or an empty origin when none is in flight. The
+   * platform delivers every event a subscription matches, whoever emitted it;
+   * a listener that must only act on one sender's events checks `source`:
+   *
+   * ```ts
+   * plugin.onPattern("scripts.*.*", (type, params) => {
+   *   if (plugin.currentEventOrigin().source !== "scripts") return;
+   *   ...
+   * });
+   * ```
+   */
+  currentEventOrigin(): EventOrigin {
+    return getCurrentEventOrigin();
+  }
+
+  /**
    * Signal that all handlers are registered and block until shutdown.
    * Incoming requests are held until run() is called (L4).
    */
@@ -785,7 +811,12 @@ export class Plugin {
     // Notification from actuator — has method, no id (W5: no response).
     // Enqueue for the single ordered pump so listeners run in wire order.
     if (msg.id === undefined && msg.method) {
-      this.enqueueNotification(msg.method, msg.params, msg.correlation_id);
+      this.enqueueNotification(
+        msg.method,
+        msg.params,
+        msg.correlation_id,
+        Object.freeze({ source: msg.source ?? "", onBehalfOf: msg.on_behalf_of ?? "" }),
+      );
       return;
     }
   }
@@ -830,8 +861,11 @@ export class Plugin {
     method: string,
     params: unknown,
     correlationId: string | undefined,
+    // The router always passes one (empty when the envelope names no
+    // sender); the default serves callers that inject a notification directly.
+    origin: EventOrigin = { source: "", onBehalfOf: "" },
   ): void {
-    this.notifyQueue.push({ method, params, correlationId });
+    this.notifyQueue.push({ method, params, correlationId, origin });
     if (!this.notifyPumpActive) {
       this.notifyPumpActive = true;
       void this.drainNotifications();
@@ -871,11 +905,11 @@ export class Plugin {
       return;
     }
     while (this.notifyQueue.length > 0) {
-      const { method, params, correlationId } = this.notifyQueue.shift()!;
+      const { method, params, correlationId, origin } = this.notifyQueue.shift()!;
       const listeners = this.listeners.get(method);
       const patterned = this.patternListeners.filter((p) => matchesTopic(p.pattern, method));
       if (!listeners && patterned.length === 0) continue;
-      await runWithCorrelation(correlationId, async () => {
+      await runWithCorrelation(correlationId, () => runWithEventOrigin(origin, async () => {
         for (const fn of listeners ?? []) {
           try {
             await fn(params);
@@ -895,7 +929,7 @@ export class Plugin {
             Log(this.pluginId, `pattern listener error for ${method}: ${message}`);
           }
         }
-      });
+      }));
     }
     this.notifyPumpActive = false;
   }

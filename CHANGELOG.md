@@ -3,6 +3,20 @@
 Versions before this file predate it; their contents are in the repo's
 git history.
 
+## Unreleased
+
+### Who sent this event
+
+- `plugin.currentEventOrigin()` (and `getCurrentEventOrigin()`) returns an
+  `EventOrigin` (`{source, onBehalfOf}`) for the event notification an `on`
+  or `onPattern` listener is handling. The platform delivers every event a
+  subscription matches, whoever emitted it, and until now a listener could
+  not tell two senders of one event type apart. `source` is the emitter the
+  platform authenticated (a plugin id, `_platform`, or a stage's name) and
+  can be trusted; `onBehalfOf` is that emitter's own actor label, a claim by
+  `source`. Same ambient shape as `currentCorrelation()`; empty in a request
+  handler. An actuator that does not send the sender leaves it empty.
+
 ## 0.2.0 — 2026-09-19
 
 ### The platform's `Action` is a type
