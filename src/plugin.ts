@@ -19,6 +19,7 @@ import type {
 import { runWithCorrelation, getCurrentCorrelation } from "./correlation.js";
 import { getCurrentActor } from "./actor.js";
 import { type EventOrigin, runWithEventOrigin, getCurrentEventOrigin } from "./origin.js";
+import { matchesTopic } from "./topic.js";
 
 // --- JSON-RPC 2.0 message types ---
 
@@ -104,20 +105,6 @@ type HandlerFn = (params: unknown) => Promise<unknown>;
  */
 type ListenerFn = (params: unknown) => void | Promise<void>;
 type PatternListenerFn = (eventType: string, params: unknown) => void | Promise<void>;
-
-/**
- * Does `eventType` match `pattern`, where `*` is exactly one dot-separated
- * segment? Mirrors the actuator's `event_bus::matches_topic`, which is what
- * actually gates delivery — the two must agree or a plugin's own routing
- * disagrees with what it receives.
- */
-function matchesTopic(pattern: string, eventType: string): boolean {
-  if (pattern === eventType) return true;
-  const pat = pattern.split(".");
-  const evt = eventType.split(".");
-  if (pat.length !== evt.length) return false;
-  return pat.every((seg, i) => seg === "*" || seg === evt[i]);
-}
 
 /**
  * A typed on_action request where the params field is narrowed to T.
@@ -593,8 +580,10 @@ export class Plugin {
 
   /**
    * Register a listener for every notification whose method matches
-   * `pattern`, where `*` stands for exactly one dot-separated segment — the
-   * same language `consumes.events` uses in the manifest.
+   * `pattern`, where `*` stands for exactly one dot-separated segment and
+   * `**` for zero or more — the same language `consumes.events` uses in the
+   * manifest. `ext.acme.**` hears every depth under the vendor, including the
+   * bare `ext.acme`; `**` alone hears everything the manifest admits.
    *
    * Needed whenever a plugin subscribes to a namespace instead of a name:
    * `on` keys listeners by exact method, so a manifest subscription like

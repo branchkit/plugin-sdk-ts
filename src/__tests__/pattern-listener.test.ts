@@ -41,6 +41,24 @@ describe("onPattern", () => {
     expect(seen).toEqual(["scripts.headphones.charged", "scripts.notes.saved"]);
   });
 
+  it("delivers a `**` pattern at any depth, the bare prefix included", async () => {
+    const plugin = new Plugin();
+    const seen: string[] = [];
+    plugin.onPattern("ext.acme.**", (eventType) => {
+      seen.push(eventType);
+    });
+
+    const running = plugin.run();
+    for (const m of ["ext.acme", "ext.acme.gaze", "ext.acme.gaze.left_eye", "ext.acmeister.x", "ext.other.gaze"]) {
+      route(plugin, m);
+    }
+    await settle();
+    shutdown(plugin);
+    await running;
+
+    expect(seen).toEqual(["ext.acme", "ext.acme.gaze", "ext.acme.gaze.left_eye"]);
+  });
+
   it("runs exact listeners before pattern listeners", async () => {
     const plugin = new Plugin();
     const order: string[] = [];
