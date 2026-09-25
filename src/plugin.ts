@@ -49,6 +49,27 @@ interface RpcMessage {
    * from the event bus; nothing the plugin sends carries it.
    */
   source?: string;
+  /**
+   * `"latest"` on an inbound event notification from a STATE stream: a stage
+   * stream declared `latest`, where each event carries the whole current
+   * value and supersedes the one before it (a gaze position, a pointer). Such
+   * a notification still waiting in the queue is replaced by the next one
+   * from the same stream rather than queued behind. Absent otherwise.
+   */
+  delivery?: string;
+}
+
+/** The `delivery` value that marks a state-stream event notification. */
+const DELIVERY_LATEST = "latest";
+
+/** One inbound notification waiting for the ordered pump. */
+interface QueuedNotification {
+  method: string;
+  params: unknown;
+  correlationId: string | undefined;
+  origin: EventOrigin;
+  /** Set on a state stream's place: its sender and type. */
+  latestKey?: string;
 }
 
 interface RpcError {
@@ -281,12 +302,16 @@ export class Plugin {
   // Inbound notifications drain through one pump so listeners observe them in
   // wire order, matching the Go and Python SDKs; parity is held by the
   // sdk-test ordering case.
-  private notifyQueue: Array<{
-    method: string;
-    params: unknown;
-    correlationId: string | undefined;
-    origin: EventOrigin;
-  }> = [];
+  //
+  // A state stream (`delivery: "latest"`) holds at most ONE place here. The
+  // read loop never waits, so a listener slower than a 250 Hz position stream
+  // would otherwise build a backlog that only grows — every position stale by
+  // the time it is handled. Instead the stream's place keeps its newest value
+  // (`latestValues`, keyed by sender and type; a key is present exactly while
+  // its place is queued), so the listener gets the newest position each time
+  // it is ready. Held by the sdk-test coalescing case, like Go and Python.
+  private notifyQueue: Array<QueuedNotification> = [];
+  private latestValues = new Map<string, QueuedNotification>();
   private notifyPumpActive = false;
 
   /**
@@ -816,6 +841,7 @@ export class Plugin {
         msg.params,
         msg.correlation_id,
         Object.freeze({ source: msg.source ?? "", onBehalfOf: msg.on_behalf_of ?? "" }),
+        msg.delivery,
       );
       return;
     }
@@ -856,7 +882,8 @@ export class Plugin {
   }
 
   // enqueueNotification appends to the ordered queue and starts the pump if it
-  // is idle. Never blocks the read loop.
+  // is idle — or, for a state stream that already holds a place, replaces the
+  // value waiting there. Never blocks the read loop.
   private enqueueNotification(
     method: string,
     params: unknown,
@@ -864,8 +891,16 @@ export class Plugin {
     // The router always passes one (empty when the envelope names no
     // sender); the default serves callers that inject a notification directly.
     origin: EventOrigin = { source: "", onBehalfOf: "" },
+    delivery?: string,
   ): void {
-    this.notifyQueue.push({ method, params, correlationId, origin });
+    const item: QueuedNotification = { method, params, correlationId, origin };
+    if (delivery === DELIVERY_LATEST) {
+      item.latestKey = `${origin.source}\u0000${method}`;
+      const placed = this.latestValues.has(item.latestKey);
+      this.latestValues.set(item.latestKey, item);
+      if (placed) return;
+    }
+    this.notifyQueue.push(item);
     if (!this.notifyPumpActive) {
       this.notifyPumpActive = true;
       void this.drainNotifications();
@@ -905,7 +940,13 @@ export class Plugin {
       return;
     }
     while (this.notifyQueue.length > 0) {
-      const { method, params, correlationId, origin } = this.notifyQueue.shift()!;
+      let next = this.notifyQueue.shift()!;
+      if (next.latestKey !== undefined) {
+        // The stream's place: deliver its newest value, taken now.
+        next = this.latestValues.get(next.latestKey) ?? next;
+        this.latestValues.delete(next.latestKey!);
+      }
+      const { method, params, correlationId, origin } = next;
       const listeners = this.listeners.get(method);
       const patterned = this.patternListeners.filter((p) => matchesTopic(p.pattern, method));
       if (!listeners && patterned.length === 0) continue;
