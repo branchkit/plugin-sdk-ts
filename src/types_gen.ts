@@ -8128,9 +8128,10 @@ export interface CaptureProgressEventParams {
    */
   next_collection: string;
   /**
-   * The plugin that owns the command being partially matched.
-   * Subscribers filter on this to receive only events for their
-   * own commands.
+   * The plugin that owns the command being partially matched. The
+   * event is ADDRESSED to it: the platform delivers it to this plugin
+   * and no other, so a subscriber only ever sees progress on its own
+   * commands.
    */
   owner_plugin: string;
 }
