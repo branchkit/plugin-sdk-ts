@@ -584,6 +584,7 @@ export const MethodPipelinesRun = "pipelines.run" as const; // since 0.1.0
 export const MethodPipelinesStatus = "pipelines.status" as const; // since 0.1.0
 export const MethodPipelinesStop = "pipelines.stop" as const; // since 0.1.0
 export const MethodPipelinesWarm = "pipelines.warm" as const; // since 0.1.0
+export const MethodPlatformProfile = "platform.profile" as const; // since 0.2.0
 export const MethodPluginDataExport = "plugin.data.export" as const; // since 0.1.0
 export const MethodPluginDebug = "plugin.debug" as const; // since 0.1.0
 export const MethodPluginReportHealth = "plugin.report_health" as const; // since 0.1.0

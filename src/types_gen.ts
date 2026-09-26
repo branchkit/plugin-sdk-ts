@@ -2122,6 +2122,24 @@ export interface TtsVoice {
   quality: string;
 }
 
+export interface UnavailableOperation {
+  /**
+   * Prose, for a session refusal: the session's own explanation.
+   */
+  detail?: string;
+  /**
+   * The operation's method name.
+   */
+  op: string;
+  /**
+   * Why, as a refusal's `data.reason` says it: `platform_no_analogue`,
+   * `platform_unported` or `session_unsupported` (each SDK's
+   * `UNSUPPORTED_REASON_*` constants). A string, as on a refusal, so an
+   * SDK older than a new reason still reads the profile.
+   */
+  reason: string;
+}
+
 export interface UsbDevice {
   manufacturer?: string;
   name: string;
@@ -7096,6 +7114,32 @@ export interface PipelinesWarmRequest {
 
 export interface PipelinesWarmResponse {
   warmed: boolean;
+}
+
+export interface PlatformProfileResponse {
+  /**
+   * The host process serving host-dependent operations and events.
+   */
+  host: string;
+  /**
+   * `macos`, `linux` or `windows`.
+   */
+  os: string;
+  /**
+   * On Linux, the desktop session the window tools drive: `x11`, `sway`,
+   * `gnome` or `other_wayland`. Absent on other systems.
+   */
+  session?: string;
+  /**
+   * Every operation a plugin can call that would be refused here, with
+   * the reason and detail the refusal itself carries. An operation not
+   * listed runs here.
+   */
+  unavailable: UnavailableOperation[];
+  /**
+   * Host events (`_platform.*`) that are never delivered here.
+   */
+  unobservable_events: string[];
 }
 
 export interface PluginDataExportRequest {
