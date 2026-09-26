@@ -8481,10 +8481,10 @@ export interface PluginDegradedEventParams {
   consecutive_timeouts: number;
   plugin_id: string;
   /**
-   * The plugin's own sentence, present IFF this came from
-   * `plugin.report_health` rather than the timeout ladder — the
-   * discriminator between a plugin that stopped answering and one that
-   * answers fine but cannot reach something it needs.
+   * Absent for the timeout ladder. Present for the other two causes: the
+   * plugin's own sentence from `plugin.report_health` (it answers fine but
+   * cannot reach something it needs), or the platform's when the plugin
+   * stopped reading its stdin (`consecutive_timeouts` is 0 for both).
    */
   reason?: string;
 }
