@@ -42,6 +42,9 @@ export function isValidExtEventType(t: string): boolean {
 export const MODELS_DIR_ENV = "BRANCHKIT_MODELS_DIR" as const;
 export const DATA_DIR_ENV = "BRANCHKIT_STAGE_DATA" as const;
 
+/**
+ * What a stage declares about itself in its handshake: what it is, how it runs, and the events it emits, consumes and accepts as configuration.
+ */
 export interface Capability {
   /**
    * Custom event types this stage accepts as CONFIGURATION from the plugin
