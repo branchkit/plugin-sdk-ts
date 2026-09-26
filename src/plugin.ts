@@ -182,6 +182,27 @@ export class RpcCallError extends Error {
 }
 
 /**
+ * What {@link Plugin.call} rejects with when no answer arrives in time. It is
+ * not a failure: the actuator may have carried the call out and only the
+ * answer is missing, so a write that timed out may have been committed. Tell
+ * it apart from a definite refusal ({@link RpcCallError}) with `instanceof`,
+ * and for a write, re-read or re-assert rather than assume either outcome.
+ */
+export class CallTimeoutError extends Error {
+  /** The method that got no answer. */
+  method: string;
+  /** How long the call waited, in milliseconds. */
+  timeoutMs: number;
+
+  constructor(method: string, timeoutMs: number) {
+    super(`rpc call "${method}" timed out after ${timeoutMs}ms`);
+    this.method = method;
+    this.timeoutMs = timeoutMs;
+    this.name = "CallTimeoutError";
+  }
+}
+
+/**
  * Sentinel subclass for the recording-disabled refusal: a log collection has
  * its recording flag off, so the append was refused.
  *
@@ -620,7 +641,7 @@ export class Plugin {
       // Timeout handler (T1, T2)
       const timer = setTimeout(() => {
         this.pending.delete(id);
-        reject(new Error(`rpc call "${method}" timed out after ${timeoutMs}ms`));
+        reject(new CallTimeoutError(method, timeoutMs));
       }, timeoutMs);
 
       this.pending.set(id, {

@@ -2,6 +2,7 @@ import "./proxy.js"; // side-effect: route fetch through BRANCHKIT_PROXY when sa
 export {
   Plugin,
   RpcCallError,
+  CallTimeoutError,
   RecordingDisabledError,
   UnsupportedError,
   errorKindOf,
