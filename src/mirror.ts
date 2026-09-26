@@ -12,8 +12,14 @@ import type { CollectionGetResponse } from "./types_gen.js";
  * - fetches once at `on_ready` — the documented earliest safe point to
  *   read other plugins' collections
  * - refetches whenever `_platform.collection.updated` fires for this
- *   collection (the plugin manifest must subscribe to that event
- *   pattern in `consumes.events`, or the event never arrives)
+ *   collection. The platform delivers that notice for every collection the
+ *   manifest declares, in `provides.collections` or `consumes.collections`,
+ *   with no `consumes.events` line needed, and a plugin that falls behind
+ *   still receives the newest notice for each changed collection rather than
+ *   losing it. Mirroring a collection the manifest does not declare needs the
+ *   subscription.
+ * - fires onChange only when the refetched data differs from the snapshot:
+ *   a refetch that finds nothing new is not a change
  * - an unpopulated collection (owner hasn't Put yet — the boot race)
  *   is NOT an error: the mirror stays not-ready and the update event
  *   completes it
@@ -26,6 +32,8 @@ export class CollectionMirror {
   #name: string;
   #compacted: boolean;
   #data: unknown = null;
+  /** `#data` serialized, to tell a real change from an identical refetch. */
+  #serialized: string | null = null;
   #ready = false;
   #onChange: Array<() => void> = [];
 
@@ -52,9 +60,10 @@ export class CollectionMirror {
   }
 
   /**
-   * Register a callback fired after every successful refresh (initial
-   * fetch, update-event refetch, or manual {@link refresh}). Use it to
-   * maintain a decoded view of the snapshot.
+   * Register a callback fired after every refresh that changed the
+   * snapshot (initial fetch, update-event refetch, or manual
+   * {@link refresh}); a refetch that returns the data already held fires
+   * nothing. Use it to maintain a decoded view of the snapshot.
    */
   onChange(fn: () => void): void {
     this.#onChange.push(fn);
@@ -96,7 +105,12 @@ export class CollectionMirror {
       }
       data = [];
     }
+    const serialized = JSON.stringify(data);
+    if (this.#ready && serialized === this.#serialized) {
+      return; // nothing new: the same data is not a change
+    }
     this.#data = data;
+    this.#serialized = serialized;
     this.#ready = true;
     for (const fn of [...this.#onChange]) {
       fn();

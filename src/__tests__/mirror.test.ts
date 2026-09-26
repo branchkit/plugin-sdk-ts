@@ -84,6 +84,33 @@ describe("collection mirror", () => {
     expect(mirror.raw()).toEqual([]);
   });
 
+  // A refetch that returns the data already held is not a change: onChange
+  // stays quiet, populated or emptied. Only real differences reach it.
+  test("identical refetch does not fire onChange", async () => {
+    let codeword = "arch";
+    let empty = false;
+    const { plugin } = fakePlugin(() => ({
+      name: "alphabet",
+      introducer: "voice",
+      merge: "authoritative",
+      data: empty ? [] : [{ letter: "a", codeword }],
+    }));
+    const mirror = plugin.mirrorCollection("alphabet");
+    let changes = 0;
+    mirror.onChange(() => changes++);
+
+    await mirror.refresh();
+    await mirror.refresh();
+    expect(changes).toBe(1);
+    codeword = "alpha";
+    await mirror.refresh();
+    expect(changes).toBe(2);
+    empty = true;
+    await mirror.refresh();
+    await mirror.refresh();
+    expect(changes).toBe(3);
+  });
+
   test("unpopulated sentinel stays not-ready without error", async () => {
     // The boot race: collection.get before the owner's first Put
     // returns the empty-array sentinel.
