@@ -310,8 +310,23 @@ export class Harness {
     }
   }
 
-  async injectEvent(eventType: string, data: unknown): Promise<void> {
-    await this.call("test.inject_event", { event_type: eventType, data });
+  /**
+   * Fire an event on the bus. The sender is the harness itself unless
+   * `opts.source` names one, so a listener that checks its sender
+   * (`currentEventOrigin()`, or a subscription naming a source) can be
+   * tested. A source naming no loaded plugin gets a stand-in emitter and the
+   * grants a user would have given.
+   */
+  async injectEvent(
+    eventType: string,
+    data: unknown,
+    opts: { source?: string } = {},
+  ): Promise<void> {
+    await this.call("test.inject_event", {
+      event_type: eventType,
+      data,
+      ...(opts.source ? { source: opts.source } : {}),
+    });
   }
 
   async getHUD(channel: string): Promise<HUDResult> {
