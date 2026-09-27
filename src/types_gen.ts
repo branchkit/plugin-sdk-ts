@@ -4428,8 +4428,10 @@ export interface NativeDarkModeResponse {
 
 export interface NativeDateFormatResponse {
   /**
-   * The vocabulary `source` is written in: `posix_strftime` or
-   * `unicode_cldr`. Without this, `source` is an uninterpretable string.
+   * The vocabulary `source` is written in: `posix_strftime`,
+   * `unicode_cldr`, or `windows_picture` (Windows' format pictures, where
+   * `dddd` is the weekday's name and `tt` the AM/PM marker). Without
+   * this, `source` is an uninterpretable string.
    */
   dialect: string;
   /**
@@ -6597,8 +6599,10 @@ export interface NativeThunderboltDevicesResponse {
 
 export interface NativeTimeFormatResponse {
   /**
-   * The vocabulary `source` is written in: `posix_strftime` or
-   * `unicode_cldr`. Without this, `source` is an uninterpretable string.
+   * The vocabulary `source` is written in: `posix_strftime`,
+   * `unicode_cldr`, or `windows_picture` (Windows' format pictures, where
+   * `dddd` is the weekday's name and `tt` the AM/PM marker). Without
+   * this, `source` is an uninterpretable string.
    */
   dialect: string;
   /**
