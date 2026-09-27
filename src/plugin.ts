@@ -12,6 +12,7 @@ import {
 import type {
   OnActionRequest,
   OnActionResponse,
+  PlatformProfileResponse,
   RenderSettingsRequest,
   RenderSettingsResponse,
 } from "./types_gen.js";
@@ -349,6 +350,10 @@ export class Plugin {
    * own logic without a live actuator; swap a seam or a mirror for the
    * platform behaviour a test needs.
    */
+  // What this machine can do, from on_ready's params or the first
+  // supports() call. See platform().
+  #platform: PlatformProfileResponse | null = null;
+
   constructor(opts: { detached?: boolean } = {}) {
     this.detached = opts.detached === true;
     this.pluginId = this.detached ? "detached" : (process.env.BRANCHKIT_PLUGIN_ID ?? "unknown");
@@ -370,6 +375,13 @@ export class Plugin {
       process.on("SIGTERM", this.onSignal);
       process.on("SIGINT", this.onSignal);
     }
+
+    // Keep the platform profile on_ready carries. Registered before any
+    // plugin listener, so a plugin's own onReady already sees platform().
+    this.on("on_ready", (params) => {
+      const p = (params as { platform?: PlatformProfileResponse } | null)?.platform;
+      if (p) this.#platform = p;
+    });
 
     // Built-in introspection: the actuator calls list_action_types after the
     // plugin reaches readiness to validate that handlers match the manifest's
@@ -583,6 +595,39 @@ export class Plugin {
    */
   onReady(fn: () => void | Promise<void>): void {
     this.on("on_ready", () => fn());
+  }
+
+  /**
+   * What this machine can do: the OS, the Linux desktop session, the host,
+   * every operation a call to which would be refused here (with the
+   * refusal's own reason), and the host events that never fire. The actuator
+   * sends it with on_ready, so it is set by the time an onReady callback
+   * runs; null before, unless supports() has already fetched it.
+   */
+  platform(): PlatformProfileResponse | null {
+    return this.#platform;
+  }
+
+  /**
+   * Whether calling `method` can succeed on this machine, as far as the
+   * platform goes: false only when the profile lists it as unavailable.
+   * Asking first lets a plugin degrade deliberately — hide a command, pick
+   * another route — instead of handling a refusal after the fact. A method
+   * the profile does not list is supported, including one this SDK has
+   * never heard of.
+   *
+   * Before on_ready this fetches the profile once (platform.profile) and
+   * keeps it; if that fails it answers true, and the call itself will say.
+   */
+  async supports(method: string): Promise<boolean> {
+    if (!this.#platform) {
+      try {
+        this.#platform ??= await this.platformProfile();
+      } catch {
+        return true;
+      }
+    }
+    return !this.#platform.unavailable.some((u) => u.op === method);
   }
 
   /**
