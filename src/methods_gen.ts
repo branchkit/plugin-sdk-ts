@@ -2104,7 +2104,7 @@ declare module "./plugin.js" {
      */
     nativeKernelVersion(): Promise<NativeKernelVersionResponse>;
     /**
-     * Get initial key repeat delay
+     * Get initial key repeat delay (seconds)
      */
     nativeKeyRepeatDelay(): Promise<number>;
     /**
@@ -2850,12 +2850,12 @@ declare module "./plugin.js" {
      */
     nativeSetInputSource(sourceId: string): Promise<boolean>;
     /**
-     * Set initial key repeat delay
+     * Set initial key repeat delay (seconds)
      * @param delay wire double
      */
     nativeSetKeyRepeatDelay(delay: number): Promise<boolean>;
     /**
-     * Set key repeat rate
+     * Set key repeat rate (keys per second)
      * @param rate wire double
      */
     nativeSetKeyRepeatRate(rate: number): Promise<boolean>;
