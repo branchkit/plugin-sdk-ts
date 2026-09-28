@@ -2643,7 +2643,7 @@ declare module "./plugin.js" {
      */
     nativeRosettaInstalled(): Promise<NativeRosettaInstalledResponse>;
     /**
-     * Execute an AppleScript via osascript
+     * Execute an AppleScript via osascript. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      * @param script AppleScript source to execute via `osascript`.
      */
     nativeRunApplescript(script: string): Promise<NativeRunApplescriptResponse>;
