@@ -4,62 +4,108 @@
 // ===== Shared types (from components/schemas) =====
 
 /**
- * Detailed info about an accessibility element.
+ * An element's frame.
  */
-export interface AXElementInfo {
-  actions: string[];
-  attributes: string[];
-  /**
-   * wire uint32 · min 0
-   */
-  children_count: number;
-  description?: string;
-  enabled: boolean;
-  focused: boolean;
-  path: AXPathSegment[];
-  position?: [number, number];
-  role: string;
-  size?: [number, number];
-  subrole?: string;
-  title?: string;
-  value?: unknown;
-}
-
-/**
- * A tree node of accessibility elements (recursive).
- *
- * schemars handles the self-reference automatically via a `$defs`
- * entry — no `#[schema(no_recursion)]` annotation needed (that was
- * utoipa-specific and was dropped in Phase 2j-utoipa-removal).
- */
-export interface AXElementNode {
-  children: AXElementNode[];
-  element: AXElementInfo;
-}
-
-/**
- * A reference to an accessibility element by PID + path from the application root.
- */
-export interface AXElementRef {
-  /**
-   * default []
-   */
-  path?: AXPathSegment[];
+export interface AccessibleBounds {
   /**
    * wire int32
    */
-  pid: number;
+  height: number;
+  /**
+   * wire int32
+   */
+  width: number;
+  /**
+   * wire int32
+   */
+  x: number;
+  /**
+   * wire int32
+   */
+  y: number;
 }
 
 /**
- * A segment of an accessibility element path (role + index among siblings with that role).
+ * An element of an application's accessibility tree.
  */
-export interface AXPathSegment {
+export interface AccessibleElement {
   /**
+   * The portable actions it offers: "press", "focus", "toggle",
+   * "expand", "collapse", "increment", "decrement", "set_value",
+   * "scroll_into_view", "show_menu".
+   */
+  actions: string[];
+  /**
+   * Where it is on screen, in the same coordinates as the window list.
+   */
+  bounds?: AccessibleBounds;
+  /**
+   * How many children it has.
    * wire uint32 · min 0
    */
-  index: number;
+  children_count: number;
+  /**
+   * Longer help or description text.
+   */
+  description?: string;
+  /**
+   * Opaque handle to pass back to read this element, valid while it
+   * lives. Its form differs per OS; treat it as a token.
+   */
+  id: string;
+  /**
+   * What assistive technology reads as the element's name ("Send").
+   */
+  name?: string;
+  /**
+   * The OS's own role: "AXButton" (with its subrole, "AXButton/
+   * AXCloseButton"), "push button", "Button".
+   */
+  native_role: string;
+  /**
+   * The process the element belongs to.
+   * wire int32
+   */
+  pid: number;
+  /**
+   * The ARIA role ("button", "checkbox", "textbox", "menuitem", …), or
+   * "generic" where none fits. Also "window" and "text" (static text),
+   * which ARIA leaves to the host.
+   */
   role: string;
+  /**
+   * ARIA states that hold: "focused", "focusable", "disabled",
+   * "checked", "mixed", "pressed", "expanded", "collapsed", "selected",
+   * "readonly", "multiline", "protected" (a password field).
+   */
+  states: string[];
+  /**
+   * Its value as text: a field's contents, a slider's position.
+   */
+  value?: string;
+}
+
+/**
+ * An element and its descendants, to the depth asked for.
+ */
+export interface AccessibleNode {
+  children: AccessibleNode[];
+  element: AccessibleElement;
+}
+
+/**
+ * Which element: one a previous answer handed out (`id`), or an
+ * application's root (`pid`).
+ */
+export interface AccessibleRef {
+  /**
+   * default null
+   */
+  id?: string;
+  /**
+   * wire int32 · default null
+   */
+  pid?: number;
 }
 
 export type Action =
@@ -3911,9 +3957,10 @@ export interface NativeAutomationPermissionResponse {
 
 export interface NativeAxElementAtPointRequest {
   /**
-   * wire int32
+   * Only this application's element; any application's when absent.
+   * wire int32 · default null
    */
-  pid: number;
+  pid?: number;
   /**
    * wire int32
    */
@@ -3925,22 +3972,60 @@ export interface NativeAxElementAtPointRequest {
 }
 
 export interface NativeAxElementAtPointResponse {
-  actions: string[];
-  attributes: string[];
   /**
+   * The portable actions it offers: "press", "focus", "toggle",
+   * "expand", "collapse", "increment", "decrement", "set_value",
+   * "scroll_into_view", "show_menu".
+   */
+  actions: string[];
+  /**
+   * Where it is on screen, in the same coordinates as the window list.
+   */
+  bounds?: AccessibleBounds;
+  /**
+   * How many children it has.
    * wire uint32 · min 0
    */
   children_count: number;
+  /**
+   * Longer help or description text.
+   */
   description?: string;
-  enabled: boolean;
-  focused: boolean;
-  path: AXPathSegment[];
-  position?: [number, number];
+  /**
+   * Opaque handle to pass back to read this element, valid while it
+   * lives. Its form differs per OS; treat it as a token.
+   */
+  id: string;
+  /**
+   * What assistive technology reads as the element's name ("Send").
+   */
+  name?: string;
+  /**
+   * The OS's own role: "AXButton" (with its subrole, "AXButton/
+   * AXCloseButton"), "push button", "Button".
+   */
+  native_role: string;
+  /**
+   * The process the element belongs to.
+   * wire int32
+   */
+  pid: number;
+  /**
+   * The ARIA role ("button", "checkbox", "textbox", "menuitem", …), or
+   * "generic" where none fits. Also "window" and "text" (static text),
+   * which ARIA leaves to the host.
+   */
   role: string;
-  size?: [number, number];
-  subrole?: string;
-  title?: string;
-  value?: unknown;
+  /**
+   * ARIA states that hold: "focused", "focusable", "disabled",
+   * "checked", "mixed", "pressed", "expanded", "collapsed", "selected",
+   * "readonly", "multiline", "protected" (a password field).
+   */
+  states: string[];
+  /**
+   * Its value as text: a field's contents, a slider's position.
+   */
+  value?: string;
 }
 
 export interface NativeAxElementTreeRequest {
@@ -3948,7 +4033,7 @@ export interface NativeAxElementTreeRequest {
    * wire uint32 · default 3 · min 0
    */
   depth?: number;
-  element: AXElementRef;
+  element: AccessibleRef;
 }
 
 export interface NativeAxObserveRequest {
@@ -3968,7 +4053,7 @@ export interface NativeAxObserveResponse {
 
 export interface NativeAxPerformActionRequest {
   action: string;
-  element: AXElementRef;
+  element: AccessibleRef;
 }
 
 export interface NativeAxPerformActionResponse {
@@ -3980,12 +4065,12 @@ export interface NativeAxReadAttributesRequest {
    * default []
    */
   attributes?: string[];
-  element: AXElementRef;
+  element: AccessibleRef;
 }
 
 export interface NativeAxSetAttributeRequest {
   attribute: string;
-  element: AXElementRef;
+  element: AccessibleRef;
   value: unknown;
 }
 
@@ -4865,7 +4950,7 @@ export interface NativeFocusModesResponse {
 }
 
 export interface NativeFocusedElementResponse {
-  element?: AXElementInfo;
+  element?: AccessibleElement;
 }
 
 export interface NativeFocusedWindowIDResponse {

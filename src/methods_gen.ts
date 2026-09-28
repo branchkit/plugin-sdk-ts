@@ -2,7 +2,7 @@
 // Run: just contracts
 
 import { Plugin } from "./plugin.js";
-import type { AXElementNode, AXElementRef, Action, ActionsListResponse, ActiveSpace, Anchor, AudioDevice, BarcodeResult, BleService, BleWriteEntry, BlobPublishResponse, BlobStateResponse, BluetoothDevice, CalendarEvent, CameraDevice, ClipboardContents, ClipboardWriteItem, CollectionCountResponse, CollectionDeleteRecordsResponse, CollectionFetchCompactedResponse, CollectionFetchResponse, CollectionGetResponse, CollectionListResponse, CollectionPutEntry, CollectionPutResponse, CollectionReplaceResponse, CollectionsCreateUserResponse, CollectionsListSection, CommandOverride, CommandSpec, CommandsListResponse, CommandsPushResponse, CommandsRemoveAliasResponse, CommandsResetOverrideResponse, CommandsResolveResponse, ConfusabilityFinding, ContactInfo, DeliveredNotification, DirectoryEntry, DispatchResponse, DisplayColorProfile, DisplayMetadata, DisplayRotation, EffectsAssertResponse, EffectsIsActiveResponse, EffectsRetractResponse, EnumeratedCommand, ExternalDisk, FieldDisplay, HUDItem, HUDRemoveChannelResponse, HidDeviceEntry, HidElementEntry, HttpHeader, HttpRequestResponse, HudFragment, InputClipboardReadFormatResponse, InputClipboardReadResponse, InputParseKeyEventResponse, InputSource, InstalledApp, KeybindsRegisterResponse, ListOpts, ListeningPort, LogEntry, LoginItem, MenuItem, NativeAccentColorResponse, NativeAccessibilityDisplayInvertResponse, NativeAccessibilityEnabledResponse, NativeActiveNetworkServiceResponse, NativeAirdropEnabledResponse, NativeAirportPowerResponse, NativeAlertSoundResponse, NativeApfsSnapshotsResponse, NativeAppBundlePathResponse, NativeAppIconResponse, NativeAppIsAgentResponse, NativeAppIsRunningResponse, NativeAppLaunchAtLoginResponse, NativeAppMetadataResponse, NativeAppSupportDirectoryResponse, NativeAudioDeviceVolumeResponse, NativeAudioInputDeviceResponse, NativeAudioOutputDeviceResponse, NativeAutoBrightnessResponse, NativeAutoRearrangeSpacesResponse, NativeAutoTimezoneResponse, NativeAutocorrectEnabledResponse, NativeAutomaticLoginUserResponse, NativeAutomationPermissionResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryHealthResponse, NativeBatteryResponse, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeResponse, NativeBleWriteResponse, NativeBluetoothPowerResponse, NativeBoldTextEnabledResponse, NativeBootVolumeResponse, NativeBrightnessResponse, NativeBundleForRemotePortResponse, NativeCalendarPermissionResponse, NativeCameraPermissionResponse, NativeCapsLockStateResponse, NativeCaptureWindowResponse, NativeCheckPermissionResponse, NativeClipboardChangeCountResponse, NativeClipboardImageDimensionsResponse, NativeColorAtPointResponse, NativeComputerNameResponse, NativeContactsPermissionResponse, NativeCpuInfoResponse, NativeCurrencyCodeResponse, NativeCurrentDatetimeResponse, NativeCurrentUserAdminResponse, NativeCurrentUserResponse, NativeCurrentWallpaperResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeCursorShakeToLocateResponse, NativeDarkModeResponse, NativeDateFormatResponse, NativeDefaultAppForUtiResponse, NativeDefaultBrowserResponse, NativeDefaultEmailClientResponse, NativeDefaultPrinterResponse, NativeDesktopDirectoryResponse, NativeDictationEnabledResponse, NativeDifferentiateWithoutColorResponse, NativeDiskSpaceResponse, NativeDiskUsageResponse, NativeDisplayCountResponse, NativeDisplayMirroringResponse, NativeDisplaySerialNumberResponse, NativeDndResponse, NativeDockAutoHideResponse, NativeDockMagnificationResponse, NativeDockMinimizeEffectResponse, NativeDockMinimizeToAppResponse, NativeDockPositionResponse, NativeDockShowIndicatorsResponse, NativeDockShowRecentsResponse, NativeDocumentsDirectoryResponse, NativeDownloadsDirectoryResponse, NativeEnvVarResponse, NativeEpochTimeResponse, NativeFanSpeedsResponse, NativeFastUserSwitchingResponse, NativeFileExistsResponse, NativeFileHashResponse, NativeFileMetadataResponse, NativeFileOwnerResponse, NativeFileQuarantineResponse, NativeFileSharingEnabledResponse, NativeFileTypeResponse, NativeFilevaultStatusResponse, NativeFinderDefaultViewResponse, NativeFinderNewWindowTargetResponse, NativeFinderShowExtensionsResponse, NativeFinderShowHiddenResponse, NativeFinderShowPathBarResponse, NativeFinderShowStatusBarResponse, NativeFinderWindowPathResponse, NativeFirewallEnabledResponse, NativeFnKeyFunctionResponse, NativeFocusModesResponse, NativeFocusedElementResponse, NativeFocusedWindowIDResponse, NativeFontSmoothingResponse, NativeFormatDateResponse, NativeFrontmostAppResponse, NativeFullDiskAccessResponse, NativeFunctionKeysStandardResponse, NativeGatekeeperStatusResponse, NativeGatewayAddressResponse, NativeGetWindowInfoResponse, NativeGpuInfoResponse, NativeGrayscaleEnabledResponse, NativeGroupWindowsByAppResponse, NativeHandoffEnabledResponse, NativeHardwareModelResponse, NativeHardwareUuidResponse, NativeHidClaimResponse, NativeHidReleaseResponse, NativeHidSendReportResponse, NativeHighlightColorResponse, NativeHomeDirectoryResponse, NativeHomebrewPrefixResponse, NativeHostnameResponse, NativeHotCornersResponse, NativeIcloudDesktopSyncResponse, NativeIcloudDrivePathResponse, NativeIcloudSignedInResponse, NativeIncreaseContrastResponse, NativeInterfaceStyleSwitcherResponse, NativeIpv6AddressResponse, NativeIsDirectoryResponse, NativeIsFileHiddenResponse, NativeKernelVersionResponse, NativeKeyboardLayoutResponse, NativeKeychainReadResponse, NativeLastRebootResponse, NativeLiveTextEnabledResponse, NativeLocalIPResponse, NativeLocaleResponse, NativeLocationEnabledResponse, NativeLowPowerModeResponse, NativeMacAddressResponse, NativeMeasurementSystemResponse, NativeMemoryInfoResponse, NativeMemoryPressureResponse, NativeMenuBarAutoHideResponse, NativeMenuBarBatteryPercentResponse, NativeMenuBarClockFormatResponse, NativeMicrophonePermissionResponse, NativeModelNameResponse, NativeNetworkBandwidthResponse, NativeNetworkDnsDomainResponse, NativeNetworkProxyEnabledResponse, NativeNetworkQualityResponse, NativeNetworkReachableResponse, NativeNetworkSsidResponse, NativeNightShiftResponse, NativeNotificationSoundEnabledResponse, NativeNotifyResponse, NativeNowPlayingResponse, NativeNumberFormatDecimalResponse, NativeObserveWindowsResponse, NativeOptimizedChargingResponse, NativePinchToZoomResponse, NativePlayFeedbackWhenVolumeChangedResponse, NativePowerAdapterConnectedResponse, NativePowerSourceResponse, NativePressAndHoldEnabledResponse, NativePreventSleepResponse, NativePrimaryDisplayIDResponse, NativePrimaryDisplayResponse, NativePrinterSharingEnabledResponse, NativeProcessCountResponse, NativeProcessExistsResponse, NativeProcessInfoResponse, NativeProxySettingsResponse, NativePublicIPResponse, NativeQuickLookResponse, NativeRandomUuidResponse, NativeReadFileBinaryResponse, NativeReadFileResponse, NativeReduceMotionResponse, NativeReduceTransparencyResponse, NativeRemoteLoginEnabledResponse, NativeRequestScreenCaptureResponse, NativeResourceUsageResponse, NativeRosettaInstalledResponse, NativeRunApplescriptResponse, NativeRunJxaResponse, NativeRunShortcutResponse, NativeScreenCapturePermissionResponse, NativeScreenCountResponse, NativeScreenLockedResponse, NativeScreenResolutionResponse, NativeScreenSaverAskPasswordResponse, NativeScreenSaverStatusResponse, NativeScreenSharingEnabledResponse, NativeScreenshotFormatResponse, NativeScreenshotIncludeShadowResponse, NativeScreenshotLocationResponse, NativeScreenshotResponse, NativeScreenshotShowThumbnailResponse, NativeScrollDirectionNaturalResponse, NativeScrollDirectionResponse, NativeSecureInputEnabledResponse, NativeSelectedTextResponse, NativeSerialNumberResponse, NativeSharingNameResponse, NativeShowScrollBarsResponse, NativeSidebarIconSizeResponse, NativeSipStatusResponse, NativeSiriEnabledResponse, NativeSlowKeysResponse, NativeSmartQuotesEnabledResponse, NativeSmartZoomResponse, NativeSoundEffectsEnabledResponse, NativeSpacesSpanDisplaysResponse, NativeSpeechRecognitionAvailableResponse, NativeSpellingLanguageResponse, NativeStageManagerEnabledResponse, NativeStartupDiskResponse, NativeStartupSoundEnabledResponse, NativeStatusIndicatorResponse, NativeStickyKeysResponse, NativeSwipeBetweenPagesResponse, NativeSwitchSpaceWhenSwitchingAppResponse, NativeSystemAppearanceResponse, NativeSystemInfoResponse, NativeSystemIntegrityInfoResponse, NativeSystemLanguageResponse, NativeSystemRegionResponse, NativeSystemUptimeResponse, NativeSystemUptimeSecondsResponse, NativeTapToClickResponse, NativeTempDirectoryResponse, NativeTemperatureUnitResponse, NativeTextReplacementsResponse, NativeThermalStateResponse, NativeThreeFingerDragResponse, NativeThunderboltDevicesResponse, NativeTimeFormatResponse, NativeTimeMachineLastBackupResponse, NativeTimeMachineStatusResponse, NativeTimezoneResponse, NativeTouchIDAvailableResponse, NativeTrueToneResponse, NativeTwentyFourHourClockResponse, NativeURLSchemeHandlerResponse, NativeUserAvatarResponse, NativeUserNameResponse, NativeUserShellResponse, NativeVoiceoverEnabledResponse, NativeVolumeResponse, NativeVpnStatusResponse, NativeWifiResponse, NativeWindowBoundsResponse, NativeXcodePathResponse, NativeXcodeVersionResponse, NativeZoomEnabledResponse, NetworkInterface, NetworkRequestHostResponse, OcrRegion, OnPointer, OutputClearResponse, OutputState, OutputStateResponse, OverlayRow, OverridesApplyResponse, OwnedCollection, PipelinesGrammarResponse, PipelinesInjectResponse, PipelinesRunResponse, PipelinesStatusResponse, PipelinesStopResponse, PipelinesWarmResponse, PlatformProfileResponse, PluginDataExportResponse, PluginLogLevel, PrinterInfo, PrivacyGetRecordingResponse, PrivilegeStatusEntry, PrivilegesRelinquishResponse, PrivilegesRequestResponse, ProcessInfo, RecognitionBiasApplyResponse, RecognitionBiasGetResponse, RecognitionBiasSetResponse, RecognitionRedecodeResponse, RedecodeItem, RegistrySnapshot, ReminderItem, ReplaceScope, RunningApp, ScreenshotRegion, SecretsDeleteResponse, SecretsIsSetResponse, SecretsListResponse, SecretsRequestSlotResponse, SecretsSetResponse, SelectionPickResponse, SessionEndCleanupResponse, SettingsRulesCreateResponse, SettingsRulesUpdateResponse, ShortcutInfo, SpaceInfo, SpeechLocale, SpotlightResult, TileableEntry, TrialBeginResponse, TrialEndResponse, TrialEnterContextResponse, TtsVoice, UsbDevice, WindowDetail, WindowFrame, WiringCollection, WorldModel } from "./types_gen.js";
+import type { AccessibleNode, AccessibleRef, Action, ActionsListResponse, ActiveSpace, Anchor, AudioDevice, BarcodeResult, BleService, BleWriteEntry, BlobPublishResponse, BlobStateResponse, BluetoothDevice, CalendarEvent, CameraDevice, ClipboardContents, ClipboardWriteItem, CollectionCountResponse, CollectionDeleteRecordsResponse, CollectionFetchCompactedResponse, CollectionFetchResponse, CollectionGetResponse, CollectionListResponse, CollectionPutEntry, CollectionPutResponse, CollectionReplaceResponse, CollectionsCreateUserResponse, CollectionsListSection, CommandOverride, CommandSpec, CommandsListResponse, CommandsPushResponse, CommandsRemoveAliasResponse, CommandsResetOverrideResponse, CommandsResolveResponse, ConfusabilityFinding, ContactInfo, DeliveredNotification, DirectoryEntry, DispatchResponse, DisplayColorProfile, DisplayMetadata, DisplayRotation, EffectsAssertResponse, EffectsIsActiveResponse, EffectsRetractResponse, EnumeratedCommand, ExternalDisk, FieldDisplay, HUDItem, HUDRemoveChannelResponse, HidDeviceEntry, HidElementEntry, HttpHeader, HttpRequestResponse, HudFragment, InputClipboardReadFormatResponse, InputClipboardReadResponse, InputParseKeyEventResponse, InputSource, InstalledApp, KeybindsRegisterResponse, ListOpts, ListeningPort, LogEntry, LoginItem, MenuItem, NativeAccentColorResponse, NativeAccessibilityDisplayInvertResponse, NativeAccessibilityEnabledResponse, NativeActiveNetworkServiceResponse, NativeAirdropEnabledResponse, NativeAirportPowerResponse, NativeAlertSoundResponse, NativeApfsSnapshotsResponse, NativeAppBundlePathResponse, NativeAppIconResponse, NativeAppIsAgentResponse, NativeAppIsRunningResponse, NativeAppLaunchAtLoginResponse, NativeAppMetadataResponse, NativeAppSupportDirectoryResponse, NativeAudioDeviceVolumeResponse, NativeAudioInputDeviceResponse, NativeAudioOutputDeviceResponse, NativeAutoBrightnessResponse, NativeAutoRearrangeSpacesResponse, NativeAutoTimezoneResponse, NativeAutocorrectEnabledResponse, NativeAutomaticLoginUserResponse, NativeAutomationPermissionResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryHealthResponse, NativeBatteryResponse, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeResponse, NativeBleWriteResponse, NativeBluetoothPowerResponse, NativeBoldTextEnabledResponse, NativeBootVolumeResponse, NativeBrightnessResponse, NativeBundleForRemotePortResponse, NativeCalendarPermissionResponse, NativeCameraPermissionResponse, NativeCapsLockStateResponse, NativeCaptureWindowResponse, NativeCheckPermissionResponse, NativeClipboardChangeCountResponse, NativeClipboardImageDimensionsResponse, NativeColorAtPointResponse, NativeComputerNameResponse, NativeContactsPermissionResponse, NativeCpuInfoResponse, NativeCurrencyCodeResponse, NativeCurrentDatetimeResponse, NativeCurrentUserAdminResponse, NativeCurrentUserResponse, NativeCurrentWallpaperResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeCursorShakeToLocateResponse, NativeDarkModeResponse, NativeDateFormatResponse, NativeDefaultAppForUtiResponse, NativeDefaultBrowserResponse, NativeDefaultEmailClientResponse, NativeDefaultPrinterResponse, NativeDesktopDirectoryResponse, NativeDictationEnabledResponse, NativeDifferentiateWithoutColorResponse, NativeDiskSpaceResponse, NativeDiskUsageResponse, NativeDisplayCountResponse, NativeDisplayMirroringResponse, NativeDisplaySerialNumberResponse, NativeDndResponse, NativeDockAutoHideResponse, NativeDockMagnificationResponse, NativeDockMinimizeEffectResponse, NativeDockMinimizeToAppResponse, NativeDockPositionResponse, NativeDockShowIndicatorsResponse, NativeDockShowRecentsResponse, NativeDocumentsDirectoryResponse, NativeDownloadsDirectoryResponse, NativeEnvVarResponse, NativeEpochTimeResponse, NativeFanSpeedsResponse, NativeFastUserSwitchingResponse, NativeFileExistsResponse, NativeFileHashResponse, NativeFileMetadataResponse, NativeFileOwnerResponse, NativeFileQuarantineResponse, NativeFileSharingEnabledResponse, NativeFileTypeResponse, NativeFilevaultStatusResponse, NativeFinderDefaultViewResponse, NativeFinderNewWindowTargetResponse, NativeFinderShowExtensionsResponse, NativeFinderShowHiddenResponse, NativeFinderShowPathBarResponse, NativeFinderShowStatusBarResponse, NativeFinderWindowPathResponse, NativeFirewallEnabledResponse, NativeFnKeyFunctionResponse, NativeFocusModesResponse, NativeFocusedElementResponse, NativeFocusedWindowIDResponse, NativeFontSmoothingResponse, NativeFormatDateResponse, NativeFrontmostAppResponse, NativeFullDiskAccessResponse, NativeFunctionKeysStandardResponse, NativeGatekeeperStatusResponse, NativeGatewayAddressResponse, NativeGetWindowInfoResponse, NativeGpuInfoResponse, NativeGrayscaleEnabledResponse, NativeGroupWindowsByAppResponse, NativeHandoffEnabledResponse, NativeHardwareModelResponse, NativeHardwareUuidResponse, NativeHidClaimResponse, NativeHidReleaseResponse, NativeHidSendReportResponse, NativeHighlightColorResponse, NativeHomeDirectoryResponse, NativeHomebrewPrefixResponse, NativeHostnameResponse, NativeHotCornersResponse, NativeIcloudDesktopSyncResponse, NativeIcloudDrivePathResponse, NativeIcloudSignedInResponse, NativeIncreaseContrastResponse, NativeInterfaceStyleSwitcherResponse, NativeIpv6AddressResponse, NativeIsDirectoryResponse, NativeIsFileHiddenResponse, NativeKernelVersionResponse, NativeKeyboardLayoutResponse, NativeKeychainReadResponse, NativeLastRebootResponse, NativeLiveTextEnabledResponse, NativeLocalIPResponse, NativeLocaleResponse, NativeLocationEnabledResponse, NativeLowPowerModeResponse, NativeMacAddressResponse, NativeMeasurementSystemResponse, NativeMemoryInfoResponse, NativeMemoryPressureResponse, NativeMenuBarAutoHideResponse, NativeMenuBarBatteryPercentResponse, NativeMenuBarClockFormatResponse, NativeMicrophonePermissionResponse, NativeModelNameResponse, NativeNetworkBandwidthResponse, NativeNetworkDnsDomainResponse, NativeNetworkProxyEnabledResponse, NativeNetworkQualityResponse, NativeNetworkReachableResponse, NativeNetworkSsidResponse, NativeNightShiftResponse, NativeNotificationSoundEnabledResponse, NativeNotifyResponse, NativeNowPlayingResponse, NativeNumberFormatDecimalResponse, NativeObserveWindowsResponse, NativeOptimizedChargingResponse, NativePinchToZoomResponse, NativePlayFeedbackWhenVolumeChangedResponse, NativePowerAdapterConnectedResponse, NativePowerSourceResponse, NativePressAndHoldEnabledResponse, NativePreventSleepResponse, NativePrimaryDisplayIDResponse, NativePrimaryDisplayResponse, NativePrinterSharingEnabledResponse, NativeProcessCountResponse, NativeProcessExistsResponse, NativeProcessInfoResponse, NativeProxySettingsResponse, NativePublicIPResponse, NativeQuickLookResponse, NativeRandomUuidResponse, NativeReadFileBinaryResponse, NativeReadFileResponse, NativeReduceMotionResponse, NativeReduceTransparencyResponse, NativeRemoteLoginEnabledResponse, NativeRequestScreenCaptureResponse, NativeResourceUsageResponse, NativeRosettaInstalledResponse, NativeRunApplescriptResponse, NativeRunJxaResponse, NativeRunShortcutResponse, NativeScreenCapturePermissionResponse, NativeScreenCountResponse, NativeScreenLockedResponse, NativeScreenResolutionResponse, NativeScreenSaverAskPasswordResponse, NativeScreenSaverStatusResponse, NativeScreenSharingEnabledResponse, NativeScreenshotFormatResponse, NativeScreenshotIncludeShadowResponse, NativeScreenshotLocationResponse, NativeScreenshotResponse, NativeScreenshotShowThumbnailResponse, NativeScrollDirectionNaturalResponse, NativeScrollDirectionResponse, NativeSecureInputEnabledResponse, NativeSelectedTextResponse, NativeSerialNumberResponse, NativeSharingNameResponse, NativeShowScrollBarsResponse, NativeSidebarIconSizeResponse, NativeSipStatusResponse, NativeSiriEnabledResponse, NativeSlowKeysResponse, NativeSmartQuotesEnabledResponse, NativeSmartZoomResponse, NativeSoundEffectsEnabledResponse, NativeSpacesSpanDisplaysResponse, NativeSpeechRecognitionAvailableResponse, NativeSpellingLanguageResponse, NativeStageManagerEnabledResponse, NativeStartupDiskResponse, NativeStartupSoundEnabledResponse, NativeStatusIndicatorResponse, NativeStickyKeysResponse, NativeSwipeBetweenPagesResponse, NativeSwitchSpaceWhenSwitchingAppResponse, NativeSystemAppearanceResponse, NativeSystemInfoResponse, NativeSystemIntegrityInfoResponse, NativeSystemLanguageResponse, NativeSystemRegionResponse, NativeSystemUptimeResponse, NativeSystemUptimeSecondsResponse, NativeTapToClickResponse, NativeTempDirectoryResponse, NativeTemperatureUnitResponse, NativeTextReplacementsResponse, NativeThermalStateResponse, NativeThreeFingerDragResponse, NativeThunderboltDevicesResponse, NativeTimeFormatResponse, NativeTimeMachineLastBackupResponse, NativeTimeMachineStatusResponse, NativeTimezoneResponse, NativeTouchIDAvailableResponse, NativeTrueToneResponse, NativeTwentyFourHourClockResponse, NativeURLSchemeHandlerResponse, NativeUserAvatarResponse, NativeUserNameResponse, NativeUserShellResponse, NativeVoiceoverEnabledResponse, NativeVolumeResponse, NativeVpnStatusResponse, NativeWifiResponse, NativeWindowBoundsResponse, NativeXcodePathResponse, NativeXcodeVersionResponse, NativeZoomEnabledResponse, NetworkInterface, NetworkRequestHostResponse, OcrRegion, OnPointer, OutputClearResponse, OutputState, OutputStateResponse, OverlayRow, OverridesApplyResponse, OwnedCollection, PipelinesGrammarResponse, PipelinesInjectResponse, PipelinesRunResponse, PipelinesStatusResponse, PipelinesStopResponse, PipelinesWarmResponse, PlatformProfileResponse, PluginDataExportResponse, PluginLogLevel, PrinterInfo, PrivacyGetRecordingResponse, PrivilegeStatusEntry, PrivilegesRelinquishResponse, PrivilegesRequestResponse, ProcessInfo, RecognitionBiasApplyResponse, RecognitionBiasGetResponse, RecognitionBiasSetResponse, RecognitionRedecodeResponse, RedecodeItem, RegistrySnapshot, ReminderItem, ReplaceScope, RunningApp, ScreenshotRegion, SecretsDeleteResponse, SecretsIsSetResponse, SecretsListResponse, SecretsRequestSlotResponse, SecretsSetResponse, SelectionPickResponse, SessionEndCleanupResponse, SettingsRulesCreateResponse, SettingsRulesUpdateResponse, ShortcutInfo, SpaceInfo, SpeechLocale, SpotlightResult, TileableEntry, TrialBeginResponse, TrialEndResponse, TrialEnterContextResponse, TtsVoice, UsbDevice, WindowDetail, WindowFrame, WiringCollection, WorldModel } from "./types_gen.js";
 import {
   MethodActionsList,
   MethodArtifactDelete,
@@ -1347,16 +1347,17 @@ declare module "./plugin.js" {
     nativeAutomationPermission(bundleId: string): Promise<NativeAutomationPermissionResponse>;
     /**
      * Get the accessibility element at a screen point
-     * @param pid wire int32
+     * @param pid Only this application's element; any application's when absent.
+     *   wire int32 · default null
      * @param x wire int32
      * @param y wire int32
      */
-    nativeAxElementAtPoint(pid: number, x: number, y: number): Promise<NativeAxElementAtPointResponse>;
+    nativeAxElementAtPoint(x: number, y: number, pid?: number): Promise<NativeAxElementAtPointResponse>;
     /**
      * Get the accessibility element tree rooted at an element
      * @param depth wire uint32 · default 3 · min 0
      */
-    nativeAxElementTree(element: AXElementRef, depth?: number): Promise<AXElementNode>;
+    nativeAxElementTree(element: AccessibleRef, depth?: number): Promise<AccessibleNode>;
     /**
      * Start observing AX notifications (STUB -- not yet implemented)
      * @param notifications default []
@@ -1366,16 +1367,16 @@ declare module "./plugin.js" {
     /**
      * Perform an action on an accessibility element
      */
-    nativeAxPerformAction(action: string, element: AXElementRef): Promise<boolean>;
+    nativeAxPerformAction(action: string, element: AccessibleRef): Promise<boolean>;
     /**
      * Read specific attributes from an accessibility element
      * @param attributes default []
      */
-    nativeAxReadAttributes(element: AXElementRef, attributes?: string[]): Promise<void>;
+    nativeAxReadAttributes(element: AccessibleRef, attributes?: string[]): Promise<Record<string, unknown>>;
     /**
      * Set an attribute on an accessibility element
      */
-    nativeAxSetAttribute(attribute: string, element: AXElementRef, value: unknown): Promise<boolean>;
+    nativeAxSetAttribute(attribute: string, element: AccessibleRef, value: unknown): Promise<boolean>;
     /**
      * Stop observing AX notifications (STUB)
      */
@@ -1790,7 +1791,7 @@ declare module "./plugin.js" {
     /**
      * Read extended attributes (xattrs) from a file
      */
-    nativeExtendedAttributes(path: string): Promise<void>;
+    nativeExtendedAttributes(path: string): Promise<unknown>;
     /**
      * List mounted external/removable disks
      */
@@ -1856,7 +1857,7 @@ declare module "./plugin.js" {
      * Read or write Finder tags on a file
      * @param tags default null
      */
-    nativeFileTags(path: string, tags?: string[]): Promise<void>;
+    nativeFileTags(path: string, tags?: string[]): Promise<unknown>;
     /**
      * Get the UTI type of a file
      */
@@ -2573,7 +2574,7 @@ declare module "./plugin.js" {
     /**
      * Read a preference value for an app domain
      */
-    nativeReadAppPreference(domain: string, key: string): Promise<void>;
+    nativeReadAppPreference(domain: string, key: string): Promise<unknown>;
     /**
      * Read file contents as UTF-8 string
      */
@@ -2586,7 +2587,7 @@ declare module "./plugin.js" {
     /**
      * Read a property list file as JSON
      */
-    nativeReadPlist(path: string): Promise<void>;
+    nativeReadPlist(path: string): Promise<unknown>;
     /**
      * Get recent documents for an app (by bundle ID)
      */
@@ -4676,19 +4677,19 @@ Plugin.prototype.nativeAutomationPermission = async function(bundleId: string) {
   return result as NativeAutomationPermissionResponse;
 };
 
-Plugin.prototype.nativeAxElementAtPoint = async function(pid: number, x: number, y: number) {
+Plugin.prototype.nativeAxElementAtPoint = async function(x: number, y: number, pid?: number) {
   const result = await this.call(
     MethodNativeAxElementAtPoint,
     {
-      pid,
       x,
       y,
+      pid,
     },
   );
   return result as NativeAxElementAtPointResponse;
 };
 
-Plugin.prototype.nativeAxElementTree = async function(element: AXElementRef, depth?: number) {
+Plugin.prototype.nativeAxElementTree = async function(element: AccessibleRef, depth?: number) {
   const result = await this.call(
     MethodNativeAxElementTree,
     {
@@ -4696,7 +4697,7 @@ Plugin.prototype.nativeAxElementTree = async function(element: AXElementRef, dep
       depth,
     },
   );
-  return result as AXElementNode;
+  return result as AccessibleNode;
 };
 
 Plugin.prototype.nativeAxObserve = async function(pid: number, notifications?: string[]) {
@@ -4710,7 +4711,7 @@ Plugin.prototype.nativeAxObserve = async function(pid: number, notifications?: s
   return result as NativeAxObserveResponse;
 };
 
-Plugin.prototype.nativeAxPerformAction = async function(action: string, element: AXElementRef) {
+Plugin.prototype.nativeAxPerformAction = async function(action: string, element: AccessibleRef) {
   const result = await this.call(
     MethodNativeAxPerformAction,
     {
@@ -4721,7 +4722,7 @@ Plugin.prototype.nativeAxPerformAction = async function(action: string, element:
   return (result as any).result;
 };
 
-Plugin.prototype.nativeAxReadAttributes = async function(element: AXElementRef, attributes?: string[]) {
+Plugin.prototype.nativeAxReadAttributes = async function(element: AccessibleRef, attributes?: string[]) {
   const result = await this.call(
     MethodNativeAxReadAttributes,
     {
@@ -4729,9 +4730,10 @@ Plugin.prototype.nativeAxReadAttributes = async function(element: AXElementRef, 
       attributes,
     },
   );
+  return result as Record<string, unknown>;
 };
 
-Plugin.prototype.nativeAxSetAttribute = async function(attribute: string, element: AXElementRef, value: unknown) {
+Plugin.prototype.nativeAxSetAttribute = async function(attribute: string, element: AccessibleRef, value: unknown) {
   const result = await this.call(
     MethodNativeAxSetAttribute,
     {
@@ -5396,6 +5398,7 @@ Plugin.prototype.nativeExtendedAttributes = async function(path: string) {
       path,
     },
   );
+  return result as unknown;
 };
 
 Plugin.prototype.nativeExternalDisks = async function() {
@@ -5532,6 +5535,7 @@ Plugin.prototype.nativeFileTags = async function(path: string, tags?: string[]) 
       tags,
     },
   );
+  return result as unknown;
 };
 
 Plugin.prototype.nativeFileType = async function(path: string) {
@@ -6680,6 +6684,7 @@ Plugin.prototype.nativeReadAppPreference = async function(domain: string, key: s
       key,
     },
   );
+  return result as unknown;
 };
 
 Plugin.prototype.nativeReadFile = async function(path: string) {
@@ -6710,6 +6715,7 @@ Plugin.prototype.nativeReadPlist = async function(path: string) {
       path,
     },
   );
+  return result as unknown;
 };
 
 Plugin.prototype.nativeRecentDocuments = async function(bundleId: string) {
