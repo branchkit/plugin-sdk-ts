@@ -46,6 +46,7 @@ export const LogEventPluginRpcFailed = "plugin.rpc_failed" as const;
 export const LogEventPluginSandboxApplied = "plugin.sandbox_applied" as const;
 export const LogEventPluginSpawned = "plugin.spawned" as const;
 export const LogEventPluginStderrLine = "plugin.stderr_line" as const;
+export const LogEventPluginWmiQuery = "plugin.wmi_query" as const;
 export const LogEventRpcCallCompleted = "rpc.call_completed" as const;
 export const LogEventRpcCallReceived = "rpc.call_received" as const;
 export const LogEventRpcNotifyReceived = "rpc.notify_received" as const;
@@ -120,6 +121,7 @@ export const LogEventRegistry: Record<string, LogEventMeta> = {
     "plugin.sandbox_applied": { name: "plugin.sandbox_applied", summary: "Sandbox profile applied (or skipped) for a managed plugin spawn.", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },
     "plugin.spawned": { name: "plugin.spawned", summary: "A managed plugin process was spawned.", since: "0.1.0", source: "plugins", severity: "info", redaction: "none" },
     "plugin.stderr_line": { name: "plugin.stderr_line", summary: "A managed plugin emitted a stdout/stderr line.", since: "0.1.0", source: "plugins", severity: "info", redaction: "full" },
+    "plugin.wmi_query": { name: "plugin.wmi_query", summary: "A plugin read (or was refused) a WMI class through native.wmi_query: allowed, failed, denied (not declared), off (switched off by the user) or forbidden (no grant can reach it). The namespace and class only. Audit-eligible.", since: "0.2.0", source: "plugins", severity: "info", redaction: "full" },
     "rpc.call_completed": { name: "rpc.call_completed", summary: "A plugin-to-actuator RPC call completed.", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },
     "rpc.call_received": { name: "rpc.call_received", summary: "A plugin-to-actuator RPC call was received.", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },
     "rpc.notify_received": { name: "rpc.notify_received", summary: "A plugin-to-actuator RPC notification (fire-and-forget) was received.", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },

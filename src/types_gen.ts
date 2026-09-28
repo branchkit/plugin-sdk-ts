@@ -7152,6 +7152,56 @@ export interface NativeWindowTitleRequest {
   window_id: string;
 }
 
+export interface NativeWmiQueryRequest {
+  /**
+   * The class (`Win32_Battery`).
+   */
+  class: string;
+  /**
+   * Instances to return at most, 1 to 1000 (default 200); more sets
+   * `truncated`.
+   * wire uint32 · default null · min 0
+   */
+  limit?: number;
+  /**
+   * The namespace, `root/cimv2` when absent (`root/WMI`,
+   * `root/StandardCimv2`); `/` or `\` between its parts.
+   * default null
+   */
+  namespace?: string;
+  /**
+   * The properties to read; all of them when empty.
+   * default []
+   */
+  properties?: string[];
+  /**
+   * A condition on the class's own properties (`Name = 'x' AND
+   * ProcessId > 4`), in WQL's syntax: comparisons with a string, number,
+   * `TRUE` or `FALSE`; `LIKE` with `%`, `_` and `[…]`; `IS [NOT] NULL`;
+   * `AND` / `OR` / `NOT` and parentheses. BranchKit evaluates it on the
+   * listed instances; it is never sent to WMI. Strings compare without
+   * regard to case, and a null or missing property matches no
+   * comparison.
+   * default null
+   */
+  where?: string;
+}
+
+export interface NativeWmiQueryResponse {
+  /**
+   * Opaque by design: each instance's properties are typed by its class
+   * at run time, so no static type can describe them. One object per
+   * instance, its properties by name (64-bit integers as numbers,
+   * dates as WMI's `yyyymmddHHMMSS.mmmmmmsUUU` strings, embedded
+   * objects as objects), and its class as `__CLASS`.
+   */
+  instances: unknown[];
+  /**
+   * More instances matched than `limit`.
+   */
+  truncated: boolean;
+}
+
 export interface NativeWorldModelRequest {
   /**
    * If true, only return windows visible on screen.
