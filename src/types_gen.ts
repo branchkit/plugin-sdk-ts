@@ -5701,6 +5701,10 @@ export interface NativePowerAdapterConnectedResponse {
   enabled: boolean;
 }
 
+export interface NativePowerModeResponse {
+  mode: string;
+}
+
 export interface NativePowerSourceResponse {
   source: string;
 }
@@ -6439,6 +6443,14 @@ export interface NativeSetOnScreenKeyboardEnabledResponse {
   ok: boolean;
 }
 
+export interface NativeSetPowerModeRequest {
+  mode: string;
+}
+
+export interface NativeSetPowerModeResponse {
+  ok: boolean;
+}
+
 export interface NativeSetScreenReaderEnabledRequest {
   enabled: boolean;
 }
@@ -6550,6 +6562,14 @@ export interface NativeSetURLSchemeHandlerRequest {
 }
 
 export interface NativeSetURLSchemeHandlerResponse {
+  ok: boolean;
+}
+
+export interface NativeSetVisualAlertsEnabledRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetVisualAlertsEnabledResponse {
   ok: boolean;
 }
 
@@ -6971,6 +6991,10 @@ export interface NativeUserNameResponse {
 
 export interface NativeUserShellResponse {
   shell: string;
+}
+
+export interface NativeVisualAlertsEnabledResponse {
+  enabled: boolean;
 }
 
 export interface NativeVolumeResponse {
