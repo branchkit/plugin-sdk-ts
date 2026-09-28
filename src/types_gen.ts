@@ -4589,6 +4589,52 @@ export interface NativeDateFormatResponse {
   value?: string;
 }
 
+export interface NativeDbusCallRequest {
+  /**
+   * Opaque by design: D-Bus values are typed by `signature` at run time,
+   * so no static type can describe them. One JSON value per argument,
+   * in the form its type takes: integers,
+   * numbers, booleans and strings as themselves; an array for `a…` and
+   * `(…)`; an object for `a{…}`; a variant as
+   * `{"signature": "d", "value": 0.5}` or a plain string, boolean or
+   * number.
+   * default []
+   */
+  args?: unknown[];
+  /**
+   * `session` (the default) or `system` (Properties.Get / GetAll only).
+   * default null
+   */
+  bus?: string;
+  interface: string;
+  method: string;
+  /**
+   * The object path (`/org/mpris/MediaPlayer2`).
+   */
+  path: string;
+  /**
+   * The well-known service name (`org.mpris.MediaPlayer2.spotify`).
+   */
+  service: string;
+  /**
+   * The arguments' D-Bus signature (`su`); empty or absent for none.
+   * default null
+   */
+  signature?: string;
+}
+
+export interface NativeDbusCallResponse {
+  /**
+   * The reply's D-Bus signature; empty when it carries nothing.
+   */
+  signature: string;
+  /**
+   * Opaque by design, typed by `signature` at run time: one JSON value
+   * per reply value, a variant unwrapped to its value.
+   */
+  values: unknown[];
+}
+
 export interface NativeDefaultAppForUtiRequest {
   uti: string;
 }

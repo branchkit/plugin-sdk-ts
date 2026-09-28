@@ -174,6 +174,7 @@ export const MethodNativeCursorInfo = "native.cursor_info" as const; // since 0.
 export const MethodNativeCursorShakeToLocate = "native.cursor_shake_to_locate" as const; // since 0.1.0
 export const MethodNativeDarkMode = "native.dark_mode" as const; // since 0.1.0
 export const MethodNativeDateFormat = "native.date_format" as const; // since 0.1.0
+export const MethodNativeDbusCall = "native.dbus_call" as const; // since 0.2.0
 export const MethodNativeDefaultAppForUti = "native.default_app_for_uti" as const; // since 0.1.0
 export const MethodNativeDefaultBrowser = "native.default_browser" as const; // since 0.1.0
 export const MethodNativeDefaultEmailClient = "native.default_email_client" as const; // since 0.1.0
