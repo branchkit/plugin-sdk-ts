@@ -5481,6 +5481,10 @@ export interface NativeModelNameResponse {
   model: string;
 }
 
+export interface NativeMonoAudioResponse {
+  enabled: boolean;
+}
+
 export interface NativeMountPointsResponse {
   volumes: string[];
 }
@@ -6455,6 +6459,14 @@ export interface NativeSetMenuBarAutoHideRequest {
 }
 
 export interface NativeSetMenuBarAutoHideResponse {
+  ok: boolean;
+}
+
+export interface NativeSetMonoAudioRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetMonoAudioResponse {
   ok: boolean;
 }
 
