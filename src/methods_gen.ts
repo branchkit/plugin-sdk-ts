@@ -1365,7 +1365,7 @@ declare module "./plugin.js" {
      */
     nativeAxObserve(pid: number, notifications?: string[]): Promise<NativeAxObserveResponse>;
     /**
-     * Perform an action on an accessibility element
+     * Perform an action on an accessibility element: press (its default action, what a click does), toggle, focus, expand, collapse, increment, decrement, scroll_into_view, show_menu, or one of the element's own actions by its OS name. The element's actions list says which it offers
      */
     nativeAxPerformAction(action: string, element: AccessibleRef): Promise<boolean>;
     /**
@@ -1374,7 +1374,7 @@ declare module "./plugin.js" {
      */
     nativeAxReadAttributes(element: AccessibleRef, attributes?: string[]): Promise<Record<string, unknown>>;
     /**
-     * Set an attribute on an accessibility element
+     * Set an accessibility element's value (text, or a number for a slider or spin button) or focus it (focused: true). Returns whether it took
      */
     nativeAxSetAttribute(attribute: string, element: AccessibleRef, value: unknown): Promise<boolean>;
     /**
