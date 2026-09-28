@@ -97,15 +97,7 @@ export class SettingsMirror<T> {
    * get() on resolve.
    */
   async setUserFields(fields: Record<string, unknown>): Promise<void> {
-    await this.#plugin.overridesApply(
-      "patch",
-      this.#name,
-      undefined,
-      fields,
-      this.#name,
-      undefined,
-      "_user",
-    );
+    await this.#plugin.overridesApply({ action: "patch", collection: this.#name, fields, id: this.#name, tenant: "_user" });
     await this.refresh();
   }
 
@@ -116,15 +108,7 @@ export class SettingsMirror<T> {
    * refreshed before resolving.
    */
   async unpatchUser(field: string): Promise<void> {
-    await this.#plugin.overridesApply(
-      "unpatch",
-      this.#name,
-      field,
-      undefined,
-      this.#name,
-      undefined,
-      "_user",
-    );
+    await this.#plugin.overridesApply({ action: "unpatch", collection: this.#name, field, id: this.#name, tenant: "_user" });
     await this.refresh();
   }
 }

@@ -97,7 +97,7 @@ declare module "./plugin.js" {
 
 Plugin.prototype.append = async function (name: string, payload: unknown): Promise<string> {
   try {
-    const entry = await this.collectionAppend(name, payload);
+    const entry = await this.collectionAppend({ name, payload });
     if (!entry) {
       throw new Error("collection.append: actuator returned no entry");
     }
@@ -112,7 +112,7 @@ Plugin.prototype.appendEntry = async function (
   payload: unknown,
 ): Promise<LogEntry> {
   try {
-    const entry = await this.collectionAppend(name, payload);
+    const entry = await this.collectionAppend({ name, payload });
     if (!entry) {
       throw new Error("collection.append: actuator returned no entry");
     }
@@ -128,7 +128,7 @@ Plugin.prototype.appendKeyed = async function (
   payload: unknown,
 ): Promise<void> {
   try {
-    await this.collectionAppendKeyed(key, name, payload);
+    await this.collectionAppendKeyed({ key, name, payload });
   } catch (e) {
     throw e;
   }
@@ -187,11 +187,11 @@ Plugin.prototype.setCollectionRecording = async function (
   name: string,
   enabled: boolean,
 ): Promise<void> {
-  await this.privacySetRecording(enabled, name);
+  await this.privacySetRecording({ enabled, name });
 };
 
 Plugin.prototype.getCollectionRecording = async function (name: string): Promise<boolean> {
-  const res = await this.privacyGetRecording(name);
+  const res = await this.privacyGetRecording({ name });
   return res?.enabled ?? false;
 };
 

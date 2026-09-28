@@ -95,7 +95,7 @@ export class CollectionMirror {
       empty = recs.length === 0;
       data = recs;
     } else {
-      const res: CollectionGetResponse = await this.#plugin.collectionGet(this.#name);
+      const res: CollectionGetResponse = await this.#plugin.collectionGet({ name: this.#name });
       empty = unpopulated(res?.data);
       data = res?.data;
     }

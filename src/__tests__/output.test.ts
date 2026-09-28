@@ -40,7 +40,7 @@ describe("semantic output helpers", () => {
       locale: "en",
       v: 1,
     };
-    const res = await p.outputState(doc);
+    const res = await p.outputState({ state: doc });
     expect(sent).toEqual({ state: doc });
     expect(res).toEqual({ ok: true, generation: 7, meaning_changed: true });
   });

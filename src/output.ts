@@ -2,7 +2,7 @@
  * Semantic output helpers — parity with plugin-sdk-go/output.go and
  * plugin-sdk-py/branchkit/output.py.
  *
- * The generated `plugin.outputState(state)` wrapper is the whole call; a
+ * The generated `plugin.outputState({ state })` wrapper is the whole call; a
  * plugin states what is true for the person (`OutputState`, `OutputSection`,
  * `OutputItem` in types_gen.ts, `OutputKind*` / `OutputUrgency*` in
  * closed_vocab_gen.ts) and never sees a renderer. An item's `action` is one

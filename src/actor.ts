@@ -25,7 +25,7 @@ const store = new AsyncLocalStorage<string>();
  * Run `fn` with `actor` as the ambient label on every RPC it makes.
  *
  * ```ts
- * await actingFor("headphones.lua", () => plugin.dispatch(action));
+ * await actingFor("headphones.lua", () => plugin.dispatch({ action }));
  * ```
  *
  * An empty actor runs `fn` with no label rather than an empty one — a host

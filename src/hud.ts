@@ -21,9 +21,9 @@ declare module "./plugin.js" {
 }
 
 Plugin.prototype.hudPushFragment = function (channel: string, targetId: string, html: string) {
-  return this.hudPush(channel, [{ target_id: targetId, html }]);
+  return this.hudPush({ channel, fragments: [{ target_id: targetId, html }] });
 };
 
 Plugin.prototype.hudPushRaw = function (channel: string, html: string) {
-  return this.hudPush(channel, [{ target_id: "", html, raw: true }]);
+  return this.hudPush({ channel, fragments: [{ target_id: "", html, raw: true }] });
 };

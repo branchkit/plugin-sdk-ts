@@ -137,7 +137,7 @@ declare module "./plugin.js" {
 Plugin.prototype.assertEffect = async function (
   name: string,
 ): Promise<AssertEffectResult> {
-  const res = await this.effectsAssert(name);
+  const res = await this.effectsAssert({ name });
   return {
     granted: res.granted,
     alreadyHeld: res.already_held,
@@ -149,7 +149,7 @@ Plugin.prototype.assertEffect = async function (
 Plugin.prototype.retractEffect = async function (
   name: string,
 ): Promise<RetractEffectResult> {
-  const res = await this.effectsRetract(name);
+  const res = await this.effectsRetract({ name });
   return {
     retracted: res.retracted,
     newOwner: optionalString(res.new_owner),
@@ -159,7 +159,7 @@ Plugin.prototype.retractEffect = async function (
 Plugin.prototype.isEffectActive = async function (
   name: string,
 ): Promise<IsEffectActiveResult> {
-  const res = await this.effectsIsActive(name);
+  const res = await this.effectsIsActive({ name });
   return {
     active: res.active,
     currentOwner: optionalString(res.current_owner),

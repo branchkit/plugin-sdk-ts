@@ -2,7 +2,7 @@
 // Run: just contracts
 
 import { Plugin } from "./plugin.js";
-import type { AccessibleNode, AccessibleRef, Action, ActionsListResponse, ActiveSpace, Anchor, AppVolume, AudioDevice, BarcodeResult, BleService, BleWriteEntry, BlobPublishResponse, BlobStateResponse, BluetoothDevice, CalendarEvent, CameraDevice, ClipboardContents, ClipboardWriteItem, CollectionCountResponse, CollectionDeleteRecordsResponse, CollectionFetchCompactedResponse, CollectionFetchResponse, CollectionGetResponse, CollectionListResponse, CollectionPutEntry, CollectionPutResponse, CollectionReplaceResponse, CollectionsCreateUserResponse, CollectionsListSection, CommandOverride, CommandSpec, CommandsListResponse, CommandsPushResponse, CommandsRemoveAliasResponse, CommandsResetOverrideResponse, CommandsResolveResponse, ConfusabilityFinding, ContactInfo, DeliveredNotification, DirectoryEntry, DispatchResponse, DisplayColorProfile, DisplayMetadata, DisplayRotation, EffectsAssertResponse, EffectsIsActiveResponse, EffectsRetractResponse, EnumeratedCommand, ExternalDisk, FieldDisplay, HUDItem, HUDRemoveChannelResponse, HidDeviceEntry, HidElementEntry, HttpHeader, HttpRequestResponse, HudFragment, InputClipboardReadFormatResponse, InputClipboardReadResponse, InputParseKeyEventResponse, InputSource, InstalledApp, KeybindsRegisterResponse, ListOpts, ListeningPort, LogEntry, LoginItem, MenuItem, NativeAccentColorResponse, NativeAccessibilityDisplayInvertResponse, NativeAccessibilityEnabledResponse, NativeActiveNetworkServiceResponse, NativeAirdropEnabledResponse, NativeAirportPowerResponse, NativeAlertSoundResponse, NativeApfsSnapshotsResponse, NativeAppBundlePathResponse, NativeAppIconResponse, NativeAppIsAgentResponse, NativeAppIsRunningResponse, NativeAppLaunchAtLoginResponse, NativeAppMetadataResponse, NativeAppSupportDirectoryResponse, NativeAudioDeviceVolumeResponse, NativeAudioInputDeviceResponse, NativeAudioOutputDeviceResponse, NativeAutoBrightnessResponse, NativeAutoRearrangeSpacesResponse, NativeAutoTimezoneResponse, NativeAutocorrectEnabledResponse, NativeAutomaticLoginUserResponse, NativeAutomationPermissionResponse, NativeAxElementAtPointResponse, NativeAxObserveResponse, NativeBatteryHealthResponse, NativeBatteryResponse, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeResponse, NativeBleWriteResponse, NativeBluetoothPowerResponse, NativeBoldTextEnabledResponse, NativeBootVolumeResponse, NativeBounceKeysResponse, NativeBrightnessResponse, NativeBundleForRemotePortResponse, NativeCalendarPermissionResponse, NativeCameraPermissionResponse, NativeCapsLockStateResponse, NativeCaptureWindowResponse, NativeCheckPermissionResponse, NativeClipboardChangeCountResponse, NativeClipboardImageDimensionsResponse, NativeColorAtPointResponse, NativeComputerNameResponse, NativeContactsPermissionResponse, NativeCpuInfoResponse, NativeCurrencyCodeResponse, NativeCurrentDatetimeResponse, NativeCurrentUserAdminResponse, NativeCurrentUserResponse, NativeCurrentWallpaperResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeCursorShakeToLocateResponse, NativeDarkModeResponse, NativeDateFormatResponse, NativeDefaultAppForUtiResponse, NativeDefaultBrowserResponse, NativeDefaultEmailClientResponse, NativeDefaultPrinterResponse, NativeDesktopDirectoryResponse, NativeDictationEnabledResponse, NativeDifferentiateWithoutColorResponse, NativeDiskSpaceResponse, NativeDiskUsageResponse, NativeDisplayCountResponse, NativeDisplayMirroringResponse, NativeDisplaySerialNumberResponse, NativeDndResponse, NativeDockAutoHideResponse, NativeDockMagnificationResponse, NativeDockMinimizeEffectResponse, NativeDockMinimizeToAppResponse, NativeDockPositionResponse, NativeDockShowIndicatorsResponse, NativeDockShowRecentsResponse, NativeDocumentsDirectoryResponse, NativeDownloadsDirectoryResponse, NativeEnvVarResponse, NativeEpochTimeResponse, NativeFanSpeedsResponse, NativeFastUserSwitchingResponse, NativeFileExistsResponse, NativeFileHashResponse, NativeFileMetadataResponse, NativeFileOwnerResponse, NativeFileQuarantineResponse, NativeFileSharingEnabledResponse, NativeFileTypeResponse, NativeFilevaultStatusResponse, NativeFinderDefaultViewResponse, NativeFinderNewWindowTargetResponse, NativeFinderShowExtensionsResponse, NativeFinderShowHiddenResponse, NativeFinderShowPathBarResponse, NativeFinderShowStatusBarResponse, NativeFinderWindowPathResponse, NativeFirewallEnabledResponse, NativeFnKeyFunctionResponse, NativeFocusModesResponse, NativeFocusedElementResponse, NativeFocusedWindowIDResponse, NativeFontSmoothingResponse, NativeFormatDateResponse, NativeFrontmostAppResponse, NativeFullDiskAccessResponse, NativeFunctionKeysStandardResponse, NativeGatekeeperStatusResponse, NativeGatewayAddressResponse, NativeGetWindowInfoResponse, NativeGpuInfoResponse, NativeGrayscaleEnabledResponse, NativeGroupWindowsByAppResponse, NativeHandoffEnabledResponse, NativeHardwareModelResponse, NativeHardwareUuidResponse, NativeHidClaimResponse, NativeHidReleaseResponse, NativeHidSendReportResponse, NativeHighlightColorResponse, NativeHomeDirectoryResponse, NativeHomebrewPrefixResponse, NativeHostnameResponse, NativeHotCornersResponse, NativeIcloudDesktopSyncResponse, NativeIcloudDrivePathResponse, NativeIcloudSignedInResponse, NativeIncreaseContrastResponse, NativeInterfaceStyleSwitcherResponse, NativeIpv6AddressResponse, NativeIsDirectoryResponse, NativeIsFileHiddenResponse, NativeKernelVersionResponse, NativeKeyboardLayoutResponse, NativeKeychainReadResponse, NativeLastRebootResponse, NativeLiveTextEnabledResponse, NativeLocalIPResponse, NativeLocaleResponse, NativeLocationEnabledResponse, NativeLowPowerModeResponse, NativeMacAddressResponse, NativeMagnifierEnabledResponse, NativeMeasurementSystemResponse, NativeMemoryInfoResponse, NativeMemoryPressureResponse, NativeMenuBarAutoHideResponse, NativeMenuBarBatteryPercentResponse, NativeMenuBarClockFormatResponse, NativeMicrophonePermissionResponse, NativeModelNameResponse, NativeMouseKeysResponse, NativeNetworkBandwidthResponse, NativeNetworkDnsDomainResponse, NativeNetworkProxyEnabledResponse, NativeNetworkQualityResponse, NativeNetworkReachableResponse, NativeNetworkSsidResponse, NativeNightShiftResponse, NativeNotificationSoundEnabledResponse, NativeNotifyResponse, NativeNowPlayingResponse, NativeNumberFormatDecimalResponse, NativeObserveWindowsResponse, NativeOnScreenKeyboardEnabledResponse, NativeOptimizedChargingResponse, NativePinchToZoomResponse, NativePlayFeedbackWhenVolumeChangedResponse, NativePowerAdapterConnectedResponse, NativePowerModeResponse, NativePowerSourceResponse, NativePressAndHoldEnabledResponse, NativePreventSleepResponse, NativePrimaryDisplayIDResponse, NativePrimaryDisplayResponse, NativePrinterSharingEnabledResponse, NativeProcessCountResponse, NativeProcessExistsResponse, NativeProcessInfoResponse, NativeProxySettingsResponse, NativePublicIPResponse, NativeQuickLookResponse, NativeRandomUuidResponse, NativeReadFileBinaryResponse, NativeReadFileResponse, NativeReduceMotionResponse, NativeReduceTransparencyResponse, NativeRemoteLoginEnabledResponse, NativeRequestScreenCaptureResponse, NativeResourceUsageResponse, NativeRosettaInstalledResponse, NativeRunApplescriptResponse, NativeRunJxaResponse, NativeRunShortcutResponse, NativeScreenCapturePermissionResponse, NativeScreenCountResponse, NativeScreenLockedResponse, NativeScreenReaderEnabledResponse, NativeScreenResolutionResponse, NativeScreenSaverAskPasswordResponse, NativeScreenSaverStatusResponse, NativeScreenSharingEnabledResponse, NativeScreenshotFormatResponse, NativeScreenshotIncludeShadowResponse, NativeScreenshotLocationResponse, NativeScreenshotResponse, NativeScreenshotShowThumbnailResponse, NativeScrollDirectionNaturalResponse, NativeScrollDirectionResponse, NativeSecureInputEnabledResponse, NativeSelectedTextResponse, NativeSerialNumberResponse, NativeSharingNameResponse, NativeShowScrollBarsResponse, NativeSidebarIconSizeResponse, NativeSipStatusResponse, NativeSiriEnabledResponse, NativeSlowKeysResponse, NativeSmartQuotesEnabledResponse, NativeSmartZoomResponse, NativeSoundEffectsEnabledResponse, NativeSpacesSpanDisplaysResponse, NativeSpeechRecognitionAvailableResponse, NativeSpellingLanguageResponse, NativeStageManagerEnabledResponse, NativeStartupDiskResponse, NativeStartupSoundEnabledResponse, NativeStatusIndicatorResponse, NativeStickyKeysResponse, NativeSwipeBetweenPagesResponse, NativeSwitchSpaceWhenSwitchingAppResponse, NativeSystemAppearanceResponse, NativeSystemInfoResponse, NativeSystemIntegrityInfoResponse, NativeSystemLanguageResponse, NativeSystemRegionResponse, NativeSystemUptimeResponse, NativeSystemUptimeSecondsResponse, NativeTapToClickResponse, NativeTempDirectoryResponse, NativeTemperatureUnitResponse, NativeTextReplacementsResponse, NativeThermalStateResponse, NativeThreeFingerDragResponse, NativeThunderboltDevicesResponse, NativeTimeFormatResponse, NativeTimeMachineLastBackupResponse, NativeTimeMachineStatusResponse, NativeTimezoneResponse, NativeTouchIDAvailableResponse, NativeTrueToneResponse, NativeTwentyFourHourClockResponse, NativeURLSchemeHandlerResponse, NativeUserAvatarResponse, NativeUserNameResponse, NativeUserShellResponse, NativeVisualAlertsEnabledResponse, NativeVolumeResponse, NativeVpnStatusResponse, NativeWifiResponse, NativeWindowBoundsResponse, NativeXcodePathResponse, NativeXcodeVersionResponse, NetworkInterface, NetworkRequestHostResponse, OcrRegion, OnPointer, OutputClearResponse, OutputState, OutputStateResponse, OverlayRow, OverridesApplyResponse, OwnedCollection, PipelinesGrammarResponse, PipelinesInjectResponse, PipelinesRunResponse, PipelinesStatusResponse, PipelinesStopResponse, PipelinesWarmResponse, PlatformProfileResponse, PluginDataExportResponse, PluginLogLevel, PrinterInfo, PrivacyGetRecordingResponse, PrivilegeStatusEntry, PrivilegesRelinquishResponse, PrivilegesRequestResponse, ProcessInfo, RecognitionBiasApplyResponse, RecognitionBiasGetResponse, RecognitionBiasSetResponse, RecognitionRedecodeResponse, RedecodeItem, RegistrySnapshot, ReminderItem, ReplaceScope, RunningApp, ScreenshotRegion, SecretsDeleteResponse, SecretsIsSetResponse, SecretsListResponse, SecretsRequestSlotResponse, SecretsSetResponse, SelectionPickResponse, SessionEndCleanupResponse, SettingsRulesCreateResponse, SettingsRulesUpdateResponse, ShortcutInfo, SpaceInfo, SpeechLocale, SpotlightResult, TileableEntry, TrialBeginResponse, TrialEndResponse, TrialEnterContextResponse, TtsVoice, UsbDevice, WindowDetail, WindowFrame, WiringCollection, WorldModel } from "./types_gen.js";
+import type { AccessibleNode, ActionsListResponse, ActiveSpace, AppVolume, ArtifactDeleteRequest, AudioDevice, BarcodeResult, BleService, BlobPublishRequest, BlobPublishResponse, BlobStateRequest, BlobStateResponse, BluetoothDevice, CalendarEvent, CameraDevice, ClipboardContents, CollectionAppendKeyedRequest, CollectionAppendRequest, CollectionCountRequest, CollectionCountResponse, CollectionDeleteRecordsRequest, CollectionDeleteRecordsResponse, CollectionFetchCompactedRequest, CollectionFetchCompactedResponse, CollectionFetchRequest, CollectionFetchResponse, CollectionGetRequest, CollectionGetResponse, CollectionListRequest, CollectionListResponse, CollectionPatchRequest, CollectionPutRequest, CollectionPutResponse, CollectionReplaceRequest, CollectionReplaceResponse, CollectionsCreateUserRequest, CollectionsCreateUserResponse, CollectionsListRequest, CollectionsListSection, CommandOverride, CommandsAddAliasRequest, CommandsConfusabilityRequest, CommandsDeleteRequest, CommandsListResponse, CommandsPushRequest, CommandsPushResponse, CommandsRemoveAliasRequest, CommandsRemoveAliasResponse, CommandsResetOverrideRequest, CommandsResetOverrideResponse, CommandsResetRequest, CommandsResolveRequest, CommandsResolveResponse, CommandsSetOverrideRequest, ConfusabilityFinding, ContactInfo, ControlSignalRequest, DeliveredNotification, DirectoryEntry, DispatchRequest, DispatchResponse, DisplayColorProfile, DisplayMetadata, DisplayRotation, EffectsAssertRequest, EffectsAssertResponse, EffectsIsActiveRequest, EffectsIsActiveResponse, EffectsRetractRequest, EffectsRetractResponse, EnumeratedCommand, EventsAppendRequest, EventsEmitRequest, ExternalDisk, HUDCreateChannelRequest, HUDHideRequest, HUDPushRequest, HUDRemoveChannelRequest, HUDRemoveChannelResponse, HUDSetSizeRequest, HUDShowRequest, HidDeviceEntry, HidElementEntry, HttpRequestRequest, HttpRequestResponse, InputClickRequest, InputClipboardActionRequest, InputClipboardReadFormatRequest, InputClipboardReadFormatResponse, InputClipboardReadRequest, InputClipboardReadResponse, InputClipboardWriteItemsRequest, InputClipboardWriteRequest, InputDoubleClickRequest, InputDragRequest, InputMouseButtonRequest, InputParseKeyEventRequest, InputParseKeyEventResponse, InputPressKeyRequest, InputRawKeyRequest, InputRightClickRequest, InputScrollRequest, InputSource, InputSwitchInputSourceRequest, InputTripleClickRequest, InputTypeTextRequest, InstalledApp, KeybindsRegisterRequest, KeybindsRegisterResponse, ListeningPort, LogEntry, LoginItem, MenuItem, NativeAccentColorResponse, NativeAccessibilityDisplayInvertResponse, NativeAccessibilityEnabledResponse, NativeActivateAppRequest, NativeActiveNetworkServiceResponse, NativeAirdropEnabledResponse, NativeAirportPowerResponse, NativeAlertSoundResponse, NativeApfsSnapshotsResponse, NativeAppBundlePathRequest, NativeAppBundlePathResponse, NativeAppFocusedWindowIDRequest, NativeAppIconPathRequest, NativeAppIconRequest, NativeAppIconResponse, NativeAppIsAgentRequest, NativeAppIsAgentResponse, NativeAppIsRunningRequest, NativeAppIsRunningResponse, NativeAppLaunchAtLoginRequest, NativeAppLaunchAtLoginResponse, NativeAppMetadataRequest, NativeAppMetadataResponse, NativeAppPathRequest, NativeAppPidRequest, NativeAppSupportDirectoryResponse, NativeAppVersionRequest, NativeAppWindowsCountRequest, NativeAppWindowsRequest, NativeAppsForPathRequest, NativeAudioDeviceVolumeRequest, NativeAudioDeviceVolumeResponse, NativeAudioInputDeviceResponse, NativeAudioOutputDeviceResponse, NativeAutoBrightnessResponse, NativeAutoRearrangeSpacesResponse, NativeAutoTimezoneResponse, NativeAutocorrectEnabledResponse, NativeAutomaticLoginUserResponse, NativeAutomationPermissionRequest, NativeAutomationPermissionResponse, NativeAxElementAtPointRequest, NativeAxElementAtPointResponse, NativeAxElementTreeRequest, NativeAxObserveRequest, NativeAxObserveResponse, NativeAxPerformActionRequest, NativeAxReadAttributesRequest, NativeAxSetAttributeRequest, NativeAxUnobserveRequest, NativeBatchIsTileableRequest, NativeBatchSetFramesRequest, NativeBatteryHealthResponse, NativeBatteryResponse, NativeBleDiscoverServicesRequest, NativeBleSubscribeAllThenWriteRequest, NativeBleSubscribeAllThenWriteResponse, NativeBleSubscribeRequest, NativeBleSubscribeResponse, NativeBleWriteRequest, NativeBleWriteResponse, NativeBluetoothPowerResponse, NativeBoldTextEnabledResponse, NativeBootVolumeResponse, NativeBordersRequest, NativeBounceKeysResponse, NativeBrightnessRequest, NativeBrightnessResponse, NativeBundleForRemotePortRequest, NativeBundleForRemotePortResponse, NativeCalendarEventsRangeRequest, NativeCalendarPermissionResponse, NativeCameraPermissionResponse, NativeCapsLockStateResponse, NativeCaptureWindowRequest, NativeCaptureWindowResponse, NativeCascadeWindowsRequest, NativeCenterWindowRequest, NativeCheckPermissionRequest, NativeCheckPermissionResponse, NativeClearFileQuarantineRequest, NativeClearNotificationsRequest, NativeClickMenuItemRequest, NativeClipboardChangeCountResponse, NativeClipboardImageDimensionsResponse, NativeCloseWindowRequest, NativeColorAtPointRequest, NativeColorAtPointResponse, NativeComputerNameResponse, NativeContactsPermissionResponse, NativeCopyFileRequest, NativeCpuInfoResponse, NativeCreateDirectoryRequest, NativeCurrencyCodeResponse, NativeCurrentDatetimeResponse, NativeCurrentUserAdminResponse, NativeCurrentUserResponse, NativeCurrentWallpaperResponse, NativeCursorInfoResponse, NativeCursorResponse, NativeCursorShakeToLocateResponse, NativeDarkModeResponse, NativeDateFormatResponse, NativeDefaultAppForUtiRequest, NativeDefaultAppForUtiResponse, NativeDefaultBrowserResponse, NativeDefaultEmailClientResponse, NativeDefaultPrinterResponse, NativeDeleteFileRequest, NativeDesktopDirectoryResponse, NativeDetectBarcodesFileRequest, NativeDictationEnabledResponse, NativeDifferentiateWithoutColorResponse, NativeDirectoryContentsRequest, NativeDiskSpaceRequest, NativeDiskSpaceResponse, NativeDiskUsageRequest, NativeDiskUsageResponse, NativeDismissNotificationRequest, NativeDisplayCountResponse, NativeDisplayMirroringResponse, NativeDisplayRefreshRateRequest, NativeDisplayScaleFactorRequest, NativeDisplaySerialNumberResponse, NativeDndResponse, NativeDockAutoHideResponse, NativeDockMagnificationResponse, NativeDockMinimizeEffectResponse, NativeDockMinimizeToAppResponse, NativeDockPositionResponse, NativeDockShowIndicatorsResponse, NativeDockShowRecentsResponse, NativeDocumentsDirectoryResponse, NativeDownloadsDirectoryResponse, NativeEjectDiskRequest, NativeEnvVarRequest, NativeEnvVarResponse, NativeEpochTimeResponse, NativeExtendedAttributesRequest, NativeFanSpeedsResponse, NativeFastUserSwitchingResponse, NativeFileAclRequest, NativeFileCreationDateRequest, NativeFileExistsRequest, NativeFileExistsResponse, NativeFileExtendedAttributesRequest, NativeFileHashRequest, NativeFileHashResponse, NativeFileMetadataRequest, NativeFileMetadataResponse, NativeFileModificationDateRequest, NativeFileOwnerRequest, NativeFileOwnerResponse, NativeFileQuarantineRequest, NativeFileQuarantineResponse, NativeFileSharingEnabledResponse, NativeFileSizeRequest, NativeFileTagsRequest, NativeFileTypeRequest, NativeFileTypeResponse, NativeFileUtiRequest, NativeFilevaultStatusResponse, NativeFinderDefaultViewResponse, NativeFinderNewWindowTargetResponse, NativeFinderShowExtensionsResponse, NativeFinderShowHiddenResponse, NativeFinderShowPathBarResponse, NativeFinderShowStatusBarResponse, NativeFinderWindowPathResponse, NativeFirewallEnabledResponse, NativeFnKeyFunctionResponse, NativeFocusModesResponse, NativeFocusedElementResponse, NativeFocusedWindowIDResponse, NativeFontSmoothingResponse, NativeForceQuitAppRequest, NativeFormatDateRequest, NativeFormatDateResponse, NativeFrontmostAppResponse, NativeFullDiskAccessResponse, NativeFunctionKeysStandardResponse, NativeGatekeeperStatusResponse, NativeGatewayAddressResponse, NativeGeneratePdfRequest, NativeGetWindowInfoRequest, NativeGetWindowInfoResponse, NativeGlobFilesRequest, NativeGpuInfoResponse, NativeGrayscaleEnabledResponse, NativeGroupWindowsByAppResponse, NativeHandoffEnabledResponse, NativeHardwareModelResponse, NativeHardwareUuidResponse, NativeHidClaimRequest, NativeHidClaimResponse, NativeHidElementsRequest, NativeHidReleaseRequest, NativeHidReleaseResponse, NativeHidSendReportRequest, NativeHidSendReportResponse, NativeHideAppRequest, NativeHighlightColorResponse, NativeHomeDirectoryResponse, NativeHomebrewPrefixResponse, NativeHostnameResolveRequest, NativeHostnameResponse, NativeHotCornersResponse, NativeIcloudDesktopSyncResponse, NativeIcloudDrivePathResponse, NativeIcloudSignedInResponse, NativeIncreaseContrastResponse, NativeInterfaceStyleSwitcherResponse, NativeIpv6AddressResponse, NativeIsAppHiddenRequest, NativeIsDirectoryRequest, NativeIsDirectoryResponse, NativeIsFileHiddenRequest, NativeIsFileHiddenResponse, NativeKernelVersionResponse, NativeKeyboardLayoutResponse, NativeKeychainDeleteRequest, NativeKeychainReadRequest, NativeKeychainReadResponse, NativeKeychainWriteRequest, NativeKillProcessRequest, NativeLastRebootResponse, NativeLaunchAppRequest, NativeLiveTextEnabledResponse, NativeLocalIPResponse, NativeLocaleResponse, NativeLocationEnabledResponse, NativeLowPowerModeResponse, NativeMacAddressResponse, NativeMagnifierEnabledResponse, NativeMaximizeWindowRequest, NativeMeasurementSystemResponse, NativeMemoryInfoResponse, NativeMemoryPressureResponse, NativeMenuBarAutoHideResponse, NativeMenuBarBatteryPercentResponse, NativeMenuBarClockFormatResponse, NativeMenuBarRequest, NativeMicrophonePermissionResponse, NativeMinimizeWindowRequest, NativeModelNameResponse, NativeMouseButtonClickRequest, NativeMouseKeysResponse, NativeMoveFileRequest, NativeMoveWindowToDisplayRequest, NativeMoveWindowToSpaceRequest, NativeMuteRequest, NativeNetworkBandwidthResponse, NativeNetworkDnsDomainResponse, NativeNetworkProxyEnabledResponse, NativeNetworkQualityResponse, NativeNetworkReachableRequest, NativeNetworkReachableResponse, NativeNetworkSsidResponse, NativeNewAppWindowRequest, NativeNightShiftResponse, NativeNotificationSoundEnabledResponse, NativeNotifyRequest, NativeNotifyResponse, NativeNowPlayingResponse, NativeNumberFormatDecimalResponse, NativeObserveWindowsRequest, NativeObserveWindowsResponse, NativeOcrFileRequest, NativeOcrScreenRegionRequest, NativeOcrWindowRequest, NativeOnScreenKeyboardEnabledResponse, NativeOpenAppSettingsRequest, NativeOpenFinderWindowRequest, NativeOpenSystemSettingsRequest, NativeOpenTargetRequest, NativeOpenURLRequest, NativeOpenWithAppRequest, NativeOptimizedChargingResponse, NativePdfExtractTextRequest, NativePdfPageCountRequest, NativePinWindowAboveRequest, NativePinchToZoomResponse, NativePingRequest, NativePlayFeedbackWhenVolumeChangedResponse, NativePlaySoundRequest, NativePowerAdapterConnectedResponse, NativePowerModeResponse, NativePowerSourceResponse, NativePressAndHoldEnabledResponse, NativePreventSleepRequest, NativePreventSleepResponse, NativePrimaryDisplayIDResponse, NativePrimaryDisplayResponse, NativePrinterSharingEnabledResponse, NativeProcessCountResponse, NativeProcessCpuUsageRequest, NativeProcessExistsRequest, NativeProcessExistsResponse, NativeProcessInfoRequest, NativeProcessInfoResponse, NativeProcessMemoryUsageRequest, NativeProcessNameRequest, NativeProcessParentPidRequest, NativeProcessPathRequest, NativeProcessStartTimeRequest, NativeProxySettingsResponse, NativePublicIPResponse, NativeQuickLookRequest, NativeQuickLookResponse, NativeQuitAppRequest, NativeRaiseWindowRequest, NativeRandomUuidResponse, NativeReadAppPreferenceRequest, NativeReadFileBinaryRequest, NativeReadFileBinaryResponse, NativeReadFileRequest, NativeReadFileResponse, NativeReadPlistRequest, NativeRecentDocumentsRequest, NativeReduceMotionResponse, NativeReduceTransparencyResponse, NativeRemoteLoginEnabledResponse, NativeRenameFileRequest, NativeRequestScreenCaptureResponse, NativeResourceUsageResponse, NativeRestartAppRequest, NativeRevealInFinderRequest, NativeRosettaInstalledResponse, NativeRunApplescriptRequest, NativeRunApplescriptResponse, NativeRunJxaRequest, NativeRunJxaResponse, NativeRunShortcutRequest, NativeRunShortcutResponse, NativeScreenCapturePermissionResponse, NativeScreenCountResponse, NativeScreenLockedResponse, NativeScreenReaderEnabledResponse, NativeScreenResolutionResponse, NativeScreenSaverAskPasswordResponse, NativeScreenSaverStatusResponse, NativeScreenSharingEnabledResponse, NativeScreenshotFormatResponse, NativeScreenshotIncludeShadowResponse, NativeScreenshotLocationResponse, NativeScreenshotRequest, NativeScreenshotResponse, NativeScreenshotShowThumbnailResponse, NativeScrollDirectionNaturalResponse, NativeScrollDirectionResponse, NativeSearchContactsRequest, NativeSecureInputEnabledResponse, NativeSelectedTextResponse, NativeSerialNumberResponse, NativeSetAirportPowerRequest, NativeSetAppHiddenRequest, NativeSetAppMutedRequest, NativeSetAppVolumeRequest, NativeSetAudioDeviceRequest, NativeSetAudioDeviceVolumeRequest, NativeSetAudioInputDeviceRequest, NativeSetAudioOutputDeviceRequest, NativeSetAutoRearrangeSpacesRequest, NativeSetBluetoothPowerRequest, NativeSetBounceKeysRequest, NativeSetBrightnessRequest, NativeSetComputerNameRequest, NativeSetDarkModeRequest, NativeSetDndRequest, NativeSetDockAutoHideRequest, NativeSetDockMagnificationRequest, NativeSetDockMinimizeEffectRequest, NativeSetDockPositionRequest, NativeSetDockShowRecentsRequest, NativeSetDockSizeRequest, NativeSetExtendedAttributeRequest, NativeSetFileHiddenRequest, NativeSetFilePermissionsRequest, NativeSetFinderShowExtensionsRequest, NativeSetFinderShowHiddenRequest, NativeSetHighlightColorRequest, NativeSetHotCornerRequest, NativeSetInputSourceRequest, NativeSetKeyRepeatDelayRequest, NativeSetKeyRepeatRateRequest, NativeSetMagnifierEnabledRequest, NativeSetMenuBarAutoHideRequest, NativeSetMouseKeysRequest, NativeSetMouseSpeedRequest, NativeSetNightShiftRequest, NativeSetOnScreenKeyboardEnabledRequest, NativeSetPowerModeRequest, NativeSetScreenReaderEnabledRequest, NativeSetScreenshotFormatRequest, NativeSetScreenshotIncludeShadowRequest, NativeSetScreenshotLocationRequest, NativeSetScrollDirectionNaturalRequest, NativeSetSidebarIconSizeRequest, NativeSetSlowKeysRequest, NativeSetStageManagerRequest, NativeSetStickyKeysRequest, NativeSetTapToClickRequest, NativeSetTextScaleRequest, NativeSetTrackpadSpeedRequest, NativeSetURLSchemeHandlerRequest, NativeSetVisualAlertsEnabledRequest, NativeSetVolumeRequest, NativeSetWallpaperRequest, NativeSetWindowAlphaRequest, NativeSetWindowLevelRequest, NativeSetWindowPositionRequest, NativeSetWindowShadowRequest, NativeSetWindowSizeRequest, NativeSetWindowStickyRequest, NativeSharingNameResponse, NativeShowScrollBarsResponse, NativeSidebarIconSizeResponse, NativeSipStatusResponse, NativeSiriEnabledResponse, NativeSlowKeysResponse, NativeSmartQuotesEnabledResponse, NativeSmartZoomResponse, NativeSoundEffectsEnabledResponse, NativeSpacesSpanDisplaysResponse, NativeSpeakRequest, NativeSpeechRecognitionAvailableResponse, NativeSpeechRecognizeFileRequest, NativeSpellingLanguageResponse, NativeSpotlightRequest, NativeStageManagerEnabledResponse, NativeStartupDiskResponse, NativeStartupSoundEnabledResponse, NativeStatusIndicatorResponse, NativeStickyKeysResponse, NativeSwipeBetweenPagesResponse, NativeSwitchSpaceRequest, NativeSwitchSpaceWhenSwitchingAppResponse, NativeSymlinkRequest, NativeSystemAppearanceResponse, NativeSystemInfoResponse, NativeSystemIntegrityInfoResponse, NativeSystemLanguageResponse, NativeSystemRegionResponse, NativeSystemUptimeResponse, NativeSystemUptimeSecondsResponse, NativeTapToClickResponse, NativeTempDirectoryResponse, NativeTemperatureUnitResponse, NativeTextReplacementsResponse, NativeThermalStateResponse, NativeThreeFingerDragResponse, NativeThunderboltDevicesResponse, NativeTimeFormatResponse, NativeTimeMachineLastBackupResponse, NativeTimeMachineStatusResponse, NativeTimezoneResponse, NativeToggleBluetoothRequest, NativeToggleFullscreenRequest, NativeToggleWifiRequest, NativeTouchIDAvailableResponse, NativeTransparencyConsentRequest, NativeTrashRequest, NativeTrueToneResponse, NativeTwentyFourHourClockResponse, NativeURLSchemeHandlerRequest, NativeURLSchemeHandlerResponse, NativeUnhideAppRequest, NativeUnminimizeWindowRequest, NativeUnobserveWindowsRequest, NativeUnzipRequest, NativeUserAvatarResponse, NativeUserNameResponse, NativeUserShellResponse, NativeVisualAlertsEnabledResponse, NativeVolumeResponse, NativeVpnStatusResponse, NativeWarpCursorRequest, NativeWifiResponse, NativeWindowAppRequest, NativeWindowBoundsRequest, NativeWindowBoundsResponse, NativeWindowDisplayIDRequest, NativeWindowIsFullscreenRequest, NativeWindowIsMinimizedRequest, NativeWindowLayerRequest, NativeWindowScreenshotRequest, NativeWindowSubroleRequest, NativeWindowTitleRequest, NativeWorldModelRequest, NativeWriteAppPreferenceRequest, NativeWriteFileRequest, NativeXcodePathResponse, NativeXcodeVersionResponse, NativeZipRequest, NetworkInterface, NetworkRequestHostRequest, NetworkRequestHostResponse, OcrRegion, OutputClearRequest, OutputClearResponse, OutputStateRequest, OutputStateResponse, OverlayRow, OverridesApplyRequest, OverridesApplyResponse, OwnedCollection, PipelinesGrammarRequest, PipelinesGrammarResponse, PipelinesInjectRequest, PipelinesInjectResponse, PipelinesRunRequest, PipelinesRunResponse, PipelinesStatusResponse, PipelinesStopRequest, PipelinesStopResponse, PipelinesWarmRequest, PipelinesWarmResponse, PlatformProfileResponse, PluginDataExportRequest, PluginDataExportResponse, PluginDebugRequest, PluginReportHealthRequest, PrinterInfo, PrivacyGetRecordingRequest, PrivacyGetRecordingResponse, PrivacySetRecordingRequest, PrivilegeStatusEntry, PrivilegesRelinquishRequest, PrivilegesRelinquishResponse, PrivilegesRequestRequest, PrivilegesRequestResponse, ProcessInfo, RecognitionBiasApplyRequest, RecognitionBiasApplyResponse, RecognitionBiasGetResponse, RecognitionBiasSetRequest, RecognitionBiasSetResponse, RecognitionRedecodeRequest, RecognitionRedecodeResponse, ReminderItem, RunningApp, SecretsDeleteRequest, SecretsDeleteResponse, SecretsIsSetRequest, SecretsIsSetResponse, SecretsListResponse, SecretsRequestSlotRequest, SecretsRequestSlotResponse, SecretsSetRequest, SecretsSetResponse, SelectionPickRequest, SelectionPickResponse, SelectionSetRequest, SessionEndCleanupResponse, SettingsPatchSignalsRequest, SettingsRedirectRequest, SettingsRulesCreateRequest, SettingsRulesCreateResponse, SettingsRulesUpdateRequest, SettingsRulesUpdateResponse, ShortcutInfo, SpaceInfo, SpeechAnnounceRequest, SpeechLocale, SpeechSayRequest, SpotlightResult, SystemLaunchAppRequest, SystemNotifyRequest, SystemRunShellRequest, TileableEntry, TrialBeginResponse, TrialEndRequest, TrialEndResponse, TrialEnterContextRequest, TrialEnterContextResponse, TrialRegisterFixtureRequest, TrialResolveSamplesRequest, TtsVoice, UsbDevice, WindowDetail, WindowFrame, WiringCollection, WorldModel } from "./types_gen.js";
 import {
   MethodActionsList,
   MethodArtifactDelete,
@@ -653,143 +653,67 @@ declare module "./plugin.js" {
     /**
      * Delete an installed model from the caller's own model namespace (ref: <plugin>/<model>)
      */
-    artifactDelete(ref: string): Promise<void>;
+    artifactDelete(req: ArtifactDeleteRequest): Promise<void>;
     /**
      * Announce that bytes up to `length` are complete on one of this plugin's declared blobs. Carries a length, never bytes
-     * @param hash The hash of the appended range, when the provider declared
-     *   `hash: provider` and is supplying one itself. Ignored otherwise —
-     *   the platform hashes by default so a published length is unfakeable.
-     * @param length Total bytes now complete in the backing file, WITHIN the current
-     *   generation. Must be `>= ` the previous publish's: the channel is
-     *   append-only and a shrinking length would invalidate ranges consumers
-     *   already hold. The platform refuses otherwise (D4).
-     *   wire uint64 (64-bit) · min 0
-     * @param name The blob's name, as declared in this plugin's `provides.blobs`.
-     * @param newGeneration Start a new generation instead of appending to the current one — the
-     *   way a provider shrinks. A new generation is a NEW backing file, so
-     *   offsets restart at zero and consumers reopen; `length` is then the
-     *   length of the new file. Compaction is an announced event rather than
-     *   a race (D4).
-     *   default false
      */
-    blobPublish(length: number, name: string, hash?: string, newGeneration?: boolean): Promise<BlobPublishResponse>;
+    blobPublish(req: BlobPublishRequest): Promise<BlobPublishResponse>;
     /**
      * Where a blob stands: its current generation, published length and version. For a restarted provider (which generation to write) and a starting consumer (what to open)
-     * @param name The blob's name, as its provider declared it in `provides.blobs`.
-     * @param provider The providing plugin. Omitted: the caller's own blob. Another
-     *   plugin's blob is answerable only to a consumer granted to read it.
      */
-    blobState(name: string, provider?: string): Promise<BlobStateResponse>;
+    blobState(req: BlobStateRequest): Promise<BlobStateResponse>;
     /**
      * Append an entry to a log-kind collection
-     * @param name Collection name. Must be a `kind: "log"` collection.
-     * @param payload Entry payload — validated against the collection's `fields` schema.
      */
-    collectionAppend(name: string, payload: unknown): Promise<LogEntry | undefined>;
+    collectionAppend(req: CollectionAppendRequest): Promise<LogEntry | undefined>;
     /**
      * Append a keyed annotation to a keyed log (compacted-changelog shape)
-     * @param key The fold key — stamped into the payload's key field. Appending another
-     *   record with the same key annotates the first (compacted-changelog
-     *   shape); a compacted read folds them into one record.
-     * @param name Collection name. Must be a keyed (`id_strategy: by_field`) `log`
-     *   collection.
-     * @param payload Entry payload — validated against the collection's `fields` schema (the
-     *   key field is supplied via `key`, not here).
      */
-    collectionAppendKeyed(key: string, name: string, payload: unknown): Promise<LogEntry | undefined>;
+    collectionAppendKeyed(req: CollectionAppendKeyedRequest): Promise<LogEntry | undefined>;
     /**
      * Total record count for a collection
      */
-    collectionCount(name: string): Promise<CollectionCountResponse>;
+    collectionCount(req: CollectionCountRequest): Promise<CollectionCountResponse>;
     /**
      * Delete records from a collection by id (bulk).
-     * @param ids Record ids to remove. Always an array; single-record callers wrap
-     *   one id. SDK helpers (`Delete` vs `DeleteMany`) hide the wrapping.
-     *   default []
      */
-    collectionDeleteRecords(name: string, ids?: string[]): Promise<CollectionDeleteRecordsResponse>;
+    collectionDeleteRecords(req: CollectionDeleteRecordsRequest): Promise<CollectionDeleteRecordsResponse>;
     /**
      * Fetch a single record from a collection by id
      */
-    collectionFetch(id: string, name: string): Promise<CollectionFetchResponse>;
+    collectionFetch(req: CollectionFetchRequest): Promise<CollectionFetchResponse>;
     /**
      * Fetch a keyed log's folded current state for one key (compacted point-read)
      */
-    collectionFetchCompacted(id: string, name: string): Promise<CollectionFetchCompactedResponse>;
+    collectionFetchCompacted(req: CollectionFetchCompactedRequest): Promise<CollectionFetchCompactedResponse>;
     /**
      * Read collection data with optional merge metadata
      */
-    collectionGet(name: string): Promise<CollectionGetResponse>;
+    collectionGet(req: CollectionGetRequest): Promise<CollectionGetResponse>;
     /**
      * List records in a collection (paginated)
-     * @param opts default {}
      */
-    collectionList(name: string, opts?: ListOpts): Promise<CollectionListResponse>;
+    collectionList(req: CollectionListRequest): Promise<CollectionListResponse>;
     /**
      * Partial update of an existing record
-     * @param fields Object of fields to merge over the existing record.
      */
-    collectionPatch(fields: unknown, id: string, name: string): Promise<void>;
+    collectionPatch(req: CollectionPatchRequest): Promise<void>;
     /**
      * Upsert records by id (bulk). Auto-registers the target as a record-keyed dynamic collection on first plugin call to an unknown name.
-     * @param entries Records to upsert. Always an array; single-record callers wrap one
-     *   entry. The wire format is uniform across single and bulk callers;
-     *   the SDK helpers (`Put` vs `PutMany`) hide the wrapping for the
-     *   single-record case. Per-key upserts replaced whole-collection REPLACE
-     *   pushes, which silently dropped codewords when a caller pushed an
-     *   intermediate snapshot.
-     *   default []
-     * @param group Writer-chosen group label stamped on EVERY entry in this call — which
-     *   of the caller's named replace-sets these records belong to. See the
-     *   record envelope's `group`: last-write placement, meaningful only
-     *   within a writer. Absent = ungrouped, the common case. Call-level
-     *   rather than per-entry because a put that mixes groups is a caller
-     *   composing two writes, not one write with two meanings.
-     * @param label Optional human-readable label for the collection as a whole — the
-     *   friendly category name shown on the Discovery HUD's tag badge and in
-     *   the Settings UI, in place of the raw collection id (`Badge` instead of
-     *   `browser_hints_arch_strict`). This is the dynamic-collection counterpart
-     *   to a manifest-declared collection's `schema.label`; a plugin creating a
-     *   collection at runtime declares its label here. Same persistence
-     *   semantics as `roles`: last-write-wins, and a put omitting `label`
-     *   leaves the prior setting in place.
-     * @param roles Optional per-payload-field display roles. Used by the Settings
-     *   UI / discovery HUD to know which payload field is the primary
-     *   label, which is the subtitle, etc. Equivalent to the `roles`
-     *   argument on `collection.push`. Mostly meaningful for
-     *   auto-registered dynamic collections — manifest-declared
-     *   collections get their roles from the schema. On the first
-     *   `collection.put` to a not-yet-registered name, the roles are
-     *   stored alongside the auto-registered schema. Subsequent puts
-     *   with `roles` overwrite the prior setting; puts omitting
-     *   `roles` leave roles unchanged.
-     *
-     *   Wire-lenient: an entry whose role string this host doesn't know
-     *   binds nothing but does NOT fail the put — see `DisplayRoles`.
      */
-    collectionPut(name: string, entries?: CollectionPutEntry[], group?: string, label?: string, roles?: Record<string, FieldDisplay>): Promise<CollectionPutResponse>;
+    collectionPut(req: CollectionPutRequest): Promise<CollectionPutResponse>;
     /**
      * Make the records in scope exactly the given set: upsert changed, delete absent, skip byte-identical. Scope is required and bounds what may be deleted.
-     * @param entries The desired set. After the call, the records in scope are exactly these.
-     *   default []
-     * @param label Same semantics as `collection.put`'s `label`.
-     * @param roles Same semantics as `collection.put`'s `roles`.
-     * @param scope What the call is allowed to delete. Required — see `ReplaceScope`.
      */
-    collectionReplace(name: string, scope: ReplaceScope, entries?: CollectionPutEntry[], label?: string, roles?: Record<string, FieldDisplay>): Promise<CollectionReplaceResponse>;
+    collectionReplace(req: CollectionReplaceRequest): Promise<CollectionReplaceResponse>;
     /**
      * Create a simple user list of words (name + words_text, one entry per line, optional `word = value`) and seed its entries
-     * @param description default ""
-     * @param name Collection name (lowercase, underscores).
-     * @param wordsText default ""
      */
-    collectionsCreateUser(name: string, description?: string, wordsText?: string): Promise<CollectionsCreateUserResponse>;
+    collectionsCreateUser(req: CollectionsCreateUserRequest): Promise<CollectionsCreateUserResponse>;
     /**
      * List collections with entries for display, optionally filtered by kind
-     * @param kind Filter by collection kind: "entity", "data", "commands", "log". If omitted, returns all.
-     *   default null
      */
-    collectionsList(kind?: string): Promise<CollectionsListSection[]>;
+    collectionsList(req: CollectionsListRequest): Promise<CollectionsListSection[]>;
     /**
      * List the collections holding records the caller owns, with per-group counts — the enumeration half of per-record ownership
      */
@@ -797,20 +721,15 @@ declare module "./plugin.js" {
     /**
      * Add an extra spoken form (alias) for an existing command
      */
-    commandsAddAlias(action: string, defaultPattern: string, newPattern: string): Promise<void>;
+    commandsAddAlias(req: CommandsAddAliasRequest): Promise<void>;
     /**
      * Author-time acoustic confusability for a phrase: existing command words it may be misheard as that are co-eligible in its context
-     * @param requiresTags The command's context (its `requires_tags`); empty = free context. Used by
-     *   tier-2 so a warning only fires when the confuser is co-eligible here.
-     *   default []
-     * @param words The literal spoken words of the phrase being authored.
-     *   default []
      */
-    commandsConfusability(requiresTags?: string[], words?: string[]): Promise<ConfusabilityFinding[]>;
+    commandsConfusability(req: CommandsConfusabilityRequest): Promise<ConfusabilityFinding[]>;
     /**
      * Delete a user command by canonical name
      */
-    commandsDelete(canonical: string): Promise<void>;
+    commandsDelete(req: CommandsDeleteRequest): Promise<void>;
     /**
      * Flat enumeration of every registered command with dynamic/static classification — calibration host source of truth
      */
@@ -829,254 +748,96 @@ declare module "./plugin.js" {
     commandsListOverrides(): Promise<CommandOverride[]>;
     /**
      * Register commands with the matching engine to the matching engine
-     * @param commands The commands to push. Replaces the commands contributed by the
-     *   calling plugin (the whole set, or one `group`).
-     *
-     *   The RUNTIME type stays `serde_json::Value` deliberately: each entry
-     *   is parsed individually into `commands::PartialCommand` further in,
-     *   so one malformed command is reported as one malformed command
-     *   rather than failing the caller's whole push. The SCHEMA says what
-     *   the entries are (2026-09-19 census) — this is the one place
-     *   `#[schemars(with = ...)]` earns its keep, making the schema MORE
-     *   precise than the declaration rather than less, which is the exact
-     *   opposite of every other use of it this census deleted.
-     *
-     *   Until now the generated wrapper took raw JSON, which is why all
-     *   three SDKs hand-wrote a typed push beside it (Go's
-     *   `PushCommandSpecs`).
-     *   default null
-     * @param group Optional named group this push owns. Absent replaces the plugin's
-     *   ENTIRE command set (the original semantics, unchanged); present
-     *   replaces only the records in that group and leaves the plugin's other
-     *   groups intact.
-     *
-     *   Exists because the single implicit slot is a race whenever a plugin has
-     *   more than one command source. Browser has five (scroll, find,
-     *   references, hint skeleton, palette) and each used to push
-     *   independently — whichever landed last was the only set the matcher saw,
-     *   and the hint skeleton routinely lost. Its workaround is a mutex plus
-     *   rebuilding the union from every builder on each call. With groups each
-     *   source owns its own, and dropping a source drops its group.
-     *
-     *   This is the same "can two of these coexist?" failure that
-     *   `collection.replace`'s scope fixes for records: a primitive that assumes
-     *   one source breaks as soon as there are two.
      */
-    commandsPush(commands?: CommandSpec[], group?: string): Promise<CommandsPushResponse>;
+    commandsPush(req: CommandsPushRequest): Promise<CommandsPushResponse>;
     /**
      * Remove an added spoken form (alias) from a command
      */
-    commandsRemoveAlias(action: string, defaultPattern: string, newPattern: string): Promise<CommandsRemoveAliasResponse>;
+    commandsRemoveAlias(req: CommandsRemoveAliasRequest): Promise<CommandsRemoveAliasResponse>;
     /**
      * Reset a command override to the plugin default
      */
-    commandsReset(canonical: string): Promise<void>;
+    commandsReset(req: CommandsResetRequest): Promise<void>;
     /**
      * Remove a user command-phrase override (revert to the plugin default)
      */
-    commandsResetOverride(action: string, defaultPattern: string): Promise<CommandsResetOverrideResponse>;
+    commandsResetOverride(req: CommandsResetOverrideRequest): Promise<CommandsResetOverrideResponse>;
     /**
      * Resolve words against the command registry — returns dispatch decision, partial-match feedback, and tiebreaker telemetry in one envelope
-     * @param activeTags Active tags for tag-based scoping. If None, uses the state's active_tags.
-     *   default null
-     * @param collections Narrow completions to commands contributed by these collections'
-     *   contributors. None or empty = all.
-     *   default null
-     * @param preferOwner Tiebreak hint for a genuine tie. When resolution reduces to 2+ equally-
-     *   eligible commands the matcher cannot separate, and exactly one of them
-     *   is owned by this plugin, that candidate is dispatched as a normal single
-     *   winner instead of the tie being surfaced. It selects *only* among the
-     *   already-tied candidates — it never overrides normal precedence
-     *   (longest-match, gated-over-ungated, scope) and has no effect when there
-     *   is no tie or when zero/multiple tied candidates match. Transient and
-     *   per-resolve; the caller supplies it for one call, it is not a stored
-     *   preference.
-     * @param preview Dry-run / verify-don't-execute mode. When true, the matcher computes
-     *   the full decision (winner, completions, telemetry) but commits
-     *   nothing: no tag writes are applied, no `sets_on_partial` bridge is
-     *   seeded, and no `command_matched`/`command_no_match` telemetry is
-     *   emitted. The action is never dispatched by `resolve` in either mode —
-     *   `preview` additionally suppresses the *side effects* of resolution so
-     *   a consumer (e.g. calibration command-practice) can score "would this
-     *   fire the right command?" without mutating live state or polluting the
-     *   no-match dashboards. Default false: normal resolve commits as before.
-     *   default false
-     * @param requireTag Restrict completions to commands requiring this tag.
-     *   default null
-     * @param sessionId Audio session ID from the Swift shell. Informational — links audio
-     *   lifecycle events to command matches.
-     * @param source Input source: "command_hold", "continuous", "selection", "api".
-     * @param words Words to match against the command registry.
-     *   default []
      */
-    commandsResolve(activeTags?: string[], collections?: string[], preferOwner?: string, preview?: boolean, requireTag?: string, sessionId?: string, source?: string, words?: string[]): Promise<CommandsResolveResponse>;
+    commandsResolve(req: CommandsResolveRequest): Promise<CommandsResolveResponse>;
     /**
      * Set a user command-phrase override (replace a command's spoken form)
      */
-    commandsSetOverride(action: string, defaultPattern: string, newPattern: string): Promise<void>;
+    commandsSetOverride(req: CommandsSetOverrideRequest): Promise<void>;
     /**
      * Send a control signal to the Swift shell via the control stream
-     * @param signal Raw control-stream signal string (e.g. "open hud", "hide discovery").
-     *   Forwarded verbatim to the Swift shell via the actuator's control stream.
      */
-    controlSignal(signal: string): Promise<void>;
+    controlSignal(req: ControlSignalRequest): Promise<void>;
     /**
      * Notify that the discovery HUD closed; emits _platform.discovery.closed
      */
     discoveryClosed(): Promise<void>;
     /**
      * Dispatch a typed Action to a plugin or platform builtin
-     * @param action The action to dispatch.
      */
-    dispatch(action: Action): Promise<DispatchResponse>;
+    dispatch(req: DispatchRequest): Promise<DispatchResponse>;
     /**
      * Assert an exclusivity-shape platform effect on behalf of this plugin
-     * @param name Registered effect name (e.g. `suppress_notifications`). Must be
-     *   declared in the plugin's manifest `consumes.effects.asserts` and
-     *   match an entry in the closed `effects::REGISTERED_EFFECTS` registry.
      */
-    effectsAssert(name: string): Promise<EffectsAssertResponse>;
+    effectsAssert(req: EffectsAssertRequest): Promise<EffectsAssertResponse>;
     /**
      * Query whether this plugin holds top-of-stack for the named effect
-     * @param name Registered effect name to query.
      */
-    effectsIsActive(name: string): Promise<EffectsIsActiveResponse>;
+    effectsIsActive(req: EffectsIsActiveRequest): Promise<EffectsIsActiveResponse>;
     /**
      * Retract this plugin's assertion of an exclusivity-shape platform effect
-     * @param name Registered effect name to retract. The plugin's frame is removed
-     *   from this effect's ownership stack. If no frame exists, the call
-     *   is a no-op (`retracted=false`, no error).
      */
-    effectsRetract(name: string): Promise<EffectsRetractResponse>;
+    effectsRetract(req: EffectsRetractRequest): Promise<EffectsRetractResponse>;
     /**
      * Append an event to the structured event log
-     * @param data Free-form event payload. Stored as a raw JSON object on the event
-     *   log line.
-     *   default null
-     * @param eventType Event type discriminator (e.g. "session_start", "match", "miss").
-     * @param sessionId Logical session id this event belongs to (8-char prefix used by
-     *   the event-stream tooling). Defaults to "?" if absent.
-     *   default "?"
      */
-    eventsAppend(eventType: string, data?: unknown, sessionId?: string): Promise<void>;
+    eventsAppend(req: EventsAppendRequest): Promise<void>;
     /**
      * Emit a plugin event on the event bus
-     * @param correlationId Optional correlation id linking related events together for
-     *   debugging. Auto-generated by the platform when omitted and the
-     *   emitting plugin is processing an event that already carried one.
-     *   default null · pattern ^tr_[0-9A-Za-z]{11}$
-     * @param data Free-form event payload published to subscribers.
-     *   default null
-     * @param eventType Convention-based event type (e.g. "clipboard.copied"). The
-     *   `_platform.*` namespace is reserved for the actuator.
      */
-    eventsEmit(eventType: string, correlationId?: string, data?: unknown): Promise<void>;
+    eventsEmit(req: EventsEmitRequest): Promise<void>;
     /**
      * Perform an HTTPS request to one of this plugin's allowed hosts, substituting the plugin's stored secrets into named headers. The plugin never sees the secret; redirects are returned, not followed
-     * @param body A UTF-8 body. Exactly one of `body` / `body_base64`, or neither.
-     * @param bodyBase64 A binary body, base64.
-     * @param headers default []
-     * @param method `GET` when omitted.
-     * @param timeoutMs Overall deadline; default 30000, at most 120000.
-     *   wire uint64 (64-bit) · min 0
-     * @param url `https://` only, to a host this plugin declares in `requires.network`
-     *   and the user has allowed.
      */
-    httpRequest(url: string, body?: string, bodyBase64?: string, headers?: HttpHeader[], method?: string, timeoutMs?: number): Promise<HttpRequestResponse>;
+    httpRequest(req: HttpRequestRequest): Promise<HttpRequestResponse>;
     /**
      * Create a new HUD broadcast channel at runtime
-     * @param acceptsInput Whether the channel's window receives keyboard/mouse input.
-     *   Defaults to false.
-     *   default false
-     * @param anchor Anchor position on screen. Defaults to `"top-right"`.
-     *
-     *   Declared 2026-09-19 (census) — the enum has existed all along and
-     *   the doc comment was spelling out its variants by hand. Note the
-     *   behaviour change that comes with it: an unrecognised anchor used to
-     *   fall back to the default SILENTLY (`unwrap_or_else`), putting the
-     *   window somewhere the caller did not ask for with nothing said; it
-     *   now fails the call by name. Absent still means the default.
-     *   default "top-right"
-     * @param channel Channel name. Must be unique across all plugins.
-     * @param description Optional human-readable description shown in dev tooling.
-     *   default ""
-     * @param draggable Whether the shell lets the user drag this window and remembers its
-     *   position. Draggable windows should also set `follows_focus: false`.
-     *   Defaults to false.
-     *   default false
-     * @param followsFocus Whether this channel follows the active display on focus changes.
-     *   Defaults to true. Set to false for user-initiated HUDs that should
-     *   stay pinned to the display where they were opened.
-     *   default true
-     * @param minHeight Minimum window height in points. Defaults to 100.
-     *   wire uint32 · default 100 · min 0
-     * @param onPointer Pointer-dodge behavior: "none" (default) or "fade" (dodge the mouse —
-     *   fade to near-transparent while the pointer is inside the frame).
-     *   default "none"
-     * @param stackOrder Stack position among windows sharing this anchor: offsets ascend from the
-     *   anchor edge, so the lowest pins at the corner (a persistent status window)
-     *   and higher values stack away (transient toasts). Ties broken by channel
-     *   name. Defaults to 0.
-     *   wire int32 · default 0
-     * @param transparent Fully transparent window — the shell skips its frosted vibrancy panel
-     *   and window shadow, so only the plugin's own markup paints. Defaults
-     *   to false (frosted).
-     *   default false
-     * @param width Window width in points. Defaults to 320.
-     *   wire uint32 · default 320 · min 0
      */
-    hudCreateChannel(channel: string, acceptsInput?: boolean, anchor?: Anchor, description?: string, draggable?: boolean, followsFocus?: boolean, minHeight?: number, onPointer?: OnPointer, stackOrder?: number, transparent?: boolean, width?: number): Promise<void>;
+    hudCreateChannel(req: HUDCreateChannelRequest): Promise<void>;
     /**
      * Hide a HUD channel's window
-     * @param channel Channel name to hide. Sends a `close <channel>` (or
-     *   `hide <channel>` for built-in channels) to the Swift shell.
      */
-    hudHide(channel: string): Promise<void>;
+    hudHide(req: HUDHideRequest): Promise<void>;
     /**
      * Push HTML fragments to a named HUD channel
-     * @param channel Name of the HUD channel to push fragments into. Must be owned by
-     *   the calling plugin (verified via
-     *   `HudChannelRegistry::verify_owner`).
-     * @param fragments The fragments to patch into the channel, in order.
-     *
-     *   Declared 2026-09-19 (census). The handler already deserialized
-     *   exactly `Vec<HudFragment>` and failed the call otherwise, so the
-     *   opaque schema described nothing the platform actually accepted.
-     *   default []
      */
-    hudPush(channel: string, fragments?: HudFragment[]): Promise<void>;
+    hudPush(req: HUDPushRequest): Promise<void>;
     /**
      * Remove a HUD broadcast channel
-     * @param channel Channel name to remove. Must be owned by the calling plugin.
      */
-    hudRemoveChannel(channel: string): Promise<HUDRemoveChannelResponse>;
+    hudRemoveChannel(req: HUDRemoveChannelRequest): Promise<HUDRemoveChannelResponse>;
     /**
      * Report actual rendered size for a HUD channel window
-     * @param channel Channel name whose actual rendered size is being reported.
-     * @param height Actual rendered height in points (used by world-model entries
-     *   instead of `min_height` when known).
-     *   wire uint32 · min 0
      */
-    hudSetSize(channel: string, height: number): Promise<void>;
+    hudSetSize(req: HUDSetSizeRequest): Promise<void>;
     /**
      * Show a HUD channel's window
-     * @param channel Channel name to show. Sends an `open <channel>` message to the
-     *   Swift shell.
      */
-    hudShow(channel: string): Promise<void>;
+    hudShow(req: HUDShowRequest): Promise<void>;
     /**
      * Click a mouse button
-     * @param button Mouse button: "left", "right", or "middle". Defaults to "left".
-     *   default "left"
      */
-    inputClick(button?: string): Promise<void>;
+    inputClick(req: InputClickRequest): Promise<void>;
     /**
      * Perform a clipboard action (copy, paste, or set text)
-     * @param action Action: "copy", "paste", or "set".
-     * @param text Text to set (only used by `action: "set"`).
-     *   default null
      */
-    inputClipboardAction(action: string, text?: string): Promise<void>;
+    inputClipboardAction(req: InputClipboardActionRequest): Promise<void>;
     /**
      * Get recent clipboard entries (if available)
      */
@@ -1084,7 +845,7 @@ declare module "./plugin.js" {
     /**
      * Read clipboard contents by type
      */
-    inputClipboardRead(contentType: string): Promise<InputClipboardReadResponse>;
+    inputClipboardRead(req: InputClipboardReadRequest): Promise<InputClipboardReadResponse>;
     /**
      * Read all items from the clipboard
      */
@@ -1092,91 +853,51 @@ declare module "./plugin.js" {
     /**
      * Read clipboard contents in a specific pasteboard type (UTI)
      */
-    inputClipboardReadFormat(format: string): Promise<InputClipboardReadFormatResponse>;
+    inputClipboardReadFormat(req: InputClipboardReadFormatRequest): Promise<InputClipboardReadFormatResponse>;
     /**
      * Write typed content to clipboard
      */
-    inputClipboardWrite(contentType: string, data: string): Promise<boolean>;
+    inputClipboardWrite(req: InputClipboardWriteRequest): Promise<boolean>;
     /**
      * Write multiple typed items to the clipboard
-     * @param items default []
      */
-    inputClipboardWriteItems(items?: ClipboardWriteItem[]): Promise<boolean>;
+    inputClipboardWriteItems(req: InputClipboardWriteItemsRequest): Promise<boolean>;
     /**
      * Double-click at position
-     * @param x wire int32 · default null
-     * @param y wire int32 · default null
      */
-    inputDoubleClick(x?: number, y?: number): Promise<void>;
+    inputDoubleClick(req: InputDoubleClickRequest): Promise<void>;
     /**
      * Atomic drag: mouse down, move, mouse up
-     * @param durationMs wire uint64 (64-bit) · default 0 · min 0
-     * @param fromX wire int32
-     * @param fromY wire int32
-     * @param toX wire int32
-     * @param toY wire int32
      */
-    inputDrag(fromX: number, fromY: number, toX: number, toY: number, durationMs?: number): Promise<void>;
+    inputDrag(req: InputDragRequest): Promise<void>;
     /**
      * List available keyboard input sources
      */
     inputListInputSources(): Promise<InputSource[]>;
     /**
      * Press, release, or drag-latch a mouse button (for drag operations, etc.)
-     * @param button Button: "left", "right", or "middle". Defaults to "left".
-     *   default "left"
-     * @param direction Direction: "press", "release", or "drag". "drag" posts a
-     *   zero-distance dragged event at the current cursor position — macOS
-     *   only treats a window as grabbed once a dragged event follows the
-     *   press, so drag-based operations need it between press and release.
      */
-    inputMouseButton(direction: string, button?: string): Promise<void>;
+    inputMouseButton(req: InputMouseButtonRequest): Promise<void>;
     /**
      * Parse a browser key event into a BranchKit combo string
-     * @param alt default false
-     * @param code `KeyboardEvent.code` — the physical key, layout-independent.
-     *   default ""
-     * @param ctrl default false
-     * @param key `KeyboardEvent.key` — used only to spot a bare modifier press.
-     *   default ""
-     * @param meta default false
-     * @param shift default false
      */
-    inputParseKeyEvent(alt?: boolean, code?: string, ctrl?: boolean, key?: string, meta?: boolean, shift?: boolean): Promise<InputParseKeyEventResponse>;
+    inputParseKeyEvent(req: InputParseKeyEventRequest): Promise<InputParseKeyEventResponse>;
     /**
      * Press a key by raw keycode or name, with optional modifiers
-     * @param code Raw keycode (takes priority over `name` if both are present).
-     *   wire uint16 · default null · min 0 · max 65535
-     * @param modifiers Modifier keys to hold during the tap (e.g. "command", "shift").
-     *   default []
-     * @param name Named key (e.g. "return", "tab"). Resolved via `resolve_key_name`.
-     *   Required if `code` is absent.
-     *   default null
      */
-    inputPressKey(code?: number, modifiers?: string[], name?: string): Promise<void>;
+    inputPressKey(req: InputPressKeyRequest): Promise<void>;
     /**
      * Send a raw key event (press, release, or click) without modifier lifting
-     * @param code Raw macOS keycode.
-     *   wire uint16 · min 0 · max 65535
-     * @param direction One of "press", "release", or "click".
      */
-    inputRawKey(code: number, direction: string): Promise<void>;
+    inputRawKey(req: InputRawKeyRequest): Promise<void>;
     /**
      * Right-click at position
-     * @param x wire int32 · default null
-     * @param y wire int32 · default null
      */
-    inputRightClick(x?: number, y?: number): Promise<void>;
+    inputRightClick(req: InputRightClickRequest): Promise<void>;
     /**
      * Scroll the mouse wheel
-     * @param amount Amount in pixels/units. Defaults to 5.
-     *   wire int32 · default 5
-     * @param direction Direction: "up", "down", "left", or "right".
-     * @param unit Scroll unit: "line" (discrete, default) or "pixel" (continuous/smooth).
-     *   Pixel units are needed for horizontal scroll in most browsers.
-     *   default "line"
      */
-    inputScroll(direction: string, amount?: number, unit?: string): Promise<void>;
+    inputScroll(req: InputScrollRequest): Promise<void>;
     /**
      * Select all content (Cmd+A)
      */
@@ -1184,28 +905,19 @@ declare module "./plugin.js" {
     /**
      * Switch keyboard input source
      */
-    inputSwitchInputSource(sourceId: string): Promise<boolean>;
+    inputSwitchInputSource(req: InputSwitchInputSourceRequest): Promise<boolean>;
     /**
      * Triple-click at position (select paragraph/line)
-     * @param x wire int32 · default null
-     * @param y wire int32 · default null
      */
-    inputTripleClick(x?: number, y?: number): Promise<void>;
+    inputTripleClick(req: InputTripleClickRequest): Promise<void>;
     /**
      * Type text into the active application via clipboard paste
-     * @param text Text to type into the active application.
      */
-    inputTypeText(text: string): Promise<void>;
+    inputTypeText(req: InputTypeTextRequest): Promise<void>;
     /**
      * Register keybind snapshot with the platform (caches and sends to Swift shell)
-     * @param snapshot The full keybind registry to install, replacing what is there.
-     *
-     *   Declared 2026-09-19 (census). The handler already deserialized
-     *   exactly `RegistrySnapshot` and refused anything else; the doc
-     *   comment was transcribing the shape by hand, and had gone stale —
-     *   an entry is `{ combo, action, source, params? }`.
      */
-    keybindsRegister(snapshot: RegistrySnapshot): Promise<KeybindsRegisterResponse>;
+    keybindsRegister(req: KeybindsRegisterRequest): Promise<KeybindsRegisterResponse>;
     /**
      * Get the system accent color name
      */
@@ -1220,9 +932,8 @@ declare module "./plugin.js" {
     nativeAccessibilityEnabled(): Promise<NativeAccessibilityEnabledResponse>;
     /**
      * Bring an app to front by bundle ID
-     * @param allWindows default false
      */
-    nativeActivateApp(bundleId: string, allWindows?: boolean): Promise<void>;
+    nativeActivateApp(req: NativeActivateAppRequest): Promise<void>;
     /**
      * Get the primary active network service name
      */
@@ -1262,44 +973,43 @@ declare module "./plugin.js" {
     /**
      * Get the filesystem path to an app bundle by bundle ID
      */
-    nativeAppBundlePath(bundleId: string): Promise<NativeAppBundlePathResponse>;
+    nativeAppBundlePath(req: NativeAppBundlePathRequest): Promise<NativeAppBundlePathResponse>;
     /**
      * Get focused window ID for app by bundle ID
      */
-    nativeAppFocusedWindowID(bundleId: string): Promise<string>;
+    nativeAppFocusedWindowID(req: NativeAppFocusedWindowIDRequest): Promise<string>;
     /**
      * Get app icon as PNG (base64)
-     * @param size wire uint32 · default 64 · min 0
      */
-    nativeAppIcon(bundleId: string, size?: number): Promise<NativeAppIconResponse>;
+    nativeAppIcon(req: NativeAppIconRequest): Promise<NativeAppIconResponse>;
     /**
      * Get path to app icon
      */
-    nativeAppIconPath(bundleId: string): Promise<string>;
+    nativeAppIconPath(req: NativeAppIconPathRequest): Promise<string>;
     /**
      * Check if app is an LSUIElement (agent/background). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeAppIsAgent(bundleId: string): Promise<NativeAppIsAgentResponse>;
+    nativeAppIsAgent(req: NativeAppIsAgentRequest): Promise<NativeAppIsAgentResponse>;
     /**
      * Check if an app is running by bundle ID
      */
-    nativeAppIsRunning(bundleId: string): Promise<NativeAppIsRunningResponse>;
+    nativeAppIsRunning(req: NativeAppIsRunningRequest): Promise<NativeAppIsRunningResponse>;
     /**
      * Check if app is in login items
      */
-    nativeAppLaunchAtLogin(bundleId: string): Promise<NativeAppLaunchAtLoginResponse>;
+    nativeAppLaunchAtLogin(req: NativeAppLaunchAtLoginRequest): Promise<NativeAppLaunchAtLoginResponse>;
     /**
      * Get bundle metadata for an application
      */
-    nativeAppMetadata(bundleId: string): Promise<NativeAppMetadataResponse>;
+    nativeAppMetadata(req: NativeAppMetadataRequest): Promise<NativeAppMetadataResponse>;
     /**
      * Get an app path by bundle ID
      */
-    nativeAppPath(bundleId: string): Promise<string>;
+    nativeAppPath(req: NativeAppPathRequest): Promise<string>;
     /**
      * Get PID of running app by bundle ID
      */
-    nativeAppPid(bundleId: string): Promise<number>;
+    nativeAppPid(req: NativeAppPidRequest): Promise<number>;
     /**
      * Get the user's Application Support directory path
      */
@@ -1307,7 +1017,7 @@ declare module "./plugin.js" {
     /**
      * Get an app version by bundle ID
      */
-    nativeAppVersion(bundleId: string): Promise<string>;
+    nativeAppVersion(req: NativeAppVersionRequest): Promise<string>;
     /**
      * List each app playing audio, with its own volume and mute, as the system mixer shows it. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
      */
@@ -1315,19 +1025,19 @@ declare module "./plugin.js" {
     /**
      * List all windows belonging to a specific app by bundle ID
      */
-    nativeAppWindows(bundleId: string): Promise<WindowDetail[]>;
+    nativeAppWindows(req: NativeAppWindowsRequest): Promise<WindowDetail[]>;
     /**
      * Count windows for an app by bundle ID
      */
-    nativeAppWindowsCount(bundleId: string): Promise<number>;
+    nativeAppWindowsCount(req: NativeAppWindowsCountRequest): Promise<number>;
     /**
      * Applications the OS registers as able to open a given file (Launch Services)
      */
-    nativeAppsForPath(path: string): Promise<InstalledApp[]>;
+    nativeAppsForPath(req: NativeAppsForPathRequest): Promise<InstalledApp[]>;
     /**
      * Get volume state for a specific audio device by UID
      */
-    nativeAudioDeviceVolume(deviceUid: string): Promise<NativeAudioDeviceVolumeResponse>;
+    nativeAudioDeviceVolume(req: NativeAudioDeviceVolumeRequest): Promise<NativeAudioDeviceVolumeResponse>;
     /**
      * List all audio input and output devices
      */
@@ -1367,59 +1077,43 @@ declare module "./plugin.js" {
     /**
      * Check if automation permission is granted for target app. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeAutomationPermission(bundleId: string): Promise<NativeAutomationPermissionResponse>;
+    nativeAutomationPermission(req: NativeAutomationPermissionRequest): Promise<NativeAutomationPermissionResponse>;
     /**
      * Get the accessibility element at a screen point
-     * @param pid Only this application's element; any application's when absent.
-     *   wire int32 · default null
-     * @param x wire int32
-     * @param y wire int32
      */
-    nativeAxElementAtPoint(x: number, y: number, pid?: number): Promise<NativeAxElementAtPointResponse>;
+    nativeAxElementAtPoint(req: NativeAxElementAtPointRequest): Promise<NativeAxElementAtPointResponse>;
     /**
      * Get the accessibility element tree rooted at an element
-     * @param depth wire uint32 · default 3 · min 0
      */
-    nativeAxElementTree(element: AccessibleRef, depth?: number): Promise<AccessibleNode>;
+    nativeAxElementTree(req: NativeAxElementTreeRequest): Promise<AccessibleNode>;
     /**
      * Observe an application's accessibility changes. Notifications arrive as _platform.ax.notification, addressed to the calling plugin alone: focus_changed, value_changed, name_changed, state_changed, children_changed, selection_changed, window_opened (none named means all)
-     * @param notifications The notifications wanted, from the portable vocabulary; none means
-     *   all of them. An unknown name is refused.
-     *   default []
-     * @param pid The application to observe.
-     *   wire int32
      */
-    nativeAxObserve(pid: number, notifications?: string[]): Promise<NativeAxObserveResponse>;
+    nativeAxObserve(req: NativeAxObserveRequest): Promise<NativeAxObserveResponse>;
     /**
      * Perform an action on an accessibility element: press (its default action, what a click does), toggle, focus, expand, collapse, increment, decrement, scroll_into_view, show_menu, or one of the element's own actions by its OS name. The element's actions list says which it offers
      */
-    nativeAxPerformAction(action: string, element: AccessibleRef): Promise<boolean>;
+    nativeAxPerformAction(req: NativeAxPerformActionRequest): Promise<boolean>;
     /**
      * Read specific attributes from an accessibility element
-     * @param attributes default []
      */
-    nativeAxReadAttributes(element: AccessibleRef, attributes?: string[]): Promise<Record<string, unknown>>;
+    nativeAxReadAttributes(req: NativeAxReadAttributesRequest): Promise<Record<string, unknown>>;
     /**
      * Set an accessibility element's value (text, or a number for a slider or spin button) or focus it (focused: true). Returns whether it took
      */
-    nativeAxSetAttribute(attribute: string, element: AccessibleRef, value: unknown): Promise<boolean>;
+    nativeAxSetAttribute(req: NativeAxSetAttributeRequest): Promise<boolean>;
     /**
      * Stop observing accessibility changes. A plugin can end only its own subscriptions
      */
-    nativeAxUnobserve(subscriptionId: string): Promise<boolean>;
+    nativeAxUnobserve(req: NativeAxUnobserveRequest): Promise<boolean>;
     /**
      * Check which windows can be tiled
-     * @param windowIds default []
      */
-    nativeBatchIsTileable(windowIds?: string[]): Promise<TileableEntry[]>;
+    nativeBatchIsTileable(req: NativeBatchIsTileableRequest): Promise<TileableEntry[]>;
     /**
      * Set positions/sizes for multiple windows
-     * @param frames default []
-     * @param readback If true, sleep 10ms after applying frames and read back the actual
-     *   positions (defaults to true). Set false to skip the readback round-trip.
-     *   default true
      */
-    nativeBatchSetFrames(frames?: WindowFrame[], readback?: boolean): Promise<WindowFrame[]>;
+    nativeBatchSetFrames(req: NativeBatchSetFramesRequest): Promise<WindowFrame[]>;
     /**
      * Get battery status information
      */
@@ -1438,39 +1132,20 @@ declare module "./plugin.js" {
     nativeBatteryMaxCapacity(): Promise<number>;
     /**
      * Discover GATT services and characteristics on a paired BLE device
-     * @param deviceIdentifier Identifier for the paired BLE device. Accepts a CoreBluetooth
-     *   peripheral UUID (e.g. "12345678-...") or a device name to match
-     *   among connected BLE HID peripherals (e.g. "Shortcut Remote").
      */
-    nativeBleDiscoverServices(deviceIdentifier: string): Promise<BleService[]>;
+    nativeBleDiscoverServices(req: NativeBleDiscoverServicesRequest): Promise<BleService[]>;
     /**
      * Subscribe to GATT notifications on a BLE characteristic
-     * @param characteristicUuid GATT characteristic UUID to subscribe to (must support notify).
-     * @param deviceIdentifier CoreBluetooth peripheral UUID or device name.
-     * @param serviceUuid GATT service UUID containing the characteristic.
      */
-    nativeBleSubscribe(characteristicUuid: string, deviceIdentifier: string, serviceUuid: string): Promise<NativeBleSubscribeResponse>;
+    nativeBleSubscribe(req: NativeBleSubscribeRequest): Promise<NativeBleSubscribeResponse>;
     /**
      * Subscribe to all notify characteristics on listed services, then write — single GATT cycle
-     * @param deviceIdentifier CoreBluetooth peripheral UUID or device name.
-     * @param subscribeServices GATT service UUIDs to subscribe to all notify characteristics on.
-     *   default []
-     * @param writes Writes to perform after subscribing. The last `with_response` write
-     *   determines when the operation completes.
      */
-    nativeBleSubscribeAllThenWrite(deviceIdentifier: string, subscribeServices?: string[], writes?: BleWriteEntry[]): Promise<NativeBleSubscribeAllThenWriteResponse>;
+    nativeBleSubscribeAllThenWrite(req: NativeBleSubscribeAllThenWriteRequest): Promise<NativeBleSubscribeAllThenWriteResponse>;
     /**
      * Write bytes to a GATT characteristic on a paired BLE device
-     * @param characteristicUuid GATT characteristic UUID (e.g. "FFF1").
-     * @param data Bytes to write to the characteristic.
-     *   default []
-     * @param deviceIdentifier Identifier for the paired BLE device. Accepts a CoreBluetooth
-     *   peripheral UUID or a device name (see ble_discover_services).
-     * @param serviceUuid GATT service UUID (e.g. "FFF0").
-     * @param writeType Write type: "with_response" (default, reliable) or "without_response" (fire-and-forget).
-     *   default "with_response"
      */
-    nativeBleWrite(characteristicUuid: string, deviceIdentifier: string, serviceUuid: string, data?: number[], writeType?: string): Promise<NativeBleWriteResponse>;
+    nativeBleWrite(req: NativeBleWriteRequest): Promise<NativeBleWriteResponse>;
     /**
      * List paired/connected Bluetooth devices
      */
@@ -1489,27 +1164,24 @@ declare module "./plugin.js" {
     nativeBootVolume(): Promise<NativeBootVolumeResponse>;
     /**
      * Draw window border overlays (forwarded to Swift shell)
-     * @param frames default []
      */
-    nativeBorders(frames?: WindowFrame[]): Promise<void>;
+    nativeBorders(req: NativeBordersRequest): Promise<void>;
     /**
      * Check if Bounce Keys is on (repeated presses of one key are ignored)
      */
     nativeBounceKeys(): Promise<NativeBounceKeysResponse>;
     /**
      * Get display brightness (0.0-1.0)
-     * @param displayId wire uint32 · default null · min 0
      */
-    nativeBrightness(displayId?: number): Promise<NativeBrightnessResponse>;
+    nativeBrightness(req: NativeBrightnessRequest): Promise<NativeBrightnessResponse>;
     /**
      * Resolve a loopback TCP connection's remote port to the owning process's app bundle ID
-     * @param remotePort wire int32
      */
-    nativeBundleForRemotePort(remotePort: number): Promise<NativeBundleForRemotePortResponse>;
+    nativeBundleForRemotePort(req: NativeBundleForRemotePortRequest): Promise<NativeBundleForRemotePortResponse>;
     /**
      * Get calendar events in a date range (ISO 8601)
      */
-    nativeCalendarEventsRange(end: string, start: string): Promise<CalendarEvent[]>;
+    nativeCalendarEventsRange(req: NativeCalendarEventsRangeRequest): Promise<CalendarEvent[]>;
     /**
      * Get today's calendar events
      */
@@ -1533,33 +1205,31 @@ declare module "./plugin.js" {
     /**
      * Capture a single window as PNG (base64)
      */
-    nativeCaptureWindow(windowId: string): Promise<NativeCaptureWindowResponse>;
+    nativeCaptureWindow(req: NativeCaptureWindowRequest): Promise<NativeCaptureWindowResponse>;
     /**
      * Cascade all windows for an app
      */
-    nativeCascadeWindows(bundleId: string): Promise<boolean>;
+    nativeCascadeWindows(req: NativeCascadeWindowsRequest): Promise<boolean>;
     /**
      * Center a window on its current display
      */
-    nativeCenterWindow(windowId: string): Promise<void>;
+    nativeCenterWindow(req: NativeCenterWindowRequest): Promise<void>;
     /**
      * Check a permission status (screen_recording, camera, etc.)
      */
-    nativeCheckPermission(permission: string): Promise<NativeCheckPermissionResponse>;
+    nativeCheckPermission(req: NativeCheckPermissionRequest): Promise<NativeCheckPermissionResponse>;
     /**
      * Remove the quarantine extended attribute from a file
      */
-    nativeClearFileQuarantine(path: string): Promise<boolean>;
+    nativeClearFileQuarantine(req: NativeClearFileQuarantineRequest): Promise<boolean>;
     /**
      * Clear all delivered notifications for an app
      */
-    nativeClearNotifications(bundleId: string): Promise<boolean>;
+    nativeClearNotifications(req: NativeClearNotificationsRequest): Promise<boolean>;
     /**
      * Click a menu item by navigating the menu bar path
-     * @param path default []
-     * @param pid wire int32
      */
-    nativeClickMenuItem(pid: number, path?: string[]): Promise<boolean>;
+    nativeClickMenuItem(req: NativeClickMenuItemRequest): Promise<boolean>;
     /**
      * A number that increases when the clipboard changes. Compare two samples to detect a change; a larger value is always later. On macOS this counts copies, so re-copying identical content advances it; elsewhere it counts observed changes, so it does not
      */
@@ -1571,13 +1241,11 @@ declare module "./plugin.js" {
     /**
      * Close a window by ID
      */
-    nativeCloseWindow(windowId: string): Promise<boolean>;
+    nativeCloseWindow(req: NativeCloseWindowRequest): Promise<boolean>;
     /**
      * Sample pixel color at screen coordinate
-     * @param x wire int32
-     * @param y wire int32
      */
-    nativeColorAtPoint(x: number, y: number): Promise<NativeColorAtPointResponse>;
+    nativeColorAtPoint(req: NativeColorAtPointRequest): Promise<NativeColorAtPointResponse>;
     /**
      * Get the computer name
      */
@@ -1593,7 +1261,7 @@ declare module "./plugin.js" {
     /**
      * Copy a file or directory
      */
-    nativeCopyFile(destination: string, source: string): Promise<boolean>;
+    nativeCopyFile(req: NativeCopyFileRequest): Promise<boolean>;
     /**
      * Get CPU chip name, core count, and architecture
      */
@@ -1609,7 +1277,7 @@ declare module "./plugin.js" {
     /**
      * Create a directory (with intermediate directories)
      */
-    nativeCreateDirectory(path: string): Promise<boolean>;
+    nativeCreateDirectory(req: NativeCreateDirectoryRequest): Promise<boolean>;
     /**
      * List the current user crontab entries. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue
      */
@@ -1657,7 +1325,7 @@ declare module "./plugin.js" {
     /**
      * Get the default application for a UTI
      */
-    nativeDefaultAppForUti(uti: string): Promise<NativeDefaultAppForUtiResponse>;
+    nativeDefaultAppForUti(req: NativeDefaultAppForUtiRequest): Promise<NativeDefaultAppForUtiResponse>;
     /**
      * Get the default browser bundle ID
      */
@@ -1673,7 +1341,7 @@ declare module "./plugin.js" {
     /**
      * Delete a file or empty directory
      */
-    nativeDeleteFile(path: string): Promise<boolean>;
+    nativeDeleteFile(req: NativeDeleteFileRequest): Promise<boolean>;
     /**
      * Get the user's Desktop directory path
      */
@@ -1685,7 +1353,7 @@ declare module "./plugin.js" {
     /**
      * Detect barcodes and QR codes from an image file
      */
-    nativeDetectBarcodesFile(path: string): Promise<BarcodeResult[]>;
+    nativeDetectBarcodesFile(req: NativeDetectBarcodesFileRequest): Promise<BarcodeResult[]>;
     /**
      * Check if Dictation is enabled
      */
@@ -1696,22 +1364,20 @@ declare module "./plugin.js" {
     nativeDifferentiateWithoutColor(): Promise<NativeDifferentiateWithoutColorResponse>;
     /**
      * List files and directories at a path
-     * @param includeHidden default false
      */
-    nativeDirectoryContents(path: string, includeHidden?: boolean): Promise<DirectoryEntry[]>;
+    nativeDirectoryContents(req: NativeDirectoryContentsRequest): Promise<DirectoryEntry[]>;
     /**
      * Get disk space for a volume (default: /)
-     * @param path default ""
      */
-    nativeDiskSpace(path?: string): Promise<NativeDiskSpaceResponse>;
+    nativeDiskSpace(req: NativeDiskSpaceRequest): Promise<NativeDiskSpaceResponse>;
     /**
      * Get disk usage for a path (like du -sh)
      */
-    nativeDiskUsage(path: string): Promise<NativeDiskUsageResponse>;
+    nativeDiskUsage(req: NativeDiskUsageRequest): Promise<NativeDiskUsageResponse>;
     /**
      * Dismiss a delivered notification (partial — no-op)
      */
-    nativeDismissNotification(id: string): Promise<void>;
+    nativeDismissNotification(req: NativeDismissNotificationRequest): Promise<void>;
     /**
      * Get current display brightness (0.0-1.0)
      */
@@ -1730,18 +1396,16 @@ declare module "./plugin.js" {
     nativeDisplayMirroring(): Promise<NativeDisplayMirroringResponse>;
     /**
      * Get display refresh rate in Hz
-     * @param displayId wire uint32 · min 0
      */
-    nativeDisplayRefreshRate(displayId: number): Promise<number>;
+    nativeDisplayRefreshRate(req: NativeDisplayRefreshRateRequest): Promise<number>;
     /**
      * Get rotation for each connected display
      */
     nativeDisplayRotation(): Promise<DisplayRotation[]>;
     /**
      * Get display scale factor
-     * @param displayId wire uint32 · min 0
      */
-    nativeDisplayScaleFactor(displayId: number): Promise<number>;
+    nativeDisplayScaleFactor(req: NativeDisplayScaleFactorRequest): Promise<number>;
     /**
      * Get primary display serial number
      */
@@ -1805,7 +1469,7 @@ declare module "./plugin.js" {
     /**
      * Eject a mounted volume by path
      */
-    nativeEjectDisk(mountPoint: string): Promise<boolean>;
+    nativeEjectDisk(req: NativeEjectDiskRequest): Promise<boolean>;
     /**
      * Empty the Trash
      */
@@ -1813,7 +1477,7 @@ declare module "./plugin.js" {
     /**
      * Read an environment variable
      */
-    nativeEnvVar(name: string): Promise<NativeEnvVarResponse>;
+    nativeEnvVar(req: NativeEnvVarRequest): Promise<NativeEnvVarResponse>;
     /**
      * Get current Unix epoch time in seconds
      */
@@ -1821,7 +1485,7 @@ declare module "./plugin.js" {
     /**
      * Read extended attributes (xattrs) from a file
      */
-    nativeExtendedAttributes(path: string): Promise<unknown>;
+    nativeExtendedAttributes(req: NativeExtendedAttributesRequest): Promise<unknown>;
     /**
      * List mounted external/removable disks
      */
@@ -1841,40 +1505,39 @@ declare module "./plugin.js" {
     /**
      * Get file ACL as string
      */
-    nativeFileAcl(path: string): Promise<string>;
+    nativeFileAcl(req: NativeFileAclRequest): Promise<string>;
     /**
      * Get file creation date as ISO string
      */
-    nativeFileCreationDate(path: string): Promise<string>;
+    nativeFileCreationDate(req: NativeFileCreationDateRequest): Promise<string>;
     /**
      * Check if a file or directory exists
      */
-    nativeFileExists(path: string): Promise<NativeFileExistsResponse>;
+    nativeFileExists(req: NativeFileExistsRequest): Promise<NativeFileExistsResponse>;
     /**
      * List extended attributes on a file
      */
-    nativeFileExtendedAttributes(path: string): Promise<string[]>;
+    nativeFileExtendedAttributes(req: NativeFileExtendedAttributesRequest): Promise<string[]>;
     /**
      * Compute SHA-256 hash of a file
-     * @param algorithm default ""
      */
-    nativeFileHash(path: string, algorithm?: string): Promise<NativeFileHashResponse>;
+    nativeFileHash(req: NativeFileHashRequest): Promise<NativeFileHashResponse>;
     /**
      * Get metadata for a file or directory (size, dates, permissions)
      */
-    nativeFileMetadata(path: string): Promise<NativeFileMetadataResponse>;
+    nativeFileMetadata(req: NativeFileMetadataRequest): Promise<NativeFileMetadataResponse>;
     /**
      * Get file modification date as ISO string
      */
-    nativeFileModificationDate(path: string): Promise<string>;
+    nativeFileModificationDate(req: NativeFileModificationDateRequest): Promise<string>;
     /**
      * Get the owner user and group of a file
      */
-    nativeFileOwner(path: string): Promise<NativeFileOwnerResponse>;
+    nativeFileOwner(req: NativeFileOwnerRequest): Promise<NativeFileOwnerResponse>;
     /**
      * Check if a file has a quarantine flag
      */
-    nativeFileQuarantine(path: string): Promise<NativeFileQuarantineResponse>;
+    nativeFileQuarantine(req: NativeFileQuarantineRequest): Promise<NativeFileQuarantineResponse>;
     /**
      * Check if file sharing (SMB) is enabled
      */
@@ -1882,20 +1545,19 @@ declare module "./plugin.js" {
     /**
      * Get file size in bytes
      */
-    nativeFileSize(path: string): Promise<number>;
+    nativeFileSize(req: NativeFileSizeRequest): Promise<number>;
     /**
      * Read or write Finder tags on a file
-     * @param tags default null
      */
-    nativeFileTags(path: string, tags?: string[]): Promise<unknown>;
+    nativeFileTags(req: NativeFileTagsRequest): Promise<unknown>;
     /**
      * Get the UTI type of a file
      */
-    nativeFileType(path: string): Promise<NativeFileTypeResponse>;
+    nativeFileType(req: NativeFileTypeRequest): Promise<NativeFileTypeResponse>;
     /**
      * Get the UTI (Uniform Type Identifier) for a file
      */
-    nativeFileUti(path: string): Promise<string>;
+    nativeFileUti(req: NativeFileUtiRequest): Promise<string>;
     /**
      * Check if FileVault disk encryption is enabled
      */
@@ -1967,11 +1629,11 @@ declare module "./plugin.js" {
     /**
      * Force-quit an app by bundle ID
      */
-    nativeForceQuitApp(bundleId: string): Promise<boolean>;
+    nativeForceQuitApp(req: NativeForceQuitAppRequest): Promise<boolean>;
     /**
      * Format an instant for the user, ON THE PLATFORM. `when` is an RFC 3339 instant; `style` is one of date, time, date_time. Rendered in the USER'S LOCAL ZONE and their locale's own conventions - including calendars and digits no format pattern can express: a Lao user correctly sees the Buddhist year 2569 where a caller formatting with a CLDR pattern would render 2026, and an Odia user sees Odia digits. Prefer this over native.date_format whenever you are DISPLAYING a date rather than inspecting the locale's format. Output is NOT byte-identical across operating systems and is not meant to be - each renders its own platform's conventions for that locale.
      */
-    nativeFormatDate(style: string, when: string): Promise<NativeFormatDateResponse>;
+    nativeFormatDate(req: NativeFormatDateRequest): Promise<NativeFormatDateResponse>;
     /**
      * Get the currently active (frontmost) application
      */
@@ -1995,16 +1657,15 @@ declare module "./plugin.js" {
     /**
      * Generate a PDF from HTML content
      */
-    nativeGeneratePdf(html: string, outputPath: string): Promise<boolean>;
+    nativeGeneratePdf(req: NativeGeneratePdfRequest): Promise<boolean>;
     /**
      * Get detailed info for a single window
      */
-    nativeGetWindowInfo(windowId: string): Promise<NativeGetWindowInfoResponse>;
+    nativeGetWindowInfo(req: NativeGetWindowInfoRequest): Promise<NativeGetWindowInfoResponse>;
     /**
      * Find files matching a glob pattern
-     * @param maxResults wire uint32 · default 0 · min 0
      */
-    nativeGlobFiles(pattern: string, maxResults?: number): Promise<string[]>;
+    nativeGlobFiles(req: NativeGlobFilesRequest): Promise<string[]>;
     /**
      * Get GPU name and VRAM info
      */
@@ -2031,37 +1692,28 @@ declare module "./plugin.js" {
     nativeHardwareUuid(): Promise<NativeHardwareUuidResponse>;
     /**
      * Seize exclusive access to a HID device, suppressing native macOS events
-     * @param deviceId Device ID (e.g. "0x28bd:0x0202:0x48f42695").
      */
-    nativeHidClaim(deviceId: string): Promise<NativeHidClaimResponse>;
+    nativeHidClaim(req: NativeHidClaimRequest): Promise<NativeHidClaimResponse>;
     /**
      * List all connected non-Apple HID devices
      */
     nativeHidDevices(): Promise<HidDeviceEntry[]>;
     /**
      * Return the parsed HID element tree (buttons, axes, dials) for a connected device
-     * @param deviceId Device ID (e.g. "0x28bd:0x0202:0x48f42695").
      */
-    nativeHidElements(deviceId: string): Promise<HidElementEntry[]>;
+    nativeHidElements(req: NativeHidElementsRequest): Promise<HidElementEntry[]>;
     /**
      * Release exclusive access to a HID device, restoring native macOS behavior
-     * @param deviceId Device ID (e.g. "0x28bd:0x0202:0x48f42695").
      */
-    nativeHidRelease(deviceId: string): Promise<NativeHidReleaseResponse>;
+    nativeHidRelease(req: NativeHidReleaseRequest): Promise<NativeHidReleaseResponse>;
     /**
      * Send an output or feature report to a connected HID device
-     * @param data Raw report bytes to send.
-     *   default []
-     * @param deviceId Device ID (e.g. "0x28bd:0x0202:0x48f42695").
-     * @param reportId HID report ID.
-     *   wire uint32 · min 0
-     * @param reportType Report type: "output" or "feature".
      */
-    nativeHidSendReport(deviceId: string, reportId: number, reportType: string, data?: number[]): Promise<NativeHidSendReportResponse>;
+    nativeHidSendReport(req: NativeHidSendReportRequest): Promise<NativeHidSendReportResponse>;
     /**
      * Hide an app by bundle ID
      */
-    nativeHideApp(bundleId: string): Promise<void>;
+    nativeHideApp(req: NativeHideAppRequest): Promise<void>;
     /**
      * Get the system highlight/selection color
      */
@@ -2081,7 +1733,7 @@ declare module "./plugin.js" {
     /**
      * Resolve a hostname to IP addresses
      */
-    nativeHostnameResolve(hostname: string): Promise<string[]>;
+    nativeHostnameResolve(req: NativeHostnameResolveRequest): Promise<string[]>;
     /**
      * Get hot corner actions as JSON string
      */
@@ -2121,15 +1773,15 @@ declare module "./plugin.js" {
     /**
      * Check if an application is hidden
      */
-    nativeIsAppHidden(bundleId: string): Promise<boolean>;
+    nativeIsAppHidden(req: NativeIsAppHiddenRequest): Promise<boolean>;
     /**
      * Check if a path is a directory
      */
-    nativeIsDirectory(path: string): Promise<NativeIsDirectoryResponse>;
+    nativeIsDirectory(req: NativeIsDirectoryRequest): Promise<NativeIsDirectoryResponse>;
     /**
      * Check if file has hidden flag
      */
-    nativeIsFileHidden(path: string): Promise<NativeIsFileHiddenResponse>;
+    nativeIsFileHidden(req: NativeIsFileHiddenRequest): Promise<NativeIsFileHiddenResponse>;
     /**
      * Get the running kernel version as a bare version string
      */
@@ -2153,30 +1805,27 @@ declare module "./plugin.js" {
     /**
      * Delete a password from this plugin's keychain drawer
      */
-    nativeKeychainDelete(account: string): Promise<void>;
+    nativeKeychainDelete(req: NativeKeychainDeleteRequest): Promise<void>;
     /**
      * Read a password from this plugin's keychain drawer
      */
-    nativeKeychainRead(account: string): Promise<NativeKeychainReadResponse>;
+    nativeKeychainRead(req: NativeKeychainReadRequest): Promise<NativeKeychainReadResponse>;
     /**
      * Store a password in this plugin's keychain drawer
      */
-    nativeKeychainWrite(account: string, password: string): Promise<void>;
+    nativeKeychainWrite(req: NativeKeychainWriteRequest): Promise<void>;
     /**
      * Send a signal to a process by PID
-     * @param pid wire int32
-     * @param signal wire int32 · default 0
      */
-    nativeKillProcess(pid: number, signal?: number): Promise<boolean>;
+    nativeKillProcess(req: NativeKillProcessRequest): Promise<boolean>;
     /**
      * Get the last reboot date/time
      */
     nativeLastReboot(): Promise<NativeLastRebootResponse>;
     /**
      * Launch an application by bundle ID
-     * @param newInstance default false
      */
-    nativeLaunchApp(bundleId: string, newInstance?: boolean): Promise<void>;
+    nativeLaunchApp(req: NativeLaunchAppRequest): Promise<void>;
     /**
      * List user launch agents
      */
@@ -2252,7 +1901,7 @@ declare module "./plugin.js" {
     /**
      * Maximize window to fill screen
      */
-    nativeMaximizeWindow(windowId: string): Promise<boolean>;
+    nativeMaximizeWindow(req: NativeMaximizeWindowRequest): Promise<boolean>;
     /**
      * Get the measurement system. Returns one of: metric, us
      */
@@ -2279,9 +1928,8 @@ declare module "./plugin.js" {
     nativeMemoryPressure(): Promise<NativeMemoryPressureResponse>;
     /**
      * Read the menu bar structure of an application by PID
-     * @param pid wire int32
      */
-    nativeMenuBar(pid: number): Promise<MenuItem[]>;
+    nativeMenuBar(req: NativeMenuBarRequest): Promise<MenuItem[]>;
     /**
      * Check if menu bar auto-hide is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
@@ -2301,7 +1949,7 @@ declare module "./plugin.js" {
     /**
      * Minimize a window by ID
      */
-    nativeMinimizeWindow(windowId: string): Promise<void>;
+    nativeMinimizeWindow(req: NativeMinimizeWindowRequest): Promise<void>;
     /**
      * Get the hardware model name (e.g. MacBook Pro 14-inch 2023)
      */
@@ -2312,11 +1960,8 @@ declare module "./plugin.js" {
     nativeMountPoints(): Promise<string[]>;
     /**
      * Click a specific mouse button (middle, button4, etc.)
-     * @param button wire uint32 · min 0
-     * @param x wire int32 · default null
-     * @param y wire int32 · default null
      */
-    nativeMouseButtonClick(button: number, x?: number, y?: number): Promise<void>;
+    nativeMouseButtonClick(req: NativeMouseButtonClickRequest): Promise<void>;
     /**
      * Check if Mouse Keys is on (the numeric keypad moves the pointer)
      */
@@ -2328,21 +1973,19 @@ declare module "./plugin.js" {
     /**
      * Move or rename a file or directory
      */
-    nativeMoveFile(destination: string, source: string): Promise<boolean>;
+    nativeMoveFile(req: NativeMoveFileRequest): Promise<boolean>;
     /**
      * Move a window to a different display
-     * @param displayId wire uint32 · min 0
      */
-    nativeMoveWindowToDisplay(displayId: number, windowId: string): Promise<void>;
+    nativeMoveWindowToDisplay(req: NativeMoveWindowToDisplayRequest): Promise<void>;
     /**
      * DEPRECATED, silent no-op on modern macOS: the private CGS move APIs this calls are dead (verified on Sequoia 2026-07-25) — the window does not move and the call still reports true. Kept for older systems. For a working move, drive the visible path the bundled windows plugin uses: mouse-hold the title bar + Ctrl+N. space_id here is an opaque CGS space id from native.list_spaces, NOT the 1-based ordinal that native.switch_space takes
-     * @param spaceId wire uint64 (64-bit) · min 0
      */
-    nativeMoveWindowToSpace(spaceId: number, windowId: string): Promise<boolean>;
+    nativeMoveWindowToSpace(req: NativeMoveWindowToSpaceRequest): Promise<boolean>;
     /**
      * Set mute state on default output device
      */
-    nativeMute(muted: boolean): Promise<void>;
+    nativeMute(req: NativeMuteRequest): Promise<void>;
     /**
      * Get network link speed
      */
@@ -2366,7 +2009,7 @@ declare module "./plugin.js" {
     /**
      * Check if a host is reachable via network
      */
-    nativeNetworkReachable(host: string): Promise<NativeNetworkReachableResponse>;
+    nativeNetworkReachable(req: NativeNetworkReachableRequest): Promise<NativeNetworkReachableResponse>;
     /**
      * Get Wi-Fi signal strength in dBm
      */
@@ -2378,7 +2021,7 @@ declare module "./plugin.js" {
     /**
      * Open a new window of an app on the current Space, without switching to an existing window on another Space
      */
-    nativeNewAppWindow(bundleId: string): Promise<boolean>;
+    nativeNewAppWindow(req: NativeNewAppWindowRequest): Promise<boolean>;
     /**
      * Check if Night Shift is currently enabled
      */
@@ -2389,11 +2032,8 @@ declare module "./plugin.js" {
     nativeNotificationSoundEnabled(): Promise<NativeNotificationSoundEnabledResponse>;
     /**
      * Post a rich notification (osascript fallback)
-     * @param body default null
-     * @param sound default null
-     * @param subtitle default null
      */
-    nativeNotify(title: string, body?: string, sound?: string, subtitle?: string): Promise<NativeNotifyResponse>;
+    nativeNotify(req: NativeNotifyRequest): Promise<NativeNotifyResponse>;
     /**
      * Get currently playing media info (title, artist, album, app)
      */
@@ -2404,9 +2044,8 @@ declare module "./plugin.js" {
     nativeNumberFormatDecimal(): Promise<NativeNumberFormatDecimalResponse>;
     /**
      * Start observing window events for a PID (STUB -- not yet implemented)
-     * @param pid wire int32
      */
-    nativeObserveWindows(pid: number): Promise<NativeObserveWindowsResponse>;
+    nativeObserveWindows(req: NativeObserveWindowsRequest): Promise<NativeObserveWindowsResponse>;
     /**
      * OCR text from the clipboard image
      */
@@ -2414,24 +2053,19 @@ declare module "./plugin.js" {
     /**
      * OCR text from an image file path
      */
-    nativeOcrFile(path: string): Promise<OcrRegion[]>;
+    nativeOcrFile(req: NativeOcrFileRequest): Promise<OcrRegion[]>;
     /**
      * OCR text from the current screen
      */
     nativeOcrScreen(): Promise<OcrRegion[]>;
     /**
      * OCR text from a screen region (x, y, width, height)
-     * @param height wire double
-     * @param width wire double
-     * @param x wire double
-     * @param y wire double
      */
-    nativeOcrScreenRegion(height: number, width: number, x: number, y: number): Promise<OcrRegion[]>;
+    nativeOcrScreenRegion(req: NativeOcrScreenRegionRequest): Promise<OcrRegion[]>;
     /**
      * OCR text from a specific window by ID
-     * @param windowId wire uint32 · min 0
      */
-    nativeOcrWindow(windowId: number): Promise<OcrRegion[]>;
+    nativeOcrWindow(req: NativeOcrWindowRequest): Promise<OcrRegion[]>;
     /**
      * Check if the on-screen keyboard is on
      */
@@ -2439,45 +2073,43 @@ declare module "./plugin.js" {
     /**
      * Open an app's preferences window
      */
-    nativeOpenAppSettings(bundleId: string): Promise<void>;
+    nativeOpenAppSettings(req: NativeOpenAppSettingsRequest): Promise<void>;
     /**
      * Open a Finder window at a specific path. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeOpenFinderWindow(path: string): Promise<void>;
+    nativeOpenFinderWindow(req: NativeOpenFinderWindowRequest): Promise<void>;
     /**
      * Open System Settings to a specific pane (e.g. 'Privacy_Accessibility')
-     * @param pane default null
      */
-    nativeOpenSystemSettings(pane?: string): Promise<void>;
+    nativeOpenSystemSettings(req: NativeOpenSystemSettingsRequest): Promise<void>;
     /**
      * Open a URL or file path with the default handler
      */
-    nativeOpenTarget(target: string): Promise<void>;
+    nativeOpenTarget(req: NativeOpenTargetRequest): Promise<void>;
     /**
      * Open a URL in the default handler
      */
-    nativeOpenURL(url: string): Promise<void>;
+    nativeOpenURL(req: NativeOpenURLRequest): Promise<void>;
     /**
      * Open a URL or path with a specific application
      */
-    nativeOpenWithApp(bundleId: string, target: string): Promise<void>;
+    nativeOpenWithApp(req: NativeOpenWithAppRequest): Promise<void>;
     /**
      * Check if optimized battery charging is enabled
      */
     nativeOptimizedCharging(): Promise<NativeOptimizedChargingResponse>;
     /**
      * Extract text from a PDF file
-     * @param page wire uint64 (64-bit) · default 0 · min 0
      */
-    nativePdfExtractText(path: string, page?: number): Promise<string>;
+    nativePdfExtractText(req: NativePdfExtractTextRequest): Promise<string>;
     /**
      * Get the page count of a PDF file
      */
-    nativePdfPageCount(path: string): Promise<number>;
+    nativePdfPageCount(req: NativePdfPageCountRequest): Promise<number>;
     /**
      * Pin or unpin a window above all others
      */
-    nativePinWindowAbove(pinned: boolean, windowId: string): Promise<void>;
+    nativePinWindowAbove(req: NativePinWindowAboveRequest): Promise<void>;
     /**
      * Check if pinch-to-zoom gesture is enabled. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue
      */
@@ -2485,7 +2117,7 @@ declare module "./plugin.js" {
     /**
      * Ping a host and return latency in milliseconds
      */
-    nativePing(host: string): Promise<number>;
+    nativePing(req: NativePingRequest): Promise<number>;
     /**
      * Check if volume change feedback sound is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
@@ -2493,7 +2125,7 @@ declare module "./plugin.js" {
     /**
      * Play a named system sound
      */
-    nativePlaySound(name: string): Promise<void>;
+    nativePlaySound(req: NativePlaySoundRequest): Promise<void>;
     /**
      * Request burst-mode world model polling (200ms intervals)
      */
@@ -2516,10 +2148,8 @@ declare module "./plugin.js" {
     nativePressAndHoldEnabled(): Promise<NativePressAndHoldEnabledResponse>;
     /**
      * Assert or release sleep prevention
-     * @param assertionId default null
-     * @param reason default "BranchKit plugin"
      */
-    nativePreventSleep(assertionId?: string, reason?: string): Promise<NativePreventSleepResponse>;
+    nativePreventSleep(req: NativePreventSleepRequest): Promise<NativePreventSleepResponse>;
     /**
      * Get metadata for the primary display
      */
@@ -2542,48 +2172,40 @@ declare module "./plugin.js" {
     nativeProcessCount(): Promise<NativeProcessCountResponse>;
     /**
      * Get CPU usage for process by PID
-     * @param pid wire int32
      */
-    nativeProcessCpuUsage(pid: number): Promise<number>;
+    nativeProcessCpuUsage(req: NativeProcessCpuUsageRequest): Promise<number>;
     /**
      * Check if a process with given PID exists
-     * @param pid wire int32
      */
-    nativeProcessExists(pid: number): Promise<NativeProcessExistsResponse>;
+    nativeProcessExists(req: NativeProcessExistsRequest): Promise<NativeProcessExistsResponse>;
     /**
      * Get info about a process by PID (name, cpu, memory, path)
-     * @param pid wire int32
      */
-    nativeProcessInfo(pid: number): Promise<NativeProcessInfoResponse>;
+    nativeProcessInfo(req: NativeProcessInfoRequest): Promise<NativeProcessInfoResponse>;
     /**
      * List all running processes with PID, name, and user
      */
     nativeProcessList(): Promise<ProcessInfo[]>;
     /**
      * Get memory usage in bytes for process by PID
-     * @param pid wire int32
      */
-    nativeProcessMemoryUsage(pid: number): Promise<number>;
+    nativeProcessMemoryUsage(req: NativeProcessMemoryUsageRequest): Promise<number>;
     /**
      * Get process name by PID
-     * @param pid wire int32
      */
-    nativeProcessName(pid: number): Promise<string>;
+    nativeProcessName(req: NativeProcessNameRequest): Promise<string>;
     /**
      * Get parent PID of a process
-     * @param pid wire int32
      */
-    nativeProcessParentPid(pid: number): Promise<number>;
+    nativeProcessParentPid(req: NativeProcessParentPidRequest): Promise<number>;
     /**
      * Get the executable path for a PID
-     * @param pid wire int32
      */
-    nativeProcessPath(pid: number): Promise<string>;
+    nativeProcessPath(req: NativeProcessPathRequest): Promise<string>;
     /**
      * Get process start time as ISO string
-     * @param pid wire int32
      */
-    nativeProcessStartTime(pid: number): Promise<string>;
+    nativeProcessStartTime(req: NativeProcessStartTimeRequest): Promise<string>;
     /**
      * Get system proxy configuration
      */
@@ -2602,17 +2224,16 @@ declare module "./plugin.js" {
     nativePurgeableSpace(): Promise<number>;
     /**
      * Generate Quick Look thumbnail as PNG (base64)
-     * @param size wire uint32 · default 512 · min 0
      */
-    nativeQuickLook(path: string, size?: number): Promise<NativeQuickLookResponse>;
+    nativeQuickLook(req: NativeQuickLookRequest): Promise<NativeQuickLookResponse>;
     /**
      * Gracefully quit an app by bundle ID
      */
-    nativeQuitApp(bundleId: string): Promise<boolean>;
+    nativeQuitApp(req: NativeQuitAppRequest): Promise<boolean>;
     /**
      * Raise a window to the front
      */
-    nativeRaiseWindow(windowId: string): Promise<void>;
+    nativeRaiseWindow(req: NativeRaiseWindowRequest): Promise<void>;
     /**
      * Generate a random UUID v4
      */
@@ -2620,24 +2241,23 @@ declare module "./plugin.js" {
     /**
      * Read a preference value for an app domain
      */
-    nativeReadAppPreference(domain: string, key: string): Promise<unknown>;
+    nativeReadAppPreference(req: NativeReadAppPreferenceRequest): Promise<unknown>;
     /**
      * Read file contents as UTF-8 string
      */
-    nativeReadFile(path: string): Promise<NativeReadFileResponse>;
+    nativeReadFile(req: NativeReadFileRequest): Promise<NativeReadFileResponse>;
     /**
      * Read a file as base64-encoded binary
-     * @param maxBytes wire uint64 (64-bit) · default null · min 0
      */
-    nativeReadFileBinary(path: string, maxBytes?: number): Promise<NativeReadFileBinaryResponse>;
+    nativeReadFileBinary(req: NativeReadFileBinaryRequest): Promise<NativeReadFileBinaryResponse>;
     /**
      * Read a property list file as JSON
      */
-    nativeReadPlist(path: string): Promise<unknown>;
+    nativeReadPlist(req: NativeReadPlistRequest): Promise<unknown>;
     /**
      * Get recent documents for an app (by bundle ID)
      */
-    nativeRecentDocuments(bundleId: string): Promise<string[]>;
+    nativeRecentDocuments(req: NativeRecentDocumentsRequest): Promise<string[]>;
     /**
      * Check if Reduce Motion is enabled
      */
@@ -2657,7 +2277,7 @@ declare module "./plugin.js" {
     /**
      * Rename a file or directory (same parent, new name)
      */
-    nativeRenameFile(newName: string, path: string): Promise<boolean>;
+    nativeRenameFile(req: NativeRenameFileRequest): Promise<boolean>;
     /**
      * Request screen capture permission (shows system dialog)
      */
@@ -2669,29 +2289,27 @@ declare module "./plugin.js" {
     /**
      * Quit and relaunch an app by bundle ID
      */
-    nativeRestartApp(bundleId: string): Promise<boolean>;
+    nativeRestartApp(req: NativeRestartAppRequest): Promise<boolean>;
     /**
      * Reveal file in Finder
      */
-    nativeRevealInFinder(path: string): Promise<void>;
+    nativeRevealInFinder(req: NativeRevealInFinderRequest): Promise<void>;
     /**
      * Check if Rosetta 2 is installed (Apple Silicon). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeRosettaInstalled(): Promise<NativeRosettaInstalledResponse>;
     /**
      * Execute an AppleScript via osascript. Exists only on macOS; elsewhere it is refused with platform_no_analogue
-     * @param script AppleScript source to execute via `osascript`.
      */
-    nativeRunApplescript(script: string): Promise<NativeRunApplescriptResponse>;
+    nativeRunApplescript(req: NativeRunApplescriptRequest): Promise<NativeRunApplescriptResponse>;
     /**
      * Run JavaScript for Automation (JXA) code. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeRunJxa(script: string): Promise<NativeRunJxaResponse>;
+    nativeRunJxa(req: NativeRunJxaRequest): Promise<NativeRunJxaResponse>;
     /**
      * Run a Shortcuts.app shortcut by name. Exists only on macOS; elsewhere it is refused with platform_no_analogue
-     * @param input default null
      */
-    nativeRunShortcut(name: string, input?: string): Promise<NativeRunShortcutResponse>;
+    nativeRunShortcut(req: NativeRunShortcutRequest): Promise<NativeRunShortcutResponse>;
     /**
      * List all running applications
      */
@@ -2742,10 +2360,8 @@ declare module "./plugin.js" {
     nativeScreenSharingEnabled(): Promise<NativeScreenSharingEnabledResponse>;
     /**
      * Capture a screenshot as base64-encoded PNG
-     * @param displayId wire uint32 · default null · min 0
-     * @param windowId default null
      */
-    nativeScreenshot(displayId?: number, region?: ScreenshotRegion, windowId?: string): Promise<NativeScreenshotResponse>;
+    nativeScreenshot(req: NativeScreenshotRequest): Promise<NativeScreenshotResponse>;
     /**
      * Get screenshot file format. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
@@ -2773,7 +2389,7 @@ declare module "./plugin.js" {
     /**
      * Search contacts by name
      */
-    nativeSearchContacts(query: string): Promise<ContactInfo[]>;
+    nativeSearchContacts(req: NativeSearchContactsRequest): Promise<ContactInfo[]>;
     /**
      * Check if Secure Input is currently enabled (blocks key events)
      */
@@ -2793,262 +2409,243 @@ declare module "./plugin.js" {
     /**
      * Turn Wi-Fi (AirPort) on or off
      */
-    nativeSetAirportPower(on: boolean): Promise<boolean>;
+    nativeSetAirportPower(req: NativeSetAirportPowerRequest): Promise<boolean>;
     /**
      * Hide or unhide an app
      */
-    nativeSetAppHidden(bundleId: string, hidden: boolean): Promise<boolean>;
+    nativeSetAppHidden(req: NativeSetAppHiddenRequest): Promise<boolean>;
     /**
      * Mute or unmute one app in the system mixer; false when the app has no audio stream. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
      */
-    nativeSetAppMuted(app: string, muted: boolean): Promise<boolean>;
+    nativeSetAppMuted(req: NativeSetAppMutedRequest): Promise<boolean>;
     /**
      * Set one app's volume (0.0-1.0) in the system mixer; false when the app has no audio stream. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
-     * @param volume wire double
      */
-    nativeSetAppVolume(app: string, volume: number): Promise<boolean>;
+    nativeSetAppVolume(req: NativeSetAppVolumeRequest): Promise<boolean>;
     /**
      * Set the default audio input or output device
-     * @param deviceType "input" or "output".
      */
-    nativeSetAudioDevice(deviceType: string, uid: string): Promise<void>;
+    nativeSetAudioDevice(req: NativeSetAudioDeviceRequest): Promise<void>;
     /**
      * Set volume for a specific audio device by UID
-     * @param volume wire double
      */
-    nativeSetAudioDeviceVolume(deviceUid: string, volume: number): Promise<void>;
+    nativeSetAudioDeviceVolume(req: NativeSetAudioDeviceVolumeRequest): Promise<void>;
     /**
      * Set active audio input device by name
      */
-    nativeSetAudioInputDevice(name: string): Promise<boolean>;
+    nativeSetAudioInputDevice(req: NativeSetAudioInputDeviceRequest): Promise<boolean>;
     /**
      * Set active audio output device by name
      */
-    nativeSetAudioOutputDevice(name: string): Promise<boolean>;
+    nativeSetAudioOutputDevice(req: NativeSetAudioOutputDeviceRequest): Promise<boolean>;
     /**
      * Enable or disable auto-rearrange Spaces. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeSetAutoRearrangeSpaces(enabled: boolean): Promise<boolean>;
+    nativeSetAutoRearrangeSpaces(req: NativeSetAutoRearrangeSpacesRequest): Promise<boolean>;
     /**
      * Turn Bluetooth on or off
      */
-    nativeSetBluetoothPower(on: boolean): Promise<boolean>;
+    nativeSetBluetoothPower(req: NativeSetBluetoothPowerRequest): Promise<boolean>;
     /**
      * Turn Bounce Keys on or off (repeated presses of one key are ignored)
      */
-    nativeSetBounceKeys(enabled: boolean): Promise<boolean>;
+    nativeSetBounceKeys(req: NativeSetBounceKeysRequest): Promise<boolean>;
     /**
      * Set display brightness (0.0-1.0)
-     * @param brightness wire double
-     * @param displayId wire uint32 · default null · min 0
      */
-    nativeSetBrightness(brightness: number, displayId?: number): Promise<void>;
+    nativeSetBrightness(req: NativeSetBrightnessRequest): Promise<void>;
     /**
      * Set the computer name
      */
-    nativeSetComputerName(name: string): Promise<boolean>;
+    nativeSetComputerName(req: NativeSetComputerNameRequest): Promise<boolean>;
     /**
      * Set dark or light mode
      */
-    nativeSetDarkMode(dark: boolean): Promise<void>;
+    nativeSetDarkMode(req: NativeSetDarkModeRequest): Promise<void>;
     /**
      * Set Do Not Disturb on or off (idempotent; via the BranchKit Focus helper shortcut)
      */
-    nativeSetDnd(enabled: boolean): Promise<void>;
+    nativeSetDnd(req: NativeSetDndRequest): Promise<void>;
     /**
      * Enable or disable Dock auto-hide. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeSetDockAutoHide(enabled: boolean): Promise<boolean>;
+    nativeSetDockAutoHide(req: NativeSetDockAutoHideRequest): Promise<boolean>;
     /**
      * Enable or disable Dock magnification. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeSetDockMagnification(enabled: boolean): Promise<boolean>;
+    nativeSetDockMagnification(req: NativeSetDockMagnificationRequest): Promise<boolean>;
     /**
      * Set Dock minimize animation (genie/scale). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeSetDockMinimizeEffect(effect: string): Promise<boolean>;
+    nativeSetDockMinimizeEffect(req: NativeSetDockMinimizeEffectRequest): Promise<boolean>;
     /**
      * Set the Dock position (left, bottom, right). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeSetDockPosition(position: string): Promise<boolean>;
+    nativeSetDockPosition(req: NativeSetDockPositionRequest): Promise<boolean>;
     /**
      * Show or hide recent apps in Dock. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeSetDockShowRecents(enabled: boolean): Promise<boolean>;
+    nativeSetDockShowRecents(req: NativeSetDockShowRecentsRequest): Promise<boolean>;
     /**
      * Set Dock tile size. Exists only on macOS; elsewhere it is refused with platform_no_analogue
-     * @param size wire double
      */
-    nativeSetDockSize(size: number): Promise<boolean>;
+    nativeSetDockSize(req: NativeSetDockSizeRequest): Promise<boolean>;
     /**
      * Set an extended attribute on a file
      */
-    nativeSetExtendedAttribute(name: string, path: string, value: string): Promise<boolean>;
+    nativeSetExtendedAttribute(req: NativeSetExtendedAttributeRequest): Promise<boolean>;
     /**
      * Set file hidden flag
      */
-    nativeSetFileHidden(hidden: boolean, path: string): Promise<boolean>;
+    nativeSetFileHidden(req: NativeSetFileHiddenRequest): Promise<boolean>;
     /**
      * Set file permissions (chmod octal mode). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue
      */
-    nativeSetFilePermissions(mode: string, path: string): Promise<boolean>;
+    nativeSetFilePermissions(req: NativeSetFilePermissionsRequest): Promise<boolean>;
     /**
      * Show or hide file extensions in Finder. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue
      */
-    nativeSetFinderShowExtensions(enabled: boolean): Promise<boolean>;
+    nativeSetFinderShowExtensions(req: NativeSetFinderShowExtensionsRequest): Promise<boolean>;
     /**
      * Show or hide hidden files in Finder
      */
-    nativeSetFinderShowHidden(enabled: boolean): Promise<boolean>;
+    nativeSetFinderShowHidden(req: NativeSetFinderShowHiddenRequest): Promise<boolean>;
     /**
      * Set system highlight/accent color
      */
-    nativeSetHighlightColor(color: string): Promise<boolean>;
+    nativeSetHighlightColor(req: NativeSetHighlightColorRequest): Promise<boolean>;
     /**
      * Set a hot corner action
-     * @param action wire uint32 · min 0
      */
-    nativeSetHotCorner(action: number, corner: string): Promise<boolean>;
+    nativeSetHotCorner(req: NativeSetHotCornerRequest): Promise<boolean>;
     /**
      * Switch to a keyboard input source by ID
      */
-    nativeSetInputSource(sourceId: string): Promise<boolean>;
+    nativeSetInputSource(req: NativeSetInputSourceRequest): Promise<boolean>;
     /**
      * Set initial key repeat delay (seconds)
-     * @param delay wire double
      */
-    nativeSetKeyRepeatDelay(delay: number): Promise<boolean>;
+    nativeSetKeyRepeatDelay(req: NativeSetKeyRepeatDelayRequest): Promise<boolean>;
     /**
      * Set key repeat rate (keys per second)
-     * @param rate wire double
      */
-    nativeSetKeyRepeatRate(rate: number): Promise<boolean>;
+    nativeSetKeyRepeatRate(req: NativeSetKeyRepeatRateRequest): Promise<boolean>;
     /**
      * Turn the screen magnifier on or off; false when it did not change
      */
-    nativeSetMagnifierEnabled(enabled: boolean): Promise<boolean>;
+    nativeSetMagnifierEnabled(req: NativeSetMagnifierEnabledRequest): Promise<boolean>;
     /**
      * Enable or disable menu bar auto-hide. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeSetMenuBarAutoHide(enabled: boolean): Promise<boolean>;
+    nativeSetMenuBarAutoHide(req: NativeSetMenuBarAutoHideRequest): Promise<boolean>;
     /**
      * Turn Mouse Keys on or off (the numeric keypad moves the pointer)
      */
-    nativeSetMouseKeys(enabled: boolean): Promise<boolean>;
+    nativeSetMouseKeys(req: NativeSetMouseKeysRequest): Promise<boolean>;
     /**
      * Set mouse tracking speed
-     * @param speed wire double
      */
-    nativeSetMouseSpeed(speed: number): Promise<boolean>;
+    nativeSetMouseSpeed(req: NativeSetMouseSpeedRequest): Promise<boolean>;
     /**
      * Enable or disable Night Shift
      */
-    nativeSetNightShift(enabled: boolean): Promise<void>;
+    nativeSetNightShift(req: NativeSetNightShiftRequest): Promise<void>;
     /**
      * Show or hide the on-screen keyboard; false when it did not change
      */
-    nativeSetOnScreenKeyboardEnabled(enabled: boolean): Promise<boolean>;
+    nativeSetOnScreenKeyboardEnabled(req: NativeSetOnScreenKeyboardEnabledRequest): Promise<boolean>;
     /**
      * Set the power mode (power-saver, balanced or performance); false when refused or not offered
      */
-    nativeSetPowerMode(mode: string): Promise<boolean>;
+    nativeSetPowerMode(req: NativeSetPowerModeRequest): Promise<boolean>;
     /**
      * Turn the screen reader on or off (VoiceOver, Orca, Narrator); false when it did not change
      */
-    nativeSetScreenReaderEnabled(enabled: boolean): Promise<boolean>;
+    nativeSetScreenReaderEnabled(req: NativeSetScreenReaderEnabledRequest): Promise<boolean>;
     /**
      * Set screenshot file format (png/jpg/pdf/tiff). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeSetScreenshotFormat(format: string): Promise<boolean>;
+    nativeSetScreenshotFormat(req: NativeSetScreenshotFormatRequest): Promise<boolean>;
     /**
      * Enable or disable window shadow in screenshots. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeSetScreenshotIncludeShadow(enabled: boolean): Promise<boolean>;
+    nativeSetScreenshotIncludeShadow(req: NativeSetScreenshotIncludeShadowRequest): Promise<boolean>;
     /**
      * Set the screenshot save location. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeSetScreenshotLocation(path: string): Promise<boolean>;
+    nativeSetScreenshotLocation(req: NativeSetScreenshotLocationRequest): Promise<boolean>;
     /**
      * Set natural scroll direction
      */
-    nativeSetScrollDirectionNatural(enabled: boolean): Promise<boolean>;
+    nativeSetScrollDirectionNatural(req: NativeSetScrollDirectionNaturalRequest): Promise<boolean>;
     /**
      * Set sidebar icon size (1=small,2=medium,3=large). Exists only on macOS; elsewhere it is refused with platform_no_analogue
-     * @param size wire uint32 · min 0
      */
-    nativeSetSidebarIconSize(size: number): Promise<boolean>;
+    nativeSetSidebarIconSize(req: NativeSetSidebarIconSizeRequest): Promise<boolean>;
     /**
      * Turn Slow Keys on or off (a key registers only after it is held)
      */
-    nativeSetSlowKeys(enabled: boolean): Promise<boolean>;
+    nativeSetSlowKeys(req: NativeSetSlowKeysRequest): Promise<boolean>;
     /**
      * Enable or disable Stage Manager. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeSetStageManager(enabled: boolean): Promise<boolean>;
+    nativeSetStageManager(req: NativeSetStageManagerRequest): Promise<boolean>;
     /**
      * Turn Sticky Keys on or off (modifiers latch, so shortcuts need one key at a time)
      */
-    nativeSetStickyKeys(enabled: boolean): Promise<boolean>;
+    nativeSetStickyKeys(req: NativeSetStickyKeysRequest): Promise<boolean>;
     /**
      * Enable or disable tap-to-click
      */
-    nativeSetTapToClick(enabled: boolean): Promise<boolean>;
+    nativeSetTapToClick(req: NativeSetTapToClickRequest): Promise<boolean>;
     /**
      * Set the system text size as a factor of the default (1.0); false when refused
-     * @param scale wire double
      */
-    nativeSetTextScale(scale: number): Promise<boolean>;
+    nativeSetTextScale(req: NativeSetTextScaleRequest): Promise<boolean>;
     /**
      * Set trackpad tracking speed
-     * @param speed wire double
      */
-    nativeSetTrackpadSpeed(speed: number): Promise<boolean>;
+    nativeSetTrackpadSpeed(req: NativeSetTrackpadSpeedRequest): Promise<boolean>;
     /**
      * Register an application as the handler for a URL scheme
      */
-    nativeSetURLSchemeHandler(bundleId: string, scheme: string): Promise<boolean>;
+    nativeSetURLSchemeHandler(req: NativeSetURLSchemeHandlerRequest): Promise<boolean>;
     /**
      * Turn screen flashing on alert sounds on or off; false when it did not change
      */
-    nativeSetVisualAlertsEnabled(enabled: boolean): Promise<boolean>;
+    nativeSetVisualAlertsEnabled(req: NativeSetVisualAlertsEnabledRequest): Promise<boolean>;
     /**
      * Set system volume (0.0–1.0)
-     * @param volume wire double
      */
-    nativeSetVolume(volume: number): Promise<void>;
+    nativeSetVolume(req: NativeSetVolumeRequest): Promise<void>;
     /**
      * Set the desktop wallpaper to an image file
      */
-    nativeSetWallpaper(path: string): Promise<boolean>;
+    nativeSetWallpaper(req: NativeSetWallpaperRequest): Promise<boolean>;
     /**
      * Set window transparency
-     * @param alpha wire double
      */
-    nativeSetWindowAlpha(alpha: number, windowId: string): Promise<void>;
+    nativeSetWindowAlpha(req: NativeSetWindowAlphaRequest): Promise<void>;
     /**
      * Set a window's level (floating, normal, below)
      */
-    nativeSetWindowLevel(level: string, windowId: string): Promise<boolean>;
+    nativeSetWindowLevel(req: NativeSetWindowLevelRequest): Promise<boolean>;
     /**
      * Move a window to x,y without changing size
-     * @param x wire int32
-     * @param y wire int32
      */
-    nativeSetWindowPosition(windowId: string, x: number, y: number): Promise<void>;
+    nativeSetWindowPosition(req: NativeSetWindowPositionRequest): Promise<void>;
     /**
      * Enable or disable the drop shadow for a window. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeSetWindowShadow(enabled: boolean, windowId: string): Promise<void>;
+    nativeSetWindowShadow(req: NativeSetWindowShadowRequest): Promise<void>;
     /**
      * Resize a window without changing position
-     * @param h wire int32
-     * @param w wire int32
      */
-    nativeSetWindowSize(h: number, w: number, windowId: string): Promise<void>;
+    nativeSetWindowSize(req: NativeSetWindowSizeRequest): Promise<void>;
     /**
      * Set a window to appear on all spaces (sticky)
      */
-    nativeSetWindowSticky(sticky: boolean, windowId: string): Promise<void>;
+    nativeSetWindowSticky(req: NativeSetWindowStickyRequest): Promise<void>;
     /**
      * Get the local network sharing name
      */
@@ -3095,10 +2692,8 @@ declare module "./plugin.js" {
     nativeSpacesSpanDisplays(): Promise<NativeSpacesSpanDisplaysResponse>;
     /**
      * Speak text using the system text-to-speech engine
-     * @param rate wire double · default null
-     * @param voice default null
      */
-    nativeSpeak(text: string, rate?: number, voice?: string): Promise<void>;
+    nativeSpeak(req: NativeSpeakRequest): Promise<void>;
     /**
      * List available speech recognition locales
      */
@@ -3109,19 +2704,16 @@ declare module "./plugin.js" {
     nativeSpeechRecognitionAvailable(): Promise<NativeSpeechRecognitionAvailableResponse>;
     /**
      * Recognize speech from an audio file (returns transcript)
-     * @param locale default ""
      */
-    nativeSpeechRecognizeFile(path: string, locale?: string): Promise<string>;
+    nativeSpeechRecognizeFile(req: NativeSpeechRecognizeFileRequest): Promise<string>;
     /**
      * Get current spelling language
      */
     nativeSpellingLanguage(): Promise<NativeSpellingLanguageResponse>;
     /**
      * Search files via Spotlight
-     * @param limit wire uint32 · default 20 · min 0
-     * @param scope default null
      */
-    nativeSpotlight(query: string, limit?: number, scope?: string[]): Promise<SpotlightResult[]>;
+    nativeSpotlight(req: NativeSpotlightRequest): Promise<SpotlightResult[]>;
     /**
      * Check if Stage Manager is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
@@ -3148,9 +2740,8 @@ declare module "./plugin.js" {
     nativeSwipeBetweenPages(): Promise<NativeSwipeBetweenPagesResponse>;
     /**
      * Switch to a Mission Control desktop by number (1-16) via the user's Switch-to-Desktop symbolic hotkey (respects remaps, auto-enables disabled shortcuts; falls back to default Ctrl+N)
-     * @param spaceId wire uint64 (64-bit) · min 0
      */
-    nativeSwitchSpace(spaceId: number): Promise<void>;
+    nativeSwitchSpace(req: NativeSwitchSpaceRequest): Promise<void>;
     /**
      * Check if switching to app switches to its Space. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
@@ -3158,7 +2749,7 @@ declare module "./plugin.js" {
     /**
      * Create a symbolic link
      */
-    nativeSymlink(link: string, source: string): Promise<boolean>;
+    nativeSymlink(req: NativeSymlinkRequest): Promise<boolean>;
     /**
      * Get system appearance info (accent color, highlight color, reduce motion, reduce transparency)
      */
@@ -3246,15 +2837,15 @@ declare module "./plugin.js" {
     /**
      * Toggle Bluetooth on/off
      */
-    nativeToggleBluetooth(enabled: boolean): Promise<boolean>;
+    nativeToggleBluetooth(req: NativeToggleBluetoothRequest): Promise<boolean>;
     /**
      * Toggle native fullscreen for a window
      */
-    nativeToggleFullscreen(windowId: string): Promise<void>;
+    nativeToggleFullscreen(req: NativeToggleFullscreenRequest): Promise<void>;
     /**
      * Toggle Wi-Fi on/off
      */
-    nativeToggleWifi(enabled: boolean): Promise<boolean>;
+    nativeToggleWifi(req: NativeToggleWifiRequest): Promise<boolean>;
     /**
      * Check if Touch ID / biometric auth hardware is available
      */
@@ -3266,11 +2857,11 @@ declare module "./plugin.js" {
     /**
      * Check TCC consent status for a service (e.g. kTCCServiceAccessibility). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
-    nativeTransparencyConsent(service: string): Promise<string>;
+    nativeTransparencyConsent(req: NativeTransparencyConsentRequest): Promise<string>;
     /**
      * Move file to Trash
      */
-    nativeTrash(path: string): Promise<boolean>;
+    nativeTrash(req: NativeTrashRequest): Promise<boolean>;
     /**
      * Check if True Tone is enabled. KNOWN LIMITATION: the `corebrightnessdiag` probe this depends on is absent from macOS 15, where this always reports false. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue
      */
@@ -3286,23 +2877,23 @@ declare module "./plugin.js" {
     /**
      * Unhide a hidden application
      */
-    nativeUnhideApp(bundleId: string): Promise<void>;
+    nativeUnhideApp(req: NativeUnhideAppRequest): Promise<void>;
     /**
      * Restore a minimized window by ID
      */
-    nativeUnminimizeWindow(windowId: string): Promise<void>;
+    nativeUnminimizeWindow(req: NativeUnminimizeWindowRequest): Promise<void>;
     /**
      * Stop observing window events (STUB)
      */
-    nativeUnobserveWindows(subscriptionId: string): Promise<boolean>;
+    nativeUnobserveWindows(req: NativeUnobserveWindowsRequest): Promise<boolean>;
     /**
      * Extract a zip archive to a directory
      */
-    nativeUnzip(destination: string, source: string): Promise<boolean>;
+    nativeUnzip(req: NativeUnzipRequest): Promise<boolean>;
     /**
      * Get the bundle ID registered as the handler for a URL scheme
      */
-    nativeURLSchemeHandler(scheme: string): Promise<NativeURLSchemeHandlerResponse>;
+    nativeURLSchemeHandler(req: NativeURLSchemeHandlerRequest): Promise<NativeURLSchemeHandlerResponse>;
     /**
      * List connected USB devices
      */
@@ -3333,10 +2924,8 @@ declare module "./plugin.js" {
     nativeVpnStatus(): Promise<NativeVpnStatusResponse>;
     /**
      * Move the cursor to a position
-     * @param x wire int32
-     * @param y wire int32
      */
-    nativeWarpCursor(x: number, y: number): Promise<void>;
+    nativeWarpCursor(req: NativeWarpCursorRequest): Promise<void>;
     /**
      * Get WiFi interface information
      */
@@ -3348,54 +2937,51 @@ declare module "./plugin.js" {
     /**
      * Get the owning app bundle ID for a window
      */
-    nativeWindowApp(windowId: string): Promise<string>;
+    nativeWindowApp(req: NativeWindowAppRequest): Promise<string>;
     /**
      * Get a window position and size by ID
      */
-    nativeWindowBounds(windowId: string): Promise<NativeWindowBoundsResponse>;
+    nativeWindowBounds(req: NativeWindowBoundsRequest): Promise<NativeWindowBoundsResponse>;
     /**
      * Get display ID for window
      */
-    nativeWindowDisplayID(windowId: string): Promise<number>;
+    nativeWindowDisplayID(req: NativeWindowDisplayIDRequest): Promise<number>;
     /**
      * Check if window is fullscreen
      */
-    nativeWindowIsFullscreen(windowId: string): Promise<boolean>;
+    nativeWindowIsFullscreen(req: NativeWindowIsFullscreenRequest): Promise<boolean>;
     /**
      * Check if window is minimized
      */
-    nativeWindowIsMinimized(windowId: string): Promise<boolean>;
+    nativeWindowIsMinimized(req: NativeWindowIsMinimizedRequest): Promise<boolean>;
     /**
      * Get window layer level
      */
-    nativeWindowLayer(windowId: string): Promise<number>;
+    nativeWindowLayer(req: NativeWindowLayerRequest): Promise<number>;
     /**
      * Take a screenshot of a specific window as base64 PNG
-     * @param windowId wire uint32 · min 0
      */
-    nativeWindowScreenshot(windowId: number): Promise<string>;
+    nativeWindowScreenshot(req: NativeWindowScreenshotRequest): Promise<string>;
     /**
      * Get window subrole
      */
-    nativeWindowSubrole(windowId: string): Promise<string>;
+    nativeWindowSubrole(req: NativeWindowSubroleRequest): Promise<string>;
     /**
      * Get a window title by ID
      */
-    nativeWindowTitle(windowId: string): Promise<string>;
+    nativeWindowTitle(req: NativeWindowTitleRequest): Promise<string>;
     /**
      * Get a snapshot of all windows and displays (with managed HUD windows)
-     * @param onScreen If true, only return windows visible on screen.
-     *   default false
      */
-    nativeWorldModel(onScreen?: boolean): Promise<WorldModel>;
+    nativeWorldModel(req: NativeWorldModelRequest): Promise<WorldModel>;
     /**
      * Write a preference value for an app domain
      */
-    nativeWriteAppPreference(domain: string, key: string, value: unknown): Promise<boolean>;
+    nativeWriteAppPreference(req: NativeWriteAppPreferenceRequest): Promise<boolean>;
     /**
      * Write string contents to a file
      */
-    nativeWriteFile(contents: string, path: string): Promise<boolean>;
+    nativeWriteFile(req: NativeWriteFileRequest): Promise<boolean>;
     /**
      * Get the active Xcode developer directory path. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
@@ -3407,284 +2993,131 @@ declare module "./plugin.js" {
     /**
      * Create a zip archive from files or a directory
      */
-    nativeZip(destination: string, source: string): Promise<boolean>;
+    nativeZip(req: NativeZipRequest): Promise<boolean>;
     /**
      * Ask for one more network host at runtime (a plugin declaring requestable hosts). It appears on the plugin's page, off until the user allows it
-     * @param host One exact host (no wildcard, no port, no path).
-     * @param reason Shown to the user beside the switch — why the plugin wants it.
-     *   default ""
      */
-    networkRequestHost(host: string, reason?: string): Promise<NetworkRequestHostResponse>;
+    networkRequestHost(req: NetworkRequestHostRequest): Promise<NetworkRequestHostResponse>;
     /**
      * Nothing is true on one of your HUD channels now: clears its semantic state so every renderer stops conveying it; visibility stays yours (hud.hide)
-     * @param channel The channel on which nothing is true now. Must be owned by the
-     *   calling plugin.
      */
-    outputClear(channel: string): Promise<OutputClearResponse>;
+    outputClear(req: OutputClearRequest): Promise<OutputClearResponse>;
     /**
      * Set a HUD channel's current semantic output state — a document of what is true for the person, in human language, consumed by every renderer; supersedes the previous state
-     * @param state The document that becomes the channel's current state. Its `channel`
-     *   must be owned by the calling plugin.
      */
-    outputState(state: OutputState): Promise<OutputStateResponse>;
+    outputState(req: OutputStateRequest): Promise<OutputStateResponse>;
     /**
      * Add, remove, restore, patch, rename, revert (reset one entry to its plugin default), or reset user overrides for a collection
-     * @param action Action: "add", "remove", "restore", "reset", "patch", "rename", or
-     *   "revert".
-     * @param collection Collection name to override.
-     * @param field Field key for the "unpatch" action — removes ONE field from the
-     *   tenant's patch of `id` (the per-field inverse of "patch"; the patch
-     *   entry is dropped when its last field goes). The settings form's
-     *   per-field revert: sparse by construction, so the reverted field
-     *   resumes tracking the shipped default. Ignored by other actions.
-     *   default null
-     * @param fields Partial record fields for "patch", or complete record for "add".
-     *   default null
-     * @param id Record ID (id_field value) for patch/remove/restore actions. For
-     *   "rename" it is the entry's *current* key (surface form) to replace; for
-     *   "revert" the current key of the entry to reset to its plugin default.
-     *   default null
-     * @param newId New key (id_field value) for the "rename" action — the entry is re-added
-     *   under this key with every other field (value, aliases) preserved.
-     *   Ignored by other actions.
-     *   default null
-     * @param tenant Which overlay tenant this mutation targets — a writer-namespace value
-     *   (`"_user"` or a plugin id). Defaults: a plugin caller targets its OWN
-     *   overlay; a host caller targets `"_user"`. A plugin transporting a user
-     *   gesture from its settings tab says `"_user"` explicitly; it may never
-     *   target another plugin's overlay. Plugin overlays carry per-field
-     *   patches only (`patch`/`restore`/`reset`) — annotation, not authorship;
-     *   a plugin's patch never changes who owns the record.
-     *   default null
      */
-    overridesApply(action: string, collection: string, field?: string, fields?: unknown, id?: string, newId?: string, tenant?: string): Promise<OverridesApplyResponse>;
+    overridesApply(req: OverridesApplyRequest): Promise<OverridesApplyResponse>;
     /**
      * List overlay entries — a plugin sees which collections carry its annotations (including dangling ids to prune); the host sees every tenant
      */
     overridesList(): Promise<OverlayRow[]>;
     /**
      * Get the current command grammar word list — or, with full=true, the complete vocabulary_update seed payload (words, narrow_to, weights, DAG)
-     * @param full When true, also return the full `vocabulary_update` payload a starting
-     *   recognition pipeline would be seeded with — words plus narrow_to,
-     *   word_weights, and the structured grammar DAG. Read-only: exporting
-     *   does not touch the committed-vocab accounting. Used by the
-     *   voice-regress harness to decode against the exact live grammar.
-     *   default false
      */
-    pipelinesGrammar(full?: boolean): Promise<PipelinesGrammarResponse>;
+    pipelinesGrammar(req: PipelinesGrammarRequest): Promise<PipelinesGrammarResponse>;
     /**
      * Send a custom configuration event to one stage of a running pipeline
-     * @param data default null
-     * @param eventType Must be a custom event type — `ext.<vendor>.<name>`. The typed families
-     *   (`audio_*`, `transcript`, `vocabulary_update`) are the platform's to
-     *   send; a plugin forging one into its own pipeline was previously
-     *   unchecked here.
-     * @param name Pipeline to configure. The caller must have introduced it.
-     * @param stage Stage within that pipeline, spelled as the pipeline definition spells
-     *   it — a role like `_platform.stt` or a qualified stage name. Required:
-     *   before per-stage channels existed this operation could only ever reach
-     *   the terminal stage, and silently did nothing for any other.
      */
-    pipelinesInject(eventType: string, name: string, stage: string, data?: unknown): Promise<PipelinesInjectResponse>;
+    pipelinesInject(req: PipelinesInjectRequest): Promise<PipelinesInjectResponse>;
     /**
      * Start a named pipeline
-     * @param ephemeral default false
-     * @param paramOverrides default {}
      */
-    pipelinesRun(name: string, ephemeral?: boolean, paramOverrides?: Record<string, unknown>): Promise<PipelinesRunResponse>;
+    pipelinesRun(req: PipelinesRunRequest): Promise<PipelinesRunResponse>;
     /**
      * List currently running pipelines
      */
     pipelinesStatus(): Promise<PipelinesStatusResponse>;
     /**
      * Stop a running pipeline by name
-     * @param audioCutoffMs Shared-clock position (the AudioChunk timestamp_ms timebase) after
-     *   which buffered audio must not be processed — e.g. the onset of a
-     *   detected dictation stop phrase, from the transcript's word_onsets_ms.
-     *   Absent = process everything.
-     *   wire uint64 (64-bit) · default null · min 0
      */
-    pipelinesStop(name: string, audioCutoffMs?: number): Promise<PipelinesStopResponse>;
+    pipelinesStop(req: PipelinesStopRequest): Promise<PipelinesStopResponse>;
     /**
      * Pre-spawn + pre-load a pipeline's recognizer stages (grammar built off the hold path)
-     * @param paramOverrides Per-stage param overrides applied to the warmed consumer stages, mirroring
-     *   `pipelines.run`. Lets a caller prewarm the model it will actually run (e.g.
-     *   a user-selected STT model) instead of only the pipeline's default.
-     *   default {}
      */
-    pipelinesWarm(name: string, paramOverrides?: Record<string, unknown>): Promise<PipelinesWarmResponse>;
+    pipelinesWarm(req: PipelinesWarmRequest): Promise<PipelinesWarmResponse>;
     /**
      * Which operations and host events this machine cannot provide, and why — ask before calling instead of handling a refusal
      */
     platformProfile(): Promise<PlatformProfileResponse>;
     /**
      * Copy one file out of the caller's own data dir into Downloads and reveal it (the one egress a plugin cannot perform itself)
-     * @param filename Name to save it under. Defaults to the source file's name. A path
-     *   separator here is refused rather than resolved — this names a file in
-     *   Downloads, not a location.
-     *   default null
-     * @param path Path of the file to export, relative to the caller's data dir.
      */
-    pluginDataExport(path: string, filename?: string): Promise<PluginDataExportResponse>;
+    pluginDataExport(req: PluginDataExportRequest): Promise<PluginDataExportResponse>;
     /**
      * Write a diagnostic line to this plugin's per-plugin log file. Use shared.Logf instead for cross-cutting coordination lines that belong in actuator.log.
-     * @param data Arbitrary JSON payload — serialized to one line in the log file
-     *   so `tail -f` and `grep` work, while `jq` can still operate on
-     *   the payload column.
-     *   default null
-     * @param level Severity level for the line. v1 callers omit this and the handler
-     *   falls through to `Debug`; v2 callers pass one of
-     *   `trace`/`debug`/`info`/`warn`/`error`. Lines below the per-plugin
-     *   threshold are dropped at the handler; `warn`/`error` additionally
-     *   cross-post to `actuator.log` via the `plugin.diagnostic` event.
-     * @param tag Optional structural tag (e.g. `BK_ACTIVATE_PATH`, `STT_BATCH`).
-     *   Renders between the timestamp and the payload in the per-plugin
-     *   log file, matching the actuator log's `[TAG]` column convention.
-     *   Empty/missing renders as `[<ts>] <payload>` with no tag bracket.
-     *   default null
      */
-    pluginDebug(data?: unknown, level?: PluginLogLevel, tag?: string): Promise<void>;
+    pluginDebug(req: PluginDebugRequest): Promise<void>;
     /**
      * Report whether this plugin can do its job. For a standing condition the platform cannot see from outside — a companion app disconnected, a device unplugged — not for a call that failed once.
-     * @param degraded `true` when the plugin is running but cannot do its job — an external
-     *   dependency it needs is gone, a device it drives is unplugged, a
-     *   companion it talks to has disconnected. `false` clears the report.
-     *
-     *   This is NOT for "something failed once": a failed call is a failed
-     *   call. It is for a standing condition the user can act on and would
-     *   otherwise have to guess at.
-     * @param reason One user-facing sentence saying what is wrong and, where possible, what
-     *   to do about it — "Chrome — extension disconnected; reload it at
-     *   chrome://extensions". The plugin owns this text; the platform invents
-     *   no copy for a plugin's failure.
-     *
-     *   Required when `degraded` is true and ignored otherwise. Truncated to
-     *   200 characters (one status line; a plugin with more to say has
-     *   `plugin.debug`) and rendered as data, never markup.
-     *   default null
      */
-    pluginReportHealth(degraded: boolean, reason?: string): Promise<void>;
+    pluginReportHealth(req: PluginReportHealthRequest): Promise<void>;
     /**
      * Read the effective recording flag for a log-kind collection (privacy control plane)
      */
-    privacyGetRecording(name: string): Promise<PrivacyGetRecordingResponse>;
+    privacyGetRecording(req: PrivacyGetRecordingRequest): Promise<PrivacyGetRecordingResponse>;
     /**
      * Toggle the recording flag on a log-kind collection (privacy control plane)
      */
-    privacySetRecording(enabled: boolean, name: string): Promise<void>;
+    privacySetRecording(req: PrivacySetRecordingRequest): Promise<void>;
     /**
      * The caller's own declared privileges with live granted/pending/denied state
      */
     privilegesList(): Promise<PrivilegeStatusEntry[]>;
     /**
      * Give back one of the caller's optional privileges: returns a live grant and/or withdraws a pending request; de-escalation, no consent needed
-     * @param privilege Privilege name — must appear in the calling plugin's
-     *   `optional_privileges`.
      */
-    privilegesRelinquish(privilege: string): Promise<PrivilegesRelinquishResponse>;
+    privilegesRelinquish(req: PrivilegesRelinquishRequest): Promise<PrivilegesRelinquishResponse>;
     /**
      * Request one of the caller's declared optional privileges; lands as an Approve/Dismiss to-do on the Plugins page
-     * @param privilege Privilege name — must appear in the calling plugin's
-     *   `optional_privileges`.
-     * @param reason Short attributed reason shown to the user next to the Approve
-     *   button (e.g. "script 'headphones' uses query:power"). Untrusted
-     *   text; capped server-side.
-     *   default ""
      */
-    privilegesRequest(privilege: string, reason?: string): Promise<PrivilegesRequestResponse>;
+    privilegesRequest(req: PrivilegesRequestRequest): Promise<PrivilegesRequestResponse>;
     /**
      * Apply a calibration-measured strength to the never-standalone recognition bias (provenance: calibration); refuses over a manually-set value unless force
-     * @param force Overwrite a manually-set value. Without it, `manual` provenance refuses
-     *   (`applied: false`) so the caller can confirm with the user first — a
-     *   calibration apply must never silently clobber a hand-set value.
-     *   default false
-     * @param strength Strength to apply (> 0; the setting is also switched on).
-     *   wire double
      */
-    recognitionBiasApply(strength: number, force?: boolean): Promise<RecognitionBiasApplyResponse>;
+    recognitionBiasApply(req: RecognitionBiasApplyRequest): Promise<RecognitionBiasApplyResponse>;
     /**
      * Read the never-standalone recognition bias (enabled, strength, provenance)
      */
     recognitionBiasGet(): Promise<RecognitionBiasGetResponse>;
     /**
      * Manually set the never-standalone recognition bias (provenance: manual); the write path behind the Recordings tab's control
-     * @param enabled Omitted = leave the on/off half unchanged.
-     *   default null
-     * @param strength Omitted = leave the stored strength unchanged. Negative → 0.
-     *   wire double · default null
      */
-    recognitionBiasSet(enabled?: boolean, strength?: number): Promise<RecognitionBiasSetResponse>;
+    recognitionBiasSet(req: RecognitionBiasSetRequest): Promise<RecognitionBiasSetResponse>;
     /**
      * Re-decode the caller's own captured audio through a registered recognizer stage against the LIVE grammar (the fragility ladder) — the actuator runs it because the grammar is platform state and plugins cannot exec
-     * @param maxActive wire uint32 · default null · min 0
-     * @param model Model dir name under app-support `models/` (single component, no
-     *   traversal), e.g. `"sherpa-offline-nemo"`.
-     * @param stage Registered stage id whose binary's `probe` subcommand runs the re-decode,
-     *   e.g. `"voice.sherpa_commands"`. Validated against the stage registry.
      */
-    recognitionRedecode(items: RedecodeItem[], model: string, stage: string, maxActive?: number): Promise<RecognitionRedecodeResponse>;
+    recognitionRedecode(req: RecognitionRedecodeRequest): Promise<RecognitionRedecodeResponse>;
     /**
      * Remove a stored credential. Deleting a name that was never set is not an error
      */
-    secretsDelete(name: string): Promise<SecretsDeleteResponse>;
+    secretsDelete(req: SecretsDeleteRequest): Promise<SecretsDeleteResponse>;
     /**
      * Whether this plugin has stored a credential under this name. The only question askable about a value that cannot be read
      */
-    secretsIsSet(name: string): Promise<SecretsIsSetResponse>;
+    secretsIsSet(req: SecretsIsSetRequest): Promise<SecretsIsSetResponse>;
     /**
      * The credential names this plugin has stored, and how they are protected on this machine
      */
     secretsList(): Promise<SecretsListResponse>;
     /**
      * Ask for a credential row on this plugin's Settings page: the user pastes the value straight into the store, bound to one host this plugin can reach. The plugin never sees the value
-     * @param host The ONE host the value may be sent to — one this plugin may already
-     *   reach (declared, or requested with `network.request_host`).
-     * @param label What the user sees on the row, e.g. "Weather script — API key".
-     *   default ""
-     * @param name The secret's name in this plugin's drawer (ASCII letters, digits,
-     *   `_`, `-`, `.`).
      */
-    secretsRequestSlot(host: string, name: string, label?: string): Promise<SecretsRequestSlotResponse>;
+    secretsRequestSlot(req: SecretsRequestSlotRequest): Promise<SecretsRequestSlotResponse>;
     /**
      * Store a credential for this plugin. Values are encrypted and can never be read back over the wire
-     * @param host The host this credential may be sent to, such as
-     *   `api.openweathermap.org`.
-     *
-     *   Recorded with the value and checked when the platform substitutes it
-     *   into a request. A caller that declares two hosts cannot get a secret
-     *   bound to one of them into a request to the other, which is what makes
-     *   storing a reference safer than holding the value: without it, a
-     *   credential that can never be read can still be sent to the wrong
-     *   place.
-     *
-     *   Optional today because substitution is not built yet, and a store
-     *   written before bindings existed holds none. An unbound secret is
-     *   refused at substitution rather than treated as usable anywhere.
-     * @param name The secret's name within this plugin. What a manifest or a script
-     *   header refers to.
-     * @param value The value. This is the only direction a value travels over the wire.
      */
-    secretsSet(name: string, value: string, host?: string): Promise<SecretsSetResponse>;
+    secretsSet(req: SecretsSetRequest): Promise<SecretsSetResponse>;
     /**
      * Resolve a selection pick by index — clears selection state, emits event, closes HUD
-     * @param index Zero-based index into the previously-set selection items array.
-     *   wire uint64 (64-bit) · min 0
      */
-    selectionPick(index: number): Promise<SelectionPickResponse>;
+    selectionPick(req: SelectionPickRequest): Promise<SelectionPickResponse>;
     /**
      * Show the selection HUD with items for the user to pick from
-     * @param channel HUD channel to show the selection in. Defaults to `"main"`.
-     *   default null
-     * @param items The selectable items, in display order.
-     *
-     *   Declared 2026-09-19 (census). The handler already deserialized
-     *   exactly `Vec<HUDItem>`; the doc comment was listing the fields a
-     *   generated type can list itself.
-     *   default []
-     * @param title Optional title displayed at the top of the selection HUD.
-     *   default null
      */
-    selectionSet(channel?: string, items?: HUDItem[], title?: string): Promise<void>;
+    selectionSet(req: SelectionSetRequest): Promise<void>;
     /**
      * Emit _platform.input.session_boundary at actual session boundaries
      */
@@ -3695,96 +3128,48 @@ declare module "./plugin.js" {
     sessionEndCleanup(): Promise<SessionEndCleanupResponse>;
     /**
      * Push Datastar signal patches to the calling plugin's active settings SSE streams
-     * @param signals Datastar signal expression, e.g. `{activeGroup: 2, activeDialModeIndex: 1}`.
-     *   Sent as a `datastar-patch-signals` SSE event to all active settings streams.
      */
-    settingsPatchSignals(signals: string): Promise<void>;
+    settingsPatchSignals(req: SettingsPatchSignalsRequest): Promise<void>;
     /**
      * Navigate the settings UI to a tab declared by the calling plugin
      */
-    settingsRedirect(tab: string): Promise<void>;
+    settingsRedirect(req: SettingsRedirectRequest): Promise<void>;
     /**
      * Trigger a full re-render of all active settings SSE streams
      */
     settingsRefresh(): Promise<void>;
     /**
      * Create a new user voice command from settings-UI signals
-     * @param newruleactionjson Raw JSON action body, used when `newruleactiontype = "json"`.
-     *   default null
-     * @param newruleactiontype Action variant (dotted type like "system.volume_up", "sequence", "json", ...).
-     *   Determines which other `newruleaction*` fields are consumed.
-     *   default null
-     * @param newruleactionval Action value used by simple action types (e.g. text for "input.type").
-     *   default null
-     * @param newrulecategory Category bucket the rule belongs to. Defaults to "User".
-     *   default null
-     * @param newruleclearstags Comma-separated tags the rule clears when it fires.
-     *   default null
-     * @param newruledescription Optional human-readable description shown in the rules table.
-     *   default null
-     * @param newrulephrase The phrase the user wants matched (with optional `<slot>` placeholders).
-     *   Required — `build_command_from_signals` rejects an empty phrase.
-     *   default null
-     * @param newrulerequirestags Comma-separated tags required for the rule to match.
-     *   default null
-     * @param newrulesetstags Comma-separated tags the rule sets when it fires.
-     *   default null
      */
-    settingsRulesCreate(newruleactionjson?: string, newruleactiontype?: string, newruleactionval?: string, newrulecategory?: string, newruleclearstags?: string, newruledescription?: string, newrulephrase?: string, newrulerequirestags?: string, newrulesetstags?: string): Promise<SettingsRulesCreateResponse>;
+    settingsRulesCreate(req: SettingsRulesCreateRequest): Promise<SettingsRulesCreateResponse>;
     /**
      * Update an existing user voice command from settings-UI signals
-     * @param canonical Existing canonical command id (the previous canonical phrase) of
-     *   the rule being updated. Required.
-     * @param newruleactionjson default null
-     * @param newruleactiontype default null
-     * @param newruleactionval default null
-     * @param newrulecategory default null
-     * @param newruleclearstags default null
-     * @param newruledescription default null
-     * @param newrulephrase default null
-     * @param newrulerequirestags default null
-     * @param newrulesetstags default null
      */
-    settingsRulesUpdate(canonical: string, newruleactionjson?: string, newruleactiontype?: string, newruleactionval?: string, newrulecategory?: string, newruleclearstags?: string, newruledescription?: string, newrulephrase?: string, newrulerequirestags?: string, newrulesetstags?: string): Promise<SettingsRulesUpdateResponse>;
+    settingsRulesUpdate(req: SettingsRulesUpdateRequest): Promise<SettingsRulesUpdateResponse>;
     /**
      * Post a VoiceOver announcement (spoken in the person's VoiceOver voice when VoiceOver is running; ignored otherwise)
      */
-    speechAnnounce(text: string): Promise<void>;
+    speechAnnounce(req: SpeechAnnounceRequest): Promise<void>;
     /**
      * Speak words through the system voice (a primitive: the platform makes the sound and reports the span for echo suppression; what to say is the caller's policy)
-     * @param priority `"normal"` queues behind whatever is playing; `"high"` cuts it off
-     *   and speaks now. Defaults to normal.
-     *   default null
-     * @param text The words. Plain language, no markup; the system voice reads it as is.
      */
-    speechSay(text: string, priority?: string): Promise<void>;
+    speechSay(req: SpeechSayRequest): Promise<void>;
     /**
      * Stop the system voice now and drop anything queued behind it
      */
     speechStop(): Promise<void>;
     /**
      * Launch an app and post a 'Launching' notification to the HUD
-     * @param bundleId Bundle ID of the application to launch (e.g. "com.apple.Safari").
-     * @param newInstance Whether to launch a fresh instance even if the app is already running.
-     *   default false
      */
-    systemLaunchApp(bundleId: string, newInstance?: boolean): Promise<void>;
+    systemLaunchApp(req: SystemLaunchAppRequest): Promise<void>;
     /**
      * Show a HUD notification with title and body text
-     * @param body Notification body text (rendered inside `<div id="body-text">`).
-     * @param durationSecs Auto-dismiss duration in seconds. When absent, defaults to
-     *   [`DEFAULT_NOTIFY_DURATION_SECS`] (5s). Pass `0` for a sticky
-     *   notification that only closes when the user clicks Dismiss.
-     *   Pass any positive integer for a custom duration.
-     *   wire uint32 · default null · min 0
-     * @param title Notification title (rendered as `<h1 id="title">`).
      */
-    systemNotify(body: string, title: string, durationSecs?: number): Promise<void>;
+    systemNotify(req: SystemNotifyRequest): Promise<void>;
     /**
      * Start a shell command via /bin/bash -c, run by the actuator outside any plugin sandbox (security-sensitive; not on Windows)
-     * @param command Shell command to execute via `/bin/bash -c`.
      */
-    systemRunShell(command: string): Promise<void>;
+    systemRunShell(req: SystemRunShellRequest): Promise<void>;
     /**
      * Open a calibration trial — writes _platform.calibration.active, returns a trial_id
      */
@@ -3792,21 +3177,19 @@ declare module "./plugin.js" {
     /**
      * Close a calibration trial — clears the tag and spawns release RPCs to fixture owners
      */
-    trialEnd(trialId: string): Promise<TrialEndResponse>;
+    trialEnd(req: TrialEndRequest): Promise<TrialEndResponse>;
     /**
      * Enter a command's context for a trial — writes mode-gated requires_tags (platform write) or forwards trial_apply_fixture to a dynamic command's owner — and returns the entered context (kind + tags + fixture_handle)
-     * @param commandId Command id from `commands.enumerate` — `<owner_plugin>:<pattern>`.
      */
-    trialEnterContext(commandId: string, trialId: string): Promise<TrialEnterContextResponse>;
+    trialEnterContext(req: TrialEnterContextRequest): Promise<TrialEnterContextResponse>;
     /**
      * Register a fixture handle under an open trial so trial_end can release it
      */
-    trialRegisterFixture(fixtureHandle: string, ownerPluginId: string, trialId: string): Promise<void>;
+    trialRegisterFixture(req: TrialRegisterFixtureRequest): Promise<void>;
     /**
      * Resolve concrete prompt phrases for a command whose vocabulary the caller can't derive — forwards trial_samples to a dynamic command's owner (empty when the owner doesn't implement the optional hook; the host then falls back to its own default).
-     * @param commandId Command id from `commands.enumerate` — `<owner_plugin>:<pattern>`.
      */
-    trialResolveSamples(commandId: string): Promise<string[]>;
+    trialResolveSamples(req: TrialResolveSamplesRequest): Promise<string[]>;
     /**
      * Commit pending vocabulary additions to the recognition pipeline
      */
@@ -3823,184 +3206,81 @@ Plugin.prototype.actionsList = async function() {
   return result as ActionsListResponse;
 };
 
-Plugin.prototype.artifactDelete = async function(ref: string) {
-  const result = await this.call(
-    MethodArtifactDelete,
-    {
-      ref,
-    },
-  );
+Plugin.prototype.artifactDelete = async function(req: ArtifactDeleteRequest) {
+  const result = await this.call(MethodArtifactDelete, req);
 };
 
-Plugin.prototype.blobPublish = async function(length: number, name: string, hash?: string, newGeneration?: boolean) {
-  const result = await this.call(
-    MethodBlobPublish,
-    {
-      length,
-      name,
-      hash,
-      new_generation: newGeneration,
-    },
-  );
+Plugin.prototype.blobPublish = async function(req: BlobPublishRequest) {
+  const result = await this.call(MethodBlobPublish, req);
   return result as BlobPublishResponse;
 };
 
-Plugin.prototype.blobState = async function(name: string, provider?: string) {
-  const result = await this.call(
-    MethodBlobState,
-    {
-      name,
-      provider,
-    },
-  );
+Plugin.prototype.blobState = async function(req: BlobStateRequest) {
+  const result = await this.call(MethodBlobState, req);
   return result as BlobStateResponse;
 };
 
-Plugin.prototype.collectionAppend = async function(name: string, payload: unknown) {
-  const result = await this.call(
-    MethodCollectionAppend,
-    {
-      name,
-      payload,
-    },
-  );
+Plugin.prototype.collectionAppend = async function(req: CollectionAppendRequest) {
+  const result = await this.call(MethodCollectionAppend, req);
   return (result as any).entry;
 };
 
-Plugin.prototype.collectionAppendKeyed = async function(key: string, name: string, payload: unknown) {
-  const result = await this.call(
-    MethodCollectionAppendKeyed,
-    {
-      key,
-      name,
-      payload,
-    },
-  );
+Plugin.prototype.collectionAppendKeyed = async function(req: CollectionAppendKeyedRequest) {
+  const result = await this.call(MethodCollectionAppendKeyed, req);
   return (result as any).entry;
 };
 
-Plugin.prototype.collectionCount = async function(name: string) {
-  const result = await this.call(
-    MethodCollectionCount,
-    {
-      name,
-    },
-  );
+Plugin.prototype.collectionCount = async function(req: CollectionCountRequest) {
+  const result = await this.call(MethodCollectionCount, req);
   return result as CollectionCountResponse;
 };
 
-Plugin.prototype.collectionDeleteRecords = async function(name: string, ids?: string[]) {
-  const result = await this.call(
-    MethodCollectionDeleteRecords,
-    {
-      name,
-      ids,
-    },
-  );
+Plugin.prototype.collectionDeleteRecords = async function(req: CollectionDeleteRecordsRequest) {
+  const result = await this.call(MethodCollectionDeleteRecords, req);
   return result as CollectionDeleteRecordsResponse;
 };
 
-Plugin.prototype.collectionFetch = async function(id: string, name: string) {
-  const result = await this.call(
-    MethodCollectionFetch,
-    {
-      id,
-      name,
-    },
-  );
+Plugin.prototype.collectionFetch = async function(req: CollectionFetchRequest) {
+  const result = await this.call(MethodCollectionFetch, req);
   return result as CollectionFetchResponse;
 };
 
-Plugin.prototype.collectionFetchCompacted = async function(id: string, name: string) {
-  const result = await this.call(
-    MethodCollectionFetchCompacted,
-    {
-      id,
-      name,
-    },
-  );
+Plugin.prototype.collectionFetchCompacted = async function(req: CollectionFetchCompactedRequest) {
+  const result = await this.call(MethodCollectionFetchCompacted, req);
   return result as CollectionFetchCompactedResponse;
 };
 
-Plugin.prototype.collectionGet = async function(name: string) {
-  const result = await this.call(
-    MethodCollectionGet,
-    {
-      name,
-    },
-  );
+Plugin.prototype.collectionGet = async function(req: CollectionGetRequest) {
+  const result = await this.call(MethodCollectionGet, req);
   return result as CollectionGetResponse;
 };
 
-Plugin.prototype.collectionList = async function(name: string, opts?: ListOpts) {
-  const result = await this.call(
-    MethodCollectionList,
-    {
-      name,
-      opts,
-    },
-  );
+Plugin.prototype.collectionList = async function(req: CollectionListRequest) {
+  const result = await this.call(MethodCollectionList, req);
   return result as CollectionListResponse;
 };
 
-Plugin.prototype.collectionPatch = async function(fields: unknown, id: string, name: string) {
-  const result = await this.call(
-    MethodCollectionPatch,
-    {
-      fields,
-      id,
-      name,
-    },
-  );
+Plugin.prototype.collectionPatch = async function(req: CollectionPatchRequest) {
+  const result = await this.call(MethodCollectionPatch, req);
 };
 
-Plugin.prototype.collectionPut = async function(name: string, entries?: CollectionPutEntry[], group?: string, label?: string, roles?: Record<string, FieldDisplay>) {
-  const result = await this.call(
-    MethodCollectionPut,
-    {
-      name,
-      entries,
-      group,
-      label,
-      roles,
-    },
-  );
+Plugin.prototype.collectionPut = async function(req: CollectionPutRequest) {
+  const result = await this.call(MethodCollectionPut, req);
   return result as CollectionPutResponse;
 };
 
-Plugin.prototype.collectionReplace = async function(name: string, scope: ReplaceScope, entries?: CollectionPutEntry[], label?: string, roles?: Record<string, FieldDisplay>) {
-  const result = await this.call(
-    MethodCollectionReplace,
-    {
-      name,
-      scope,
-      entries,
-      label,
-      roles,
-    },
-  );
+Plugin.prototype.collectionReplace = async function(req: CollectionReplaceRequest) {
+  const result = await this.call(MethodCollectionReplace, req);
   return result as CollectionReplaceResponse;
 };
 
-Plugin.prototype.collectionsCreateUser = async function(name: string, description?: string, wordsText?: string) {
-  const result = await this.call(
-    MethodCollectionsCreateUser,
-    {
-      name,
-      description,
-      words_text: wordsText,
-    },
-  );
+Plugin.prototype.collectionsCreateUser = async function(req: CollectionsCreateUserRequest) {
+  const result = await this.call(MethodCollectionsCreateUser, req);
   return result as CollectionsCreateUserResponse;
 };
 
-Plugin.prototype.collectionsList = async function(kind?: string) {
-  const result = await this.call(
-    MethodCollectionsList,
-    {
-      kind,
-    },
-  );
+Plugin.prototype.collectionsList = async function(req: CollectionsListRequest) {
+  const result = await this.call(MethodCollectionsList, req);
   return (result as any).sections;
 };
 
@@ -4009,35 +3289,17 @@ Plugin.prototype.collectionsOwned = async function() {
   return (result as any).owned;
 };
 
-Plugin.prototype.commandsAddAlias = async function(action: string, defaultPattern: string, newPattern: string) {
-  const result = await this.call(
-    MethodCommandsAddAlias,
-    {
-      action,
-      default_pattern: defaultPattern,
-      new_pattern: newPattern,
-    },
-  );
+Plugin.prototype.commandsAddAlias = async function(req: CommandsAddAliasRequest) {
+  const result = await this.call(MethodCommandsAddAlias, req);
 };
 
-Plugin.prototype.commandsConfusability = async function(requiresTags?: string[], words?: string[]) {
-  const result = await this.call(
-    MethodCommandsConfusability,
-    {
-      requires_tags: requiresTags,
-      words,
-    },
-  );
+Plugin.prototype.commandsConfusability = async function(req: CommandsConfusabilityRequest) {
+  const result = await this.call(MethodCommandsConfusability, req);
   return (result as any).findings;
 };
 
-Plugin.prototype.commandsDelete = async function(canonical: string) {
-  const result = await this.call(
-    MethodCommandsDelete,
-    {
-      canonical,
-    },
-  );
+Plugin.prototype.commandsDelete = async function(req: CommandsDeleteRequest) {
+  const result = await this.call(MethodCommandsDelete, req);
 };
 
 Plugin.prototype.commandsEnumerate = async function() {
@@ -4060,251 +3322,106 @@ Plugin.prototype.commandsListOverrides = async function() {
   return (result as any).overrides;
 };
 
-Plugin.prototype.commandsPush = async function(commands?: CommandSpec[], group?: string) {
-  const result = await this.call(
-    MethodCommandsPush,
-    {
-      commands,
-      group,
-    },
-  );
+Plugin.prototype.commandsPush = async function(req: CommandsPushRequest) {
+  const result = await this.call(MethodCommandsPush, req);
   return result as CommandsPushResponse;
 };
 
-Plugin.prototype.commandsRemoveAlias = async function(action: string, defaultPattern: string, newPattern: string) {
-  const result = await this.call(
-    MethodCommandsRemoveAlias,
-    {
-      action,
-      default_pattern: defaultPattern,
-      new_pattern: newPattern,
-    },
-  );
+Plugin.prototype.commandsRemoveAlias = async function(req: CommandsRemoveAliasRequest) {
+  const result = await this.call(MethodCommandsRemoveAlias, req);
   return result as CommandsRemoveAliasResponse;
 };
 
-Plugin.prototype.commandsReset = async function(canonical: string) {
-  const result = await this.call(
-    MethodCommandsReset,
-    {
-      canonical,
-    },
-  );
+Plugin.prototype.commandsReset = async function(req: CommandsResetRequest) {
+  const result = await this.call(MethodCommandsReset, req);
 };
 
-Plugin.prototype.commandsResetOverride = async function(action: string, defaultPattern: string) {
-  const result = await this.call(
-    MethodCommandsResetOverride,
-    {
-      action,
-      default_pattern: defaultPattern,
-    },
-  );
+Plugin.prototype.commandsResetOverride = async function(req: CommandsResetOverrideRequest) {
+  const result = await this.call(MethodCommandsResetOverride, req);
   return result as CommandsResetOverrideResponse;
 };
 
-Plugin.prototype.commandsResolve = async function(activeTags?: string[], collections?: string[], preferOwner?: string, preview?: boolean, requireTag?: string, sessionId?: string, source?: string, words?: string[]) {
-  const result = await this.call(
-    MethodCommandsResolve,
-    {
-      active_tags: activeTags,
-      collections,
-      prefer_owner: preferOwner,
-      preview,
-      require_tag: requireTag,
-      session_id: sessionId,
-      source,
-      words,
-    },
-  );
+Plugin.prototype.commandsResolve = async function(req: CommandsResolveRequest) {
+  const result = await this.call(MethodCommandsResolve, req);
   return result as CommandsResolveResponse;
 };
 
-Plugin.prototype.commandsSetOverride = async function(action: string, defaultPattern: string, newPattern: string) {
-  const result = await this.call(
-    MethodCommandsSetOverride,
-    {
-      action,
-      default_pattern: defaultPattern,
-      new_pattern: newPattern,
-    },
-  );
+Plugin.prototype.commandsSetOverride = async function(req: CommandsSetOverrideRequest) {
+  const result = await this.call(MethodCommandsSetOverride, req);
 };
 
-Plugin.prototype.controlSignal = async function(signal: string) {
-  const result = await this.call(
-    MethodControlSignal,
-    {
-      signal,
-    },
-  );
+Plugin.prototype.controlSignal = async function(req: ControlSignalRequest) {
+  const result = await this.call(MethodControlSignal, req);
 };
 
 Plugin.prototype.discoveryClosed = async function() {
   const result = await this.call(MethodDiscoveryClosed);
 };
 
-Plugin.prototype.dispatch = async function(action: Action) {
-  const result = await this.call(
-    MethodDispatch,
-    {
-      action,
-    },
-  );
+Plugin.prototype.dispatch = async function(req: DispatchRequest) {
+  const result = await this.call(MethodDispatch, req);
   return result as DispatchResponse;
 };
 
-Plugin.prototype.effectsAssert = async function(name: string) {
-  const result = await this.call(
-    MethodEffectsAssert,
-    {
-      name,
-    },
-  );
+Plugin.prototype.effectsAssert = async function(req: EffectsAssertRequest) {
+  const result = await this.call(MethodEffectsAssert, req);
   return result as EffectsAssertResponse;
 };
 
-Plugin.prototype.effectsIsActive = async function(name: string) {
-  const result = await this.call(
-    MethodEffectsIsActive,
-    {
-      name,
-    },
-  );
+Plugin.prototype.effectsIsActive = async function(req: EffectsIsActiveRequest) {
+  const result = await this.call(MethodEffectsIsActive, req);
   return result as EffectsIsActiveResponse;
 };
 
-Plugin.prototype.effectsRetract = async function(name: string) {
-  const result = await this.call(
-    MethodEffectsRetract,
-    {
-      name,
-    },
-  );
+Plugin.prototype.effectsRetract = async function(req: EffectsRetractRequest) {
+  const result = await this.call(MethodEffectsRetract, req);
   return result as EffectsRetractResponse;
 };
 
-Plugin.prototype.eventsAppend = async function(eventType: string, data?: unknown, sessionId?: string) {
-  const result = await this.call(
-    MethodEventsAppend,
-    {
-      event_type: eventType,
-      data,
-      session_id: sessionId,
-    },
-  );
+Plugin.prototype.eventsAppend = async function(req: EventsAppendRequest) {
+  const result = await this.call(MethodEventsAppend, req);
 };
 
-Plugin.prototype.eventsEmit = async function(eventType: string, correlationId?: string, data?: unknown) {
-  const result = await this.call(
-    MethodEventsEmit,
-    {
-      event_type: eventType,
-      correlation_id: correlationId,
-      data,
-    },
-  );
+Plugin.prototype.eventsEmit = async function(req: EventsEmitRequest) {
+  const result = await this.call(MethodEventsEmit, req);
 };
 
-Plugin.prototype.httpRequest = async function(url: string, body?: string, bodyBase64?: string, headers?: HttpHeader[], method?: string, timeoutMs?: number) {
-  const result = await this.call(
-    MethodHttpRequest,
-    {
-      url,
-      body,
-      body_base64: bodyBase64,
-      headers,
-      method,
-      timeout_ms: timeoutMs,
-    },
-  );
+Plugin.prototype.httpRequest = async function(req: HttpRequestRequest) {
+  const result = await this.call(MethodHttpRequest, req);
   return result as HttpRequestResponse;
 };
 
-Plugin.prototype.hudCreateChannel = async function(channel: string, acceptsInput?: boolean, anchor?: Anchor, description?: string, draggable?: boolean, followsFocus?: boolean, minHeight?: number, onPointer?: OnPointer, stackOrder?: number, transparent?: boolean, width?: number) {
-  const result = await this.call(
-    MethodHudCreateChannel,
-    {
-      channel,
-      accepts_input: acceptsInput,
-      anchor,
-      description,
-      draggable,
-      follows_focus: followsFocus,
-      min_height: minHeight,
-      on_pointer: onPointer,
-      stack_order: stackOrder,
-      transparent,
-      width,
-    },
-  );
+Plugin.prototype.hudCreateChannel = async function(req: HUDCreateChannelRequest) {
+  const result = await this.call(MethodHudCreateChannel, req);
 };
 
-Plugin.prototype.hudHide = async function(channel: string) {
-  const result = await this.call(
-    MethodHudHide,
-    {
-      channel,
-    },
-  );
+Plugin.prototype.hudHide = async function(req: HUDHideRequest) {
+  const result = await this.call(MethodHudHide, req);
 };
 
-Plugin.prototype.hudPush = async function(channel: string, fragments?: HudFragment[]) {
-  const result = await this.call(
-    MethodHudPush,
-    {
-      channel,
-      fragments,
-    },
-  );
+Plugin.prototype.hudPush = async function(req: HUDPushRequest) {
+  const result = await this.call(MethodHudPush, req);
 };
 
-Plugin.prototype.hudRemoveChannel = async function(channel: string) {
-  const result = await this.call(
-    MethodHudRemoveChannel,
-    {
-      channel,
-    },
-  );
+Plugin.prototype.hudRemoveChannel = async function(req: HUDRemoveChannelRequest) {
+  const result = await this.call(MethodHudRemoveChannel, req);
   return result as HUDRemoveChannelResponse;
 };
 
-Plugin.prototype.hudSetSize = async function(channel: string, height: number) {
-  const result = await this.call(
-    MethodHudSetSize,
-    {
-      channel,
-      height,
-    },
-  );
+Plugin.prototype.hudSetSize = async function(req: HUDSetSizeRequest) {
+  const result = await this.call(MethodHudSetSize, req);
 };
 
-Plugin.prototype.hudShow = async function(channel: string) {
-  const result = await this.call(
-    MethodHudShow,
-    {
-      channel,
-    },
-  );
+Plugin.prototype.hudShow = async function(req: HUDShowRequest) {
+  const result = await this.call(MethodHudShow, req);
 };
 
-Plugin.prototype.inputClick = async function(button?: string) {
-  const result = await this.call(
-    MethodInputClick,
-    {
-      button,
-    },
-  );
+Plugin.prototype.inputClick = async function(req: InputClickRequest) {
+  const result = await this.call(MethodInputClick, req);
 };
 
-Plugin.prototype.inputClipboardAction = async function(action: string, text?: string) {
-  const result = await this.call(
-    MethodInputClipboardAction,
-    {
-      action,
-      text,
-    },
-  );
+Plugin.prototype.inputClipboardAction = async function(req: InputClipboardActionRequest) {
+  const result = await this.call(MethodInputClipboardAction, req);
 };
 
 Plugin.prototype.inputClipboardHistory = async function() {
@@ -4312,13 +3429,8 @@ Plugin.prototype.inputClipboardHistory = async function() {
   return (result as any).entries;
 };
 
-Plugin.prototype.inputClipboardRead = async function(contentType: string) {
-  const result = await this.call(
-    MethodInputClipboardRead,
-    {
-      content_type: contentType,
-    },
-  );
+Plugin.prototype.inputClipboardRead = async function(req: InputClipboardReadRequest) {
+  const result = await this.call(MethodInputClipboardRead, req);
   return result as InputClipboardReadResponse;
 };
 
@@ -4327,58 +3439,27 @@ Plugin.prototype.inputClipboardReadAll = async function() {
   return (result as any).items;
 };
 
-Plugin.prototype.inputClipboardReadFormat = async function(format: string) {
-  const result = await this.call(
-    MethodInputClipboardReadFormat,
-    {
-      format,
-    },
-  );
+Plugin.prototype.inputClipboardReadFormat = async function(req: InputClipboardReadFormatRequest) {
+  const result = await this.call(MethodInputClipboardReadFormat, req);
   return result as InputClipboardReadFormatResponse;
 };
 
-Plugin.prototype.inputClipboardWrite = async function(contentType: string, data: string) {
-  const result = await this.call(
-    MethodInputClipboardWrite,
-    {
-      content_type: contentType,
-      data,
-    },
-  );
+Plugin.prototype.inputClipboardWrite = async function(req: InputClipboardWriteRequest) {
+  const result = await this.call(MethodInputClipboardWrite, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.inputClipboardWriteItems = async function(items?: ClipboardWriteItem[]) {
-  const result = await this.call(
-    MethodInputClipboardWriteItems,
-    {
-      items,
-    },
-  );
+Plugin.prototype.inputClipboardWriteItems = async function(req: InputClipboardWriteItemsRequest) {
+  const result = await this.call(MethodInputClipboardWriteItems, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.inputDoubleClick = async function(x?: number, y?: number) {
-  const result = await this.call(
-    MethodInputDoubleClick,
-    {
-      x,
-      y,
-    },
-  );
+Plugin.prototype.inputDoubleClick = async function(req: InputDoubleClickRequest) {
+  const result = await this.call(MethodInputDoubleClick, req);
 };
 
-Plugin.prototype.inputDrag = async function(fromX: number, fromY: number, toX: number, toY: number, durationMs?: number) {
-  const result = await this.call(
-    MethodInputDrag,
-    {
-      from_x: fromX,
-      from_y: fromY,
-      to_x: toX,
-      to_y: toY,
-      duration_ms: durationMs,
-    },
-  );
+Plugin.prototype.inputDrag = async function(req: InputDragRequest) {
+  const result = await this.call(MethodInputDrag, req);
 };
 
 Plugin.prototype.inputListInputSources = async function() {
@@ -4386,113 +3467,50 @@ Plugin.prototype.inputListInputSources = async function() {
   return (result as any).sources;
 };
 
-Plugin.prototype.inputMouseButton = async function(direction: string, button?: string) {
-  const result = await this.call(
-    MethodInputMouseButton,
-    {
-      direction,
-      button,
-    },
-  );
+Plugin.prototype.inputMouseButton = async function(req: InputMouseButtonRequest) {
+  const result = await this.call(MethodInputMouseButton, req);
 };
 
-Plugin.prototype.inputParseKeyEvent = async function(alt?: boolean, code?: string, ctrl?: boolean, key?: string, meta?: boolean, shift?: boolean) {
-  const result = await this.call(
-    MethodInputParseKeyEvent,
-    {
-      alt,
-      code,
-      ctrl,
-      key,
-      meta,
-      shift,
-    },
-  );
+Plugin.prototype.inputParseKeyEvent = async function(req: InputParseKeyEventRequest) {
+  const result = await this.call(MethodInputParseKeyEvent, req);
   return result as InputParseKeyEventResponse;
 };
 
-Plugin.prototype.inputPressKey = async function(code?: number, modifiers?: string[], name?: string) {
-  const result = await this.call(
-    MethodInputPressKey,
-    {
-      code,
-      modifiers,
-      name,
-    },
-  );
+Plugin.prototype.inputPressKey = async function(req: InputPressKeyRequest) {
+  const result = await this.call(MethodInputPressKey, req);
 };
 
-Plugin.prototype.inputRawKey = async function(code: number, direction: string) {
-  const result = await this.call(
-    MethodInputRawKey,
-    {
-      code,
-      direction,
-    },
-  );
+Plugin.prototype.inputRawKey = async function(req: InputRawKeyRequest) {
+  const result = await this.call(MethodInputRawKey, req);
 };
 
-Plugin.prototype.inputRightClick = async function(x?: number, y?: number) {
-  const result = await this.call(
-    MethodInputRightClick,
-    {
-      x,
-      y,
-    },
-  );
+Plugin.prototype.inputRightClick = async function(req: InputRightClickRequest) {
+  const result = await this.call(MethodInputRightClick, req);
 };
 
-Plugin.prototype.inputScroll = async function(direction: string, amount?: number, unit?: string) {
-  const result = await this.call(
-    MethodInputScroll,
-    {
-      direction,
-      amount,
-      unit,
-    },
-  );
+Plugin.prototype.inputScroll = async function(req: InputScrollRequest) {
+  const result = await this.call(MethodInputScroll, req);
 };
 
 Plugin.prototype.inputSelectAll = async function() {
   const result = await this.call(MethodInputSelectAll);
 };
 
-Plugin.prototype.inputSwitchInputSource = async function(sourceId: string) {
-  const result = await this.call(
-    MethodInputSwitchInputSource,
-    {
-      source_id: sourceId,
-    },
-  );
+Plugin.prototype.inputSwitchInputSource = async function(req: InputSwitchInputSourceRequest) {
+  const result = await this.call(MethodInputSwitchInputSource, req);
   return (result as any).result;
 };
 
-Plugin.prototype.inputTripleClick = async function(x?: number, y?: number) {
-  const result = await this.call(
-    MethodInputTripleClick,
-    {
-      x,
-      y,
-    },
-  );
+Plugin.prototype.inputTripleClick = async function(req: InputTripleClickRequest) {
+  const result = await this.call(MethodInputTripleClick, req);
 };
 
-Plugin.prototype.inputTypeText = async function(text: string) {
-  const result = await this.call(
-    MethodInputTypeText,
-    {
-      text,
-    },
-  );
+Plugin.prototype.inputTypeText = async function(req: InputTypeTextRequest) {
+  const result = await this.call(MethodInputTypeText, req);
 };
 
-Plugin.prototype.keybindsRegister = async function(snapshot: RegistrySnapshot) {
-  const result = await this.call(
-    MethodKeybindsRegister,
-    {
-      snapshot,
-    },
-  );
+Plugin.prototype.keybindsRegister = async function(req: KeybindsRegisterRequest) {
+  const result = await this.call(MethodKeybindsRegister, req);
   return result as KeybindsRegisterResponse;
 };
 
@@ -4511,14 +3529,8 @@ Plugin.prototype.nativeAccessibilityEnabled = async function() {
   return result as NativeAccessibilityEnabledResponse;
 };
 
-Plugin.prototype.nativeActivateApp = async function(bundleId: string, allWindows?: boolean) {
-  const result = await this.call(
-    MethodNativeActivateApp,
-    {
-      bundle_id: bundleId,
-      all_windows: allWindows,
-    },
-  );
+Plugin.prototype.nativeActivateApp = async function(req: NativeActivateAppRequest) {
+  const result = await this.call(MethodNativeActivateApp, req);
 };
 
 Plugin.prototype.nativeActiveNetworkService = async function() {
@@ -4566,104 +3578,53 @@ Plugin.prototype.nativeApfsSnapshots = async function() {
   return result as NativeApfsSnapshotsResponse;
 };
 
-Plugin.prototype.nativeAppBundlePath = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeAppBundlePath,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeAppBundlePath = async function(req: NativeAppBundlePathRequest) {
+  const result = await this.call(MethodNativeAppBundlePath, req);
   return result as NativeAppBundlePathResponse;
 };
 
-Plugin.prototype.nativeAppFocusedWindowID = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeAppFocusedWindowId,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeAppFocusedWindowID = async function(req: NativeAppFocusedWindowIDRequest) {
+  const result = await this.call(MethodNativeAppFocusedWindowId, req);
   return result as string;
 };
 
-Plugin.prototype.nativeAppIcon = async function(bundleId: string, size?: number) {
-  const result = await this.call(
-    MethodNativeAppIcon,
-    {
-      bundle_id: bundleId,
-      size,
-    },
-  );
+Plugin.prototype.nativeAppIcon = async function(req: NativeAppIconRequest) {
+  const result = await this.call(MethodNativeAppIcon, req);
   return result as NativeAppIconResponse;
 };
 
-Plugin.prototype.nativeAppIconPath = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeAppIconPath,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeAppIconPath = async function(req: NativeAppIconPathRequest) {
+  const result = await this.call(MethodNativeAppIconPath, req);
   return result as string;
 };
 
-Plugin.prototype.nativeAppIsAgent = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeAppIsAgent,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeAppIsAgent = async function(req: NativeAppIsAgentRequest) {
+  const result = await this.call(MethodNativeAppIsAgent, req);
   return result as NativeAppIsAgentResponse;
 };
 
-Plugin.prototype.nativeAppIsRunning = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeAppIsRunning,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeAppIsRunning = async function(req: NativeAppIsRunningRequest) {
+  const result = await this.call(MethodNativeAppIsRunning, req);
   return result as NativeAppIsRunningResponse;
 };
 
-Plugin.prototype.nativeAppLaunchAtLogin = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeAppLaunchAtLogin,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeAppLaunchAtLogin = async function(req: NativeAppLaunchAtLoginRequest) {
+  const result = await this.call(MethodNativeAppLaunchAtLogin, req);
   return result as NativeAppLaunchAtLoginResponse;
 };
 
-Plugin.prototype.nativeAppMetadata = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeAppMetadata,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeAppMetadata = async function(req: NativeAppMetadataRequest) {
+  const result = await this.call(MethodNativeAppMetadata, req);
   return result as NativeAppMetadataResponse;
 };
 
-Plugin.prototype.nativeAppPath = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeAppPath,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeAppPath = async function(req: NativeAppPathRequest) {
+  const result = await this.call(MethodNativeAppPath, req);
   return result as string;
 };
 
-Plugin.prototype.nativeAppPid = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeAppPid,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeAppPid = async function(req: NativeAppPidRequest) {
+  const result = await this.call(MethodNativeAppPid, req);
   return result as number;
 };
 
@@ -4672,13 +3633,8 @@ Plugin.prototype.nativeAppSupportDirectory = async function() {
   return result as NativeAppSupportDirectoryResponse;
 };
 
-Plugin.prototype.nativeAppVersion = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeAppVersion,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeAppVersion = async function(req: NativeAppVersionRequest) {
+  const result = await this.call(MethodNativeAppVersion, req);
   return result as string;
 };
 
@@ -4687,43 +3643,23 @@ Plugin.prototype.nativeAppVolumes = async function() {
   return (result as any).apps;
 };
 
-Plugin.prototype.nativeAppWindows = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeAppWindows,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeAppWindows = async function(req: NativeAppWindowsRequest) {
+  const result = await this.call(MethodNativeAppWindows, req);
   return (result as any).windows;
 };
 
-Plugin.prototype.nativeAppWindowsCount = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeAppWindowsCount,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeAppWindowsCount = async function(req: NativeAppWindowsCountRequest) {
+  const result = await this.call(MethodNativeAppWindowsCount, req);
   return result as number;
 };
 
-Plugin.prototype.nativeAppsForPath = async function(path: string) {
-  const result = await this.call(
-    MethodNativeAppsForPath,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeAppsForPath = async function(req: NativeAppsForPathRequest) {
+  const result = await this.call(MethodNativeAppsForPath, req);
   return (result as any).apps;
 };
 
-Plugin.prototype.nativeAudioDeviceVolume = async function(deviceUid: string) {
-  const result = await this.call(
-    MethodNativeAudioDeviceVolume,
-    {
-      device_uid: deviceUid,
-    },
-  );
+Plugin.prototype.nativeAudioDeviceVolume = async function(req: NativeAudioDeviceVolumeRequest) {
+  const result = await this.call(MethodNativeAudioDeviceVolume, req);
   return result as NativeAudioDeviceVolumeResponse;
 };
 
@@ -4772,112 +3708,53 @@ Plugin.prototype.nativeAutomaticLoginUser = async function() {
   return result as NativeAutomaticLoginUserResponse;
 };
 
-Plugin.prototype.nativeAutomationPermission = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeAutomationPermission,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeAutomationPermission = async function(req: NativeAutomationPermissionRequest) {
+  const result = await this.call(MethodNativeAutomationPermission, req);
   return result as NativeAutomationPermissionResponse;
 };
 
-Plugin.prototype.nativeAxElementAtPoint = async function(x: number, y: number, pid?: number) {
-  const result = await this.call(
-    MethodNativeAxElementAtPoint,
-    {
-      x,
-      y,
-      pid,
-    },
-  );
+Plugin.prototype.nativeAxElementAtPoint = async function(req: NativeAxElementAtPointRequest) {
+  const result = await this.call(MethodNativeAxElementAtPoint, req);
   return result as NativeAxElementAtPointResponse;
 };
 
-Plugin.prototype.nativeAxElementTree = async function(element: AccessibleRef, depth?: number) {
-  const result = await this.call(
-    MethodNativeAxElementTree,
-    {
-      element,
-      depth,
-    },
-  );
+Plugin.prototype.nativeAxElementTree = async function(req: NativeAxElementTreeRequest) {
+  const result = await this.call(MethodNativeAxElementTree, req);
   return result as AccessibleNode;
 };
 
-Plugin.prototype.nativeAxObserve = async function(pid: number, notifications?: string[]) {
-  const result = await this.call(
-    MethodNativeAxObserve,
-    {
-      pid,
-      notifications,
-    },
-  );
+Plugin.prototype.nativeAxObserve = async function(req: NativeAxObserveRequest) {
+  const result = await this.call(MethodNativeAxObserve, req);
   return result as NativeAxObserveResponse;
 };
 
-Plugin.prototype.nativeAxPerformAction = async function(action: string, element: AccessibleRef) {
-  const result = await this.call(
-    MethodNativeAxPerformAction,
-    {
-      action,
-      element,
-    },
-  );
+Plugin.prototype.nativeAxPerformAction = async function(req: NativeAxPerformActionRequest) {
+  const result = await this.call(MethodNativeAxPerformAction, req);
   return (result as any).result;
 };
 
-Plugin.prototype.nativeAxReadAttributes = async function(element: AccessibleRef, attributes?: string[]) {
-  const result = await this.call(
-    MethodNativeAxReadAttributes,
-    {
-      element,
-      attributes,
-    },
-  );
+Plugin.prototype.nativeAxReadAttributes = async function(req: NativeAxReadAttributesRequest) {
+  const result = await this.call(MethodNativeAxReadAttributes, req);
   return result as Record<string, unknown>;
 };
 
-Plugin.prototype.nativeAxSetAttribute = async function(attribute: string, element: AccessibleRef, value: unknown) {
-  const result = await this.call(
-    MethodNativeAxSetAttribute,
-    {
-      attribute,
-      element,
-      value,
-    },
-  );
+Plugin.prototype.nativeAxSetAttribute = async function(req: NativeAxSetAttributeRequest) {
+  const result = await this.call(MethodNativeAxSetAttribute, req);
   return (result as any).result;
 };
 
-Plugin.prototype.nativeAxUnobserve = async function(subscriptionId: string) {
-  const result = await this.call(
-    MethodNativeAxUnobserve,
-    {
-      subscription_id: subscriptionId,
-    },
-  );
+Plugin.prototype.nativeAxUnobserve = async function(req: NativeAxUnobserveRequest) {
+  const result = await this.call(MethodNativeAxUnobserve, req);
   return (result as any).result;
 };
 
-Plugin.prototype.nativeBatchIsTileable = async function(windowIds?: string[]) {
-  const result = await this.call(
-    MethodNativeBatchIsTileable,
-    {
-      window_ids: windowIds,
-    },
-  );
+Plugin.prototype.nativeBatchIsTileable = async function(req: NativeBatchIsTileableRequest) {
+  const result = await this.call(MethodNativeBatchIsTileable, req);
   return (result as any).results;
 };
 
-Plugin.prototype.nativeBatchSetFrames = async function(frames?: WindowFrame[], readback?: boolean) {
-  const result = await this.call(
-    MethodNativeBatchSetFrames,
-    {
-      frames,
-      readback,
-    },
-  );
+Plugin.prototype.nativeBatchSetFrames = async function(req: NativeBatchSetFramesRequest) {
+  const result = await this.call(MethodNativeBatchSetFrames, req);
   return (result as any).results;
 };
 
@@ -4901,51 +3778,23 @@ Plugin.prototype.nativeBatteryMaxCapacity = async function() {
   return result as number;
 };
 
-Plugin.prototype.nativeBleDiscoverServices = async function(deviceIdentifier: string) {
-  const result = await this.call(
-    MethodNativeBleDiscoverServices,
-    {
-      device_identifier: deviceIdentifier,
-    },
-  );
+Plugin.prototype.nativeBleDiscoverServices = async function(req: NativeBleDiscoverServicesRequest) {
+  const result = await this.call(MethodNativeBleDiscoverServices, req);
   return (result as any).services;
 };
 
-Plugin.prototype.nativeBleSubscribe = async function(characteristicUuid: string, deviceIdentifier: string, serviceUuid: string) {
-  const result = await this.call(
-    MethodNativeBleSubscribe,
-    {
-      characteristic_uuid: characteristicUuid,
-      device_identifier: deviceIdentifier,
-      service_uuid: serviceUuid,
-    },
-  );
+Plugin.prototype.nativeBleSubscribe = async function(req: NativeBleSubscribeRequest) {
+  const result = await this.call(MethodNativeBleSubscribe, req);
   return result as NativeBleSubscribeResponse;
 };
 
-Plugin.prototype.nativeBleSubscribeAllThenWrite = async function(deviceIdentifier: string, subscribeServices?: string[], writes?: BleWriteEntry[]) {
-  const result = await this.call(
-    MethodNativeBleSubscribeAllThenWrite,
-    {
-      device_identifier: deviceIdentifier,
-      subscribe_services: subscribeServices,
-      writes,
-    },
-  );
+Plugin.prototype.nativeBleSubscribeAllThenWrite = async function(req: NativeBleSubscribeAllThenWriteRequest) {
+  const result = await this.call(MethodNativeBleSubscribeAllThenWrite, req);
   return result as NativeBleSubscribeAllThenWriteResponse;
 };
 
-Plugin.prototype.nativeBleWrite = async function(characteristicUuid: string, deviceIdentifier: string, serviceUuid: string, data?: number[], writeType?: string) {
-  const result = await this.call(
-    MethodNativeBleWrite,
-    {
-      characteristic_uuid: characteristicUuid,
-      device_identifier: deviceIdentifier,
-      service_uuid: serviceUuid,
-      data,
-      write_type: writeType,
-    },
-  );
+Plugin.prototype.nativeBleWrite = async function(req: NativeBleWriteRequest) {
+  const result = await this.call(MethodNativeBleWrite, req);
   return result as NativeBleWriteResponse;
 };
 
@@ -4969,13 +3818,8 @@ Plugin.prototype.nativeBootVolume = async function() {
   return result as NativeBootVolumeResponse;
 };
 
-Plugin.prototype.nativeBorders = async function(frames?: WindowFrame[]) {
-  const result = await this.call(
-    MethodNativeBorders,
-    {
-      frames,
-    },
-  );
+Plugin.prototype.nativeBorders = async function(req: NativeBordersRequest) {
+  const result = await this.call(MethodNativeBorders, req);
 };
 
 Plugin.prototype.nativeBounceKeys = async function() {
@@ -4983,34 +3827,18 @@ Plugin.prototype.nativeBounceKeys = async function() {
   return result as NativeBounceKeysResponse;
 };
 
-Plugin.prototype.nativeBrightness = async function(displayId?: number) {
-  const result = await this.call(
-    MethodNativeBrightness,
-    {
-      display_id: displayId,
-    },
-  );
+Plugin.prototype.nativeBrightness = async function(req: NativeBrightnessRequest) {
+  const result = await this.call(MethodNativeBrightness, req);
   return result as NativeBrightnessResponse;
 };
 
-Plugin.prototype.nativeBundleForRemotePort = async function(remotePort: number) {
-  const result = await this.call(
-    MethodNativeBundleForRemotePort,
-    {
-      remote_port: remotePort,
-    },
-  );
+Plugin.prototype.nativeBundleForRemotePort = async function(req: NativeBundleForRemotePortRequest) {
+  const result = await this.call(MethodNativeBundleForRemotePort, req);
   return result as NativeBundleForRemotePortResponse;
 };
 
-Plugin.prototype.nativeCalendarEventsRange = async function(end: string, start: string) {
-  const result = await this.call(
-    MethodNativeCalendarEventsRange,
-    {
-      end,
-      start,
-    },
-  );
+Plugin.prototype.nativeCalendarEventsRange = async function(req: NativeCalendarEventsRangeRequest) {
+  const result = await this.call(MethodNativeCalendarEventsRange, req);
   return (result as any).events;
 };
 
@@ -5039,73 +3867,37 @@ Plugin.prototype.nativeCapsLockState = async function() {
   return result as NativeCapsLockStateResponse;
 };
 
-Plugin.prototype.nativeCaptureWindow = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeCaptureWindow,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeCaptureWindow = async function(req: NativeCaptureWindowRequest) {
+  const result = await this.call(MethodNativeCaptureWindow, req);
   return result as NativeCaptureWindowResponse;
 };
 
-Plugin.prototype.nativeCascadeWindows = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeCascadeWindows,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeCascadeWindows = async function(req: NativeCascadeWindowsRequest) {
+  const result = await this.call(MethodNativeCascadeWindows, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeCenterWindow = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeCenterWindow,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeCenterWindow = async function(req: NativeCenterWindowRequest) {
+  const result = await this.call(MethodNativeCenterWindow, req);
 };
 
-Plugin.prototype.nativeCheckPermission = async function(permission: string) {
-  const result = await this.call(
-    MethodNativeCheckPermission,
-    {
-      permission,
-    },
-  );
+Plugin.prototype.nativeCheckPermission = async function(req: NativeCheckPermissionRequest) {
+  const result = await this.call(MethodNativeCheckPermission, req);
   return result as NativeCheckPermissionResponse;
 };
 
-Plugin.prototype.nativeClearFileQuarantine = async function(path: string) {
-  const result = await this.call(
-    MethodNativeClearFileQuarantine,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeClearFileQuarantine = async function(req: NativeClearFileQuarantineRequest) {
+  const result = await this.call(MethodNativeClearFileQuarantine, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeClearNotifications = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeClearNotifications,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeClearNotifications = async function(req: NativeClearNotificationsRequest) {
+  const result = await this.call(MethodNativeClearNotifications, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeClickMenuItem = async function(pid: number, path?: string[]) {
-  const result = await this.call(
-    MethodNativeClickMenuItem,
-    {
-      pid,
-      path,
-    },
-  );
+Plugin.prototype.nativeClickMenuItem = async function(req: NativeClickMenuItemRequest) {
+  const result = await this.call(MethodNativeClickMenuItem, req);
   return (result as any).result;
 };
 
@@ -5119,24 +3911,13 @@ Plugin.prototype.nativeClipboardImageDimensions = async function() {
   return result as NativeClipboardImageDimensionsResponse;
 };
 
-Plugin.prototype.nativeCloseWindow = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeCloseWindow,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeCloseWindow = async function(req: NativeCloseWindowRequest) {
+  const result = await this.call(MethodNativeCloseWindow, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeColorAtPoint = async function(x: number, y: number) {
-  const result = await this.call(
-    MethodNativeColorAtPoint,
-    {
-      x,
-      y,
-    },
-  );
+Plugin.prototype.nativeColorAtPoint = async function(req: NativeColorAtPointRequest) {
+  const result = await this.call(MethodNativeColorAtPoint, req);
   return result as NativeColorAtPointResponse;
 };
 
@@ -5155,14 +3936,8 @@ Plugin.prototype.nativeContactsPermission = async function() {
   return result as NativeContactsPermissionResponse;
 };
 
-Plugin.prototype.nativeCopyFile = async function(destination: string, source: string) {
-  const result = await this.call(
-    MethodNativeCopyFile,
-    {
-      destination,
-      source,
-    },
-  );
+Plugin.prototype.nativeCopyFile = async function(req: NativeCopyFileRequest) {
+  const result = await this.call(MethodNativeCopyFile, req);
   return (result as any).ok;
 };
 
@@ -5181,13 +3956,8 @@ Plugin.prototype.nativeCpuUsage = async function() {
   return result as number;
 };
 
-Plugin.prototype.nativeCreateDirectory = async function(path: string) {
-  const result = await this.call(
-    MethodNativeCreateDirectory,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeCreateDirectory = async function(req: NativeCreateDirectoryRequest) {
+  const result = await this.call(MethodNativeCreateDirectory, req);
   return (result as any).ok;
 };
 
@@ -5246,13 +4016,8 @@ Plugin.prototype.nativeDateFormat = async function() {
   return result as NativeDateFormatResponse;
 };
 
-Plugin.prototype.nativeDefaultAppForUti = async function(uti: string) {
-  const result = await this.call(
-    MethodNativeDefaultAppForUti,
-    {
-      uti,
-    },
-  );
+Plugin.prototype.nativeDefaultAppForUti = async function(req: NativeDefaultAppForUtiRequest) {
+  const result = await this.call(MethodNativeDefaultAppForUti, req);
   return result as NativeDefaultAppForUtiResponse;
 };
 
@@ -5271,13 +4036,8 @@ Plugin.prototype.nativeDefaultPrinter = async function() {
   return result as NativeDefaultPrinterResponse;
 };
 
-Plugin.prototype.nativeDeleteFile = async function(path: string) {
-  const result = await this.call(
-    MethodNativeDeleteFile,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeDeleteFile = async function(req: NativeDeleteFileRequest) {
+  const result = await this.call(MethodNativeDeleteFile, req);
   return (result as any).ok;
 };
 
@@ -5291,13 +4051,8 @@ Plugin.prototype.nativeDetectBarcodes = async function() {
   return (result as any).barcodes;
 };
 
-Plugin.prototype.nativeDetectBarcodesFile = async function(path: string) {
-  const result = await this.call(
-    MethodNativeDetectBarcodesFile,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeDetectBarcodesFile = async function(req: NativeDetectBarcodesFileRequest) {
+  const result = await this.call(MethodNativeDetectBarcodesFile, req);
   return (result as any).barcodes;
 };
 
@@ -5311,44 +4066,23 @@ Plugin.prototype.nativeDifferentiateWithoutColor = async function() {
   return result as NativeDifferentiateWithoutColorResponse;
 };
 
-Plugin.prototype.nativeDirectoryContents = async function(path: string, includeHidden?: boolean) {
-  const result = await this.call(
-    MethodNativeDirectoryContents,
-    {
-      path,
-      include_hidden: includeHidden,
-    },
-  );
+Plugin.prototype.nativeDirectoryContents = async function(req: NativeDirectoryContentsRequest) {
+  const result = await this.call(MethodNativeDirectoryContents, req);
   return (result as any).entries;
 };
 
-Plugin.prototype.nativeDiskSpace = async function(path?: string) {
-  const result = await this.call(
-    MethodNativeDiskSpace,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeDiskSpace = async function(req: NativeDiskSpaceRequest) {
+  const result = await this.call(MethodNativeDiskSpace, req);
   return result as NativeDiskSpaceResponse;
 };
 
-Plugin.prototype.nativeDiskUsage = async function(path: string) {
-  const result = await this.call(
-    MethodNativeDiskUsage,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeDiskUsage = async function(req: NativeDiskUsageRequest) {
+  const result = await this.call(MethodNativeDiskUsage, req);
   return result as NativeDiskUsageResponse;
 };
 
-Plugin.prototype.nativeDismissNotification = async function(id: string) {
-  const result = await this.call(
-    MethodNativeDismissNotification,
-    {
-      id,
-    },
-  );
+Plugin.prototype.nativeDismissNotification = async function(req: NativeDismissNotificationRequest) {
+  const result = await this.call(MethodNativeDismissNotification, req);
 };
 
 Plugin.prototype.nativeDisplayBrightness = async function() {
@@ -5371,13 +4105,8 @@ Plugin.prototype.nativeDisplayMirroring = async function() {
   return result as NativeDisplayMirroringResponse;
 };
 
-Plugin.prototype.nativeDisplayRefreshRate = async function(displayId: number) {
-  const result = await this.call(
-    MethodNativeDisplayRefreshRate,
-    {
-      display_id: displayId,
-    },
-  );
+Plugin.prototype.nativeDisplayRefreshRate = async function(req: NativeDisplayRefreshRateRequest) {
+  const result = await this.call(MethodNativeDisplayRefreshRate, req);
   return result as number;
 };
 
@@ -5386,13 +4115,8 @@ Plugin.prototype.nativeDisplayRotation = async function() {
   return (result as any).rotations;
 };
 
-Plugin.prototype.nativeDisplayScaleFactor = async function(displayId: number) {
-  const result = await this.call(
-    MethodNativeDisplayScaleFactor,
-    {
-      display_id: displayId,
-    },
-  );
+Plugin.prototype.nativeDisplayScaleFactor = async function(req: NativeDisplayScaleFactorRequest) {
+  const result = await this.call(MethodNativeDisplayScaleFactor, req);
   return result as number;
 };
 
@@ -5471,13 +4195,8 @@ Plugin.prototype.nativeDownloadsDirectory = async function() {
   return result as NativeDownloadsDirectoryResponse;
 };
 
-Plugin.prototype.nativeEjectDisk = async function(mountPoint: string) {
-  const result = await this.call(
-    MethodNativeEjectDisk,
-    {
-      mount_point: mountPoint,
-    },
-  );
+Plugin.prototype.nativeEjectDisk = async function(req: NativeEjectDiskRequest) {
+  const result = await this.call(MethodNativeEjectDisk, req);
   return (result as any).ok;
 };
 
@@ -5486,13 +4205,8 @@ Plugin.prototype.nativeEmptyTrash = async function() {
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeEnvVar = async function(name: string) {
-  const result = await this.call(
-    MethodNativeEnvVar,
-    {
-      name,
-    },
-  );
+Plugin.prototype.nativeEnvVar = async function(req: NativeEnvVarRequest) {
+  const result = await this.call(MethodNativeEnvVar, req);
   return result as NativeEnvVarResponse;
 };
 
@@ -5501,13 +4215,8 @@ Plugin.prototype.nativeEpochTime = async function() {
   return result as NativeEpochTimeResponse;
 };
 
-Plugin.prototype.nativeExtendedAttributes = async function(path: string) {
-  const result = await this.call(
-    MethodNativeExtendedAttributes,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeExtendedAttributes = async function(req: NativeExtendedAttributesRequest) {
+  const result = await this.call(MethodNativeExtendedAttributes, req);
   return result as unknown;
 };
 
@@ -5531,94 +4240,48 @@ Plugin.prototype.nativeFastUserSwitching = async function() {
   return result as NativeFastUserSwitchingResponse;
 };
 
-Plugin.prototype.nativeFileAcl = async function(path: string) {
-  const result = await this.call(
-    MethodNativeFileAcl,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeFileAcl = async function(req: NativeFileAclRequest) {
+  const result = await this.call(MethodNativeFileAcl, req);
   return result as string;
 };
 
-Plugin.prototype.nativeFileCreationDate = async function(path: string) {
-  const result = await this.call(
-    MethodNativeFileCreationDate,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeFileCreationDate = async function(req: NativeFileCreationDateRequest) {
+  const result = await this.call(MethodNativeFileCreationDate, req);
   return result as string;
 };
 
-Plugin.prototype.nativeFileExists = async function(path: string) {
-  const result = await this.call(
-    MethodNativeFileExists,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeFileExists = async function(req: NativeFileExistsRequest) {
+  const result = await this.call(MethodNativeFileExists, req);
   return result as NativeFileExistsResponse;
 };
 
-Plugin.prototype.nativeFileExtendedAttributes = async function(path: string) {
-  const result = await this.call(
-    MethodNativeFileExtendedAttributes,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeFileExtendedAttributes = async function(req: NativeFileExtendedAttributesRequest) {
+  const result = await this.call(MethodNativeFileExtendedAttributes, req);
   return (result as any).attributes;
 };
 
-Plugin.prototype.nativeFileHash = async function(path: string, algorithm?: string) {
-  const result = await this.call(
-    MethodNativeFileHash,
-    {
-      path,
-      algorithm,
-    },
-  );
+Plugin.prototype.nativeFileHash = async function(req: NativeFileHashRequest) {
+  const result = await this.call(MethodNativeFileHash, req);
   return result as NativeFileHashResponse;
 };
 
-Plugin.prototype.nativeFileMetadata = async function(path: string) {
-  const result = await this.call(
-    MethodNativeFileMetadata,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeFileMetadata = async function(req: NativeFileMetadataRequest) {
+  const result = await this.call(MethodNativeFileMetadata, req);
   return result as NativeFileMetadataResponse;
 };
 
-Plugin.prototype.nativeFileModificationDate = async function(path: string) {
-  const result = await this.call(
-    MethodNativeFileModificationDate,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeFileModificationDate = async function(req: NativeFileModificationDateRequest) {
+  const result = await this.call(MethodNativeFileModificationDate, req);
   return result as string;
 };
 
-Plugin.prototype.nativeFileOwner = async function(path: string) {
-  const result = await this.call(
-    MethodNativeFileOwner,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeFileOwner = async function(req: NativeFileOwnerRequest) {
+  const result = await this.call(MethodNativeFileOwner, req);
   return result as NativeFileOwnerResponse;
 };
 
-Plugin.prototype.nativeFileQuarantine = async function(path: string) {
-  const result = await this.call(
-    MethodNativeFileQuarantine,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeFileQuarantine = async function(req: NativeFileQuarantineRequest) {
+  const result = await this.call(MethodNativeFileQuarantine, req);
   return result as NativeFileQuarantineResponse;
 };
 
@@ -5627,44 +4290,23 @@ Plugin.prototype.nativeFileSharingEnabled = async function() {
   return result as NativeFileSharingEnabledResponse;
 };
 
-Plugin.prototype.nativeFileSize = async function(path: string) {
-  const result = await this.call(
-    MethodNativeFileSize,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeFileSize = async function(req: NativeFileSizeRequest) {
+  const result = await this.call(MethodNativeFileSize, req);
   return result as number;
 };
 
-Plugin.prototype.nativeFileTags = async function(path: string, tags?: string[]) {
-  const result = await this.call(
-    MethodNativeFileTags,
-    {
-      path,
-      tags,
-    },
-  );
+Plugin.prototype.nativeFileTags = async function(req: NativeFileTagsRequest) {
+  const result = await this.call(MethodNativeFileTags, req);
   return result as unknown;
 };
 
-Plugin.prototype.nativeFileType = async function(path: string) {
-  const result = await this.call(
-    MethodNativeFileType,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeFileType = async function(req: NativeFileTypeRequest) {
+  const result = await this.call(MethodNativeFileType, req);
   return result as NativeFileTypeResponse;
 };
 
-Plugin.prototype.nativeFileUti = async function(path: string) {
-  const result = await this.call(
-    MethodNativeFileUti,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeFileUti = async function(req: NativeFileUtiRequest) {
+  const result = await this.call(MethodNativeFileUti, req);
   return result as string;
 };
 
@@ -5753,24 +4395,13 @@ Plugin.prototype.nativeFontSmoothing = async function() {
   return result as NativeFontSmoothingResponse;
 };
 
-Plugin.prototype.nativeForceQuitApp = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeForceQuitApp,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeForceQuitApp = async function(req: NativeForceQuitAppRequest) {
+  const result = await this.call(MethodNativeForceQuitApp, req);
   return (result as any).result;
 };
 
-Plugin.prototype.nativeFormatDate = async function(style: string, when: string) {
-  const result = await this.call(
-    MethodNativeFormatDate,
-    {
-      style,
-      when,
-    },
-  );
+Plugin.prototype.nativeFormatDate = async function(req: NativeFormatDateRequest) {
+  const result = await this.call(MethodNativeFormatDate, req);
   return result as NativeFormatDateResponse;
 };
 
@@ -5799,35 +4430,18 @@ Plugin.prototype.nativeGatewayAddress = async function() {
   return result as NativeGatewayAddressResponse;
 };
 
-Plugin.prototype.nativeGeneratePdf = async function(html: string, outputPath: string) {
-  const result = await this.call(
-    MethodNativeGeneratePdf,
-    {
-      html,
-      output_path: outputPath,
-    },
-  );
+Plugin.prototype.nativeGeneratePdf = async function(req: NativeGeneratePdfRequest) {
+  const result = await this.call(MethodNativeGeneratePdf, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeGetWindowInfo = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeGetWindowInfo,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeGetWindowInfo = async function(req: NativeGetWindowInfoRequest) {
+  const result = await this.call(MethodNativeGetWindowInfo, req);
   return result as NativeGetWindowInfoResponse;
 };
 
-Plugin.prototype.nativeGlobFiles = async function(pattern: string, maxResults?: number) {
-  const result = await this.call(
-    MethodNativeGlobFiles,
-    {
-      pattern,
-      max_results: maxResults,
-    },
-  );
+Plugin.prototype.nativeGlobFiles = async function(req: NativeGlobFilesRequest) {
+  const result = await this.call(MethodNativeGlobFiles, req);
   return (result as any).paths;
 };
 
@@ -5861,13 +4475,8 @@ Plugin.prototype.nativeHardwareUuid = async function() {
   return result as NativeHardwareUuidResponse;
 };
 
-Plugin.prototype.nativeHidClaim = async function(deviceId: string) {
-  const result = await this.call(
-    MethodNativeHidClaim,
-    {
-      device_id: deviceId,
-    },
-  );
+Plugin.prototype.nativeHidClaim = async function(req: NativeHidClaimRequest) {
+  const result = await this.call(MethodNativeHidClaim, req);
   return result as NativeHidClaimResponse;
 };
 
@@ -5876,46 +4485,23 @@ Plugin.prototype.nativeHidDevices = async function() {
   return (result as any).devices;
 };
 
-Plugin.prototype.nativeHidElements = async function(deviceId: string) {
-  const result = await this.call(
-    MethodNativeHidElements,
-    {
-      device_id: deviceId,
-    },
-  );
+Plugin.prototype.nativeHidElements = async function(req: NativeHidElementsRequest) {
+  const result = await this.call(MethodNativeHidElements, req);
   return (result as any).elements;
 };
 
-Plugin.prototype.nativeHidRelease = async function(deviceId: string) {
-  const result = await this.call(
-    MethodNativeHidRelease,
-    {
-      device_id: deviceId,
-    },
-  );
+Plugin.prototype.nativeHidRelease = async function(req: NativeHidReleaseRequest) {
+  const result = await this.call(MethodNativeHidRelease, req);
   return result as NativeHidReleaseResponse;
 };
 
-Plugin.prototype.nativeHidSendReport = async function(deviceId: string, reportId: number, reportType: string, data?: number[]) {
-  const result = await this.call(
-    MethodNativeHidSendReport,
-    {
-      device_id: deviceId,
-      report_id: reportId,
-      report_type: reportType,
-      data,
-    },
-  );
+Plugin.prototype.nativeHidSendReport = async function(req: NativeHidSendReportRequest) {
+  const result = await this.call(MethodNativeHidSendReport, req);
   return result as NativeHidSendReportResponse;
 };
 
-Plugin.prototype.nativeHideApp = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeHideApp,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeHideApp = async function(req: NativeHideAppRequest) {
+  const result = await this.call(MethodNativeHideApp, req);
 };
 
 Plugin.prototype.nativeHighlightColor = async function() {
@@ -5938,13 +4524,8 @@ Plugin.prototype.nativeHostname = async function() {
   return result as NativeHostnameResponse;
 };
 
-Plugin.prototype.nativeHostnameResolve = async function(hostname: string) {
-  const result = await this.call(
-    MethodNativeHostnameResolve,
-    {
-      hostname,
-    },
-  );
+Plugin.prototype.nativeHostnameResolve = async function(req: NativeHostnameResolveRequest) {
+  const result = await this.call(MethodNativeHostnameResolve, req);
   return (result as any).addresses;
 };
 
@@ -5993,33 +4574,18 @@ Plugin.prototype.nativeIpv6Address = async function() {
   return result as NativeIpv6AddressResponse;
 };
 
-Plugin.prototype.nativeIsAppHidden = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeIsAppHidden,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeIsAppHidden = async function(req: NativeIsAppHiddenRequest) {
+  const result = await this.call(MethodNativeIsAppHidden, req);
   return (result as any).result;
 };
 
-Plugin.prototype.nativeIsDirectory = async function(path: string) {
-  const result = await this.call(
-    MethodNativeIsDirectory,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeIsDirectory = async function(req: NativeIsDirectoryRequest) {
+  const result = await this.call(MethodNativeIsDirectory, req);
   return result as NativeIsDirectoryResponse;
 };
 
-Plugin.prototype.nativeIsFileHidden = async function(path: string) {
-  const result = await this.call(
-    MethodNativeIsFileHidden,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeIsFileHidden = async function(req: NativeIsFileHiddenRequest) {
+  const result = await this.call(MethodNativeIsFileHidden, req);
   return result as NativeIsFileHiddenResponse;
 };
 
@@ -6048,43 +4614,21 @@ Plugin.prototype.nativeKeyboardLayout = async function() {
   return result as NativeKeyboardLayoutResponse;
 };
 
-Plugin.prototype.nativeKeychainDelete = async function(account: string) {
-  const result = await this.call(
-    MethodNativeKeychainDelete,
-    {
-      account,
-    },
-  );
+Plugin.prototype.nativeKeychainDelete = async function(req: NativeKeychainDeleteRequest) {
+  const result = await this.call(MethodNativeKeychainDelete, req);
 };
 
-Plugin.prototype.nativeKeychainRead = async function(account: string) {
-  const result = await this.call(
-    MethodNativeKeychainRead,
-    {
-      account,
-    },
-  );
+Plugin.prototype.nativeKeychainRead = async function(req: NativeKeychainReadRequest) {
+  const result = await this.call(MethodNativeKeychainRead, req);
   return result as NativeKeychainReadResponse;
 };
 
-Plugin.prototype.nativeKeychainWrite = async function(account: string, password: string) {
-  const result = await this.call(
-    MethodNativeKeychainWrite,
-    {
-      account,
-      password,
-    },
-  );
+Plugin.prototype.nativeKeychainWrite = async function(req: NativeKeychainWriteRequest) {
+  const result = await this.call(MethodNativeKeychainWrite, req);
 };
 
-Plugin.prototype.nativeKillProcess = async function(pid: number, signal?: number) {
-  const result = await this.call(
-    MethodNativeKillProcess,
-    {
-      pid,
-      signal,
-    },
-  );
+Plugin.prototype.nativeKillProcess = async function(req: NativeKillProcessRequest) {
+  const result = await this.call(MethodNativeKillProcess, req);
   return (result as any).ok;
 };
 
@@ -6093,14 +4637,8 @@ Plugin.prototype.nativeLastReboot = async function() {
   return result as NativeLastRebootResponse;
 };
 
-Plugin.prototype.nativeLaunchApp = async function(bundleId: string, newInstance?: boolean) {
-  const result = await this.call(
-    MethodNativeLaunchApp,
-    {
-      bundle_id: bundleId,
-      new_instance: newInstance,
-    },
-  );
+Plugin.prototype.nativeLaunchApp = async function(req: NativeLaunchAppRequest) {
+  const result = await this.call(MethodNativeLaunchApp, req);
 };
 
 Plugin.prototype.nativeLaunchdAgents = async function() {
@@ -6192,13 +4730,8 @@ Plugin.prototype.nativeMagnifierEnabled = async function() {
   return result as NativeMagnifierEnabledResponse;
 };
 
-Plugin.prototype.nativeMaximizeWindow = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeMaximizeWindow,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeMaximizeWindow = async function(req: NativeMaximizeWindowRequest) {
+  const result = await this.call(MethodNativeMaximizeWindow, req);
   return (result as any).ok;
 };
 
@@ -6229,13 +4762,8 @@ Plugin.prototype.nativeMemoryPressure = async function() {
   return result as NativeMemoryPressureResponse;
 };
 
-Plugin.prototype.nativeMenuBar = async function(pid: number) {
-  const result = await this.call(
-    MethodNativeMenuBar,
-    {
-      pid,
-    },
-  );
+Plugin.prototype.nativeMenuBar = async function(req: NativeMenuBarRequest) {
+  const result = await this.call(MethodNativeMenuBar, req);
   return (result as any).items;
 };
 
@@ -6259,13 +4787,8 @@ Plugin.prototype.nativeMicrophonePermission = async function() {
   return result as NativeMicrophonePermissionResponse;
 };
 
-Plugin.prototype.nativeMinimizeWindow = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeMinimizeWindow,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeMinimizeWindow = async function(req: NativeMinimizeWindowRequest) {
+  const result = await this.call(MethodNativeMinimizeWindow, req);
 };
 
 Plugin.prototype.nativeModelName = async function() {
@@ -6278,15 +4801,8 @@ Plugin.prototype.nativeMountPoints = async function() {
   return (result as any).volumes;
 };
 
-Plugin.prototype.nativeMouseButtonClick = async function(button: number, x?: number, y?: number) {
-  const result = await this.call(
-    MethodNativeMouseButtonClick,
-    {
-      button,
-      x,
-      y,
-    },
-  );
+Plugin.prototype.nativeMouseButtonClick = async function(req: NativeMouseButtonClickRequest) {
+  const result = await this.call(MethodNativeMouseButtonClick, req);
 };
 
 Plugin.prototype.nativeMouseKeys = async function() {
@@ -6299,45 +4815,22 @@ Plugin.prototype.nativeMouseSpeed = async function() {
   return result as number;
 };
 
-Plugin.prototype.nativeMoveFile = async function(destination: string, source: string) {
-  const result = await this.call(
-    MethodNativeMoveFile,
-    {
-      destination,
-      source,
-    },
-  );
+Plugin.prototype.nativeMoveFile = async function(req: NativeMoveFileRequest) {
+  const result = await this.call(MethodNativeMoveFile, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeMoveWindowToDisplay = async function(displayId: number, windowId: string) {
-  const result = await this.call(
-    MethodNativeMoveWindowToDisplay,
-    {
-      display_id: displayId,
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeMoveWindowToDisplay = async function(req: NativeMoveWindowToDisplayRequest) {
+  const result = await this.call(MethodNativeMoveWindowToDisplay, req);
 };
 
-Plugin.prototype.nativeMoveWindowToSpace = async function(spaceId: number, windowId: string) {
-  const result = await this.call(
-    MethodNativeMoveWindowToSpace,
-    {
-      space_id: spaceId,
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeMoveWindowToSpace = async function(req: NativeMoveWindowToSpaceRequest) {
+  const result = await this.call(MethodNativeMoveWindowToSpace, req);
   return (result as any).result;
 };
 
-Plugin.prototype.nativeMute = async function(muted: boolean) {
-  const result = await this.call(
-    MethodNativeMute,
-    {
-      muted,
-    },
-  );
+Plugin.prototype.nativeMute = async function(req: NativeMuteRequest) {
+  const result = await this.call(MethodNativeMute, req);
 };
 
 Plugin.prototype.nativeNetworkBandwidth = async function() {
@@ -6365,13 +4858,8 @@ Plugin.prototype.nativeNetworkQuality = async function() {
   return result as NativeNetworkQualityResponse;
 };
 
-Plugin.prototype.nativeNetworkReachable = async function(host: string) {
-  const result = await this.call(
-    MethodNativeNetworkReachable,
-    {
-      host,
-    },
-  );
+Plugin.prototype.nativeNetworkReachable = async function(req: NativeNetworkReachableRequest) {
+  const result = await this.call(MethodNativeNetworkReachable, req);
   return result as NativeNetworkReachableResponse;
 };
 
@@ -6385,13 +4873,8 @@ Plugin.prototype.nativeNetworkSsid = async function() {
   return result as NativeNetworkSsidResponse;
 };
 
-Plugin.prototype.nativeNewAppWindow = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeNewAppWindow,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeNewAppWindow = async function(req: NativeNewAppWindowRequest) {
+  const result = await this.call(MethodNativeNewAppWindow, req);
   return (result as any).ok;
 };
 
@@ -6405,16 +4888,8 @@ Plugin.prototype.nativeNotificationSoundEnabled = async function() {
   return result as NativeNotificationSoundEnabledResponse;
 };
 
-Plugin.prototype.nativeNotify = async function(title: string, body?: string, sound?: string, subtitle?: string) {
-  const result = await this.call(
-    MethodNativeNotify,
-    {
-      title,
-      body,
-      sound,
-      subtitle,
-    },
-  );
+Plugin.prototype.nativeNotify = async function(req: NativeNotifyRequest) {
+  const result = await this.call(MethodNativeNotify, req);
   return result as NativeNotifyResponse;
 };
 
@@ -6428,13 +4903,8 @@ Plugin.prototype.nativeNumberFormatDecimal = async function() {
   return result as NativeNumberFormatDecimalResponse;
 };
 
-Plugin.prototype.nativeObserveWindows = async function(pid: number) {
-  const result = await this.call(
-    MethodNativeObserveWindows,
-    {
-      pid,
-    },
-  );
+Plugin.prototype.nativeObserveWindows = async function(req: NativeObserveWindowsRequest) {
+  const result = await this.call(MethodNativeObserveWindows, req);
   return result as NativeObserveWindowsResponse;
 };
 
@@ -6443,13 +4913,8 @@ Plugin.prototype.nativeOcrClipboard = async function() {
   return (result as any).regions;
 };
 
-Plugin.prototype.nativeOcrFile = async function(path: string) {
-  const result = await this.call(
-    MethodNativeOcrFile,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeOcrFile = async function(req: NativeOcrFileRequest) {
+  const result = await this.call(MethodNativeOcrFile, req);
   return (result as any).regions;
 };
 
@@ -6458,26 +4923,13 @@ Plugin.prototype.nativeOcrScreen = async function() {
   return (result as any).regions;
 };
 
-Plugin.prototype.nativeOcrScreenRegion = async function(height: number, width: number, x: number, y: number) {
-  const result = await this.call(
-    MethodNativeOcrScreenRegion,
-    {
-      height,
-      width,
-      x,
-      y,
-    },
-  );
+Plugin.prototype.nativeOcrScreenRegion = async function(req: NativeOcrScreenRegionRequest) {
+  const result = await this.call(MethodNativeOcrScreenRegion, req);
   return (result as any).regions;
 };
 
-Plugin.prototype.nativeOcrWindow = async function(windowId: number) {
-  const result = await this.call(
-    MethodNativeOcrWindow,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeOcrWindow = async function(req: NativeOcrWindowRequest) {
+  const result = await this.call(MethodNativeOcrWindow, req);
   return (result as any).regions;
 };
 
@@ -6486,59 +4938,28 @@ Plugin.prototype.nativeOnScreenKeyboardEnabled = async function() {
   return result as NativeOnScreenKeyboardEnabledResponse;
 };
 
-Plugin.prototype.nativeOpenAppSettings = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeOpenAppSettings,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeOpenAppSettings = async function(req: NativeOpenAppSettingsRequest) {
+  const result = await this.call(MethodNativeOpenAppSettings, req);
 };
 
-Plugin.prototype.nativeOpenFinderWindow = async function(path: string) {
-  const result = await this.call(
-    MethodNativeOpenFinderWindow,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeOpenFinderWindow = async function(req: NativeOpenFinderWindowRequest) {
+  const result = await this.call(MethodNativeOpenFinderWindow, req);
 };
 
-Plugin.prototype.nativeOpenSystemSettings = async function(pane?: string) {
-  const result = await this.call(
-    MethodNativeOpenSystemSettings,
-    {
-      pane,
-    },
-  );
+Plugin.prototype.nativeOpenSystemSettings = async function(req: NativeOpenSystemSettingsRequest) {
+  const result = await this.call(MethodNativeOpenSystemSettings, req);
 };
 
-Plugin.prototype.nativeOpenTarget = async function(target: string) {
-  const result = await this.call(
-    MethodNativeOpenTarget,
-    {
-      target,
-    },
-  );
+Plugin.prototype.nativeOpenTarget = async function(req: NativeOpenTargetRequest) {
+  const result = await this.call(MethodNativeOpenTarget, req);
 };
 
-Plugin.prototype.nativeOpenURL = async function(url: string) {
-  const result = await this.call(
-    MethodNativeOpenUrl,
-    {
-      url,
-    },
-  );
+Plugin.prototype.nativeOpenURL = async function(req: NativeOpenURLRequest) {
+  const result = await this.call(MethodNativeOpenUrl, req);
 };
 
-Plugin.prototype.nativeOpenWithApp = async function(bundleId: string, target: string) {
-  const result = await this.call(
-    MethodNativeOpenWithApp,
-    {
-      bundle_id: bundleId,
-      target,
-    },
-  );
+Plugin.prototype.nativeOpenWithApp = async function(req: NativeOpenWithAppRequest) {
+  const result = await this.call(MethodNativeOpenWithApp, req);
 };
 
 Plugin.prototype.nativeOptimizedCharging = async function() {
@@ -6546,35 +4967,18 @@ Plugin.prototype.nativeOptimizedCharging = async function() {
   return result as NativeOptimizedChargingResponse;
 };
 
-Plugin.prototype.nativePdfExtractText = async function(path: string, page?: number) {
-  const result = await this.call(
-    MethodNativePdfExtractText,
-    {
-      path,
-      page,
-    },
-  );
+Plugin.prototype.nativePdfExtractText = async function(req: NativePdfExtractTextRequest) {
+  const result = await this.call(MethodNativePdfExtractText, req);
   return result as string;
 };
 
-Plugin.prototype.nativePdfPageCount = async function(path: string) {
-  const result = await this.call(
-    MethodNativePdfPageCount,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativePdfPageCount = async function(req: NativePdfPageCountRequest) {
+  const result = await this.call(MethodNativePdfPageCount, req);
   return result as number;
 };
 
-Plugin.prototype.nativePinWindowAbove = async function(pinned: boolean, windowId: string) {
-  const result = await this.call(
-    MethodNativePinWindowAbove,
-    {
-      pinned,
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativePinWindowAbove = async function(req: NativePinWindowAboveRequest) {
+  const result = await this.call(MethodNativePinWindowAbove, req);
 };
 
 Plugin.prototype.nativePinchToZoom = async function() {
@@ -6582,13 +4986,8 @@ Plugin.prototype.nativePinchToZoom = async function() {
   return result as NativePinchToZoomResponse;
 };
 
-Plugin.prototype.nativePing = async function(host: string) {
-  const result = await this.call(
-    MethodNativePing,
-    {
-      host,
-    },
-  );
+Plugin.prototype.nativePing = async function(req: NativePingRequest) {
+  const result = await this.call(MethodNativePing, req);
   return result as number;
 };
 
@@ -6597,13 +4996,8 @@ Plugin.prototype.nativePlayFeedbackWhenVolumeChanged = async function() {
   return result as NativePlayFeedbackWhenVolumeChangedResponse;
 };
 
-Plugin.prototype.nativePlaySound = async function(name: string) {
-  const result = await this.call(
-    MethodNativePlaySound,
-    {
-      name,
-    },
-  );
+Plugin.prototype.nativePlaySound = async function(req: NativePlaySoundRequest) {
+  const result = await this.call(MethodNativePlaySound, req);
 };
 
 Plugin.prototype.nativePollBurst = async function() {
@@ -6630,14 +5024,8 @@ Plugin.prototype.nativePressAndHoldEnabled = async function() {
   return result as NativePressAndHoldEnabledResponse;
 };
 
-Plugin.prototype.nativePreventSleep = async function(assertionId?: string, reason?: string) {
-  const result = await this.call(
-    MethodNativePreventSleep,
-    {
-      assertion_id: assertionId,
-      reason,
-    },
-  );
+Plugin.prototype.nativePreventSleep = async function(req: NativePreventSleepRequest) {
+  const result = await this.call(MethodNativePreventSleep, req);
   return result as NativePreventSleepResponse;
 };
 
@@ -6666,33 +5054,18 @@ Plugin.prototype.nativeProcessCount = async function() {
   return result as NativeProcessCountResponse;
 };
 
-Plugin.prototype.nativeProcessCpuUsage = async function(pid: number) {
-  const result = await this.call(
-    MethodNativeProcessCpuUsage,
-    {
-      pid,
-    },
-  );
+Plugin.prototype.nativeProcessCpuUsage = async function(req: NativeProcessCpuUsageRequest) {
+  const result = await this.call(MethodNativeProcessCpuUsage, req);
   return result as number;
 };
 
-Plugin.prototype.nativeProcessExists = async function(pid: number) {
-  const result = await this.call(
-    MethodNativeProcessExists,
-    {
-      pid,
-    },
-  );
+Plugin.prototype.nativeProcessExists = async function(req: NativeProcessExistsRequest) {
+  const result = await this.call(MethodNativeProcessExists, req);
   return result as NativeProcessExistsResponse;
 };
 
-Plugin.prototype.nativeProcessInfo = async function(pid: number) {
-  const result = await this.call(
-    MethodNativeProcessInfo,
-    {
-      pid,
-    },
-  );
+Plugin.prototype.nativeProcessInfo = async function(req: NativeProcessInfoRequest) {
+  const result = await this.call(MethodNativeProcessInfo, req);
   return result as NativeProcessInfoResponse;
 };
 
@@ -6701,53 +5074,28 @@ Plugin.prototype.nativeProcessList = async function() {
   return (result as any).processes;
 };
 
-Plugin.prototype.nativeProcessMemoryUsage = async function(pid: number) {
-  const result = await this.call(
-    MethodNativeProcessMemoryUsage,
-    {
-      pid,
-    },
-  );
+Plugin.prototype.nativeProcessMemoryUsage = async function(req: NativeProcessMemoryUsageRequest) {
+  const result = await this.call(MethodNativeProcessMemoryUsage, req);
   return result as number;
 };
 
-Plugin.prototype.nativeProcessName = async function(pid: number) {
-  const result = await this.call(
-    MethodNativeProcessName,
-    {
-      pid,
-    },
-  );
+Plugin.prototype.nativeProcessName = async function(req: NativeProcessNameRequest) {
+  const result = await this.call(MethodNativeProcessName, req);
   return result as string;
 };
 
-Plugin.prototype.nativeProcessParentPid = async function(pid: number) {
-  const result = await this.call(
-    MethodNativeProcessParentPid,
-    {
-      pid,
-    },
-  );
+Plugin.prototype.nativeProcessParentPid = async function(req: NativeProcessParentPidRequest) {
+  const result = await this.call(MethodNativeProcessParentPid, req);
   return result as number;
 };
 
-Plugin.prototype.nativeProcessPath = async function(pid: number) {
-  const result = await this.call(
-    MethodNativeProcessPath,
-    {
-      pid,
-    },
-  );
+Plugin.prototype.nativeProcessPath = async function(req: NativeProcessPathRequest) {
+  const result = await this.call(MethodNativeProcessPath, req);
   return result as string;
 };
 
-Plugin.prototype.nativeProcessStartTime = async function(pid: number) {
-  const result = await this.call(
-    MethodNativeProcessStartTime,
-    {
-      pid,
-    },
-  );
+Plugin.prototype.nativeProcessStartTime = async function(req: NativeProcessStartTimeRequest) {
+  const result = await this.call(MethodNativeProcessStartTime, req);
   return result as string;
 };
 
@@ -6771,34 +5119,18 @@ Plugin.prototype.nativePurgeableSpace = async function() {
   return result as number;
 };
 
-Plugin.prototype.nativeQuickLook = async function(path: string, size?: number) {
-  const result = await this.call(
-    MethodNativeQuickLook,
-    {
-      path,
-      size,
-    },
-  );
+Plugin.prototype.nativeQuickLook = async function(req: NativeQuickLookRequest) {
+  const result = await this.call(MethodNativeQuickLook, req);
   return result as NativeQuickLookResponse;
 };
 
-Plugin.prototype.nativeQuitApp = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeQuitApp,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeQuitApp = async function(req: NativeQuitAppRequest) {
+  const result = await this.call(MethodNativeQuitApp, req);
   return (result as any).result;
 };
 
-Plugin.prototype.nativeRaiseWindow = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeRaiseWindow,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeRaiseWindow = async function(req: NativeRaiseWindowRequest) {
+  const result = await this.call(MethodNativeRaiseWindow, req);
 };
 
 Plugin.prototype.nativeRandomUuid = async function() {
@@ -6806,55 +5138,28 @@ Plugin.prototype.nativeRandomUuid = async function() {
   return result as NativeRandomUuidResponse;
 };
 
-Plugin.prototype.nativeReadAppPreference = async function(domain: string, key: string) {
-  const result = await this.call(
-    MethodNativeReadAppPreference,
-    {
-      domain,
-      key,
-    },
-  );
+Plugin.prototype.nativeReadAppPreference = async function(req: NativeReadAppPreferenceRequest) {
+  const result = await this.call(MethodNativeReadAppPreference, req);
   return result as unknown;
 };
 
-Plugin.prototype.nativeReadFile = async function(path: string) {
-  const result = await this.call(
-    MethodNativeReadFile,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeReadFile = async function(req: NativeReadFileRequest) {
+  const result = await this.call(MethodNativeReadFile, req);
   return result as NativeReadFileResponse;
 };
 
-Plugin.prototype.nativeReadFileBinary = async function(path: string, maxBytes?: number) {
-  const result = await this.call(
-    MethodNativeReadFileBinary,
-    {
-      path,
-      max_bytes: maxBytes,
-    },
-  );
+Plugin.prototype.nativeReadFileBinary = async function(req: NativeReadFileBinaryRequest) {
+  const result = await this.call(MethodNativeReadFileBinary, req);
   return result as NativeReadFileBinaryResponse;
 };
 
-Plugin.prototype.nativeReadPlist = async function(path: string) {
-  const result = await this.call(
-    MethodNativeReadPlist,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeReadPlist = async function(req: NativeReadPlistRequest) {
+  const result = await this.call(MethodNativeReadPlist, req);
   return result as unknown;
 };
 
-Plugin.prototype.nativeRecentDocuments = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeRecentDocuments,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeRecentDocuments = async function(req: NativeRecentDocumentsRequest) {
+  const result = await this.call(MethodNativeRecentDocuments, req);
   return (result as any).paths;
 };
 
@@ -6878,14 +5183,8 @@ Plugin.prototype.nativeRemoteLoginEnabled = async function() {
   return result as NativeRemoteLoginEnabledResponse;
 };
 
-Plugin.prototype.nativeRenameFile = async function(newName: string, path: string) {
-  const result = await this.call(
-    MethodNativeRenameFile,
-    {
-      new_name: newName,
-      path,
-    },
-  );
+Plugin.prototype.nativeRenameFile = async function(req: NativeRenameFileRequest) {
+  const result = await this.call(MethodNativeRenameFile, req);
   return (result as any).ok;
 };
 
@@ -6899,23 +5198,13 @@ Plugin.prototype.nativeResourceUsage = async function() {
   return result as NativeResourceUsageResponse;
 };
 
-Plugin.prototype.nativeRestartApp = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeRestartApp,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeRestartApp = async function(req: NativeRestartAppRequest) {
+  const result = await this.call(MethodNativeRestartApp, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeRevealInFinder = async function(path: string) {
-  const result = await this.call(
-    MethodNativeRevealInFinder,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeRevealInFinder = async function(req: NativeRevealInFinderRequest) {
+  const result = await this.call(MethodNativeRevealInFinder, req);
 };
 
 Plugin.prototype.nativeRosettaInstalled = async function() {
@@ -6923,34 +5212,18 @@ Plugin.prototype.nativeRosettaInstalled = async function() {
   return result as NativeRosettaInstalledResponse;
 };
 
-Plugin.prototype.nativeRunApplescript = async function(script: string) {
-  const result = await this.call(
-    MethodNativeRunApplescript,
-    {
-      script,
-    },
-  );
+Plugin.prototype.nativeRunApplescript = async function(req: NativeRunApplescriptRequest) {
+  const result = await this.call(MethodNativeRunApplescript, req);
   return result as NativeRunApplescriptResponse;
 };
 
-Plugin.prototype.nativeRunJxa = async function(script: string) {
-  const result = await this.call(
-    MethodNativeRunJxa,
-    {
-      script,
-    },
-  );
+Plugin.prototype.nativeRunJxa = async function(req: NativeRunJxaRequest) {
+  const result = await this.call(MethodNativeRunJxa, req);
   return result as NativeRunJxaResponse;
 };
 
-Plugin.prototype.nativeRunShortcut = async function(name: string, input?: string) {
-  const result = await this.call(
-    MethodNativeRunShortcut,
-    {
-      name,
-      input,
-    },
-  );
+Plugin.prototype.nativeRunShortcut = async function(req: NativeRunShortcutRequest) {
+  const result = await this.call(MethodNativeRunShortcut, req);
   return result as NativeRunShortcutResponse;
 };
 
@@ -7012,15 +5285,8 @@ Plugin.prototype.nativeScreenSharingEnabled = async function() {
   return result as NativeScreenSharingEnabledResponse;
 };
 
-Plugin.prototype.nativeScreenshot = async function(displayId?: number, region?: ScreenshotRegion, windowId?: string) {
-  const result = await this.call(
-    MethodNativeScreenshot,
-    {
-      display_id: displayId,
-      region,
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeScreenshot = async function(req: NativeScreenshotRequest) {
+  const result = await this.call(MethodNativeScreenshot, req);
   return result as NativeScreenshotResponse;
 };
 
@@ -7054,13 +5320,8 @@ Plugin.prototype.nativeScrollDirectionNatural = async function() {
   return result as NativeScrollDirectionNaturalResponse;
 };
 
-Plugin.prototype.nativeSearchContacts = async function(query: string) {
-  const result = await this.call(
-    MethodNativeSearchContacts,
-    {
-      query,
-    },
-  );
+Plugin.prototype.nativeSearchContacts = async function(req: NativeSearchContactsRequest) {
+  const result = await this.call(MethodNativeSearchContacts, req);
   return (result as any).contacts;
 };
 
@@ -7084,612 +5345,292 @@ Plugin.prototype.nativeSerialNumber = async function() {
   return result as NativeSerialNumberResponse;
 };
 
-Plugin.prototype.nativeSetAirportPower = async function(on: boolean) {
-  const result = await this.call(
-    MethodNativeSetAirportPower,
-    {
-      on,
-    },
-  );
+Plugin.prototype.nativeSetAirportPower = async function(req: NativeSetAirportPowerRequest) {
+  const result = await this.call(MethodNativeSetAirportPower, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetAppHidden = async function(bundleId: string, hidden: boolean) {
-  const result = await this.call(
-    MethodNativeSetAppHidden,
-    {
-      bundle_id: bundleId,
-      hidden,
-    },
-  );
+Plugin.prototype.nativeSetAppHidden = async function(req: NativeSetAppHiddenRequest) {
+  const result = await this.call(MethodNativeSetAppHidden, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetAppMuted = async function(app: string, muted: boolean) {
-  const result = await this.call(
-    MethodNativeSetAppMuted,
-    {
-      app,
-      muted,
-    },
-  );
+Plugin.prototype.nativeSetAppMuted = async function(req: NativeSetAppMutedRequest) {
+  const result = await this.call(MethodNativeSetAppMuted, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetAppVolume = async function(app: string, volume: number) {
-  const result = await this.call(
-    MethodNativeSetAppVolume,
-    {
-      app,
-      volume,
-    },
-  );
+Plugin.prototype.nativeSetAppVolume = async function(req: NativeSetAppVolumeRequest) {
+  const result = await this.call(MethodNativeSetAppVolume, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetAudioDevice = async function(deviceType: string, uid: string) {
-  const result = await this.call(
-    MethodNativeSetAudioDevice,
-    {
-      device_type: deviceType,
-      uid,
-    },
-  );
+Plugin.prototype.nativeSetAudioDevice = async function(req: NativeSetAudioDeviceRequest) {
+  const result = await this.call(MethodNativeSetAudioDevice, req);
 };
 
-Plugin.prototype.nativeSetAudioDeviceVolume = async function(deviceUid: string, volume: number) {
-  const result = await this.call(
-    MethodNativeSetAudioDeviceVolume,
-    {
-      device_uid: deviceUid,
-      volume,
-    },
-  );
+Plugin.prototype.nativeSetAudioDeviceVolume = async function(req: NativeSetAudioDeviceVolumeRequest) {
+  const result = await this.call(MethodNativeSetAudioDeviceVolume, req);
 };
 
-Plugin.prototype.nativeSetAudioInputDevice = async function(name: string) {
-  const result = await this.call(
-    MethodNativeSetAudioInputDevice,
-    {
-      name,
-    },
-  );
+Plugin.prototype.nativeSetAudioInputDevice = async function(req: NativeSetAudioInputDeviceRequest) {
+  const result = await this.call(MethodNativeSetAudioInputDevice, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetAudioOutputDevice = async function(name: string) {
-  const result = await this.call(
-    MethodNativeSetAudioOutputDevice,
-    {
-      name,
-    },
-  );
+Plugin.prototype.nativeSetAudioOutputDevice = async function(req: NativeSetAudioOutputDeviceRequest) {
+  const result = await this.call(MethodNativeSetAudioOutputDevice, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetAutoRearrangeSpaces = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetAutoRearrangeSpaces,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetAutoRearrangeSpaces = async function(req: NativeSetAutoRearrangeSpacesRequest) {
+  const result = await this.call(MethodNativeSetAutoRearrangeSpaces, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetBluetoothPower = async function(on: boolean) {
-  const result = await this.call(
-    MethodNativeSetBluetoothPower,
-    {
-      on,
-    },
-  );
+Plugin.prototype.nativeSetBluetoothPower = async function(req: NativeSetBluetoothPowerRequest) {
+  const result = await this.call(MethodNativeSetBluetoothPower, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetBounceKeys = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetBounceKeys,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetBounceKeys = async function(req: NativeSetBounceKeysRequest) {
+  const result = await this.call(MethodNativeSetBounceKeys, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetBrightness = async function(brightness: number, displayId?: number) {
-  const result = await this.call(
-    MethodNativeSetBrightness,
-    {
-      brightness,
-      display_id: displayId,
-    },
-  );
+Plugin.prototype.nativeSetBrightness = async function(req: NativeSetBrightnessRequest) {
+  const result = await this.call(MethodNativeSetBrightness, req);
 };
 
-Plugin.prototype.nativeSetComputerName = async function(name: string) {
-  const result = await this.call(
-    MethodNativeSetComputerName,
-    {
-      name,
-    },
-  );
+Plugin.prototype.nativeSetComputerName = async function(req: NativeSetComputerNameRequest) {
+  const result = await this.call(MethodNativeSetComputerName, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetDarkMode = async function(dark: boolean) {
-  const result = await this.call(
-    MethodNativeSetDarkMode,
-    {
-      dark,
-    },
-  );
+Plugin.prototype.nativeSetDarkMode = async function(req: NativeSetDarkModeRequest) {
+  const result = await this.call(MethodNativeSetDarkMode, req);
 };
 
-Plugin.prototype.nativeSetDnd = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetDnd,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetDnd = async function(req: NativeSetDndRequest) {
+  const result = await this.call(MethodNativeSetDnd, req);
 };
 
-Plugin.prototype.nativeSetDockAutoHide = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetDockAutoHide,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetDockAutoHide = async function(req: NativeSetDockAutoHideRequest) {
+  const result = await this.call(MethodNativeSetDockAutoHide, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetDockMagnification = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetDockMagnification,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetDockMagnification = async function(req: NativeSetDockMagnificationRequest) {
+  const result = await this.call(MethodNativeSetDockMagnification, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetDockMinimizeEffect = async function(effect: string) {
-  const result = await this.call(
-    MethodNativeSetDockMinimizeEffect,
-    {
-      effect,
-    },
-  );
+Plugin.prototype.nativeSetDockMinimizeEffect = async function(req: NativeSetDockMinimizeEffectRequest) {
+  const result = await this.call(MethodNativeSetDockMinimizeEffect, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetDockPosition = async function(position: string) {
-  const result = await this.call(
-    MethodNativeSetDockPosition,
-    {
-      position,
-    },
-  );
+Plugin.prototype.nativeSetDockPosition = async function(req: NativeSetDockPositionRequest) {
+  const result = await this.call(MethodNativeSetDockPosition, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetDockShowRecents = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetDockShowRecents,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetDockShowRecents = async function(req: NativeSetDockShowRecentsRequest) {
+  const result = await this.call(MethodNativeSetDockShowRecents, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetDockSize = async function(size: number) {
-  const result = await this.call(
-    MethodNativeSetDockSize,
-    {
-      size,
-    },
-  );
+Plugin.prototype.nativeSetDockSize = async function(req: NativeSetDockSizeRequest) {
+  const result = await this.call(MethodNativeSetDockSize, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetExtendedAttribute = async function(name: string, path: string, value: string) {
-  const result = await this.call(
-    MethodNativeSetExtendedAttribute,
-    {
-      name,
-      path,
-      value,
-    },
-  );
+Plugin.prototype.nativeSetExtendedAttribute = async function(req: NativeSetExtendedAttributeRequest) {
+  const result = await this.call(MethodNativeSetExtendedAttribute, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetFileHidden = async function(hidden: boolean, path: string) {
-  const result = await this.call(
-    MethodNativeSetFileHidden,
-    {
-      hidden,
-      path,
-    },
-  );
+Plugin.prototype.nativeSetFileHidden = async function(req: NativeSetFileHiddenRequest) {
+  const result = await this.call(MethodNativeSetFileHidden, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetFilePermissions = async function(mode: string, path: string) {
-  const result = await this.call(
-    MethodNativeSetFilePermissions,
-    {
-      mode,
-      path,
-    },
-  );
+Plugin.prototype.nativeSetFilePermissions = async function(req: NativeSetFilePermissionsRequest) {
+  const result = await this.call(MethodNativeSetFilePermissions, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetFinderShowExtensions = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetFinderShowExtensions,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetFinderShowExtensions = async function(req: NativeSetFinderShowExtensionsRequest) {
+  const result = await this.call(MethodNativeSetFinderShowExtensions, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetFinderShowHidden = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetFinderShowHidden,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetFinderShowHidden = async function(req: NativeSetFinderShowHiddenRequest) {
+  const result = await this.call(MethodNativeSetFinderShowHidden, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetHighlightColor = async function(color: string) {
-  const result = await this.call(
-    MethodNativeSetHighlightColor,
-    {
-      color,
-    },
-  );
+Plugin.prototype.nativeSetHighlightColor = async function(req: NativeSetHighlightColorRequest) {
+  const result = await this.call(MethodNativeSetHighlightColor, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetHotCorner = async function(action: number, corner: string) {
-  const result = await this.call(
-    MethodNativeSetHotCorner,
-    {
-      action,
-      corner,
-    },
-  );
+Plugin.prototype.nativeSetHotCorner = async function(req: NativeSetHotCornerRequest) {
+  const result = await this.call(MethodNativeSetHotCorner, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetInputSource = async function(sourceId: string) {
-  const result = await this.call(
-    MethodNativeSetInputSource,
-    {
-      source_id: sourceId,
-    },
-  );
+Plugin.prototype.nativeSetInputSource = async function(req: NativeSetInputSourceRequest) {
+  const result = await this.call(MethodNativeSetInputSource, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetKeyRepeatDelay = async function(delay: number) {
-  const result = await this.call(
-    MethodNativeSetKeyRepeatDelay,
-    {
-      delay,
-    },
-  );
+Plugin.prototype.nativeSetKeyRepeatDelay = async function(req: NativeSetKeyRepeatDelayRequest) {
+  const result = await this.call(MethodNativeSetKeyRepeatDelay, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetKeyRepeatRate = async function(rate: number) {
-  const result = await this.call(
-    MethodNativeSetKeyRepeatRate,
-    {
-      rate,
-    },
-  );
+Plugin.prototype.nativeSetKeyRepeatRate = async function(req: NativeSetKeyRepeatRateRequest) {
+  const result = await this.call(MethodNativeSetKeyRepeatRate, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetMagnifierEnabled = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetMagnifierEnabled,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetMagnifierEnabled = async function(req: NativeSetMagnifierEnabledRequest) {
+  const result = await this.call(MethodNativeSetMagnifierEnabled, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetMenuBarAutoHide = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetMenuBarAutoHide,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetMenuBarAutoHide = async function(req: NativeSetMenuBarAutoHideRequest) {
+  const result = await this.call(MethodNativeSetMenuBarAutoHide, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetMouseKeys = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetMouseKeys,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetMouseKeys = async function(req: NativeSetMouseKeysRequest) {
+  const result = await this.call(MethodNativeSetMouseKeys, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetMouseSpeed = async function(speed: number) {
-  const result = await this.call(
-    MethodNativeSetMouseSpeed,
-    {
-      speed,
-    },
-  );
+Plugin.prototype.nativeSetMouseSpeed = async function(req: NativeSetMouseSpeedRequest) {
+  const result = await this.call(MethodNativeSetMouseSpeed, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetNightShift = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetNightShift,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetNightShift = async function(req: NativeSetNightShiftRequest) {
+  const result = await this.call(MethodNativeSetNightShift, req);
 };
 
-Plugin.prototype.nativeSetOnScreenKeyboardEnabled = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetOnScreenKeyboardEnabled,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetOnScreenKeyboardEnabled = async function(req: NativeSetOnScreenKeyboardEnabledRequest) {
+  const result = await this.call(MethodNativeSetOnScreenKeyboardEnabled, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetPowerMode = async function(mode: string) {
-  const result = await this.call(
-    MethodNativeSetPowerMode,
-    {
-      mode,
-    },
-  );
+Plugin.prototype.nativeSetPowerMode = async function(req: NativeSetPowerModeRequest) {
+  const result = await this.call(MethodNativeSetPowerMode, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetScreenReaderEnabled = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetScreenReaderEnabled,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetScreenReaderEnabled = async function(req: NativeSetScreenReaderEnabledRequest) {
+  const result = await this.call(MethodNativeSetScreenReaderEnabled, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetScreenshotFormat = async function(format: string) {
-  const result = await this.call(
-    MethodNativeSetScreenshotFormat,
-    {
-      format,
-    },
-  );
+Plugin.prototype.nativeSetScreenshotFormat = async function(req: NativeSetScreenshotFormatRequest) {
+  const result = await this.call(MethodNativeSetScreenshotFormat, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetScreenshotIncludeShadow = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetScreenshotIncludeShadow,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetScreenshotIncludeShadow = async function(req: NativeSetScreenshotIncludeShadowRequest) {
+  const result = await this.call(MethodNativeSetScreenshotIncludeShadow, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetScreenshotLocation = async function(path: string) {
-  const result = await this.call(
-    MethodNativeSetScreenshotLocation,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeSetScreenshotLocation = async function(req: NativeSetScreenshotLocationRequest) {
+  const result = await this.call(MethodNativeSetScreenshotLocation, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetScrollDirectionNatural = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetScrollDirectionNatural,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetScrollDirectionNatural = async function(req: NativeSetScrollDirectionNaturalRequest) {
+  const result = await this.call(MethodNativeSetScrollDirectionNatural, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetSidebarIconSize = async function(size: number) {
-  const result = await this.call(
-    MethodNativeSetSidebarIconSize,
-    {
-      size,
-    },
-  );
+Plugin.prototype.nativeSetSidebarIconSize = async function(req: NativeSetSidebarIconSizeRequest) {
+  const result = await this.call(MethodNativeSetSidebarIconSize, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetSlowKeys = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetSlowKeys,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetSlowKeys = async function(req: NativeSetSlowKeysRequest) {
+  const result = await this.call(MethodNativeSetSlowKeys, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetStageManager = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetStageManager,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetStageManager = async function(req: NativeSetStageManagerRequest) {
+  const result = await this.call(MethodNativeSetStageManager, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetStickyKeys = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetStickyKeys,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetStickyKeys = async function(req: NativeSetStickyKeysRequest) {
+  const result = await this.call(MethodNativeSetStickyKeys, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetTapToClick = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetTapToClick,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetTapToClick = async function(req: NativeSetTapToClickRequest) {
+  const result = await this.call(MethodNativeSetTapToClick, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetTextScale = async function(scale: number) {
-  const result = await this.call(
-    MethodNativeSetTextScale,
-    {
-      scale,
-    },
-  );
+Plugin.prototype.nativeSetTextScale = async function(req: NativeSetTextScaleRequest) {
+  const result = await this.call(MethodNativeSetTextScale, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetTrackpadSpeed = async function(speed: number) {
-  const result = await this.call(
-    MethodNativeSetTrackpadSpeed,
-    {
-      speed,
-    },
-  );
+Plugin.prototype.nativeSetTrackpadSpeed = async function(req: NativeSetTrackpadSpeedRequest) {
+  const result = await this.call(MethodNativeSetTrackpadSpeed, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetURLSchemeHandler = async function(bundleId: string, scheme: string) {
-  const result = await this.call(
-    MethodNativeSetUrlSchemeHandler,
-    {
-      bundle_id: bundleId,
-      scheme,
-    },
-  );
+Plugin.prototype.nativeSetURLSchemeHandler = async function(req: NativeSetURLSchemeHandlerRequest) {
+  const result = await this.call(MethodNativeSetUrlSchemeHandler, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetVisualAlertsEnabled = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeSetVisualAlertsEnabled,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeSetVisualAlertsEnabled = async function(req: NativeSetVisualAlertsEnabledRequest) {
+  const result = await this.call(MethodNativeSetVisualAlertsEnabled, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetVolume = async function(volume: number) {
-  const result = await this.call(
-    MethodNativeSetVolume,
-    {
-      volume,
-    },
-  );
+Plugin.prototype.nativeSetVolume = async function(req: NativeSetVolumeRequest) {
+  const result = await this.call(MethodNativeSetVolume, req);
 };
 
-Plugin.prototype.nativeSetWallpaper = async function(path: string) {
-  const result = await this.call(
-    MethodNativeSetWallpaper,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeSetWallpaper = async function(req: NativeSetWallpaperRequest) {
+  const result = await this.call(MethodNativeSetWallpaper, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeSetWindowAlpha = async function(alpha: number, windowId: string) {
-  const result = await this.call(
-    MethodNativeSetWindowAlpha,
-    {
-      alpha,
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeSetWindowAlpha = async function(req: NativeSetWindowAlphaRequest) {
+  const result = await this.call(MethodNativeSetWindowAlpha, req);
 };
 
-Plugin.prototype.nativeSetWindowLevel = async function(level: string, windowId: string) {
-  const result = await this.call(
-    MethodNativeSetWindowLevel,
-    {
-      level,
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeSetWindowLevel = async function(req: NativeSetWindowLevelRequest) {
+  const result = await this.call(MethodNativeSetWindowLevel, req);
   return (result as any).result;
 };
 
-Plugin.prototype.nativeSetWindowPosition = async function(windowId: string, x: number, y: number) {
-  const result = await this.call(
-    MethodNativeSetWindowPosition,
-    {
-      window_id: windowId,
-      x,
-      y,
-    },
-  );
+Plugin.prototype.nativeSetWindowPosition = async function(req: NativeSetWindowPositionRequest) {
+  const result = await this.call(MethodNativeSetWindowPosition, req);
 };
 
-Plugin.prototype.nativeSetWindowShadow = async function(enabled: boolean, windowId: string) {
-  const result = await this.call(
-    MethodNativeSetWindowShadow,
-    {
-      enabled,
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeSetWindowShadow = async function(req: NativeSetWindowShadowRequest) {
+  const result = await this.call(MethodNativeSetWindowShadow, req);
 };
 
-Plugin.prototype.nativeSetWindowSize = async function(h: number, w: number, windowId: string) {
-  const result = await this.call(
-    MethodNativeSetWindowSize,
-    {
-      h,
-      w,
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeSetWindowSize = async function(req: NativeSetWindowSizeRequest) {
+  const result = await this.call(MethodNativeSetWindowSize, req);
 };
 
-Plugin.prototype.nativeSetWindowSticky = async function(sticky: boolean, windowId: string) {
-  const result = await this.call(
-    MethodNativeSetWindowSticky,
-    {
-      sticky,
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeSetWindowSticky = async function(req: NativeSetWindowStickyRequest) {
+  const result = await this.call(MethodNativeSetWindowSticky, req);
 };
 
 Plugin.prototype.nativeSharingName = async function() {
@@ -7746,15 +5687,8 @@ Plugin.prototype.nativeSpacesSpanDisplays = async function() {
   return result as NativeSpacesSpanDisplaysResponse;
 };
 
-Plugin.prototype.nativeSpeak = async function(text: string, rate?: number, voice?: string) {
-  const result = await this.call(
-    MethodNativeSpeak,
-    {
-      text,
-      rate,
-      voice,
-    },
-  );
+Plugin.prototype.nativeSpeak = async function(req: NativeSpeakRequest) {
+  const result = await this.call(MethodNativeSpeak, req);
 };
 
 Plugin.prototype.nativeSpeechLocales = async function() {
@@ -7767,14 +5701,8 @@ Plugin.prototype.nativeSpeechRecognitionAvailable = async function() {
   return result as NativeSpeechRecognitionAvailableResponse;
 };
 
-Plugin.prototype.nativeSpeechRecognizeFile = async function(path: string, locale?: string) {
-  const result = await this.call(
-    MethodNativeSpeechRecognizeFile,
-    {
-      path,
-      locale,
-    },
-  );
+Plugin.prototype.nativeSpeechRecognizeFile = async function(req: NativeSpeechRecognizeFileRequest) {
+  const result = await this.call(MethodNativeSpeechRecognizeFile, req);
   return result as string;
 };
 
@@ -7783,15 +5711,8 @@ Plugin.prototype.nativeSpellingLanguage = async function() {
   return result as NativeSpellingLanguageResponse;
 };
 
-Plugin.prototype.nativeSpotlight = async function(query: string, limit?: number, scope?: string[]) {
-  const result = await this.call(
-    MethodNativeSpotlight,
-    {
-      query,
-      limit,
-      scope,
-    },
-  );
+Plugin.prototype.nativeSpotlight = async function(req: NativeSpotlightRequest) {
+  const result = await this.call(MethodNativeSpotlight, req);
   return (result as any).results;
 };
 
@@ -7825,13 +5746,8 @@ Plugin.prototype.nativeSwipeBetweenPages = async function() {
   return result as NativeSwipeBetweenPagesResponse;
 };
 
-Plugin.prototype.nativeSwitchSpace = async function(spaceId: number) {
-  const result = await this.call(
-    MethodNativeSwitchSpace,
-    {
-      space_id: spaceId,
-    },
-  );
+Plugin.prototype.nativeSwitchSpace = async function(req: NativeSwitchSpaceRequest) {
+  const result = await this.call(MethodNativeSwitchSpace, req);
 };
 
 Plugin.prototype.nativeSwitchSpaceWhenSwitchingApp = async function() {
@@ -7839,14 +5755,8 @@ Plugin.prototype.nativeSwitchSpaceWhenSwitchingApp = async function() {
   return result as NativeSwitchSpaceWhenSwitchingAppResponse;
 };
 
-Plugin.prototype.nativeSymlink = async function(link: string, source: string) {
-  const result = await this.call(
-    MethodNativeSymlink,
-    {
-      link,
-      source,
-    },
-  );
+Plugin.prototype.nativeSymlink = async function(req: NativeSymlinkRequest) {
+  const result = await this.call(MethodNativeSymlink, req);
   return (result as any).ok;
 };
 
@@ -7955,32 +5865,17 @@ Plugin.prototype.nativeTimezone = async function() {
   return result as NativeTimezoneResponse;
 };
 
-Plugin.prototype.nativeToggleBluetooth = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeToggleBluetooth,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeToggleBluetooth = async function(req: NativeToggleBluetoothRequest) {
+  const result = await this.call(MethodNativeToggleBluetooth, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeToggleFullscreen = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeToggleFullscreen,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeToggleFullscreen = async function(req: NativeToggleFullscreenRequest) {
+  const result = await this.call(MethodNativeToggleFullscreen, req);
 };
 
-Plugin.prototype.nativeToggleWifi = async function(enabled: boolean) {
-  const result = await this.call(
-    MethodNativeToggleWifi,
-    {
-      enabled,
-    },
-  );
+Plugin.prototype.nativeToggleWifi = async function(req: NativeToggleWifiRequest) {
+  const result = await this.call(MethodNativeToggleWifi, req);
   return (result as any).ok;
 };
 
@@ -7994,23 +5889,13 @@ Plugin.prototype.nativeTrackpadSpeed = async function() {
   return result as number;
 };
 
-Plugin.prototype.nativeTransparencyConsent = async function(service: string) {
-  const result = await this.call(
-    MethodNativeTransparencyConsent,
-    {
-      service,
-    },
-  );
+Plugin.prototype.nativeTransparencyConsent = async function(req: NativeTransparencyConsentRequest) {
+  const result = await this.call(MethodNativeTransparencyConsent, req);
   return result as string;
 };
 
-Plugin.prototype.nativeTrash = async function(path: string) {
-  const result = await this.call(
-    MethodNativeTrash,
-    {
-      path,
-    },
-  );
+Plugin.prototype.nativeTrash = async function(req: NativeTrashRequest) {
+  const result = await this.call(MethodNativeTrash, req);
   return (result as any).result;
 };
 
@@ -8029,52 +5914,26 @@ Plugin.prototype.nativeTwentyFourHourClock = async function() {
   return result as NativeTwentyFourHourClockResponse;
 };
 
-Plugin.prototype.nativeUnhideApp = async function(bundleId: string) {
-  const result = await this.call(
-    MethodNativeUnhideApp,
-    {
-      bundle_id: bundleId,
-    },
-  );
+Plugin.prototype.nativeUnhideApp = async function(req: NativeUnhideAppRequest) {
+  const result = await this.call(MethodNativeUnhideApp, req);
 };
 
-Plugin.prototype.nativeUnminimizeWindow = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeUnminimizeWindow,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeUnminimizeWindow = async function(req: NativeUnminimizeWindowRequest) {
+  const result = await this.call(MethodNativeUnminimizeWindow, req);
 };
 
-Plugin.prototype.nativeUnobserveWindows = async function(subscriptionId: string) {
-  const result = await this.call(
-    MethodNativeUnobserveWindows,
-    {
-      subscription_id: subscriptionId,
-    },
-  );
+Plugin.prototype.nativeUnobserveWindows = async function(req: NativeUnobserveWindowsRequest) {
+  const result = await this.call(MethodNativeUnobserveWindows, req);
   return (result as any).result;
 };
 
-Plugin.prototype.nativeUnzip = async function(destination: string, source: string) {
-  const result = await this.call(
-    MethodNativeUnzip,
-    {
-      destination,
-      source,
-    },
-  );
+Plugin.prototype.nativeUnzip = async function(req: NativeUnzipRequest) {
+  const result = await this.call(MethodNativeUnzip, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeURLSchemeHandler = async function(scheme: string) {
-  const result = await this.call(
-    MethodNativeUrlSchemeHandler,
-    {
-      scheme,
-    },
-  );
+Plugin.prototype.nativeURLSchemeHandler = async function(req: NativeURLSchemeHandlerRequest) {
+  const result = await this.call(MethodNativeUrlSchemeHandler, req);
   return result as NativeURLSchemeHandlerResponse;
 };
 
@@ -8113,14 +5972,8 @@ Plugin.prototype.nativeVpnStatus = async function() {
   return result as NativeVpnStatusResponse;
 };
 
-Plugin.prototype.nativeWarpCursor = async function(x: number, y: number) {
-  const result = await this.call(
-    MethodNativeWarpCursor,
-    {
-      x,
-      y,
-    },
-  );
+Plugin.prototype.nativeWarpCursor = async function(req: NativeWarpCursorRequest) {
+  const result = await this.call(MethodNativeWarpCursor, req);
 };
 
 Plugin.prototype.nativeWifi = async function() {
@@ -8133,126 +5986,63 @@ Plugin.prototype.nativeWifiNetworks = async function() {
   return (result as any).networks;
 };
 
-Plugin.prototype.nativeWindowApp = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeWindowApp,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeWindowApp = async function(req: NativeWindowAppRequest) {
+  const result = await this.call(MethodNativeWindowApp, req);
   return result as string;
 };
 
-Plugin.prototype.nativeWindowBounds = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeWindowBounds,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeWindowBounds = async function(req: NativeWindowBoundsRequest) {
+  const result = await this.call(MethodNativeWindowBounds, req);
   return result as NativeWindowBoundsResponse;
 };
 
-Plugin.prototype.nativeWindowDisplayID = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeWindowDisplayId,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeWindowDisplayID = async function(req: NativeWindowDisplayIDRequest) {
+  const result = await this.call(MethodNativeWindowDisplayId, req);
   return result as number;
 };
 
-Plugin.prototype.nativeWindowIsFullscreen = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeWindowIsFullscreen,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeWindowIsFullscreen = async function(req: NativeWindowIsFullscreenRequest) {
+  const result = await this.call(MethodNativeWindowIsFullscreen, req);
   return result as boolean;
 };
 
-Plugin.prototype.nativeWindowIsMinimized = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeWindowIsMinimized,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeWindowIsMinimized = async function(req: NativeWindowIsMinimizedRequest) {
+  const result = await this.call(MethodNativeWindowIsMinimized, req);
   return result as boolean;
 };
 
-Plugin.prototype.nativeWindowLayer = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeWindowLayer,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeWindowLayer = async function(req: NativeWindowLayerRequest) {
+  const result = await this.call(MethodNativeWindowLayer, req);
   return result as number;
 };
 
-Plugin.prototype.nativeWindowScreenshot = async function(windowId: number) {
-  const result = await this.call(
-    MethodNativeWindowScreenshot,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeWindowScreenshot = async function(req: NativeWindowScreenshotRequest) {
+  const result = await this.call(MethodNativeWindowScreenshot, req);
   return result as string;
 };
 
-Plugin.prototype.nativeWindowSubrole = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeWindowSubrole,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeWindowSubrole = async function(req: NativeWindowSubroleRequest) {
+  const result = await this.call(MethodNativeWindowSubrole, req);
   return result as string;
 };
 
-Plugin.prototype.nativeWindowTitle = async function(windowId: string) {
-  const result = await this.call(
-    MethodNativeWindowTitle,
-    {
-      window_id: windowId,
-    },
-  );
+Plugin.prototype.nativeWindowTitle = async function(req: NativeWindowTitleRequest) {
+  const result = await this.call(MethodNativeWindowTitle, req);
   return result as string;
 };
 
-Plugin.prototype.nativeWorldModel = async function(onScreen?: boolean) {
-  const result = await this.call(
-    MethodNativeWorldModel,
-    {
-      on_screen: onScreen,
-    },
-  );
+Plugin.prototype.nativeWorldModel = async function(req: NativeWorldModelRequest) {
+  const result = await this.call(MethodNativeWorldModel, req);
   return result as WorldModel;
 };
 
-Plugin.prototype.nativeWriteAppPreference = async function(domain: string, key: string, value: unknown) {
-  const result = await this.call(
-    MethodNativeWriteAppPreference,
-    {
-      domain,
-      key,
-      value,
-    },
-  );
+Plugin.prototype.nativeWriteAppPreference = async function(req: NativeWriteAppPreferenceRequest) {
+  const result = await this.call(MethodNativeWriteAppPreference, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.nativeWriteFile = async function(contents: string, path: string) {
-  const result = await this.call(
-    MethodNativeWriteFile,
-    {
-      contents,
-      path,
-    },
-  );
+Plugin.prototype.nativeWriteFile = async function(req: NativeWriteFileRequest) {
+  const result = await this.call(MethodNativeWriteFile, req);
   return (result as any).ok;
 };
 
@@ -8266,61 +6056,28 @@ Plugin.prototype.nativeXcodeVersion = async function() {
   return result as NativeXcodeVersionResponse;
 };
 
-Plugin.prototype.nativeZip = async function(destination: string, source: string) {
-  const result = await this.call(
-    MethodNativeZip,
-    {
-      destination,
-      source,
-    },
-  );
+Plugin.prototype.nativeZip = async function(req: NativeZipRequest) {
+  const result = await this.call(MethodNativeZip, req);
   return (result as any).ok;
 };
 
-Plugin.prototype.networkRequestHost = async function(host: string, reason?: string) {
-  const result = await this.call(
-    MethodNetworkRequestHost,
-    {
-      host,
-      reason,
-    },
-  );
+Plugin.prototype.networkRequestHost = async function(req: NetworkRequestHostRequest) {
+  const result = await this.call(MethodNetworkRequestHost, req);
   return result as NetworkRequestHostResponse;
 };
 
-Plugin.prototype.outputClear = async function(channel: string) {
-  const result = await this.call(
-    MethodOutputClear,
-    {
-      channel,
-    },
-  );
+Plugin.prototype.outputClear = async function(req: OutputClearRequest) {
+  const result = await this.call(MethodOutputClear, req);
   return result as OutputClearResponse;
 };
 
-Plugin.prototype.outputState = async function(state: OutputState) {
-  const result = await this.call(
-    MethodOutputState,
-    {
-      state,
-    },
-  );
+Plugin.prototype.outputState = async function(req: OutputStateRequest) {
+  const result = await this.call(MethodOutputState, req);
   return result as OutputStateResponse;
 };
 
-Plugin.prototype.overridesApply = async function(action: string, collection: string, field?: string, fields?: unknown, id?: string, newId?: string, tenant?: string) {
-  const result = await this.call(
-    MethodOverridesApply,
-    {
-      action,
-      collection,
-      field,
-      fields,
-      id,
-      new_id: newId,
-      tenant,
-    },
-  );
+Plugin.prototype.overridesApply = async function(req: OverridesApplyRequest) {
+  const result = await this.call(MethodOverridesApply, req);
   return result as OverridesApplyResponse;
 };
 
@@ -8329,38 +6086,18 @@ Plugin.prototype.overridesList = async function() {
   return (result as any).overlays;
 };
 
-Plugin.prototype.pipelinesGrammar = async function(full?: boolean) {
-  const result = await this.call(
-    MethodPipelinesGrammar,
-    {
-      full,
-    },
-  );
+Plugin.prototype.pipelinesGrammar = async function(req: PipelinesGrammarRequest) {
+  const result = await this.call(MethodPipelinesGrammar, req);
   return result as PipelinesGrammarResponse;
 };
 
-Plugin.prototype.pipelinesInject = async function(eventType: string, name: string, stage: string, data?: unknown) {
-  const result = await this.call(
-    MethodPipelinesInject,
-    {
-      event_type: eventType,
-      name,
-      stage,
-      data,
-    },
-  );
+Plugin.prototype.pipelinesInject = async function(req: PipelinesInjectRequest) {
+  const result = await this.call(MethodPipelinesInject, req);
   return result as PipelinesInjectResponse;
 };
 
-Plugin.prototype.pipelinesRun = async function(name: string, ephemeral?: boolean, paramOverrides?: Record<string, unknown>) {
-  const result = await this.call(
-    MethodPipelinesRun,
-    {
-      name,
-      ephemeral,
-      param_overrides: paramOverrides,
-    },
-  );
+Plugin.prototype.pipelinesRun = async function(req: PipelinesRunRequest) {
+  const result = await this.call(MethodPipelinesRun, req);
   return result as PipelinesRunResponse;
 };
 
@@ -8369,25 +6106,13 @@ Plugin.prototype.pipelinesStatus = async function() {
   return result as PipelinesStatusResponse;
 };
 
-Plugin.prototype.pipelinesStop = async function(name: string, audioCutoffMs?: number) {
-  const result = await this.call(
-    MethodPipelinesStop,
-    {
-      name,
-      audio_cutoff_ms: audioCutoffMs,
-    },
-  );
+Plugin.prototype.pipelinesStop = async function(req: PipelinesStopRequest) {
+  const result = await this.call(MethodPipelinesStop, req);
   return result as PipelinesStopResponse;
 };
 
-Plugin.prototype.pipelinesWarm = async function(name: string, paramOverrides?: Record<string, unknown>) {
-  const result = await this.call(
-    MethodPipelinesWarm,
-    {
-      name,
-      param_overrides: paramOverrides,
-    },
-  );
+Plugin.prototype.pipelinesWarm = async function(req: PipelinesWarmRequest) {
+  const result = await this.call(MethodPipelinesWarm, req);
   return result as PipelinesWarmResponse;
 };
 
@@ -8396,56 +6121,26 @@ Plugin.prototype.platformProfile = async function() {
   return result as PlatformProfileResponse;
 };
 
-Plugin.prototype.pluginDataExport = async function(path: string, filename?: string) {
-  const result = await this.call(
-    MethodPluginDataExport,
-    {
-      path,
-      filename,
-    },
-  );
+Plugin.prototype.pluginDataExport = async function(req: PluginDataExportRequest) {
+  const result = await this.call(MethodPluginDataExport, req);
   return result as PluginDataExportResponse;
 };
 
-Plugin.prototype.pluginDebug = async function(data?: unknown, level?: PluginLogLevel, tag?: string) {
-  const result = await this.call(
-    MethodPluginDebug,
-    {
-      data,
-      level,
-      tag,
-    },
-  );
+Plugin.prototype.pluginDebug = async function(req: PluginDebugRequest) {
+  const result = await this.call(MethodPluginDebug, req);
 };
 
-Plugin.prototype.pluginReportHealth = async function(degraded: boolean, reason?: string) {
-  const result = await this.call(
-    MethodPluginReportHealth,
-    {
-      degraded,
-      reason,
-    },
-  );
+Plugin.prototype.pluginReportHealth = async function(req: PluginReportHealthRequest) {
+  const result = await this.call(MethodPluginReportHealth, req);
 };
 
-Plugin.prototype.privacyGetRecording = async function(name: string) {
-  const result = await this.call(
-    MethodPrivacyGetRecording,
-    {
-      name,
-    },
-  );
+Plugin.prototype.privacyGetRecording = async function(req: PrivacyGetRecordingRequest) {
+  const result = await this.call(MethodPrivacyGetRecording, req);
   return result as PrivacyGetRecordingResponse;
 };
 
-Plugin.prototype.privacySetRecording = async function(enabled: boolean, name: string) {
-  const result = await this.call(
-    MethodPrivacySetRecording,
-    {
-      enabled,
-      name,
-    },
-  );
+Plugin.prototype.privacySetRecording = async function(req: PrivacySetRecordingRequest) {
+  const result = await this.call(MethodPrivacySetRecording, req);
 };
 
 Plugin.prototype.privilegesList = async function() {
@@ -8453,35 +6148,18 @@ Plugin.prototype.privilegesList = async function() {
   return (result as any).privileges;
 };
 
-Plugin.prototype.privilegesRelinquish = async function(privilege: string) {
-  const result = await this.call(
-    MethodPrivilegesRelinquish,
-    {
-      privilege,
-    },
-  );
+Plugin.prototype.privilegesRelinquish = async function(req: PrivilegesRelinquishRequest) {
+  const result = await this.call(MethodPrivilegesRelinquish, req);
   return result as PrivilegesRelinquishResponse;
 };
 
-Plugin.prototype.privilegesRequest = async function(privilege: string, reason?: string) {
-  const result = await this.call(
-    MethodPrivilegesRequest,
-    {
-      privilege,
-      reason,
-    },
-  );
+Plugin.prototype.privilegesRequest = async function(req: PrivilegesRequestRequest) {
+  const result = await this.call(MethodPrivilegesRequest, req);
   return result as PrivilegesRequestResponse;
 };
 
-Plugin.prototype.recognitionBiasApply = async function(strength: number, force?: boolean) {
-  const result = await this.call(
-    MethodRecognitionBiasApply,
-    {
-      strength,
-      force,
-    },
-  );
+Plugin.prototype.recognitionBiasApply = async function(req: RecognitionBiasApplyRequest) {
+  const result = await this.call(MethodRecognitionBiasApply, req);
   return result as RecognitionBiasApplyResponse;
 };
 
@@ -8490,47 +6168,23 @@ Plugin.prototype.recognitionBiasGet = async function() {
   return result as RecognitionBiasGetResponse;
 };
 
-Plugin.prototype.recognitionBiasSet = async function(enabled?: boolean, strength?: number) {
-  const result = await this.call(
-    MethodRecognitionBiasSet,
-    {
-      enabled,
-      strength,
-    },
-  );
+Plugin.prototype.recognitionBiasSet = async function(req: RecognitionBiasSetRequest) {
+  const result = await this.call(MethodRecognitionBiasSet, req);
   return result as RecognitionBiasSetResponse;
 };
 
-Plugin.prototype.recognitionRedecode = async function(items: RedecodeItem[], model: string, stage: string, maxActive?: number) {
-  const result = await this.call(
-    MethodRecognitionRedecode,
-    {
-      items,
-      model,
-      stage,
-      max_active: maxActive,
-    },
-  );
+Plugin.prototype.recognitionRedecode = async function(req: RecognitionRedecodeRequest) {
+  const result = await this.call(MethodRecognitionRedecode, req);
   return result as RecognitionRedecodeResponse;
 };
 
-Plugin.prototype.secretsDelete = async function(name: string) {
-  const result = await this.call(
-    MethodSecretsDelete,
-    {
-      name,
-    },
-  );
+Plugin.prototype.secretsDelete = async function(req: SecretsDeleteRequest) {
+  const result = await this.call(MethodSecretsDelete, req);
   return result as SecretsDeleteResponse;
 };
 
-Plugin.prototype.secretsIsSet = async function(name: string) {
-  const result = await this.call(
-    MethodSecretsIsSet,
-    {
-      name,
-    },
-  );
+Plugin.prototype.secretsIsSet = async function(req: SecretsIsSetRequest) {
+  const result = await this.call(MethodSecretsIsSet, req);
   return result as SecretsIsSetResponse;
 };
 
@@ -8539,49 +6193,23 @@ Plugin.prototype.secretsList = async function() {
   return result as SecretsListResponse;
 };
 
-Plugin.prototype.secretsRequestSlot = async function(host: string, name: string, label?: string) {
-  const result = await this.call(
-    MethodSecretsRequestSlot,
-    {
-      host,
-      name,
-      label,
-    },
-  );
+Plugin.prototype.secretsRequestSlot = async function(req: SecretsRequestSlotRequest) {
+  const result = await this.call(MethodSecretsRequestSlot, req);
   return result as SecretsRequestSlotResponse;
 };
 
-Plugin.prototype.secretsSet = async function(name: string, value: string, host?: string) {
-  const result = await this.call(
-    MethodSecretsSet,
-    {
-      name,
-      value,
-      host,
-    },
-  );
+Plugin.prototype.secretsSet = async function(req: SecretsSetRequest) {
+  const result = await this.call(MethodSecretsSet, req);
   return result as SecretsSetResponse;
 };
 
-Plugin.prototype.selectionPick = async function(index: number) {
-  const result = await this.call(
-    MethodSelectionPick,
-    {
-      index,
-    },
-  );
+Plugin.prototype.selectionPick = async function(req: SelectionPickRequest) {
+  const result = await this.call(MethodSelectionPick, req);
   return result as SelectionPickResponse;
 };
 
-Plugin.prototype.selectionSet = async function(channel?: string, items?: HUDItem[], title?: string) {
-  const result = await this.call(
-    MethodSelectionSet,
-    {
-      channel,
-      items,
-      title,
-    },
-  );
+Plugin.prototype.selectionSet = async function(req: SelectionSetRequest) {
+  const result = await this.call(MethodSelectionSet, req);
 };
 
 Plugin.prototype.sessionBoundary = async function() {
@@ -8593,116 +6221,50 @@ Plugin.prototype.sessionEndCleanup = async function() {
   return result as SessionEndCleanupResponse;
 };
 
-Plugin.prototype.settingsPatchSignals = async function(signals: string) {
-  const result = await this.call(
-    MethodSettingsPatchSignals,
-    {
-      signals,
-    },
-  );
+Plugin.prototype.settingsPatchSignals = async function(req: SettingsPatchSignalsRequest) {
+  const result = await this.call(MethodSettingsPatchSignals, req);
 };
 
-Plugin.prototype.settingsRedirect = async function(tab: string) {
-  const result = await this.call(
-    MethodSettingsRedirect,
-    {
-      tab,
-    },
-  );
+Plugin.prototype.settingsRedirect = async function(req: SettingsRedirectRequest) {
+  const result = await this.call(MethodSettingsRedirect, req);
 };
 
 Plugin.prototype.settingsRefresh = async function() {
   const result = await this.call(MethodSettingsRefresh);
 };
 
-Plugin.prototype.settingsRulesCreate = async function(newruleactionjson?: string, newruleactiontype?: string, newruleactionval?: string, newrulecategory?: string, newruleclearstags?: string, newruledescription?: string, newrulephrase?: string, newrulerequirestags?: string, newrulesetstags?: string) {
-  const result = await this.call(
-    MethodSettingsRulesCreate,
-    {
-      newruleactionjson,
-      newruleactiontype,
-      newruleactionval,
-      newrulecategory,
-      newruleclearstags,
-      newruledescription,
-      newrulephrase,
-      newrulerequirestags,
-      newrulesetstags,
-    },
-  );
+Plugin.prototype.settingsRulesCreate = async function(req: SettingsRulesCreateRequest) {
+  const result = await this.call(MethodSettingsRulesCreate, req);
   return result as SettingsRulesCreateResponse;
 };
 
-Plugin.prototype.settingsRulesUpdate = async function(canonical: string, newruleactionjson?: string, newruleactiontype?: string, newruleactionval?: string, newrulecategory?: string, newruleclearstags?: string, newruledescription?: string, newrulephrase?: string, newrulerequirestags?: string, newrulesetstags?: string) {
-  const result = await this.call(
-    MethodSettingsRulesUpdate,
-    {
-      canonical,
-      newruleactionjson,
-      newruleactiontype,
-      newruleactionval,
-      newrulecategory,
-      newruleclearstags,
-      newruledescription,
-      newrulephrase,
-      newrulerequirestags,
-      newrulesetstags,
-    },
-  );
+Plugin.prototype.settingsRulesUpdate = async function(req: SettingsRulesUpdateRequest) {
+  const result = await this.call(MethodSettingsRulesUpdate, req);
   return result as SettingsRulesUpdateResponse;
 };
 
-Plugin.prototype.speechAnnounce = async function(text: string) {
-  const result = await this.call(
-    MethodSpeechAnnounce,
-    {
-      text,
-    },
-  );
+Plugin.prototype.speechAnnounce = async function(req: SpeechAnnounceRequest) {
+  const result = await this.call(MethodSpeechAnnounce, req);
 };
 
-Plugin.prototype.speechSay = async function(text: string, priority?: string) {
-  const result = await this.call(
-    MethodSpeechSay,
-    {
-      text,
-      priority,
-    },
-  );
+Plugin.prototype.speechSay = async function(req: SpeechSayRequest) {
+  const result = await this.call(MethodSpeechSay, req);
 };
 
 Plugin.prototype.speechStop = async function() {
   const result = await this.call(MethodSpeechStop);
 };
 
-Plugin.prototype.systemLaunchApp = async function(bundleId: string, newInstance?: boolean) {
-  const result = await this.call(
-    MethodSystemLaunchApp,
-    {
-      bundle_id: bundleId,
-      new_instance: newInstance,
-    },
-  );
+Plugin.prototype.systemLaunchApp = async function(req: SystemLaunchAppRequest) {
+  const result = await this.call(MethodSystemLaunchApp, req);
 };
 
-Plugin.prototype.systemNotify = async function(body: string, title: string, durationSecs?: number) {
-  const result = await this.call(
-    MethodSystemNotify,
-    {
-      body,
-      title,
-      duration_secs: durationSecs,
-    },
-  );
+Plugin.prototype.systemNotify = async function(req: SystemNotifyRequest) {
+  const result = await this.call(MethodSystemNotify, req);
 };
 
-Plugin.prototype.systemRunShell = async function(command: string) {
-  const result = await this.call(
-    MethodSystemRunShell,
-    {
-      command,
-    },
-  );
+Plugin.prototype.systemRunShell = async function(req: SystemRunShellRequest) {
+  const result = await this.call(MethodSystemRunShell, req);
 };
 
 Plugin.prototype.trialBegin = async function() {
@@ -8710,45 +6272,22 @@ Plugin.prototype.trialBegin = async function() {
   return result as TrialBeginResponse;
 };
 
-Plugin.prototype.trialEnd = async function(trialId: string) {
-  const result = await this.call(
-    MethodTrialEnd,
-    {
-      trial_id: trialId,
-    },
-  );
+Plugin.prototype.trialEnd = async function(req: TrialEndRequest) {
+  const result = await this.call(MethodTrialEnd, req);
   return result as TrialEndResponse;
 };
 
-Plugin.prototype.trialEnterContext = async function(commandId: string, trialId: string) {
-  const result = await this.call(
-    MethodTrialEnterContext,
-    {
-      command_id: commandId,
-      trial_id: trialId,
-    },
-  );
+Plugin.prototype.trialEnterContext = async function(req: TrialEnterContextRequest) {
+  const result = await this.call(MethodTrialEnterContext, req);
   return result as TrialEnterContextResponse;
 };
 
-Plugin.prototype.trialRegisterFixture = async function(fixtureHandle: string, ownerPluginId: string, trialId: string) {
-  const result = await this.call(
-    MethodTrialRegisterFixture,
-    {
-      fixture_handle: fixtureHandle,
-      owner_plugin_id: ownerPluginId,
-      trial_id: trialId,
-    },
-  );
+Plugin.prototype.trialRegisterFixture = async function(req: TrialRegisterFixtureRequest) {
+  const result = await this.call(MethodTrialRegisterFixture, req);
 };
 
-Plugin.prototype.trialResolveSamples = async function(commandId: string) {
-  const result = await this.call(
-    MethodTrialResolveSamples,
-    {
-      command_id: commandId,
-    },
-  );
+Plugin.prototype.trialResolveSamples = async function(req: TrialResolveSamplesRequest) {
+  const result = await this.call(MethodTrialResolveSamples, req);
   return (result as any).prompts;
 };
 

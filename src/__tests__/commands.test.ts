@@ -30,7 +30,7 @@ describe("PushCommands file loading", () => {
       // Create a mock plugin that tracks calls
       const calls: any[] = [];
       const mockPlugin = {
-        commandsPush: async (commands: unknown, group?: string) => {
+        commandsPush: async ({ commands, group }: { commands: unknown; group?: string }) => {
           calls.push({ commands, group });
           return { count: 0 };
         },
@@ -59,7 +59,7 @@ describe("PushCommands file loading", () => {
       try {
         let captured: any;
         const mockPlugin = {
-          commandsPush: async (commands: unknown) => {
+          commandsPush: async ({ commands }: { commands: unknown }) => {
             captured = commands;
             return { count: 2 };
           },
@@ -108,7 +108,7 @@ describe("PushCommands file loading", () => {
       try {
         let captured: any;
         const mockPlugin = {
-          commandsPush: async (commands: unknown) => {
+          commandsPush: async ({ commands }: { commands: unknown }) => {
             captured = commands;
             return { count: 2 };
           },

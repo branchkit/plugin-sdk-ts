@@ -5,6 +5,18 @@ git history.
 
 ## Unreleased
 
+### Breaking: generated methods take one request object
+
+- Every generated method that takes parameters now takes a single object,
+  typed as its `<Method>Request` interface:
+  `plugin.collectionFetch({ id, name })`, not `plugin.collectionFetch(id, name)`.
+  Keys are the wire's snake_case names, the same spelling every response
+  type already uses (`{ accepts_input: true }`). Positional order came from
+  the schema, which is alphabetical, so it said nothing a caller could
+  guess, and 62 methods had two or more parameters of one type that
+  type-checked just as well swapped. A new optional field can be added later
+  without breaking any caller. Methods with no parameters are unchanged.
+
 ### `**` in pattern listeners
 
 - `onPattern` now takes `**`, zero or more whole segments, matching the

@@ -7812,6 +7812,11 @@ export interface SettingsRedirectRequest {
 
 export interface SettingsRulesCreateRequest {
   /**
+   * Check the candidate and report any conflict without saving it.
+   * default null
+   */
+  check_only?: boolean;
+  /**
    * Raw JSON action body, used when `newruleactiontype = "json"`.
    * default null
    */
@@ -7880,6 +7885,12 @@ export interface SettingsRulesUpdateRequest {
    * the rule being updated. Required.
    */
   canonical: string;
+  /**
+   * Check the candidate and report any conflict without saving it or
+   * removing the command it would replace.
+   * default null
+   */
+  check_only?: boolean;
   /**
    * default null
    */

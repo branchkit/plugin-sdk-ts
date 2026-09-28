@@ -75,9 +75,7 @@ export async function PushCommands(plugin: Plugin): Promise<number> {
   // as one bad command — which is why `commands` is a runtime
   // `serde_json::Value` there with only its schema declared. Checking the
   // shape a second time here would duplicate that and diverge from it.
-  const resp = await plugin.commandsPush(
-    allCommands as unknown as CommandSpec[],
-  );
+  const resp = await plugin.commandsPush({ commands: allCommands as unknown as CommandSpec[] });
   return resp.count;
 }
 
@@ -345,7 +343,7 @@ export async function pushCommandSpecs(
   plugin: Plugin,
   specs: CommandSpec[],
 ): Promise<number> {
-  const resp = await plugin.commandsPush(specs.map(normalizeCommandSpec));
+  const resp = await plugin.commandsPush({ commands: specs.map(normalizeCommandSpec) });
   return resp.count;
 }
 
@@ -386,6 +384,6 @@ export async function pushCommandGroup(
       "pushCommandGroup: group name is required (use pushCommandSpecs to replace the whole set)",
     );
   }
-  const resp = await plugin.commandsPush(specs.map(normalizeCommandSpec), group);
+  const resp = await plugin.commandsPush({ commands: specs.map(normalizeCommandSpec), group });
   return resp.count;
 }

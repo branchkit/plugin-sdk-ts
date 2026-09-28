@@ -23,12 +23,18 @@ import { Plugin } from "@branchkitdev/plugin-sdk-ts";
 const plugin = new Plugin();
 
 plugin.handleAction("myplugin.greet", async () => {
-  await plugin.call("input.type_text", { text: "Hello!" });
+  await plugin.inputTypeText({ text: "Hello!" });
   return { status: "ok" };
 });
 
 await plugin.run();
 ```
+
+Every platform method has a generated wrapper like `inputTypeText` that
+takes one object typed as the method's request, keyed by the wire's
+snake_case names (`{ accepts_input: true }`). Use it over the raw
+`plugin.call(method, params)`: a wrong method or field name fails the type
+check instead of the call.
 
 Pair with a `plugin.json` manifest declaring the action — see the
 tutorial. `branchkit-gen` generates typed param interfaces from your

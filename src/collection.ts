@@ -295,7 +295,7 @@ Plugin.prototype.get = async function (
   name: string,
   id: string,
 ): Promise<CollectionRecord | undefined> {
-  const res = await this.collectionFetch(id, name);
+  const res = await this.collectionFetch({ id, name });
   // res.record is `unknown` because the Rust type is Option<CollectionRecord>
   // and the TS emitter routes Option<T> through unknown.
   if (!res || res.record == null) return undefined;
@@ -306,7 +306,7 @@ Plugin.prototype.getCompacted = async function (
   name: string,
   key: string,
 ): Promise<CollectionRecord | undefined> {
-  const res = await this.collectionFetchCompacted(key, name);
+  const res = await this.collectionFetchCompacted({ id: key, name });
   if (!res || res.record == null) return undefined;
   return res.record as CollectionRecord;
 };
@@ -315,7 +315,7 @@ Plugin.prototype.list = async function (
   name: string,
   opts?: ListOpts,
 ): Promise<CollectionRecord[]> {
-  const res = await this.collectionList(name, opts);
+  const res = await this.collectionList({ name, opts });
   return res?.records ?? [];
 };
 
@@ -323,7 +323,7 @@ Plugin.prototype.listCompacted = async function (
   name: string,
   opts?: ListOpts,
 ): Promise<CollectionRecord[]> {
-  const res = await this.collectionList(name, { ...opts, compacted: true });
+  const res = await this.collectionList({ name, opts: { ...opts, compacted: true } });
   return res?.records ?? [];
 };
 
@@ -388,12 +388,12 @@ Plugin.prototype.listPage = async function (
   name: string,
   opts?: ListOpts,
 ): Promise<{ records: CollectionRecord[]; total: number }> {
-  const res = await this.collectionList(name, opts);
+  const res = await this.collectionList({ name, opts });
   return { records: res?.records ?? [], total: res?.total ?? 0 };
 };
 
 Plugin.prototype.count = async function (name: string): Promise<number> {
-  const res = await this.collectionCount(name);
+  const res = await this.collectionCount({ name });
   return res?.count ?? 0;
 };
 
@@ -402,7 +402,7 @@ Plugin.prototype.put = async function (
   id: string,
   payload: unknown,
 ): Promise<void> {
-  await this.collectionPut(name, [{ id, payload }]);
+  await this.collectionPut({ name, entries: [{ id, payload }] });
 };
 
 Plugin.prototype.putMany = async function (
@@ -410,7 +410,7 @@ Plugin.prototype.putMany = async function (
   entries: CollectionPutEntry[],
 ): Promise<number> {
   if (entries.length === 0) return 0;
-  const res = await this.collectionPut(name, entries);
+  const res = await this.collectionPut({ name, entries });
   return res?.count ?? 0;
 };
 
@@ -423,13 +423,7 @@ Plugin.prototype.replace = async function (
   // No early return on an empty `entries`: replacing with the empty set is how
   // a caller CLEARS its scope, and short-circuiting would silently turn that
   // into a no-op — the opposite of what was asked.
-  const res = await this.collectionReplace(
-    name,
-    scope,
-    entries,
-    opts?.label,
-    opts?.roles,
-  );
+  const res = await this.collectionReplace({ name, scope, entries, label: opts?.label, roles: opts?.roles });
   return {
     put: res?.put ?? 0,
     deleted: res?.deleted ?? 0,
@@ -452,7 +446,7 @@ Plugin.prototype.putManyWithDisplay = async function (
   label: string,
 ): Promise<number> {
   if (entries.length === 0) return 0;
-  const res = await this.collectionPut(name, entries, undefined, label || undefined, roles);
+  const res = await this.collectionPut({ name, entries, label: label || undefined, roles });
   return res?.count ?? 0;
 };
 
@@ -461,11 +455,11 @@ Plugin.prototype.patch = async function (
   id: string,
   fields: unknown,
 ): Promise<void> {
-  await this.collectionPatch(fields, id, name);
+  await this.collectionPatch({ fields, id, name });
 };
 
 Plugin.prototype.delete = async function (name: string, id: string): Promise<boolean> {
-  const res = await this.collectionDeleteRecords(name, [id]);
+  const res = await this.collectionDeleteRecords({ name, ids: [id] });
   return (res?.deleted ?? 0) > 0;
 };
 
@@ -474,7 +468,7 @@ Plugin.prototype.deleteMany = async function (
   ids: string[],
 ): Promise<{ deleted: number; alreadyAbsent: number }> {
   if (ids.length === 0) return { deleted: 0, alreadyAbsent: 0 };
-  const res = await this.collectionDeleteRecords(name, ids);
+  const res = await this.collectionDeleteRecords({ name, ids });
   return {
     deleted: res?.deleted ?? 0,
     alreadyAbsent: res?.already_absent ?? 0,

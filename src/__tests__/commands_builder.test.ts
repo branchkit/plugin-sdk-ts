@@ -75,7 +75,7 @@ describe("command builder", () => {
   test("pushCommandSpecs coerces null array fields to [] (Go parity)", async () => {
     let sent: Record<string, unknown>[] | undefined;
     const fakePlugin = {
-      commandsPush: async (commands: Record<string, unknown>[]) => {
+      commandsPush: async ({ commands }: { commands: Record<string, unknown>[] }) => {
         sent = commands;
         return { count: 1 };
       },
