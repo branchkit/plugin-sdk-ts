@@ -1220,7 +1220,7 @@ declare module "./plugin.js" {
      */
     nativeActiveSpace(): Promise<ActiveSpace[]>;
     /**
-     * Check if AirDrop discoverability is enabled
+     * Check if AirDrop discoverability is enabled. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeAirdropEnabled(): Promise<NativeAirdropEnabledResponse>;
     /**
@@ -1240,7 +1240,7 @@ declare module "./plugin.js" {
      */
     nativeAllWindowIds(): Promise<string[]>;
     /**
-     * List APFS local snapshots as `tmutil listlocalsnapshots` prints them — a header line followed by one snapshot name per line, NOT JSON
+     * List APFS local snapshots as `tmutil listlocalsnapshots` prints them — a header line followed by one snapshot name per line, NOT JSON. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeApfsSnapshots(): Promise<NativeApfsSnapshotsResponse>;
     /**
@@ -1261,7 +1261,7 @@ declare module "./plugin.js" {
      */
     nativeAppIconPath(bundleId: string): Promise<string>;
     /**
-     * Check if app is an LSUIElement (agent/background)
+     * Check if app is an LSUIElement (agent/background). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeAppIsAgent(bundleId: string): Promise<NativeAppIsAgentResponse>;
     /**
@@ -1293,7 +1293,7 @@ declare module "./plugin.js" {
      */
     nativeAppVersion(bundleId: string): Promise<string>;
     /**
-     * List each app playing audio, with its own volume and mute, as the system mixer shows it
+     * List each app playing audio, with its own volume and mute, as the system mixer shows it. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeAppVolumes(): Promise<AppVolume[]>;
     /**
@@ -1333,7 +1333,7 @@ declare module "./plugin.js" {
      */
     nativeAutoBrightness(): Promise<NativeAutoBrightnessResponse>;
     /**
-     * Check if Spaces auto-rearrange based on usage
+     * Check if Spaces auto-rearrange based on usage. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeAutoRearrangeSpaces(): Promise<NativeAutoRearrangeSpacesResponse>;
     /**
@@ -1341,7 +1341,7 @@ declare module "./plugin.js" {
      */
     nativeAutoTimezone(): Promise<NativeAutoTimezoneResponse>;
     /**
-     * Check if auto-correction is enabled
+     * Check if auto-correction is enabled. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeAutocorrectEnabled(): Promise<NativeAutocorrectEnabledResponse>;
     /**
@@ -1349,7 +1349,7 @@ declare module "./plugin.js" {
      */
     nativeAutomaticLoginUser(): Promise<NativeAutomaticLoginUserResponse>;
     /**
-     * Check if automation permission is granted for target app
+     * Check if automation permission is granted for target app. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeAutomationPermission(bundleId: string): Promise<NativeAutomationPermissionResponse>;
     /**
@@ -1464,7 +1464,7 @@ declare module "./plugin.js" {
      */
     nativeBluetoothPower(): Promise<NativeBluetoothPowerResponse>;
     /**
-     * Check if bold text is enabled in accessibility
+     * Check if bold text is enabled in accessibility. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeBoldTextEnabled(): Promise<NativeBoldTextEnabledResponse>;
     /**
@@ -1591,7 +1591,7 @@ declare module "./plugin.js" {
      */
     nativeCreateDirectory(path: string): Promise<boolean>;
     /**
-     * List the current user crontab entries
+     * List the current user crontab entries. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue
      */
     nativeCronJobs(): Promise<string[]>;
     /**
@@ -1671,7 +1671,7 @@ declare module "./plugin.js" {
      */
     nativeDictationEnabled(): Promise<NativeDictationEnabledResponse>;
     /**
-     * Check if differentiate without color is enabled
+     * Check if differentiate without color is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeDifferentiateWithoutColor(): Promise<NativeDifferentiateWithoutColorResponse>;
     /**
@@ -1743,35 +1743,35 @@ declare module "./plugin.js" {
      */
     nativeDnsServers(): Promise<string[]>;
     /**
-     * Check if Dock auto-hide is enabled
+     * Check if Dock auto-hide is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeDockAutoHide(): Promise<NativeDockAutoHideResponse>;
     /**
-     * Check if Dock magnification is enabled
+     * Check if Dock magnification is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeDockMagnification(): Promise<NativeDockMagnificationResponse>;
     /**
-     * Get Dock minimize animation. Returns one of: genie, scale, suck
+     * Get Dock minimize animation. Returns one of: genie, scale, suck. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeDockMinimizeEffect(): Promise<NativeDockMinimizeEffectResponse>;
     /**
-     * Check if windows minimize into app icon
+     * Check if windows minimize into app icon. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeDockMinimizeToApp(): Promise<NativeDockMinimizeToAppResponse>;
     /**
-     * Get the Dock position (left, bottom, right)
+     * Get the Dock position (left, bottom, right). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeDockPosition(): Promise<NativeDockPositionResponse>;
     /**
-     * Check if Dock shows running app indicators
+     * Check if Dock shows running app indicators. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeDockShowIndicators(): Promise<NativeDockShowIndicatorsResponse>;
     /**
-     * Check if Dock shows recent apps
+     * Check if Dock shows recent apps. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeDockShowRecents(): Promise<NativeDockShowRecentsResponse>;
     /**
-     * Get the Dock tile size (0-128)
+     * Get the Dock tile size (0-128). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeDockSize(): Promise<number>;
     /**
@@ -1885,15 +1885,15 @@ declare module "./plugin.js" {
      */
     nativeFinderDefaultView(): Promise<NativeFinderDefaultViewResponse>;
     /**
-     * Get Finder new window default location
+     * Get Finder new window default location. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeFinderNewWindowTarget(): Promise<NativeFinderNewWindowTargetResponse>;
     /**
-     * Get the currently selected files in Finder
+     * Get the currently selected files in Finder. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeFinderSelection(): Promise<string[]>;
     /**
-     * Whether the file manager shows file extensions
+     * Whether the file manager shows file extensions. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeFinderShowExtensions(): Promise<NativeFinderShowExtensionsResponse>;
     /**
@@ -1901,7 +1901,7 @@ declare module "./plugin.js" {
      */
     nativeFinderShowHidden(): Promise<NativeFinderShowHiddenResponse>;
     /**
-     * Check if Finder shows path bar
+     * Check if Finder shows path bar. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeFinderShowPathBar(): Promise<NativeFinderShowPathBarResponse>;
     /**
@@ -1909,7 +1909,7 @@ declare module "./plugin.js" {
      */
     nativeFinderShowStatusBar(): Promise<NativeFinderShowStatusBarResponse>;
     /**
-     * Get the path of the frontmost Finder window
+     * Get the path of the frontmost Finder window. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeFinderWindowPath(): Promise<NativeFinderWindowPathResponse>;
     /**
@@ -1925,7 +1925,7 @@ declare module "./plugin.js" {
      */
     nativeFlushDns(): Promise<boolean>;
     /**
-     * Get function key default behavior
+     * Get function key default behavior. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeFnKeyFunction(): Promise<NativeFnKeyFunctionResponse>;
     /**
@@ -1957,11 +1957,11 @@ declare module "./plugin.js" {
      */
     nativeFrontmostApp(): Promise<NativeFrontmostAppResponse>;
     /**
-     * Check if full disk access is granted
+     * Check if full disk access is granted. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeFullDiskAccess(): Promise<NativeFullDiskAccessResponse>;
     /**
-     * Check if function keys are set to standard behavior (not media)
+     * Check if function keys are set to standard behavior (not media). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeFunctionKeysStandard(): Promise<NativeFunctionKeysStandardResponse>;
     /**
@@ -1994,11 +1994,11 @@ declare module "./plugin.js" {
      */
     nativeGrayscaleEnabled(): Promise<NativeGrayscaleEnabledResponse>;
     /**
-     * Check if Mission Control groups windows by app
+     * Check if Mission Control groups windows by app. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeGroupWindowsByApp(): Promise<NativeGroupWindowsByAppResponse>;
     /**
-     * Check if Handoff is enabled
+     * Check if Handoff is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeHandoffEnabled(): Promise<NativeHandoffEnabledResponse>;
     /**
@@ -2051,7 +2051,7 @@ declare module "./plugin.js" {
      */
     nativeHomeDirectory(): Promise<NativeHomeDirectoryResponse>;
     /**
-     * Get the Homebrew installation prefix
+     * Get the Homebrew installation prefix. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue
      */
     nativeHomebrewPrefix(): Promise<NativeHomebrewPrefixResponse>;
     /**
@@ -2067,15 +2067,15 @@ declare module "./plugin.js" {
      */
     nativeHotCorners(): Promise<NativeHotCornersResponse>;
     /**
-     * Check if iCloud Desktop & Documents sync is enabled
+     * Check if iCloud Desktop & Documents sync is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeIcloudDesktopSync(): Promise<NativeIcloudDesktopSyncResponse>;
     /**
-     * Get the local path to iCloud Drive
+     * Get the local path to iCloud Drive. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeIcloudDrivePath(): Promise<NativeIcloudDrivePathResponse>;
     /**
-     * Check if the user is signed into iCloud
+     * Check if the user is signed into iCloud. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeIcloudSignedIn(): Promise<NativeIcloudSignedInResponse>;
     /**
@@ -2091,7 +2091,7 @@ declare module "./plugin.js" {
      */
     nativeInstalledApps(): Promise<InstalledApp[]>;
     /**
-     * Get auto appearance switching setting
+     * Get auto appearance switching setting. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeInterfaceStyleSwitcher(): Promise<NativeInterfaceStyleSwitcherResponse>;
     /**
@@ -2178,7 +2178,7 @@ declare module "./plugin.js" {
      */
     nativeListNotifications(): Promise<DeliveredNotification[]>;
     /**
-     * List available Shortcuts.app shortcuts
+     * List available Shortcuts.app shortcuts. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeListShortcuts(): Promise<ShortcutInfo[]>;
     /**
@@ -2186,7 +2186,7 @@ declare module "./plugin.js" {
      */
     nativeListSpaces(): Promise<SpaceInfo[]>;
     /**
-     * Check if Live Text is enabled
+     * Check if Live Text is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeLiveTextEnabled(): Promise<NativeLiveTextEnabledResponse>;
     /**
@@ -2214,7 +2214,7 @@ declare module "./plugin.js" {
      */
     nativeLoginItems(): Promise<LoginItem[]>;
     /**
-     * List modern login items (SMAppService)
+     * List modern login items (SMAppService). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeLoginItemsModern(): Promise<string[]>;
     /**
@@ -2259,7 +2259,7 @@ declare module "./plugin.js" {
      */
     nativeMenuBar(pid: number): Promise<MenuItem[]>;
     /**
-     * Check if menu bar auto-hide is enabled
+     * Check if menu bar auto-hide is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeMenuBarAutoHide(): Promise<NativeMenuBarAutoHideResponse>;
     /**
@@ -2332,7 +2332,7 @@ declare module "./plugin.js" {
      */
     nativeNetworkProxyEnabled(): Promise<NativeNetworkProxyEnabledResponse>;
     /**
-     * Run a quick network quality test (upload/download Mbps)
+     * Run a quick network quality test (upload/download Mbps). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeNetworkQuality(): Promise<NativeNetworkQualityResponse>;
     /**
@@ -2409,7 +2409,7 @@ declare module "./plugin.js" {
      */
     nativeOpenAppSettings(bundleId: string): Promise<void>;
     /**
-     * Open a Finder window at a specific path
+     * Open a Finder window at a specific path. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeOpenFinderWindow(path: string): Promise<void>;
     /**
@@ -2447,7 +2447,7 @@ declare module "./plugin.js" {
      */
     nativePinWindowAbove(pinned: boolean, windowId: string): Promise<void>;
     /**
-     * Check if pinch-to-zoom gesture is enabled
+     * Check if pinch-to-zoom gesture is enabled. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativePinchToZoom(): Promise<NativePinchToZoomResponse>;
     /**
@@ -2455,7 +2455,7 @@ declare module "./plugin.js" {
      */
     nativePing(host: string): Promise<number>;
     /**
-     * Check if volume change feedback sound is enabled
+     * Check if volume change feedback sound is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativePlayFeedbackWhenVolumeChanged(): Promise<NativePlayFeedbackWhenVolumeChangedResponse>;
     /**
@@ -2475,7 +2475,7 @@ declare module "./plugin.js" {
      */
     nativePowerSource(): Promise<NativePowerSourceResponse>;
     /**
-     * Check if press-and-hold for accented characters is enabled
+     * Check if press-and-hold for accented characters is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativePressAndHoldEnabled(): Promise<NativePressAndHoldEnabledResponse>;
     /**
@@ -2561,7 +2561,7 @@ declare module "./plugin.js" {
      */
     nativePurgeMemory(): Promise<boolean>;
     /**
-     * Get purgeable disk space in bytes
+     * Get purgeable disk space in bytes. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativePurgeableSpace(): Promise<number>;
     /**
@@ -2607,7 +2607,7 @@ declare module "./plugin.js" {
      */
     nativeReduceMotion(): Promise<NativeReduceMotionResponse>;
     /**
-     * Check if Reduce Transparency is enabled
+     * Check if Reduce Transparency is enabled. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeReduceTransparency(): Promise<NativeReduceTransparencyResponse>;
     /**
@@ -2639,7 +2639,7 @@ declare module "./plugin.js" {
      */
     nativeRevealInFinder(path: string): Promise<void>;
     /**
-     * Check if Rosetta 2 is installed (Apple Silicon)
+     * Check if Rosetta 2 is installed (Apple Silicon). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeRosettaInstalled(): Promise<NativeRosettaInstalledResponse>;
     /**
@@ -2648,11 +2648,11 @@ declare module "./plugin.js" {
      */
     nativeRunApplescript(script: string): Promise<NativeRunApplescriptResponse>;
     /**
-     * Run JavaScript for Automation (JXA) code
+     * Run JavaScript for Automation (JXA) code. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeRunJxa(script: string): Promise<NativeRunJxaResponse>;
     /**
-     * Run a Shortcuts.app shortcut by name
+     * Run a Shortcuts.app shortcut by name. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      * @param input default null
      */
     nativeRunShortcut(name: string, input?: string): Promise<NativeRunShortcutResponse>;
@@ -2707,19 +2707,19 @@ declare module "./plugin.js" {
      */
     nativeScreenshot(displayId?: number, region?: ScreenshotRegion, windowId?: string): Promise<NativeScreenshotResponse>;
     /**
-     * Get screenshot file format
+     * Get screenshot file format. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeScreenshotFormat(): Promise<NativeScreenshotFormatResponse>;
     /**
-     * Check if screenshots include window shadow
+     * Check if screenshots include window shadow. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeScreenshotIncludeShadow(): Promise<NativeScreenshotIncludeShadowResponse>;
     /**
-     * Get the configured screenshot save location
+     * Get the configured screenshot save location. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeScreenshotLocation(): Promise<NativeScreenshotLocationResponse>;
     /**
-     * Check if screenshot thumbnail is shown
+     * Check if screenshot thumbnail is shown. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeScreenshotShowThumbnail(): Promise<NativeScreenshotShowThumbnailResponse>;
     /**
@@ -2759,11 +2759,11 @@ declare module "./plugin.js" {
      */
     nativeSetAppHidden(bundleId: string, hidden: boolean): Promise<boolean>;
     /**
-     * Mute or unmute one app in the system mixer; false when the app has no audio stream
+     * Mute or unmute one app in the system mixer; false when the app has no audio stream. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeSetAppMuted(app: string, muted: boolean): Promise<boolean>;
     /**
-     * Set one app's volume (0.0-1.0) in the system mixer; false when the app has no audio stream
+     * Set one app's volume (0.0-1.0) in the system mixer; false when the app has no audio stream. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
      * @param volume wire double
      */
     nativeSetAppVolume(app: string, volume: number): Promise<boolean>;
@@ -2786,7 +2786,7 @@ declare module "./plugin.js" {
      */
     nativeSetAudioOutputDevice(name: string): Promise<boolean>;
     /**
-     * Enable or disable auto-rearrange Spaces
+     * Enable or disable auto-rearrange Spaces. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSetAutoRearrangeSpaces(enabled: boolean): Promise<boolean>;
     /**
@@ -2812,27 +2812,27 @@ declare module "./plugin.js" {
      */
     nativeSetDnd(enabled: boolean): Promise<void>;
     /**
-     * Enable or disable Dock auto-hide
+     * Enable or disable Dock auto-hide. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSetDockAutoHide(enabled: boolean): Promise<boolean>;
     /**
-     * Enable or disable Dock magnification
+     * Enable or disable Dock magnification. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSetDockMagnification(enabled: boolean): Promise<boolean>;
     /**
-     * Set Dock minimize animation (genie/scale)
+     * Set Dock minimize animation (genie/scale). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSetDockMinimizeEffect(effect: string): Promise<boolean>;
     /**
-     * Set the Dock position (left, bottom, right)
+     * Set the Dock position (left, bottom, right). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSetDockPosition(position: string): Promise<boolean>;
     /**
-     * Show or hide recent apps in Dock
+     * Show or hide recent apps in Dock. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSetDockShowRecents(enabled: boolean): Promise<boolean>;
     /**
-     * Set Dock tile size
+     * Set Dock tile size. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      * @param size wire double
      */
     nativeSetDockSize(size: number): Promise<boolean>;
@@ -2845,11 +2845,11 @@ declare module "./plugin.js" {
      */
     nativeSetFileHidden(hidden: boolean, path: string): Promise<boolean>;
     /**
-     * Set file permissions (chmod octal mode)
+     * Set file permissions (chmod octal mode). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue
      */
     nativeSetFilePermissions(mode: string, path: string): Promise<boolean>;
     /**
-     * Show or hide file extensions in Finder
+     * Show or hide file extensions in Finder. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeSetFinderShowExtensions(enabled: boolean): Promise<boolean>;
     /**
@@ -2880,7 +2880,7 @@ declare module "./plugin.js" {
      */
     nativeSetKeyRepeatRate(rate: number): Promise<boolean>;
     /**
-     * Enable or disable menu bar auto-hide
+     * Enable or disable menu bar auto-hide. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSetMenuBarAutoHide(enabled: boolean): Promise<boolean>;
     /**
@@ -2893,15 +2893,15 @@ declare module "./plugin.js" {
      */
     nativeSetNightShift(enabled: boolean): Promise<void>;
     /**
-     * Set screenshot file format (png/jpg/pdf/tiff)
+     * Set screenshot file format (png/jpg/pdf/tiff). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSetScreenshotFormat(format: string): Promise<boolean>;
     /**
-     * Enable or disable window shadow in screenshots
+     * Enable or disable window shadow in screenshots. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSetScreenshotIncludeShadow(enabled: boolean): Promise<boolean>;
     /**
-     * Set the screenshot save location
+     * Set the screenshot save location. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSetScreenshotLocation(path: string): Promise<boolean>;
     /**
@@ -2909,12 +2909,12 @@ declare module "./plugin.js" {
      */
     nativeSetScrollDirectionNatural(enabled: boolean): Promise<boolean>;
     /**
-     * Set sidebar icon size (1=small,2=medium,3=large)
+     * Set sidebar icon size (1=small,2=medium,3=large). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      * @param size wire uint32 · min 0
      */
     nativeSetSidebarIconSize(size: number): Promise<boolean>;
     /**
-     * Enable or disable Stage Manager
+     * Enable or disable Stage Manager. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSetStageManager(enabled: boolean): Promise<boolean>;
     /**
@@ -2955,7 +2955,7 @@ declare module "./plugin.js" {
      */
     nativeSetWindowPosition(windowId: string, x: number, y: number): Promise<void>;
     /**
-     * Enable or disable the drop shadow for a window
+     * Enable or disable the drop shadow for a window. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSetWindowShadow(enabled: boolean, windowId: string): Promise<void>;
     /**
@@ -2977,7 +2977,7 @@ declare module "./plugin.js" {
      */
     nativeShowScrollBars(): Promise<NativeShowScrollBarsResponse>;
     /**
-     * Get sidebar icon size. Returns one of: small, medium, large
+     * Get sidebar icon size. Returns one of: small, medium, large. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSidebarIconSize(): Promise<NativeSidebarIconSizeResponse>;
     /**
@@ -2985,7 +2985,7 @@ declare module "./plugin.js" {
      */
     nativeSipStatus(): Promise<NativeSipStatusResponse>;
     /**
-     * Check if Siri is enabled
+     * Check if Siri is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSiriEnabled(): Promise<NativeSiriEnabledResponse>;
     /**
@@ -2997,11 +2997,11 @@ declare module "./plugin.js" {
      */
     nativeSlowKeys(): Promise<NativeSlowKeysResponse>;
     /**
-     * Check if smart quotes are enabled
+     * Check if smart quotes are enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSmartQuotesEnabled(): Promise<NativeSmartQuotesEnabledResponse>;
     /**
-     * Check if smart zoom (double-tap) is enabled
+     * Check if smart zoom (double-tap) is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSmartZoom(): Promise<NativeSmartZoomResponse>;
     /**
@@ -3042,7 +3042,7 @@ declare module "./plugin.js" {
      */
     nativeSpotlight(query: string, limit?: number, scope?: string[]): Promise<SpotlightResult[]>;
     /**
-     * Check if Stage Manager is enabled
+     * Check if Stage Manager is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeStageManagerEnabled(): Promise<NativeStageManagerEnabledResponse>;
     /**
@@ -3050,7 +3050,7 @@ declare module "./plugin.js" {
      */
     nativeStartupDisk(): Promise<NativeStartupDiskResponse>;
     /**
-     * Check if startup sound is enabled
+     * Check if startup sound is enabled. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeStartupSoundEnabled(): Promise<NativeStartupSoundEnabledResponse>;
     /**
@@ -3062,7 +3062,7 @@ declare module "./plugin.js" {
      */
     nativeStickyKeys(): Promise<NativeStickyKeysResponse>;
     /**
-     * Check if swipe between pages gesture is enabled
+     * Check if swipe between pages gesture is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSwipeBetweenPages(): Promise<NativeSwipeBetweenPagesResponse>;
     /**
@@ -3071,7 +3071,7 @@ declare module "./plugin.js" {
      */
     nativeSwitchSpace(spaceId: number): Promise<void>;
     /**
-     * Check if switching to app switches to its Space
+     * Check if switching to app switches to its Space. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSwitchSpaceWhenSwitchingApp(): Promise<NativeSwitchSpaceWhenSwitchingAppResponse>;
     /**
@@ -3123,7 +3123,7 @@ declare module "./plugin.js" {
      */
     nativeTemperatureUnit(): Promise<NativeTemperatureUnitResponse>;
     /**
-     * Get user text replacements as the raw `NSUserDictionaryReplacementItems` preference value — macOS plist text, NOT JSON
+     * Get user text replacements as the raw `NSUserDictionaryReplacementItems` preference value — macOS plist text, NOT JSON. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeTextReplacements(): Promise<NativeTextReplacementsResponse>;
     /**
@@ -3131,7 +3131,7 @@ declare module "./plugin.js" {
      */
     nativeThermalState(): Promise<NativeThermalStateResponse>;
     /**
-     * Check if three-finger drag is enabled
+     * Check if three-finger drag is enabled. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeThreeFingerDrag(): Promise<NativeThreeFingerDragResponse>;
     /**
@@ -3179,7 +3179,7 @@ declare module "./plugin.js" {
      */
     nativeTrackpadSpeed(): Promise<number>;
     /**
-     * Check TCC consent status for a service (e.g. kTCCServiceAccessibility)
+     * Check TCC consent status for a service (e.g. kTCCServiceAccessibility). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeTransparencyConsent(service: string): Promise<string>;
     /**
@@ -3187,7 +3187,7 @@ declare module "./plugin.js" {
      */
     nativeTrash(path: string): Promise<boolean>;
     /**
-     * Check if True Tone is enabled. KNOWN LIMITATION: the `corebrightnessdiag` probe this depends on is absent from macOS 15, where this always reports false
+     * Check if True Tone is enabled. KNOWN LIMITATION: the `corebrightnessdiag` probe this depends on is absent from macOS 15, where this always reports false. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeTrueTone(): Promise<NativeTrueToneResponse>;
     /**
@@ -3231,7 +3231,7 @@ declare module "./plugin.js" {
      */
     nativeUserName(): Promise<NativeUserNameResponse>;
     /**
-     * Get the current user's login shell path
+     * Get the current user's login shell path. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue
      */
     nativeUserShell(): Promise<NativeUserShellResponse>;
     /**
@@ -3312,11 +3312,11 @@ declare module "./plugin.js" {
      */
     nativeWriteFile(contents: string, path: string): Promise<boolean>;
     /**
-     * Get the active Xcode developer directory path
+     * Get the active Xcode developer directory path. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeXcodePath(): Promise<NativeXcodePathResponse>;
     /**
-     * Get the installed Xcode version
+     * Get the installed Xcode version. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeXcodeVersion(): Promise<NativeXcodeVersionResponse>;
     /**
