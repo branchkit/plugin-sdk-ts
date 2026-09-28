@@ -4285,6 +4285,10 @@ export interface NativeBordersRequest {
   frames?: WindowFrame[];
 }
 
+export interface NativeBounceKeysResponse {
+  enabled: boolean;
+}
+
 export interface NativeBrightnessRequest {
   /**
    * wire uint32 · default null · min 0
@@ -5372,6 +5376,10 @@ export interface NativeMacAddressResponse {
   value: string;
 }
 
+export interface NativeMagnifierEnabledResponse {
+  enabled: boolean;
+}
+
 export interface NativeMaximizeWindowRequest {
   window_id: string;
 }
@@ -5444,6 +5452,10 @@ export interface NativeMouseButtonClickRequest {
    * wire int32 · default null
    */
   y?: number;
+}
+
+export interface NativeMouseKeysResponse {
+  enabled: boolean;
 }
 
 export interface NativeMoveFileRequest {
@@ -5614,6 +5626,10 @@ export interface NativeOcrWindowRequest {
 
 export interface NativeOcrWindowResponse {
   regions: OcrRegion[];
+}
+
+export interface NativeOnScreenKeyboardEnabledResponse {
+  enabled: boolean;
 }
 
 export interface NativeOpenAppSettingsRequest {
@@ -6019,6 +6035,10 @@ export interface NativeScreenLockedResponse {
   enabled: boolean;
 }
 
+export interface NativeScreenReaderEnabledResponse {
+  enabled: boolean;
+}
+
 export interface NativeScreenResolutionResponse {
   value: string;
 }
@@ -6189,6 +6209,14 @@ export interface NativeSetBluetoothPowerRequest {
 }
 
 export interface NativeSetBluetoothPowerResponse {
+  ok: boolean;
+}
+
+export interface NativeSetBounceKeysRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetBounceKeysResponse {
   ok: boolean;
 }
 
@@ -6364,11 +6392,27 @@ export interface NativeSetKeyRepeatRateResponse {
   ok: boolean;
 }
 
+export interface NativeSetMagnifierEnabledRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetMagnifierEnabledResponse {
+  ok: boolean;
+}
+
 export interface NativeSetMenuBarAutoHideRequest {
   enabled: boolean;
 }
 
 export interface NativeSetMenuBarAutoHideResponse {
+  ok: boolean;
+}
+
+export interface NativeSetMouseKeysRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetMouseKeysResponse {
   ok: boolean;
 }
 
@@ -6385,6 +6429,22 @@ export interface NativeSetMouseSpeedResponse {
 
 export interface NativeSetNightShiftRequest {
   enabled: boolean;
+}
+
+export interface NativeSetOnScreenKeyboardEnabledRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetOnScreenKeyboardEnabledResponse {
+  ok: boolean;
+}
+
+export interface NativeSetScreenReaderEnabledRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetScreenReaderEnabledResponse {
+  ok: boolean;
 }
 
 export interface NativeSetScreenshotFormatRequest {
@@ -6430,6 +6490,14 @@ export interface NativeSetSidebarIconSizeResponse {
   ok: boolean;
 }
 
+export interface NativeSetSlowKeysRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetSlowKeysResponse {
+  ok: boolean;
+}
+
 export interface NativeSetStageManagerRequest {
   enabled: boolean;
 }
@@ -6438,11 +6506,30 @@ export interface NativeSetStageManagerResponse {
   ok: boolean;
 }
 
+export interface NativeSetStickyKeysRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetStickyKeysResponse {
+  ok: boolean;
+}
+
 export interface NativeSetTapToClickRequest {
   enabled: boolean;
 }
 
 export interface NativeSetTapToClickResponse {
+  ok: boolean;
+}
+
+export interface NativeSetTextScaleRequest {
+  /**
+   * wire double
+   */
+  scale: number;
+}
+
+export interface NativeSetTextScaleResponse {
   ok: boolean;
 }
 
@@ -6886,10 +6973,6 @@ export interface NativeUserShellResponse {
   shell: string;
 }
 
-export interface NativeVoiceoverEnabledResponse {
-  enabled: boolean;
-}
-
 export interface NativeVolumeResponse {
   is_muted: boolean;
   /**
@@ -7041,10 +7124,6 @@ export interface NativeZipRequest {
 
 export interface NativeZipResponse {
   ok: boolean;
-}
-
-export interface NativeZoomEnabledResponse {
-  enabled: boolean;
 }
 
 export interface NetworkRequestHostRequest {
