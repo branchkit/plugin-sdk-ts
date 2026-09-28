@@ -255,6 +255,35 @@ export interface ActiveSpace {
 export type Anchor = "top-left" | "top-right" | "bottom-left" | "bottom-right" | "bottom-center" | "center";
 
 /**
+ * One app's audio in the system mixer: its own volume and mute, apart from
+ * the device's. An app with several streams (a browser's tabs) is one
+ * entry, and setting it sets them all.
+ */
+export interface AppVolume {
+  /**
+   * The app's identity, as `native.running_apps` reports it.
+   */
+  app: string;
+  /**
+   * True when every one of its streams is muted.
+   */
+  muted: boolean;
+  /**
+   * The app's name as the mixer shows it.
+   */
+  name: string;
+  /**
+   * True when a stream is playing now; a paused one stays listed.
+   */
+  playing: boolean;
+  /**
+   * 0.0–1.0; the loudest of its streams.
+   * wire double
+   */
+  volume: number;
+}
+
+/**
  * An audio input/output device.
  */
 export interface AudioDevice {
@@ -3883,6 +3912,10 @@ export interface NativeAppVersionRequest {
   bundle_id: string;
 }
 
+export interface NativeAppVolumesResponse {
+  apps: AppVolume[];
+}
+
 export interface NativeAppWindowsRequest {
   bundle_id: string;
 }
@@ -6087,6 +6120,27 @@ export interface NativeSetAppHiddenRequest {
 }
 
 export interface NativeSetAppHiddenResponse {
+  ok: boolean;
+}
+
+export interface NativeSetAppMutedRequest {
+  app: string;
+  muted: boolean;
+}
+
+export interface NativeSetAppMutedResponse {
+  ok: boolean;
+}
+
+export interface NativeSetAppVolumeRequest {
+  app: string;
+  /**
+   * wire double
+   */
+  volume: number;
+}
+
+export interface NativeSetAppVolumeResponse {
   ok: boolean;
 }
 
