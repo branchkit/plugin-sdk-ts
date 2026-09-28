@@ -3,7 +3,7 @@
 Versions before this file predate it; their contents are in the repo's
 git history.
 
-## Unreleased
+## 0.3.0 — 2026-09-28
 
 ### D-Bus calls (Linux)
 

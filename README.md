@@ -20,7 +20,7 @@ bun add github:branchkit/plugin-sdk-ts
 ```
 
 That tracks the repository's `main`. To pin a release, add `#<tag>` (for
-example `#v0.2.0`) or a commit. The changes on `main` since the last tag are
+example `#v0.3.0`) or a commit. The changes on `main` since the last tag are
 listed under **Unreleased** in the changelog.
 
 The fastest start is the scaffold, which writes a working plugin and builds it:
