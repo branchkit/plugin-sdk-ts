@@ -638,6 +638,7 @@ export const HookTrialSamples = "trial_samples" as const; // since 0.1.0
 export const EventActionExecuted = "_platform.action.executed" as const;
 export const EventAppFocused = "_platform.app.focused" as const;
 export const EventAudioDevicesChanged = "_platform.audio_devices.changed" as const;
+export const EventAxNotification = "_platform.ax.notification" as const;
 export const EventBleNotification = "_platform.ble.notification" as const;
 export const EventBlobUpdated = "_platform.blob.updated" as const;
 export const EventCaptureProgress = "_platform.capture.progress" as const;

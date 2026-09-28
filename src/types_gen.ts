@@ -4038,10 +4038,13 @@ export interface NativeAxElementTreeRequest {
 
 export interface NativeAxObserveRequest {
   /**
+   * The notifications wanted, from the portable vocabulary; none means
+   * all of them. An unknown name is refused.
    * default []
    */
   notifications?: string[];
   /**
+   * The application to observe.
    * wire int32
    */
   pid: number;
@@ -8181,6 +8184,38 @@ export interface AudioDevicesChangedEventParams {
    * CoreAudio device UID.
    */
   uid: string;
+}
+
+/** Payload of the `_platform.ax.notification` event. */
+export interface AxNotificationEventParams {
+  /**
+   * The element it happened to, as the tree operations describe one.
+   */
+  element: AccessibleElement;
+  /**
+   * focus_changed, value_changed, name_changed, state_changed,
+   * children_changed, selection_changed or window_opened.
+   */
+  notification: string;
+  /**
+   * For state_changed: whether that state is now on.
+   */
+  on?: boolean;
+  /**
+   * The plugin holding the subscription. The event is ADDRESSED to it:
+   * what a user types into a field arrives as value_changed, so no other
+   * plugin receives it, whatever it holds.
+   */
+  owner_plugin: string;
+  /**
+   * For state_changed: the ARIA state that changed (checked, expanded,
+   * selected, pressed, disabled).
+   */
+  state?: string;
+  /**
+   * The subscription `native.ax_observe` returned.
+   */
+  subscription_id: string;
 }
 
 /** Payload of the `_platform.ble.notification` event. */

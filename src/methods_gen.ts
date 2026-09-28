@@ -1359,9 +1359,12 @@ declare module "./plugin.js" {
      */
     nativeAxElementTree(element: AccessibleRef, depth?: number): Promise<AccessibleNode>;
     /**
-     * Start observing AX notifications (STUB -- not yet implemented)
-     * @param notifications default []
-     * @param pid wire int32
+     * Observe an application's accessibility changes. Notifications arrive as _platform.ax.notification, addressed to the calling plugin alone: focus_changed, value_changed, name_changed, state_changed, children_changed, selection_changed, window_opened (none named means all)
+     * @param notifications The notifications wanted, from the portable vocabulary; none means
+     *   all of them. An unknown name is refused.
+     *   default []
+     * @param pid The application to observe.
+     *   wire int32
      */
     nativeAxObserve(pid: number, notifications?: string[]): Promise<NativeAxObserveResponse>;
     /**
@@ -1378,7 +1381,7 @@ declare module "./plugin.js" {
      */
     nativeAxSetAttribute(attribute: string, element: AccessibleRef, value: unknown): Promise<boolean>;
     /**
-     * Stop observing AX notifications (STUB)
+     * Stop observing accessibility changes. A plugin can end only its own subscriptions
      */
     nativeAxUnobserve(subscriptionId: string): Promise<boolean>;
     /**
