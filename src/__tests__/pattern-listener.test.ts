@@ -1,5 +1,6 @@
 import { describe, it, expect } from "bun:test";
 import { Plugin } from "../plugin.js";
+import { notificationBarrier, waitFor } from "./wait.js";
 
 // Drives a parsed inbound notification through the private router, the same
 // way the correlation tests do.
@@ -15,7 +16,8 @@ function shutdown(plugin: Plugin): void {
   (plugin as unknown as { shutdown: () => void }).shutdown();
 }
 
-const settle = () => new Promise((r) => setTimeout(r, 20));
+// Everything routed so far has been delivered (the negatives included).
+const settle = (plugin: Plugin) => notificationBarrier(plugin, (m) => route(plugin, m));
 
 describe("onPattern", () => {
   it("delivers matching events with the concrete event type", async () => {
@@ -34,7 +36,7 @@ describe("onPattern", () => {
     // `*` is ONE segment: neither of these matches `scripts.*.*`.
     route(plugin, "scripts.headphones");
     route(plugin, "_platform.app.focused");
-    await settle();
+    await settle(plugin);
     shutdown(plugin);
     await running;
 
@@ -52,7 +54,7 @@ describe("onPattern", () => {
     for (const m of ["ext.acme", "ext.acme.gaze", "ext.acme.gaze.left_eye", "ext.acmeister.x", "ext.other.gaze"]) {
       route(plugin, m);
     }
-    await settle();
+    await settle(plugin);
     shutdown(plugin);
     await running;
 
@@ -71,7 +73,7 @@ describe("onPattern", () => {
 
     const running = plugin.run();
     route(plugin, "scripts.headphones.charged");
-    await settle();
+    await waitFor(() => order.length === 2);
     shutdown(plugin);
     await running;
 
@@ -90,7 +92,7 @@ describe("onPattern", () => {
 
     const running = plugin.run();
     route(plugin, "scripts.headphones.charged");
-    await settle();
+    await waitFor(() => reached);
     shutdown(plugin);
     await running;
 

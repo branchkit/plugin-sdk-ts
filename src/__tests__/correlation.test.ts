@@ -1,6 +1,7 @@
 import { describe, it, expect } from "bun:test";
 import { Plugin } from "../plugin.js";
 import { runWithCorrelation, getCurrentCorrelation } from "../correlation.js";
+import { waitFor } from "./wait.js";
 
 interface RpcLine {
   method?: string;
@@ -30,6 +31,8 @@ function captureStdout(): { lines: RpcLine[]; restore: () => void } {
   };
 }
 
+// A real yield to the timer queue, so the concurrent contexts below
+// genuinely interleave — this one is deliberate, not a settle.
 const tick = () => new Promise((r) => setTimeout(r, 10));
 
 // Drives a parsed inbound message through the private router.
@@ -82,7 +85,10 @@ describe("Plugin inbound correlation", () => {
       void plugin.run(); // resolves readiness; emits plugin.initialized
 
       route(plugin, { id: 1, method: "do_thing", correlation_id: "tr_inbound99" });
-      await tick();
+      // The handler has run once its side-effect notification is on the wire.
+      // (Not its response: under `bun test` stdin is at EOF, so the plugin may
+      // shut down — and stop writing — before the response goes out.)
+      await waitFor(() => cap.lines.some((l) => l.method === "plugin.side_effect"));
 
       expect(seen).toBe("tr_inbound99");
       const sideEffect = cap.lines.find((l) => l.method === "plugin.side_effect");
@@ -107,7 +113,7 @@ describe("Plugin inbound correlation", () => {
       void plugin.run();
 
       route(plugin, { id: 1, method: "do_thing" });
-      await tick();
+      await waitFor(() => cap.lines.some((l) => l.method === "plugin.side_effect"));
 
       expect(seen).toBe("");
       const sideEffect = cap.lines.find((l) => l.method === "plugin.side_effect");

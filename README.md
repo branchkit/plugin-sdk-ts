@@ -180,7 +180,10 @@ test("hello branchkit matches", async () => {
 ```
 
 It runs the `branchkit-test-harness` binary that ships inside BranchKit.app;
-set `BRANCHKIT_TEST_HARNESS` to its path anywhere else. `bun test` runs your
+set `BRANCHKIT_TEST_HARNESS` to its path anywhere else. Tests guarded by
+`skipIf(!harnessBinaryAvailable())` skip without the binary; set
+`BRANCHKIT_REQUIRE_HARNESS=1` (in CI, say) to make that a failure instead.
+`bun test` runs your
 tests; `branchkit-cli dev test .` checks the manifest and runs the platform's
 own conformance checks against the plugin.
 

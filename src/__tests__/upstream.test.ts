@@ -105,14 +105,37 @@ describe("UpstreamClient", () => {
       res.end("ok");
     });
 
+    // Drive the clock the cache reads rather than sleeping past it. Frozen,
+    // not offset from the real clock: the real milliseconds a request takes
+    // would otherwise push "1999 ms later" past the window.
+    const realNow = Date.now;
+    const t0 = realNow();
+    let offset = 0;
+    Date.now = () => t0 + offset;
     try {
       const client = new UpstreamClient(srv.url);
-      await client.healthy();
+      expect(await client.healthy()).toBe(true);
       await client.healthy();
       await client.healthy();
       // Only one actual request should have been made (cached)
       expect(requestCount).toBe(1);
+
+      // Still inside the window: served from cache.
+      offset = 1999;
+      expect(await client.healthy()).toBe(true);
+      expect(requestCount).toBe(1);
+
+      // Past it: probes again.
+      offset = 2001;
+      expect(await client.healthy()).toBe(true);
+      expect(requestCount).toBe(2);
+
+      // And the fresh result starts a new window.
+      offset = 2500;
+      await client.healthy();
+      expect(requestCount).toBe(2);
     } finally {
+      Date.now = realNow;
       srv.close();
     }
   });

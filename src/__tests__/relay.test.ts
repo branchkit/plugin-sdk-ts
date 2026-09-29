@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import { createServer as createTcpServer, type Socket } from "node:net";
 import { request } from "node:http";
-import { ListenLocal } from "./listen.js";
-import { RELAY_HEADER_PREFIX, relayEnv } from "./relay.js";
+import { ListenLocal } from "../listen.js";
+import { RELAY_HEADER_PREFIX, relayEnv } from "../relay.js";
 
 // A stand-in for the actuator's relay (listener_relay.rs): parks plugin
 // connections presenting the right header, and for each client on the public

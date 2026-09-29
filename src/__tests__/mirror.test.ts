@@ -2,6 +2,7 @@ import { describe, test, expect } from "bun:test";
 import { Plugin } from "../plugin.js";
 import "../methods_gen.js";
 import "../mirror.js";
+import { waitFor } from "./wait.js";
 
 /**
  * Build a Plugin with `call` stubbed and `on`/`onReady` intercepted so
@@ -157,6 +158,7 @@ describe("collection mirror", () => {
   test("rapid updates refresh in wire order, not completion order", async () => {
     const p = new Plugin();
     let get = 0;
+    let done = 0;
     // @ts-expect-error — stubbing transport for unit test
     p.call = async (method: string) => {
       expect(method).toBe("collection.get");
@@ -164,6 +166,7 @@ describe("collection mirror", () => {
       const version = `v${get}`;
       // First fetch is slow, second is instant.
       await new Promise((r) => setTimeout(r, get === 1 ? 50 : 0));
+      done++;
       return { name: "alphabet", introducer: "voice", merge: "authoritative", data: { k: version } };
     };
 
@@ -176,7 +179,10 @@ describe("collection mirror", () => {
     // @ts-expect-error
     p.enqueueNotification("_platform.collection.updated", { collection: "alphabet" });
 
-    await new Promise((r) => setTimeout(r, 200));
+    // Both fetches have returned (and so, serialized or not, both results
+    // have been applied by the time the pump moves on).
+    await waitFor(() => done === 2);
+    await new Promise((r) => setTimeout(r, 0));
 
     expect(get).toBe(2);
     expect(mirror.raw()).toEqual({ k: "v2" });

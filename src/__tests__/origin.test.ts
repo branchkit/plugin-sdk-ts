@@ -1,6 +1,7 @@
 import { describe, it, expect } from "bun:test";
 import { Plugin } from "../plugin.js";
 import { type EventOrigin, getCurrentEventOrigin, runWithEventOrigin } from "../origin.js";
+import { waitFor } from "./wait.js";
 
 // Drives a parsed inbound message through the private router, the same way
 // the correlation and pattern-listener tests do.
@@ -15,8 +16,6 @@ function route(plugin: Plugin, msg: Record<string, unknown>): void {
 function shutdown(plugin: Plugin): void {
   (plugin as unknown as { shutdown: () => void }).shutdown();
 }
-
-const settle = () => new Promise((r) => setTimeout(r, 20));
 
 describe("ambient event origin store", () => {
   it("isolates concurrent async contexts", async () => {
@@ -61,7 +60,7 @@ describe("Plugin.currentEventOrigin", () => {
     // No origin at all: an older actuator, or a notification that is not a
     // bus event. Must not inherit the previous delivery's sender.
     route(plugin, { method: "scripts.headphones.charged" });
-    await settle();
+    await waitFor(() => exact.length === 3 && patterned.length === 3);
     shutdown(plugin);
     await running;
 
@@ -85,7 +84,7 @@ describe("Plugin.currentEventOrigin", () => {
     const running = plugin.run();
     // A request never carries a sender; even one that did is not an event.
     route(plugin, { id: 1, method: "do_thing", source: "scripts" });
-    await settle();
+    await waitFor(() => seen !== undefined);
     shutdown(plugin);
     await running;
     expect(seen).toEqual({ source: "", onBehalfOf: "" });

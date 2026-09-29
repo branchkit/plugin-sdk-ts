@@ -237,3 +237,43 @@ describe("data byte preservation", () => {
     expect(out.toString()).toBe('{"type":"t","data":{"s":"<&>"}}\n');
   });
 });
+
+// Malformed input is an error, never a clean EOF and never a short payload:
+// a stage that read a truncated frame as an orderly close would finish a
+// session on half its audio.
+describe("framing errors", () => {
+  function readerOver(raw: Buffer): PipelineReader {
+    const stream = new PassThrough();
+    const reader = new PipelineReader(stream);
+    stream.end(raw);
+    return reader;
+  }
+
+  test("bad header JSON", async () => {
+    await expect(readerOver(Buffer.from("not json\n")).readEvent()).rejects.toThrow("wire: bad header");
+  });
+
+  test("payload_length over the 16 MB cap", async () => {
+    const over = 16 * 1024 * 1024 + 1;
+    const raw = Buffer.from(`{"type":"audio_chunk","payload_length":${over}}\n`);
+    await expect(readerOver(raw).readEvent()).rejects.toThrow(`payload_length ${over} exceeds 16 MB cap`);
+  });
+
+  test("payload_length exactly at the cap is accepted", async () => {
+    const cap = 16 * 1024 * 1024;
+    const raw = Buffer.concat([Buffer.from(`{"type":"blob","payload_length":${cap}}\n`), Buffer.alloc(cap, 7)]);
+    const ev = await readerOver(raw).readEvent();
+    expect(ev!.payload.length).toBe(cap);
+  });
+
+  test("truncated payload", async () => {
+    const raw = Buffer.concat([Buffer.from('{"type":"audio_chunk","payload_length":10}\n'), Buffer.alloc(4)]);
+    await expect(readerOver(raw).readEvent()).rejects.toThrow("unexpected EOF reading payload");
+  });
+
+  test("a bad frame after a good one still errors", async () => {
+    const reader = readerOver(Buffer.from('{"type":"ok"}\n{"type":\n'));
+    expect((await reader.readEvent())!.type).toBe("ok");
+    await expect(reader.readEvent()).rejects.toThrow("wire: bad header");
+  });
+});

@@ -1,5 +1,23 @@
+// Integration tests that drive the Rust `branchkit-test-harness` binary
+// against the app repo's plugins/helloworld (the Go one). Two things must
+// exist first:
+//
+//   1. the harness binary — `cargo build -p branchkit-test-harness` in the
+//      app repo, or BRANCHKIT_TEST_HARNESS=/path/to/branchkit-test-harness;
+//   2. the helloworld plugin's binary, which the harness spawns —
+//      `cd plugins/helloworld/src && go build -o ../helloworld-plugin .`
+//
+// Either one missing skips the suite with a message saying which. Set
+// BRANCHKIT_REQUIRE_HARNESS=1 (any CI lane that builds them) to make a
+// missing piece FAIL instead: a skip reports green, so a lookup that quietly
+// stops finding the binary would otherwise go unnoticed.
 import { describe, test, expect } from "bun:test";
-import { Harness, harnessBinaryAvailable } from "../harness.js";
+import { existsSync } from "node:fs";
+import {
+  Harness,
+  harnessBinaryAvailable,
+  harnessRequired,
+} from "../harness.js";
 
 const HELLOWORLD_DIR = new URL(
   "../../../plugins/helloworld",
@@ -10,11 +28,26 @@ const APPS_PROVIDER_DIR = new URL(
   import.meta.url,
 ).pathname;
 
-// These are integration tests that drive the Rust `branchkit-test-harness`
-// binary. It isn't built (or reachable) from this SDK's standalone checkout, so
-// skip when absent — they run in the app-repo conformance context where the
-// binary exists. See harnessBinaryAvailable().
-describe.skipIf(!harnessBinaryAvailable())("Harness", () => {
+const HELLOWORLD_BIN = `${HELLOWORLD_DIR}/helloworld-plugin`;
+const helloworldBuilt = existsSync(HELLOWORLD_BIN);
+const HELLOWORLD_MISSING =
+  `helloworld plugin not built (${HELLOWORLD_BIN}); build it with ` +
+  "`cd plugins/helloworld/src && go build -o ../helloworld-plugin .`";
+
+if (!harnessBinaryAvailable()) {
+  console.warn(
+    "harness.test.ts: skipping — branchkit-test-harness not found. Build it " +
+      "with `cargo build -p branchkit-test-harness` or set " +
+      "BRANCHKIT_TEST_HARNESS; BRANCHKIT_REQUIRE_HARNESS=1 fails instead.",
+  );
+} else if (!helloworldBuilt) {
+  if (harnessRequired()) {
+    throw new Error(`BRANCHKIT_REQUIRE_HARNESS is set: ${HELLOWORLD_MISSING}`);
+  }
+  console.warn(`harness.test.ts: skipping — ${HELLOWORLD_MISSING}`);
+}
+
+describe.skipIf(!harnessBinaryAvailable() || !helloworldBuilt)("Harness", () => {
   test("start and get plugin state", async () => {
     const h = await Harness.start(HELLOWORLD_DIR);
     try {

@@ -416,34 +416,53 @@ export class Harness {
   }
 }
 
+// The one message every SDK gives when the binary is absent: where it ships
+// and how to build it.
+const HARNESS_MISSING =
+  "harness: cannot find branchkit-test-harness binary. It ships inside " +
+  "BranchKit.app (Contents/Resources); install the app, or set " +
+  "BRANCHKIT_TEST_HARNESS to a harness binary. In an app-repo checkout, " +
+  "build it with `cargo build -p branchkit-test-harness` (it lands in " +
+  "target/debug/branchkit-test-harness).";
+
+/// True when BRANCHKIT_REQUIRE_HARNESS asks for a missing harness binary to
+/// fail instead of skip. Set it in any CI lane that builds the binary: without
+/// it, a lookup that silently stops finding the binary turns every harness
+/// test into a skip and the suite still reports green.
+export function harnessRequired(): boolean {
+  const v = process.env.BRANCHKIT_REQUIRE_HARNESS;
+  return v !== undefined && v !== "" && v !== "0" && v !== "false";
+}
+
 /// True when the `branchkit-test-harness` binary can be located. Harness-backed
 /// integration tests should `skipIf(!harnessBinaryAvailable())` so they run
 /// where the binary is built (the app-repo conformance context) and skip
 /// cleanly where it isn't (this SDK's standalone CI, a fresh checkout).
+///
+/// Under BRANCHKIT_REQUIRE_HARNESS this is always true, so nothing skips and
+/// `Harness.start` fails with the build instructions instead.
 export function harnessBinaryAvailable(): boolean {
-  try {
-    findHarnessBinary();
-    return true;
-  } catch {
-    return false;
-  }
+  if (harnessRequired()) return true;
+  return lookupHarnessBinary() !== undefined;
 }
 
-function findHarnessBinary(): string {
+/// BRANCHKIT_TEST_HARNESS wins; then a Cargo target directory walking up from
+/// the working directory (app-repo checkouts), then the installed app, then
+/// PATH. A freshly built binary is searched before the installed app's so a
+/// stale installed harness never shadows the one just built.
+function lookupHarnessBinary(): string | undefined {
   const env = process.env.BRANCHKIT_TEST_HARNESS;
   if (env) return env;
 
-  // The installed app ships the harness in its Resources; the cargo
-  // target paths serve app-repo checkouts.
   const candidates = [
-    "/Applications/BranchKit.app/Contents/Resources/branchkit-test-harness",
-    `${process.env.HOME ?? ""}/Applications/BranchKit.app/Contents/Resources/branchkit-test-harness`,
     "target/debug/branchkit-test-harness",
     "target/release/branchkit-test-harness",
     "../target/debug/branchkit-test-harness",
     "../target/release/branchkit-test-harness",
     "../../target/debug/branchkit-test-harness",
     "../../target/release/branchkit-test-harness",
+    "/Applications/BranchKit.app/Contents/Resources/branchkit-test-harness",
+    `${process.env.HOME ?? ""}/Applications/BranchKit.app/Contents/Resources/branchkit-test-harness`,
   ];
 
   for (const c of candidates) {
@@ -453,14 +472,19 @@ function findHarnessBinary(): string {
 
   // Try PATH via which
   try {
-    return execSync("which branchkit-test-harness", { encoding: "utf8" }).trim();
+    const found = execSync("which branchkit-test-harness", {
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+    if (found) return found;
   } catch {
     // fall through
   }
+  return undefined;
+}
 
-  throw new Error(
-    "harness: cannot find branchkit-test-harness binary. It ships inside " +
-      "BranchKit.app (Contents/Resources); install the app, or set " +
-      "BRANCHKIT_TEST_HARNESS to a harness binary.",
-  );
+function findHarnessBinary(): string {
+  const found = lookupHarnessBinary();
+  if (found) return found;
+  throw new Error(HARNESS_MISSING);
 }
