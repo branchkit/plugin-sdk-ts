@@ -2497,7 +2497,7 @@ declare module "./plugin.js" {
      */
     nativeSetDockSize(req: NativeSetDockSizeRequest): Promise<boolean>;
     /**
-     * Turn the system's dwell click on or off (holding the pointer still clicks). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue
+     * Turn the system's dwell click on or off (holding the pointer still clicks). Exists only on Linux; elsewhere it is refused with platform_no_analogue
      */
     nativeSetDwellClick(req: NativeSetDwellClickRequest): Promise<boolean>;
     /**
@@ -2541,7 +2541,7 @@ declare module "./plugin.js" {
      */
     nativeSetKeyRepeatRate(req: NativeSetKeyRepeatRateRequest): Promise<boolean>;
     /**
-     * Turn the screen magnifier on or off; false when it did not change
+     * Turn the screen magnifier on or off; false when it did not change. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeSetMagnifierEnabled(req: NativeSetMagnifierEnabledRequest): Promise<boolean>;
     /**
@@ -2553,7 +2553,7 @@ declare module "./plugin.js" {
      */
     nativeSetMonoAudio(req: NativeSetMonoAudioRequest): Promise<boolean>;
     /**
-     * Turn Mouse Keys on or off (the numeric keypad moves the pointer)
+     * Turn Mouse Keys on or off (the numeric keypad moves the pointer). Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeSetMouseKeys(req: NativeSetMouseKeysRequest): Promise<boolean>;
     /**
@@ -2565,15 +2565,15 @@ declare module "./plugin.js" {
      */
     nativeSetNightShift(req: NativeSetNightShiftRequest): Promise<void>;
     /**
-     * Show or hide the on-screen keyboard; false when it did not change
+     * Show or hide the on-screen keyboard; false when it did not change. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeSetOnScreenKeyboardEnabled(req: NativeSetOnScreenKeyboardEnabledRequest): Promise<boolean>;
     /**
-     * Set the power mode (power-saver, balanced or performance); false when refused or not offered
+     * Set the power mode (power-saver, balanced or performance); false when refused or not offered. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeSetPowerMode(req: NativeSetPowerModeRequest): Promise<boolean>;
     /**
-     * Turn the screen reader on or off (VoiceOver, Orca, Narrator); false when it did not change
+     * Turn the screen reader on or off (VoiceOver, Orca, Narrator); false when it did not change. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeSetScreenReaderEnabled(req: NativeSetScreenReaderEnabledRequest): Promise<boolean>;
     /**
@@ -2597,7 +2597,7 @@ declare module "./plugin.js" {
      */
     nativeSetSidebarIconSize(req: NativeSetSidebarIconSizeRequest): Promise<boolean>;
     /**
-     * Turn Slow Keys on or off (a key registers only after it is held)
+     * Turn Slow Keys on or off (a key registers only after it is held). Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeSetSlowKeys(req: NativeSetSlowKeysRequest): Promise<boolean>;
     /**
@@ -2605,7 +2605,7 @@ declare module "./plugin.js" {
      */
     nativeSetStageManager(req: NativeSetStageManagerRequest): Promise<boolean>;
     /**
-     * Turn Sticky Keys on or off (modifiers latch, so shortcuts need one key at a time)
+     * Turn Sticky Keys on or off (modifiers latch, so shortcuts need one key at a time). Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeSetStickyKeys(req: NativeSetStickyKeysRequest): Promise<boolean>;
     /**
@@ -2613,7 +2613,7 @@ declare module "./plugin.js" {
      */
     nativeSetTapToClick(req: NativeSetTapToClickRequest): Promise<boolean>;
     /**
-     * Set the system text size as a factor of the default (1.0); false when refused
+     * Set the system text size as a factor of the default (1.0); false when refused. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeSetTextScale(req: NativeSetTextScaleRequest): Promise<boolean>;
     /**
@@ -2625,7 +2625,7 @@ declare module "./plugin.js" {
      */
     nativeSetURLSchemeHandler(req: NativeSetURLSchemeHandlerRequest): Promise<boolean>;
     /**
-     * Turn screen flashing on alert sounds on or off; false when it did not change
+     * Turn screen flashing on alert sounds on or off; false when it did not change. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeSetVisualAlertsEnabled(req: NativeSetVisualAlertsEnabledRequest): Promise<boolean>;
     /**
