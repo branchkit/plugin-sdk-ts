@@ -1085,6 +1085,29 @@ export interface ExternalDisk {
 }
 
 /**
+ * One fan (`native.fan_speeds`).
+ */
+export interface FanSpeed {
+  /**
+   * The fan's label where the hardware gives one, else its position
+   * (`Fan 1`).
+   */
+  label: string;
+  /**
+   * wire uint32 · min 0
+   */
+  max_rpm?: number;
+  /**
+   * wire uint32 · min 0
+   */
+  min_rpm?: number;
+  /**
+   * wire uint32 · min 0
+   */
+  rpm: number;
+}
+
+/**
  * Where a field appears in generic UI rendering. Each field on a
  * collection declares at most one role; surfaces (discovery HUD,
  * settings UI, etc.) interpret roles on their own terms.
@@ -1132,6 +1155,30 @@ export interface Frame {
    * wire int32
    */
   y: number;
+}
+
+/**
+ * A graphics processor (`native.gpu_info`).
+ */
+export interface GpuInfo {
+  /**
+   * The driver the OS bound to it (`amdgpu`, `i915`), where it names one.
+   */
+  driver?: string;
+  /**
+   * As the OS names it (`Apple M4`, `NVIDIA GeForce RTX 4070`).
+   */
+  name: string;
+  /**
+   * The maker (`Apple`, `NVIDIA`, `AMD`, `Intel`), when known.
+   */
+  vendor?: string;
+  /**
+   * Memory of its own, in bytes. None when it shares system memory or
+   * the OS does not say.
+   * wire uint64 (64-bit) · min 0
+   */
+  vram_bytes?: number;
 }
 
 export interface HUDItem {
@@ -2231,6 +2278,24 @@ export interface SystemAppearance {
   increase_contrast: boolean;
   reduce_motion: boolean;
   reduce_transparency: boolean;
+}
+
+/**
+ * A device connected over Thunderbolt or USB4 (`native.thunderbolt_devices`).
+ */
+export interface ThunderboltDevice {
+  /**
+   * Whether the OS has let the device's PCIe tunnels through. Linux asks
+   * (the `authorized` attribute); macOS authorizes devices itself, so
+   * there it is none.
+   */
+  authorized?: boolean;
+  /**
+   * The device's unique id (its switch UID), stable across connections.
+   */
+  id?: string;
+  name: string;
+  vendor?: string;
 }
 
 /**
@@ -5213,7 +5278,7 @@ export interface NativeExternalDisplayNamesResponse {
 }
 
 export interface NativeFanSpeedsResponse {
-  value: string;
+  fans: FanSpeed[];
 }
 
 export interface NativeFastUserSwitchingResponse {
@@ -5534,7 +5599,7 @@ export interface NativeGlobFilesResponse {
 }
 
 export interface NativeGpuInfoResponse {
-  info: string;
+  gpus: GpuInfo[];
 }
 
 export interface NativeGrayscaleEnabledResponse {
@@ -7528,7 +7593,7 @@ export interface NativeThreeFingerDragResponse {
 }
 
 export interface NativeThunderboltDevicesResponse {
-  value: string;
+  devices: ThunderboltDevice[];
 }
 
 export interface NativeTimeFormatResponse {
