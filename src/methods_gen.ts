@@ -1636,7 +1636,7 @@ declare module "./plugin.js" {
      */
     nativeFnKeyFunction(): Promise<NativeFnKeyFunctionResponse>;
     /**
-     * Get configured Focus modes as the raw `com.apple.ncprefs` preference value — macOS plist text, NOT JSON
+     * Get configured Focus modes as the raw `com.apple.ncprefs` preference value — macOS plist text, NOT JSON. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeFocusModes(): Promise<NativeFocusModesResponse>;
     /**
@@ -2416,7 +2416,7 @@ declare module "./plugin.js" {
      */
     nativeSearchContacts(req: NativeSearchContactsRequest): Promise<ContactInfo[]>;
     /**
-     * Check if Secure Input is currently enabled (blocks key events)
+     * Check if Secure Input is currently enabled (blocks key events). Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSecureInputEnabled(): Promise<NativeSecureInputEnabledResponse>;
     /**
@@ -2740,7 +2740,7 @@ declare module "./plugin.js" {
      */
     nativeSpeechRecognizeFile(req: NativeSpeechRecognizeFileRequest): Promise<string>;
     /**
-     * Get current spelling language
+     * Get current spelling language. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeSpellingLanguage(): Promise<NativeSpellingLanguageResponse>;
     /**
