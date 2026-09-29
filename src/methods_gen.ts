@@ -2121,7 +2121,7 @@ declare module "./plugin.js" {
      */
     nativeOpenTarget(req: NativeOpenTargetRequest): Promise<void>;
     /**
-     * Open a URL in the default handler
+     * Open a web (http, https) or email (mailto) link in its default handler; any other scheme is refused
      */
     nativeOpenURL(req: NativeOpenURLRequest): Promise<void>;
     /**
