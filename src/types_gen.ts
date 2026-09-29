@@ -4692,6 +4692,14 @@ export interface NativeDbusCallResponse {
   values: unknown[];
 }
 
+export interface NativeDefaultAppForMimeTypeRequest {
+  mime_type: string;
+}
+
+export interface NativeDefaultAppForMimeTypeResponse {
+  app: string;
+}
+
 export interface NativeDefaultAppForUtiRequest {
   uti: string;
 }
@@ -4994,6 +5002,10 @@ export interface NativeFileMetadataResponse {
    * wire uint64 (64-bit) · min 0
    */
   size: number;
+}
+
+export interface NativeFileMimeTypeRequest {
+  path: string;
 }
 
 export interface NativeFileModificationDateRequest {
