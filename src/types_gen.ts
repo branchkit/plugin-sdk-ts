@@ -369,6 +369,24 @@ export interface BleCharacteristic {
 }
 
 /**
+ * A Bluetooth LE device offering the asked-for service.
+ */
+export interface BleDeviceEntry {
+  /**
+   * Whether the user has allowed this device for this service. Until
+   * they do, calls on it are refused, and the first one puts it on the
+   * plugin's card to be allowed.
+   */
+  allowed: boolean;
+  /**
+   * How the OS names it (an address, or on macOS a CoreBluetooth
+   * identifier): the `device_identifier` every other BLE call takes.
+   */
+  id: string;
+  name: string;
+}
+
+/**
  * A GATT service with its characteristics.
  */
 export interface BleService {
@@ -1189,7 +1207,16 @@ export interface HUDItem {
   title: string;
 }
 
+/**
+ * A HID device as its caller may see it: one whose product the plugin
+ * declared, never a keyboard, pointer, system control or security key.
+ */
 export interface HidDeviceEntry {
+  /**
+   * Whether the user has this product switched on for the caller. Every
+   * other HID call on it is refused until they do.
+   */
+  allowed: boolean;
   /**
    * wire uint32 · min 0
    */
@@ -1199,12 +1226,22 @@ export interface HidDeviceEntry {
    * wire uint32 · min 0
    */
   buttons: number;
+  /**
+   * Device ID (`0x046d:0xc52b:…`), the handle every other HID call takes.
+   */
   id: string;
+  /**
+   * Whether the caller has it open (`native.hid_open`).
+   */
+  open: boolean;
   product: string;
   /**
    * wire uint32 · min 0
    */
   product_id: number;
+  /**
+   * Whether some plugin holds it exclusively (`native.hid_claim`).
+   */
   seized: boolean;
   transport: string;
   /**
@@ -4501,11 +4538,22 @@ export interface NativeBatteryHealthResponse {
   value: string;
 }
 
+export interface NativeBleDevicesRequest {
+  /**
+   * A GATT service the plugin declares in `requires.devices.ble`
+   * (`fff0`, or 128 bits).
+   * non-empty
+   */
+  service_uuid: string;
+}
+
+export interface NativeBleDevicesResponse {
+  devices: BleDeviceEntry[];
+}
+
 export interface NativeBleDiscoverServicesRequest {
   /**
-   * Identifier for the paired BLE device. Accepts a CoreBluetooth
-   * peripheral UUID (e.g. "12345678-...") or a device name to match
-   * among connected BLE HID peripherals (e.g. "Shortcut Remote").
+   * The device, as `native.ble_devices` names it.
    * non-empty
    */
   device_identifier: string;
@@ -4522,12 +4570,12 @@ export interface NativeBleSubscribeRequest {
    */
   characteristic_uuid: string;
   /**
-   * CoreBluetooth peripheral UUID or device name.
+   * The device, as `native.ble_devices` names it.
    * non-empty
    */
   device_identifier: string;
   /**
-   * GATT service UUID containing the characteristic.
+   * A declared GATT service containing the characteristic.
    * non-empty
    */
   service_uuid: string;
@@ -4539,12 +4587,14 @@ export interface NativeBleSubscribeResponse {
 
 export interface NativeBleSubscribeAllThenWriteRequest {
   /**
-   * CoreBluetooth peripheral UUID or device name.
+   * The device, as `native.ble_devices` names it.
    * non-empty
    */
   device_identifier: string;
   /**
-   * GATT service UUIDs to subscribe to all notify characteristics on.
+   * Declared GATT services to subscribe to all notify characteristics
+   * on. Their notifications are the caller's until
+   * `native.ble_unsubscribe` with characteristic `*`.
    * default []
    */
   subscribe_services?: string[];
@@ -4559,6 +4609,30 @@ export interface NativeBleSubscribeAllThenWriteResponse {
   success: boolean;
 }
 
+export interface NativeBleUnsubscribeRequest {
+  /**
+   * The characteristic `native.ble_subscribe` subscribed to.
+   * non-empty
+   */
+  characteristic_uuid: string;
+  /**
+   * The device, as `native.ble_devices` names it.
+   * non-empty
+   */
+  device_identifier: string;
+  /**
+   * non-empty
+   */
+  service_uuid: string;
+}
+
+export interface NativeBleUnsubscribeResponse {
+  /**
+   * Whether the caller was subscribed.
+   */
+  unsubscribed: boolean;
+}
+
 export interface NativeBleWriteRequest {
   /**
    * GATT characteristic UUID (e.g. "FFF1").
@@ -4571,13 +4645,12 @@ export interface NativeBleWriteRequest {
    */
   data?: number[];
   /**
-   * Identifier for the paired BLE device. Accepts a CoreBluetooth
-   * peripheral UUID or a device name (see ble_discover_services).
+   * The device, as `native.ble_devices` names it.
    * non-empty
    */
   device_identifier: string;
   /**
-   * GATT service UUID (e.g. "FFF0").
+   * A declared GATT service (e.g. "fff0").
    * non-empty
    */
   service_uuid: string;
@@ -5632,6 +5705,21 @@ export interface NativeHidClaimResponse {
   success: boolean;
 }
 
+export interface NativeHidCloseRequest {
+  /**
+   * Device ID, as `native.hid_devices` lists it.
+   * non-empty
+   */
+  device_id: string;
+}
+
+export interface NativeHidCloseResponse {
+  /**
+   * Whether the caller had it open.
+   */
+  closed: boolean;
+}
+
 export interface NativeHidDevicesResponse {
   devices: HidDeviceEntry[];
 }
@@ -5648,6 +5736,18 @@ export interface NativeHidElementsResponse {
   elements: HidElementEntry[];
 }
 
+export interface NativeHidOpenRequest {
+  /**
+   * Device ID, as `native.hid_devices` lists it.
+   * non-empty
+   */
+  device_id: string;
+}
+
+export interface NativeHidOpenResponse {
+  success: boolean;
+}
+
 export interface NativeHidReleaseRequest {
   /**
    * Device ID (e.g. "0x28bd:0x0202:0x48f42695").
@@ -5657,6 +5757,9 @@ export interface NativeHidReleaseRequest {
 }
 
 export interface NativeHidReleaseResponse {
+  /**
+   * Whether the caller held it exclusively.
+   */
   success: boolean;
 }
 
@@ -9341,7 +9444,7 @@ export interface AxNotificationEventParams {
 /** Payload of the `_platform.ble.notification` event. */
 export interface BleNotificationEventParams {
   /**
-   * GATT characteristic UUID.
+   * GATT characteristic UUID, 128-bit lower case.
    */
   characteristic_uuid: string;
   /**
@@ -9349,11 +9452,15 @@ export interface BleNotificationEventParams {
    */
   data: number[];
   /**
-   * CoreBluetooth peripheral UUID.
+   * The device as `native.ble_devices` names it.
    */
   device_identifier: string;
   /**
-   * GATT service UUID.
+   * The plugin that subscribed; the event reaches it alone.
+   */
+  owner_plugin: string;
+  /**
+   * GATT service UUID, 128-bit lower case.
    */
   service_uuid: string;
 }
@@ -9529,6 +9636,10 @@ export interface HidConnectedEventParams {
    */
   buttons: number;
   device_id: string;
+  /**
+   * The plugin this copy is for: one that declared the product.
+   */
+  owner_plugin: string;
   product: string;
   /**
    * wire uint32 · min 0
@@ -9544,6 +9655,10 @@ export interface HidConnectedEventParams {
 /** Payload of the `_platform.hid.disconnected` event. */
 export interface HidDisconnectedEventParams {
   device_id: string;
+  /**
+   * The plugin this copy is for: one that declared the product.
+   */
+  owner_plugin: string;
   product: string;
   transport: string;
 }
@@ -9551,6 +9666,10 @@ export interface HidDisconnectedEventParams {
 /** Payload of the `_platform.hid.input` event. */
 export interface HidInputEventParams {
   device_id: string;
+  /**
+   * The plugin that opened the device; the event reaches it alone.
+   */
+  owner_plugin: string;
   product: string;
   /**
    * wire uint64 (64-bit) · min 0
@@ -9562,7 +9681,7 @@ export interface HidInputEventParams {
    */
   usage: number;
   /**
-   * HID usage page (e.g. 0x09 = Button, 0x07 = Keyboard, 0x01 = Generic Desktop).
+   * HID usage page (e.g. 0x09 = Button, 0x01 = Generic Desktop).
    * wire uint32 · min 0
    */
   usage_page: number;
@@ -9576,18 +9695,22 @@ export interface HidInputEventParams {
 /** Payload of the `_platform.hid.report` event. */
 export interface HidReportEventParams {
   /**
-   * Raw report bytes.
+   * Raw report bytes, without the report ID.
    */
   data: number[];
   device_id: string;
+  /**
+   * The plugin that opened the device; the event reaches it alone.
+   */
+  owner_plugin: string;
   product: string;
   /**
-   * HID report ID.
+   * HID report ID, 0 for a device that numbers none.
    * wire uint32 · min 0
    */
   report_id: number;
   /**
-   * IOHIDReportType (0 = input, 1 = output, 2 = feature).
+   * 0 = input (the only kind a device sends unasked).
    * wire uint32 · min 0
    */
   report_type: number;
