@@ -2550,6 +2550,9 @@ export interface ActionsListResponse {
 }
 
 export interface ArtifactDeleteRequest {
+  /**
+   * non-empty
+   */
   ref: string;
 }
 
@@ -2570,6 +2573,7 @@ export interface BlobPublishRequest {
   length: number;
   /**
    * The blob's name, as declared in this plugin's `provides.blobs`.
+   * non-empty
    */
   name: string;
   /**
@@ -2623,6 +2627,7 @@ export interface BlobPublishResponse {
 export interface BlobStateRequest {
   /**
    * The blob's name, as its provider declared it in `provides.blobs`.
+   * non-empty
    */
   name: string;
   /**
@@ -2655,6 +2660,7 @@ export interface BlobStateResponse {
 export interface CollectionAppendRequest {
   /**
    * Collection name. Must be a `kind: "log"` collection.
+   * non-empty
    */
   name: string;
   /**
@@ -2675,11 +2681,13 @@ export interface CollectionAppendKeyedRequest {
    * The fold key — stamped into the payload's key field. Appending another
    * record with the same key annotates the first (compacted-changelog
    * shape); a compacted read folds them into one record.
+   * non-empty
    */
   key: string;
   /**
    * Collection name. Must be a keyed (`id_strategy: by_field`) `log`
    * collection.
+   * non-empty
    */
   name: string;
   /**
@@ -2697,6 +2705,9 @@ export interface CollectionAppendKeyedResponse {
 }
 
 export interface CollectionCountRequest {
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -2714,6 +2725,9 @@ export interface CollectionDeleteRecordsRequest {
    * default []
    */
   ids?: string[];
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -2731,7 +2745,13 @@ export interface CollectionDeleteRecordsResponse {
 }
 
 export interface CollectionFetchRequest {
+  /**
+   * non-empty
+   */
   id: string;
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -2743,7 +2763,13 @@ export interface CollectionFetchResponse {
 }
 
 export interface CollectionFetchCompactedRequest {
+  /**
+   * non-empty
+   */
   id: string;
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -2755,6 +2781,9 @@ export interface CollectionFetchCompactedResponse {
 }
 
 export interface CollectionGetRequest {
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -2772,6 +2801,9 @@ export interface CollectionGetResponse {
 }
 
 export interface CollectionListRequest {
+  /**
+   * non-empty
+   */
   name: string;
   /**
    * default {}
@@ -2793,7 +2825,13 @@ export interface CollectionPatchRequest {
    * Object of fields to merge over the existing record.
    */
   fields: unknown;
+  /**
+   * non-empty
+   */
   id: string;
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -2828,6 +2866,9 @@ export interface CollectionPutRequest {
    * leaves the prior setting in place.
    */
   label?: string;
+  /**
+   * non-empty
+   */
   name: string;
   /**
    * Optional per-payload-field display roles. Used by the Settings
@@ -2866,6 +2907,9 @@ export interface CollectionReplaceRequest {
    * Same semantics as `collection.put`'s `label`.
    */
   label?: string;
+  /**
+   * non-empty
+   */
   name: string;
   /**
    * Same semantics as `collection.put`'s `roles`.
@@ -2907,6 +2951,7 @@ export interface CollectionsCreateUserRequest {
   description?: string;
   /**
    * Collection name (lowercase, underscores).
+   * non-empty
    */
   name: string;
   /**
@@ -2939,8 +2984,17 @@ export interface CollectionsOwnedResponse {
 }
 
 export interface CommandsAddAliasRequest {
+  /**
+   * non-empty
+   */
   action: string;
+  /**
+   * non-empty
+   */
   default_pattern: string;
+  /**
+   * non-empty
+   */
   new_pattern: string;
 }
 
@@ -2963,6 +3017,9 @@ export interface CommandsConfusabilityResponse {
 }
 
 export interface CommandsDeleteRequest {
+  /**
+   * non-empty
+   */
   canonical: string;
 }
 
@@ -3035,8 +3092,17 @@ export interface CommandsPushResponse {
 }
 
 export interface CommandsRemoveAliasRequest {
+  /**
+   * non-empty
+   */
   action: string;
+  /**
+   * non-empty
+   */
   default_pattern: string;
+  /**
+   * non-empty
+   */
   new_pattern: string;
 }
 
@@ -3049,11 +3115,20 @@ export interface CommandsRemoveAliasResponse {
 }
 
 export interface CommandsResetRequest {
+  /**
+   * non-empty
+   */
   canonical: string;
 }
 
 export interface CommandsResetOverrideRequest {
+  /**
+   * non-empty
+   */
   action: string;
+  /**
+   * non-empty
+   */
   default_pattern: string;
 }
 
@@ -3210,8 +3285,17 @@ export interface CommandsResolveResponse {
 }
 
 export interface CommandsSetOverrideRequest {
+  /**
+   * non-empty
+   */
   action: string;
+  /**
+   * non-empty
+   */
   default_pattern: string;
+  /**
+   * non-empty
+   */
   new_pattern: string;
 }
 
@@ -3219,6 +3303,7 @@ export interface ControlSignalRequest {
   /**
    * Raw control-stream signal string (e.g. "open hud", "hide discovery").
    * Forwarded verbatim to the Swift shell via the actuator's control stream.
+   * non-empty
    */
   signal: string;
 }
@@ -3262,6 +3347,7 @@ export interface EffectsAssertRequest {
    * Registered effect name (e.g. `suppress_notifications`). Must be
    * declared in the plugin's manifest `consumes.effects.asserts` and
    * match an entry in the closed `effects::REGISTERED_EFFECTS` registry.
+   * non-empty
    */
   name: string;
 }
@@ -3303,6 +3389,7 @@ export interface EffectsAssertResponse {
 export interface EffectsIsActiveRequest {
   /**
    * Registered effect name to query.
+   * non-empty
    */
   name: string;
 }
@@ -3327,6 +3414,7 @@ export interface EffectsRetractRequest {
    * Registered effect name to retract. The plugin's frame is removed
    * from this effect's ownership stack. If no frame exists, the call
    * is a no-op (`retracted=false`, no error).
+   * non-empty
    */
   name: string;
 }
@@ -3355,6 +3443,7 @@ export interface EventsAppendRequest {
   data?: unknown;
   /**
    * Event type discriminator (e.g. "session_start", "match", "miss").
+   * non-empty
    */
   event_type: string;
   /**
@@ -3381,6 +3470,7 @@ export interface EventsEmitRequest {
   /**
    * Convention-based event type (e.g. "clipboard.copied"). The
    * `_platform.*` namespace is reserved for the actuator.
+   * non-empty
    */
   event_type: string;
 }
@@ -3410,6 +3500,7 @@ export interface HttpRequestRequest {
   /**
    * `https://` only, to a host this plugin declares in `requires.network`
    * and the user has allowed.
+   * non-empty
    */
   url: string;
 }
@@ -3451,6 +3542,7 @@ export interface HUDCreateChannelRequest {
   anchor?: Anchor;
   /**
    * Channel name. Must be unique across all plugins.
+   * non-empty
    */
   channel: string;
   /**
@@ -3509,6 +3601,7 @@ export interface HUDHideRequest {
   /**
    * Channel name to hide. Sends a `close <channel>` (or
    * `hide <channel>` for built-in channels) to the Swift shell.
+   * non-empty
    */
   channel: string;
 }
@@ -3518,6 +3611,7 @@ export interface HUDPushRequest {
    * Name of the HUD channel to push fragments into. Must be owned by
    * the calling plugin (verified via
    * `HudChannelRegistry::verify_owner`).
+   * non-empty
    */
   channel: string;
   /**
@@ -3534,6 +3628,7 @@ export interface HUDPushRequest {
 export interface HUDRemoveChannelRequest {
   /**
    * Channel name to remove. Must be owned by the calling plugin.
+   * non-empty
    */
   channel: string;
 }
@@ -3550,6 +3645,7 @@ export interface HUDRemoveChannelResponse {
 export interface HUDSetSizeRequest {
   /**
    * Channel name whose actual rendered size is being reported.
+   * non-empty
    */
   channel: string;
   /**
@@ -3564,6 +3660,7 @@ export interface HUDShowRequest {
   /**
    * Channel name to show. Sends an `open <channel>` message to the
    * Swift shell.
+   * non-empty
    */
   channel: string;
 }
@@ -3579,6 +3676,7 @@ export interface InputClickRequest {
 export interface InputClipboardActionRequest {
   /**
    * Action: "copy", "paste", or "set".
+   * non-empty
    */
   action: string;
   /**
@@ -3593,6 +3691,9 @@ export interface InputClipboardHistoryResponse {
 }
 
 export interface InputClipboardReadRequest {
+  /**
+   * non-empty
+   */
   content_type: string;
 }
 
@@ -3609,6 +3710,9 @@ export interface InputClipboardReadAllResponse {
 }
 
 export interface InputClipboardReadFormatRequest {
+  /**
+   * non-empty
+   */
   format: string;
 }
 
@@ -3617,6 +3721,9 @@ export interface InputClipboardReadFormatResponse {
 }
 
 export interface InputClipboardWriteRequest {
+  /**
+   * non-empty
+   */
   content_type: string;
   data: string;
 }
@@ -3685,6 +3792,7 @@ export interface InputMouseButtonRequest {
    * zero-distance dragged event at the current cursor position — macOS
    * only treats a window as grabbed once a dragged event follows the
    * press, so drag-based operations need it between press and release.
+   * non-empty
    */
   direction: string;
 }
@@ -3767,6 +3875,7 @@ export interface InputRawKeyRequest {
   code: number;
   /**
    * One of "press", "release", or "click".
+   * non-empty
    */
   direction: string;
 }
@@ -3790,6 +3899,7 @@ export interface InputScrollRequest {
   amount?: number;
   /**
    * Direction: "up", "down", "left", or "right".
+   * non-empty
    */
   direction: string;
   /**
@@ -3801,6 +3911,9 @@ export interface InputScrollRequest {
 }
 
 export interface InputSwitchInputSourceRequest {
+  /**
+   * non-empty
+   */
   source_id: string;
 }
 
@@ -3864,6 +3977,9 @@ export interface NativeActivateAppRequest {
    * default false
    */
   all_windows?: boolean;
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -3900,6 +4016,9 @@ export interface NativeApfsSnapshotsResponse {
 }
 
 export interface NativeAppBundlePathRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -3908,10 +4027,16 @@ export interface NativeAppBundlePathResponse {
 }
 
 export interface NativeAppFocusedWindowIDRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
 export interface NativeAppIconRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
   /**
    * wire uint32 · default 64 · min 0
@@ -3931,10 +4056,16 @@ export interface NativeAppIconResponse {
 }
 
 export interface NativeAppIconPathRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
 export interface NativeAppIsAgentRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -3943,6 +4074,9 @@ export interface NativeAppIsAgentResponse {
 }
 
 export interface NativeAppIsRunningRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -3951,6 +4085,9 @@ export interface NativeAppIsRunningResponse {
 }
 
 export interface NativeAppLaunchAtLoginRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -3959,6 +4096,9 @@ export interface NativeAppLaunchAtLoginResponse {
 }
 
 export interface NativeAppMetadataRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -3973,10 +4113,16 @@ export interface NativeAppMetadataResponse {
 }
 
 export interface NativeAppPathRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
 export interface NativeAppPidRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -3989,6 +4135,9 @@ export interface NativeAppVerificationResponse {
 }
 
 export interface NativeAppVersionRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -3997,6 +4146,9 @@ export interface NativeAppVolumesResponse {
 }
 
 export interface NativeAppWindowsRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -4005,10 +4157,16 @@ export interface NativeAppWindowsResponse {
 }
 
 export interface NativeAppWindowsCountRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
 export interface NativeAppsForPathRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -4017,6 +4175,9 @@ export interface NativeAppsForPathResponse {
 }
 
 export interface NativeAudioDeviceVolumeRequest {
+  /**
+   * non-empty
+   */
   device_uid: string;
 }
 
@@ -4061,6 +4222,9 @@ export interface NativeAutomaticLoginUserResponse {
 }
 
 export interface NativeAutomationPermissionRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -4168,6 +4332,9 @@ export interface NativeAxObserveResponse {
 }
 
 export interface NativeAxPerformActionRequest {
+  /**
+   * non-empty
+   */
   action: string;
   element: AccessibleRef;
 }
@@ -4185,6 +4352,9 @@ export interface NativeAxReadAttributesRequest {
 }
 
 export interface NativeAxSetAttributeRequest {
+  /**
+   * non-empty
+   */
   attribute: string;
   element: AccessibleRef;
   value: unknown;
@@ -4195,6 +4365,9 @@ export interface NativeAxSetAttributeResponse {
 }
 
 export interface NativeAxUnobserveRequest {
+  /**
+   * non-empty
+   */
   subscription_id: string;
 }
 
@@ -4268,6 +4441,7 @@ export interface NativeBleDiscoverServicesRequest {
    * Identifier for the paired BLE device. Accepts a CoreBluetooth
    * peripheral UUID (e.g. "12345678-...") or a device name to match
    * among connected BLE HID peripherals (e.g. "Shortcut Remote").
+   * non-empty
    */
   device_identifier: string;
 }
@@ -4279,14 +4453,17 @@ export interface NativeBleDiscoverServicesResponse {
 export interface NativeBleSubscribeRequest {
   /**
    * GATT characteristic UUID to subscribe to (must support notify).
+   * non-empty
    */
   characteristic_uuid: string;
   /**
    * CoreBluetooth peripheral UUID or device name.
+   * non-empty
    */
   device_identifier: string;
   /**
    * GATT service UUID containing the characteristic.
+   * non-empty
    */
   service_uuid: string;
 }
@@ -4298,6 +4475,7 @@ export interface NativeBleSubscribeResponse {
 export interface NativeBleSubscribeAllThenWriteRequest {
   /**
    * CoreBluetooth peripheral UUID or device name.
+   * non-empty
    */
   device_identifier: string;
   /**
@@ -4319,6 +4497,7 @@ export interface NativeBleSubscribeAllThenWriteResponse {
 export interface NativeBleWriteRequest {
   /**
    * GATT characteristic UUID (e.g. "FFF1").
+   * non-empty
    */
   characteristic_uuid: string;
   /**
@@ -4329,10 +4508,12 @@ export interface NativeBleWriteRequest {
   /**
    * Identifier for the paired BLE device. Accepts a CoreBluetooth
    * peripheral UUID or a device name (see ble_discover_services).
+   * non-empty
    */
   device_identifier: string;
   /**
    * GATT service UUID (e.g. "FFF0").
+   * non-empty
    */
   service_uuid: string;
   /**
@@ -4399,7 +4580,13 @@ export interface NativeBundleForRemotePortResponse {
 }
 
 export interface NativeCalendarEventsRangeRequest {
+  /**
+   * non-empty
+   */
   end: string;
+  /**
+   * non-empty
+   */
   start: string;
 }
 
@@ -4428,6 +4615,9 @@ export interface NativeCapsLockStateResponse {
 }
 
 export interface NativeCaptureWindowRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
@@ -4443,6 +4633,9 @@ export interface NativeCaptureWindowResponse {
 }
 
 export interface NativeCascadeWindowsRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -4451,10 +4644,16 @@ export interface NativeCascadeWindowsResponse {
 }
 
 export interface NativeCenterWindowRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
 export interface NativeCheckPermissionRequest {
+  /**
+   * non-empty
+   */
   permission: string;
 }
 
@@ -4464,6 +4663,9 @@ export interface NativeCheckPermissionResponse {
 }
 
 export interface NativeClearFileQuarantineRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -4472,6 +4674,9 @@ export interface NativeClearFileQuarantineResponse {
 }
 
 export interface NativeClearNotificationsRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -4506,6 +4711,9 @@ export interface NativeClipboardImageDimensionsResponse {
 }
 
 export interface NativeCloseWindowRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
@@ -4553,7 +4761,13 @@ export interface NativeContactsPermissionResponse {
 }
 
 export interface NativeCopyFileRequest {
+  /**
+   * non-empty
+   */
   destination: string;
+  /**
+   * non-empty
+   */
   source: string;
 }
 
@@ -4566,6 +4780,9 @@ export interface NativeCpuInfoResponse {
 }
 
 export interface NativeCreateDirectoryRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -4686,14 +4903,22 @@ export interface NativeDbusCallRequest {
    * default null
    */
   bus?: string;
+  /**
+   * non-empty
+   */
   interface: string;
+  /**
+   * non-empty
+   */
   method: string;
   /**
    * The object path (`/org/mpris/MediaPlayer2`).
+   * non-empty
    */
   path: string;
   /**
    * The well-known service name (`org.mpris.MediaPlayer2.spotify`).
+   * non-empty
    */
   service: string;
   /**
@@ -4716,6 +4941,9 @@ export interface NativeDbusCallResponse {
 }
 
 export interface NativeDefaultAppForMimeTypeRequest {
+  /**
+   * non-empty
+   */
   mime_type: string;
 }
 
@@ -4724,6 +4952,9 @@ export interface NativeDefaultAppForMimeTypeResponse {
 }
 
 export interface NativeDefaultAppForUtiRequest {
+  /**
+   * non-empty
+   */
   uti: string;
 }
 
@@ -4744,6 +4975,9 @@ export interface NativeDefaultPrinterResponse {
 }
 
 export interface NativeDeleteFileRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -4760,6 +4994,9 @@ export interface NativeDetectBarcodesResponse {
 }
 
 export interface NativeDetectBarcodesFileRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -4780,6 +5017,9 @@ export interface NativeDirectoryContentsRequest {
    * default false
    */
   include_hidden?: boolean;
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -4811,6 +5051,9 @@ export interface NativeDiskSpaceResponse {
 }
 
 export interface NativeDiskUsageRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -4819,6 +5062,9 @@ export interface NativeDiskUsageResponse {
 }
 
 export interface NativeDismissNotificationRequest {
+  /**
+   * non-empty
+   */
   id: string;
 }
 
@@ -4919,6 +5165,9 @@ export interface NativeDwellClickResponse {
 }
 
 export interface NativeEjectDiskRequest {
+  /**
+   * non-empty
+   */
   mount_point: string;
 }
 
@@ -4931,6 +5180,9 @@ export interface NativeEmptyTrashResponse {
 }
 
 export interface NativeEnvVarRequest {
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -4946,6 +5198,9 @@ export interface NativeEpochTimeResponse {
 }
 
 export interface NativeExtendedAttributesRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -4966,14 +5221,23 @@ export interface NativeFastUserSwitchingResponse {
 }
 
 export interface NativeFileAclRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
 export interface NativeFileCreationDateRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
 export interface NativeFileExistsRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -4982,6 +5246,9 @@ export interface NativeFileExistsResponse {
 }
 
 export interface NativeFileExtendedAttributesRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -4994,6 +5261,9 @@ export interface NativeFileHashRequest {
    * default ""
    */
   algorithm?: string;
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -5002,6 +5272,9 @@ export interface NativeFileHashResponse {
 }
 
 export interface NativeFileMetadataRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -5028,14 +5301,23 @@ export interface NativeFileMetadataResponse {
 }
 
 export interface NativeFileMimeTypeRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
 export interface NativeFileModificationDateRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
 export interface NativeFileOwnerRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -5044,6 +5326,9 @@ export interface NativeFileOwnerResponse {
 }
 
 export interface NativeFileQuarantineRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -5056,10 +5341,16 @@ export interface NativeFileSharingEnabledResponse {
 }
 
 export interface NativeFileSizeRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
 export interface NativeFileTagsRequest {
+  /**
+   * non-empty
+   */
   path: string;
   /**
    * default null
@@ -5068,6 +5359,9 @@ export interface NativeFileTagsRequest {
 }
 
 export interface NativeFileTypeRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -5076,6 +5370,9 @@ export interface NativeFileTypeResponse {
 }
 
 export interface NativeFileUtiRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -5144,6 +5441,9 @@ export interface NativeFontSmoothingResponse {
 }
 
 export interface NativeForceQuitAppRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -5152,7 +5452,13 @@ export interface NativeForceQuitAppResponse {
 }
 
 export interface NativeFormatDateRequest {
+  /**
+   * non-empty
+   */
   style: string;
+  /**
+   * non-empty
+   */
   when: string;
 }
 
@@ -5177,7 +5483,13 @@ export interface NativeGatewayAddressResponse {
 }
 
 export interface NativeGeneratePdfRequest {
+  /**
+   * non-empty
+   */
   html: string;
+  /**
+   * non-empty
+   */
   output_path: string;
 }
 
@@ -5186,6 +5498,9 @@ export interface NativeGeneratePdfResponse {
 }
 
 export interface NativeGetWindowInfoRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
@@ -5212,6 +5527,9 @@ export interface NativeGlobFilesRequest {
    * wire uint32 · default 0 · min 0
    */
   max_results?: number;
+  /**
+   * non-empty
+   */
   pattern: string;
 }
 
@@ -5246,6 +5564,7 @@ export interface NativeHardwareUuidResponse {
 export interface NativeHidClaimRequest {
   /**
    * Device ID (e.g. "0x28bd:0x0202:0x48f42695").
+   * non-empty
    */
   device_id: string;
 }
@@ -5261,6 +5580,7 @@ export interface NativeHidDevicesResponse {
 export interface NativeHidElementsRequest {
   /**
    * Device ID (e.g. "0x28bd:0x0202:0x48f42695").
+   * non-empty
    */
   device_id: string;
 }
@@ -5272,6 +5592,7 @@ export interface NativeHidElementsResponse {
 export interface NativeHidReleaseRequest {
   /**
    * Device ID (e.g. "0x28bd:0x0202:0x48f42695").
+   * non-empty
    */
   device_id: string;
 }
@@ -5288,6 +5609,7 @@ export interface NativeHidSendReportRequest {
   data?: number[];
   /**
    * Device ID (e.g. "0x28bd:0x0202:0x48f42695").
+   * non-empty
    */
   device_id: string;
   /**
@@ -5297,6 +5619,7 @@ export interface NativeHidSendReportRequest {
   report_id: number;
   /**
    * Report type: "output" or "feature".
+   * non-empty
    */
   report_type: string;
 }
@@ -5306,6 +5629,9 @@ export interface NativeHidSendReportResponse {
 }
 
 export interface NativeHideAppRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -5326,6 +5652,9 @@ export interface NativeHostnameResponse {
 }
 
 export interface NativeHostnameResolveRequest {
+  /**
+   * non-empty
+   */
   hostname: string;
 }
 
@@ -5370,6 +5699,9 @@ export interface NativeIpv6AddressResponse {
 }
 
 export interface NativeIsAppHiddenRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -5378,6 +5710,9 @@ export interface NativeIsAppHiddenResponse {
 }
 
 export interface NativeIsDirectoryRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -5386,6 +5721,9 @@ export interface NativeIsDirectoryResponse {
 }
 
 export interface NativeIsFileHiddenRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -5407,10 +5745,16 @@ export interface NativeKeyboardLayoutResponse {
 }
 
 export interface NativeKeychainDeleteRequest {
+  /**
+   * non-empty
+   */
   account: string;
 }
 
 export interface NativeKeychainReadRequest {
+  /**
+   * non-empty
+   */
   account: string;
 }
 
@@ -5419,7 +5763,13 @@ export interface NativeKeychainReadResponse {
 }
 
 export interface NativeKeychainWriteRequest {
+  /**
+   * non-empty
+   */
   account: string;
+  /**
+   * non-empty
+   */
   password: string;
 }
 
@@ -5443,6 +5793,9 @@ export interface NativeLastRebootResponse {
 }
 
 export interface NativeLaunchAppRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
   /**
    * default false
@@ -5515,6 +5868,9 @@ export interface NativeMagnifierEnabledResponse {
 }
 
 export interface NativeMaximizeWindowRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
@@ -5562,6 +5918,9 @@ export interface NativeMicrophonePermissionResponse {
 }
 
 export interface NativeMinimizeWindowRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
@@ -5597,7 +5956,13 @@ export interface NativeMouseKeysResponse {
 }
 
 export interface NativeMoveFileRequest {
+  /**
+   * non-empty
+   */
   destination: string;
+  /**
+   * non-empty
+   */
   source: string;
 }
 
@@ -5610,6 +5975,9 @@ export interface NativeMoveWindowToDisplayRequest {
    * wire uint32 · min 0
    */
   display_id: number;
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
@@ -5618,6 +5986,9 @@ export interface NativeMoveWindowToSpaceRequest {
    * wire uint64 (64-bit) · min 0
    */
   space_id: number;
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
@@ -5650,6 +6021,9 @@ export interface NativeNetworkQualityResponse {
 }
 
 export interface NativeNetworkReachableRequest {
+  /**
+   * non-empty
+   */
   host: string;
 }
 
@@ -5662,6 +6036,9 @@ export interface NativeNetworkSsidResponse {
 }
 
 export interface NativeNewAppWindowRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -5690,6 +6067,9 @@ export interface NativeNotifyRequest {
    * default null
    */
   subtitle?: string;
+  /**
+   * non-empty
+   */
   title: string;
 }
 
@@ -5721,6 +6101,9 @@ export interface NativeOcrClipboardResponse {
 }
 
 export interface NativeOcrFileRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -5771,10 +6154,16 @@ export interface NativeOnScreenKeyboardEnabledResponse {
 }
 
 export interface NativeOpenAppSettingsRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
 export interface NativeOpenFinderWindowRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -5786,15 +6175,27 @@ export interface NativeOpenSystemSettingsRequest {
 }
 
 export interface NativeOpenTargetRequest {
+  /**
+   * non-empty
+   */
   target: string;
 }
 
 export interface NativeOpenURLRequest {
+  /**
+   * non-empty
+   */
   url: string;
 }
 
 export interface NativeOpenWithAppRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
+  /**
+   * non-empty
+   */
   target: string;
 }
 
@@ -5807,15 +6208,24 @@ export interface NativePdfExtractTextRequest {
    * wire uint64 (64-bit) · default 0 · min 0
    */
   page?: number;
+  /**
+   * non-empty
+   */
   path: string;
 }
 
 export interface NativePdfPageCountRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
 export interface NativePinWindowAboveRequest {
   pinned: boolean;
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
@@ -5824,6 +6234,9 @@ export interface NativePinchToZoomResponse {
 }
 
 export interface NativePingRequest {
+  /**
+   * non-empty
+   */
   host: string;
 }
 
@@ -5832,6 +6245,9 @@ export interface NativePlayFeedbackWhenVolumeChangedResponse {
 }
 
 export interface NativePlaySoundRequest {
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -5983,6 +6399,9 @@ export interface NativePublicIPResponse {
 }
 
 export interface NativeQuickLookRequest {
+  /**
+   * non-empty
+   */
   path: string;
   /**
    * wire uint32 · default 512 · min 0
@@ -6002,6 +6421,9 @@ export interface NativeQuickLookResponse {
 }
 
 export interface NativeQuitAppRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -6010,6 +6432,9 @@ export interface NativeQuitAppResponse {
 }
 
 export interface NativeRaiseWindowRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
@@ -6018,11 +6443,20 @@ export interface NativeRandomUuidResponse {
 }
 
 export interface NativeReadAppPreferenceRequest {
+  /**
+   * non-empty
+   */
   domain: string;
+  /**
+   * non-empty
+   */
   key: string;
 }
 
 export interface NativeReadFileRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -6035,6 +6469,9 @@ export interface NativeReadFileBinaryRequest {
    * wire uint64 (64-bit) · default null · min 0
    */
   max_bytes?: number;
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -6043,10 +6480,16 @@ export interface NativeReadFileBinaryResponse {
 }
 
 export interface NativeReadPlistRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
 export interface NativeRecentDocumentsRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -6071,7 +6514,13 @@ export interface NativeRemoteLoginEnabledResponse {
 }
 
 export interface NativeRenameFileRequest {
+  /**
+   * non-empty
+   */
   new_name: string;
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -6103,6 +6552,9 @@ export interface NativeResourceUsageResponse {
 }
 
 export interface NativeRestartAppRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
@@ -6111,6 +6563,9 @@ export interface NativeRestartAppResponse {
 }
 
 export interface NativeRevealInFinderRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -6121,6 +6576,7 @@ export interface NativeRosettaInstalledResponse {
 export interface NativeRunApplescriptRequest {
   /**
    * AppleScript source to execute via `osascript`.
+   * non-empty
    */
   script: string;
 }
@@ -6135,6 +6591,9 @@ export interface NativeRunApplescriptResponse {
 }
 
 export interface NativeRunJxaRequest {
+  /**
+   * non-empty
+   */
   script: string;
 }
 
@@ -6147,6 +6606,9 @@ export interface NativeRunShortcutRequest {
    * default null
    */
   input?: string;
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -6241,6 +6703,9 @@ export interface NativeScrollDirectionNaturalResponse {
 }
 
 export interface NativeSearchContactsRequest {
+  /**
+   * non-empty
+   */
   query: string;
 }
 
@@ -6273,6 +6738,9 @@ export interface NativeSetAirportPowerResponse {
 }
 
 export interface NativeSetAppHiddenRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
   hidden: boolean;
 }
@@ -6282,6 +6750,9 @@ export interface NativeSetAppHiddenResponse {
 }
 
 export interface NativeSetAppMutedRequest {
+  /**
+   * non-empty
+   */
   app: string;
   muted: boolean;
 }
@@ -6291,6 +6762,9 @@ export interface NativeSetAppMutedResponse {
 }
 
 export interface NativeSetAppVolumeRequest {
+  /**
+   * non-empty
+   */
   app: string;
   /**
    * wire double
@@ -6305,12 +6779,19 @@ export interface NativeSetAppVolumeResponse {
 export interface NativeSetAudioDeviceRequest {
   /**
    * "input" or "output".
+   * non-empty
    */
   device_type: string;
+  /**
+   * non-empty
+   */
   uid: string;
 }
 
 export interface NativeSetAudioDeviceVolumeRequest {
+  /**
+   * non-empty
+   */
   device_uid: string;
   /**
    * wire double
@@ -6319,6 +6800,9 @@ export interface NativeSetAudioDeviceVolumeRequest {
 }
 
 export interface NativeSetAudioInputDeviceRequest {
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -6327,6 +6811,9 @@ export interface NativeSetAudioInputDeviceResponse {
 }
 
 export interface NativeSetAudioOutputDeviceRequest {
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -6394,6 +6881,9 @@ export interface NativeSetDockMagnificationResponse {
 }
 
 export interface NativeSetDockMinimizeEffectRequest {
+  /**
+   * non-empty
+   */
   effect: string;
 }
 
@@ -6402,6 +6892,9 @@ export interface NativeSetDockMinimizeEffectResponse {
 }
 
 export interface NativeSetDockPositionRequest {
+  /**
+   * non-empty
+   */
   position: string;
 }
 
@@ -6437,7 +6930,13 @@ export interface NativeSetDwellClickResponse {
 }
 
 export interface NativeSetExtendedAttributeRequest {
+  /**
+   * non-empty
+   */
   name: string;
+  /**
+   * non-empty
+   */
   path: string;
   value: string;
 }
@@ -6448,6 +6947,9 @@ export interface NativeSetExtendedAttributeResponse {
 
 export interface NativeSetFileHiddenRequest {
   hidden: boolean;
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -6456,7 +6958,13 @@ export interface NativeSetFileHiddenResponse {
 }
 
 export interface NativeSetFilePermissionsRequest {
+  /**
+   * non-empty
+   */
   mode: string;
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -6481,6 +6989,9 @@ export interface NativeSetFinderShowHiddenResponse {
 }
 
 export interface NativeSetHighlightColorRequest {
+  /**
+   * non-empty
+   */
   color: string;
 }
 
@@ -6493,6 +7004,9 @@ export interface NativeSetHotCornerRequest {
    * wire uint32 · min 0
    */
   action: number;
+  /**
+   * non-empty
+   */
   corner: string;
 }
 
@@ -6501,6 +7015,9 @@ export interface NativeSetHotCornerResponse {
 }
 
 export interface NativeSetInputSourceRequest {
+  /**
+   * non-empty
+   */
   source_id: string;
 }
 
@@ -6586,6 +7103,9 @@ export interface NativeSetOnScreenKeyboardEnabledResponse {
 }
 
 export interface NativeSetPowerModeRequest {
+  /**
+   * non-empty
+   */
   mode: string;
 }
 
@@ -6602,6 +7122,9 @@ export interface NativeSetScreenReaderEnabledResponse {
 }
 
 export interface NativeSetScreenshotFormatRequest {
+  /**
+   * non-empty
+   */
   format: string;
 }
 
@@ -6618,6 +7141,9 @@ export interface NativeSetScreenshotIncludeShadowResponse {
 }
 
 export interface NativeSetScreenshotLocationRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -6699,7 +7225,13 @@ export interface NativeSetTrackpadSpeedResponse {
 }
 
 export interface NativeSetURLSchemeHandlerRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
+  /**
+   * non-empty
+   */
   scheme: string;
 }
 
@@ -6723,6 +7255,9 @@ export interface NativeSetVolumeRequest {
 }
 
 export interface NativeSetWallpaperRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -6735,11 +7270,20 @@ export interface NativeSetWindowAlphaRequest {
    * wire double
    */
   alpha: number;
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
 export interface NativeSetWindowLevelRequest {
+  /**
+   * non-empty
+   */
   level: string;
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
@@ -6748,6 +7292,9 @@ export interface NativeSetWindowLevelResponse {
 }
 
 export interface NativeSetWindowPositionRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
   /**
    * wire int32
@@ -6761,6 +7308,9 @@ export interface NativeSetWindowPositionRequest {
 
 export interface NativeSetWindowShadowRequest {
   enabled: boolean;
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
@@ -6773,11 +7323,17 @@ export interface NativeSetWindowSizeRequest {
    * wire int32
    */
   w: number;
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
 export interface NativeSetWindowStickyRequest {
   sticky: boolean;
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
@@ -6822,6 +7378,9 @@ export interface NativeSpeakRequest {
    * wire double · default null
    */
   rate?: number;
+  /**
+   * non-empty
+   */
   text: string;
   /**
    * default null
@@ -6842,6 +7401,9 @@ export interface NativeSpeechRecognizeFileRequest {
    * default ""
    */
   locale?: string;
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -6854,6 +7416,9 @@ export interface NativeSpotlightRequest {
    * wire uint32 · default 20 · min 0
    */
   limit?: number;
+  /**
+   * non-empty
+   */
   query: string;
   /**
    * default null
@@ -6901,7 +7466,13 @@ export interface NativeSwitchSpaceWhenSwitchingAppResponse {
 }
 
 export interface NativeSymlinkRequest {
+  /**
+   * non-empty
+   */
   link: string;
+  /**
+   * non-empty
+   */
   source: string;
 }
 
@@ -7043,6 +7614,9 @@ export interface NativeToggleBluetoothResponse {
 }
 
 export interface NativeToggleFullscreenRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
@@ -7059,10 +7633,16 @@ export interface NativeTouchIDAvailableResponse {
 }
 
 export interface NativeTransparencyConsentRequest {
+  /**
+   * non-empty
+   */
   service: string;
 }
 
 export interface NativeTrashRequest {
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -7083,14 +7663,23 @@ export interface NativeTwentyFourHourClockResponse {
 }
 
 export interface NativeUnhideAppRequest {
+  /**
+   * non-empty
+   */
   bundle_id: string;
 }
 
 export interface NativeUnminimizeWindowRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
 export interface NativeUnobserveWindowsRequest {
+  /**
+   * non-empty
+   */
   subscription_id: string;
 }
 
@@ -7099,7 +7688,13 @@ export interface NativeUnobserveWindowsResponse {
 }
 
 export interface NativeUnzipRequest {
+  /**
+   * non-empty
+   */
   destination: string;
+  /**
+   * non-empty
+   */
   source: string;
 }
 
@@ -7108,6 +7703,9 @@ export interface NativeUnzipResponse {
 }
 
 export interface NativeURLSchemeHandlerRequest {
+  /**
+   * non-empty
+   */
   scheme: string;
 }
 
@@ -7187,10 +7785,16 @@ export interface NativeWifiNetworksResponse {
 }
 
 export interface NativeWindowAppRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
 export interface NativeWindowBoundsRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
@@ -7214,18 +7818,30 @@ export interface NativeWindowBoundsResponse {
 }
 
 export interface NativeWindowDisplayIDRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
 export interface NativeWindowIsFullscreenRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
 export interface NativeWindowIsMinimizedRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
 export interface NativeWindowLayerRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
@@ -7237,16 +7853,23 @@ export interface NativeWindowScreenshotRequest {
 }
 
 export interface NativeWindowSubroleRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
 export interface NativeWindowTitleRequest {
+  /**
+   * non-empty
+   */
   window_id: string;
 }
 
 export interface NativeWmiQueryRequest {
   /**
    * The class (`Win32_Battery`).
+   * non-empty
    */
   class: string;
   /**
@@ -7303,7 +7926,13 @@ export interface NativeWorldModelRequest {
 }
 
 export interface NativeWriteAppPreferenceRequest {
+  /**
+   * non-empty
+   */
   domain: string;
+  /**
+   * non-empty
+   */
   key: string;
   value: unknown;
 }
@@ -7314,6 +7943,9 @@ export interface NativeWriteAppPreferenceResponse {
 
 export interface NativeWriteFileRequest {
   contents: string;
+  /**
+   * non-empty
+   */
   path: string;
 }
 
@@ -7330,7 +7962,13 @@ export interface NativeXcodeVersionResponse {
 }
 
 export interface NativeZipRequest {
+  /**
+   * non-empty
+   */
   destination: string;
+  /**
+   * non-empty
+   */
   source: string;
 }
 
@@ -7341,6 +7979,7 @@ export interface NativeZipResponse {
 export interface NetworkRequestHostRequest {
   /**
    * One exact host (no wildcard, no port, no path).
+   * non-empty
    */
   host: string;
   /**
@@ -7362,6 +8001,7 @@ export interface OutputClearRequest {
   /**
    * The channel on which nothing is true now. Must be owned by the
    * calling plugin.
+   * non-empty
    */
   channel: string;
 }
@@ -7402,6 +8042,7 @@ export interface OutputStateResponse {
 export interface OverlayClearRequest {
   /**
    * The overlay to remove; nothing happens if it is not showing.
+   * non-empty
    */
   id: string;
 }
@@ -7415,6 +8056,7 @@ export interface OverlayShowRequest {
    * The caller's name for this overlay (letters, digits, `_`, `-`, `.`;
    * up to 64). Showing it again replaces its shapes. Overlays are kept
    * per caller, so one plugin cannot replace or clear another's.
+   * non-empty
    */
   id: string;
   /**
@@ -7433,10 +8075,12 @@ export interface OverridesApplyRequest {
   /**
    * Action: "add", "remove", "restore", "reset", "patch", "rename", or
    * "revert".
+   * non-empty
    */
   action: string;
   /**
    * Collection name to override.
+   * non-empty
    */
   collection: string;
   /**
@@ -7524,10 +8168,12 @@ export interface PipelinesInjectRequest {
    * (`audio_*`, `transcript`, `vocabulary_update`) are the platform's to
    * send; a plugin forging one into its own pipeline was previously
    * unchecked here.
+   * non-empty
    */
   event_type: string;
   /**
    * Pipeline to configure. The caller must have introduced it.
+   * non-empty
    */
   name: string;
   /**
@@ -7535,6 +8181,7 @@ export interface PipelinesInjectRequest {
    * it — a role like `_platform.stt` or a qualified stage name. Required:
    * before per-stage channels existed this operation could only ever reach
    * the terminal stage, and silently did nothing for any other.
+   * non-empty
    */
   stage: string;
 }
@@ -7548,6 +8195,9 @@ export interface PipelinesRunRequest {
    * default false
    */
   ephemeral?: boolean;
+  /**
+   * non-empty
+   */
   name: string;
   /**
    * default {}
@@ -7575,6 +8225,9 @@ export interface PipelinesStopRequest {
    * wire uint64 (64-bit) · default null · min 0
    */
   audio_cutoff_ms?: number;
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -7583,6 +8236,9 @@ export interface PipelinesStopResponse {
 }
 
 export interface PipelinesWarmRequest {
+  /**
+   * non-empty
+   */
   name: string;
   /**
    * Per-stage param overrides applied to the warmed consumer stages, mirroring
@@ -7633,6 +8289,7 @@ export interface PluginDataExportRequest {
   filename?: string;
   /**
    * Path of the file to export, relative to the caller's data dir.
+   * non-empty
    */
   path: string;
 }
@@ -7700,6 +8357,9 @@ export interface PluginReportHealthRequest {
 }
 
 export interface PrivacyGetRecordingRequest {
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -7713,6 +8373,9 @@ export interface PrivacyGetRecordingResponse {
 
 export interface PrivacySetRecordingRequest {
   enabled: boolean;
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -7727,6 +8390,7 @@ export interface PrivilegesRelinquishRequest {
   /**
    * Privilege name — must appear in the calling plugin's
    * `optional_privileges`.
+   * non-empty
    */
   privilege: string;
 }
@@ -7744,6 +8408,7 @@ export interface PrivilegesRequestRequest {
   /**
    * Privilege name — must appear in the calling plugin's
    * `optional_privileges`.
+   * non-empty
    */
   privilege: string;
   /**
@@ -7834,11 +8499,13 @@ export interface RecognitionRedecodeRequest {
   /**
    * Model dir name under app-support `models/` (single component, no
    * traversal), e.g. `"sherpa-offline-nemo"`.
+   * non-empty
    */
   model: string;
   /**
    * Registered stage id whose binary's `probe` subcommand runs the re-decode,
    * e.g. `"voice.sherpa_commands"`. Validated against the stage registry.
+   * non-empty
    */
   stage: string;
 }
@@ -7855,6 +8522,9 @@ export interface RecognitionRedecodeResponse {
 }
 
 export interface SecretsDeleteRequest {
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -7868,6 +8538,9 @@ export interface SecretsDeleteResponse {
 }
 
 export interface SecretsIsSetRequest {
+  /**
+   * non-empty
+   */
   name: string;
 }
 
@@ -7897,6 +8570,7 @@ export interface SecretsRequestSlotRequest {
   /**
    * The ONE host the value may be sent to — one this plugin may already
    * reach (declared, or requested with `network.request_host`).
+   * non-empty
    */
   host: string;
   /**
@@ -7907,6 +8581,7 @@ export interface SecretsRequestSlotRequest {
   /**
    * The secret's name in this plugin's drawer (ASCII letters, digits,
    * `_`, `-`, `.`).
+   * non-empty
    */
   name: string;
 }
@@ -7938,10 +8613,12 @@ export interface SecretsSetRequest {
   /**
    * The secret's name within this plugin. What a manifest or a script
    * header refers to.
+   * non-empty
    */
   name: string;
   /**
    * The value. This is the only direction a value travels over the wire.
+   * non-empty
    */
   value: string;
 }
@@ -8020,11 +8697,15 @@ export interface SettingsPatchSignalsRequest {
   /**
    * Datastar signal expression, e.g. `{activeGroup: 2, activeDialModeIndex: 1}`.
    * Sent as a `datastar-patch-signals` SSE event to all active settings streams.
+   * non-empty
    */
   signals: string;
 }
 
 export interface SettingsRedirectRequest {
+  /**
+   * non-empty
+   */
   tab: string;
 }
 
@@ -8101,6 +8782,7 @@ export interface SettingsRulesUpdateRequest {
   /**
    * Existing canonical command id (the previous canonical phrase) of
    * the rule being updated. Required.
+   * non-empty
    */
   canonical: string;
   /**
@@ -8157,6 +8839,9 @@ export interface SettingsRulesUpdateResponse {
 }
 
 export interface SpeechAnnounceRequest {
+  /**
+   * non-empty
+   */
   text: string;
 }
 
@@ -8169,6 +8854,7 @@ export interface SpeechSayRequest {
   priority?: string;
   /**
    * The words. Plain language, no markup; the system voice reads it as is.
+   * non-empty
    */
   text: string;
 }
@@ -8176,6 +8862,7 @@ export interface SpeechSayRequest {
 export interface SystemLaunchAppRequest {
   /**
    * Bundle ID of the application to launch (e.g. "com.apple.Safari").
+   * non-empty
    */
   bundle_id: string;
   /**
@@ -8200,6 +8887,7 @@ export interface SystemNotifyRequest {
   duration_secs?: number;
   /**
    * Notification title (rendered as `<h1 id="title">`).
+   * non-empty
    */
   title: string;
 }
@@ -8207,6 +8895,7 @@ export interface SystemNotifyRequest {
 export interface SystemRunShellRequest {
   /**
    * Shell command to execute via `/bin/bash -c`.
+   * non-empty
    */
   command: string;
 }
@@ -8216,6 +8905,9 @@ export interface TrialBeginResponse {
 }
 
 export interface TrialEndRequest {
+  /**
+   * non-empty
+   */
   trial_id: string;
 }
 
@@ -8231,8 +8923,12 @@ export interface TrialEndResponse {
 export interface TrialEnterContextRequest {
   /**
    * Command id from `commands.enumerate` — `<owner_plugin>:<pattern>`.
+   * non-empty
    */
   command_id: string;
+  /**
+   * non-empty
+   */
   trial_id: string;
 }
 
@@ -8260,14 +8956,24 @@ export interface TrialEnterContextResponse {
 }
 
 export interface TrialRegisterFixtureRequest {
+  /**
+   * non-empty
+   */
   fixture_handle: string;
+  /**
+   * non-empty
+   */
   owner_plugin_id: string;
+  /**
+   * non-empty
+   */
   trial_id: string;
 }
 
 export interface TrialResolveSamplesRequest {
   /**
    * Command id from `commands.enumerate` — `<owner_plugin>:<pattern>`.
+   * non-empty
    */
   command_id: string;
 }
