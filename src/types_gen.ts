@@ -4826,6 +4826,10 @@ export interface NativeDownloadsDirectoryResponse {
   path: string;
 }
 
+export interface NativeDwellClickResponse {
+  enabled: boolean;
+}
+
 export interface NativeEjectDiskRequest {
   mount_point: string;
 }
@@ -6349,6 +6353,14 @@ export interface NativeSetDockSizeRequest {
 }
 
 export interface NativeSetDockSizeResponse {
+  ok: boolean;
+}
+
+export interface NativeSetDwellClickRequest {
+  enabled: boolean;
+}
+
+export interface NativeSetDwellClickResponse {
   ok: boolean;
 }
 
