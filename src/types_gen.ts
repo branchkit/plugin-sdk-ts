@@ -4600,10 +4600,6 @@ export interface NativeCursorInfoResponse {
   y: number;
 }
 
-export interface NativeCursorShakeToLocateResponse {
-  enabled: boolean;
-}
-
 export interface NativeDarkModeResponse {
   is_dark: boolean;
 }
@@ -5461,6 +5457,10 @@ export interface NativeLocalIPResponse {
 
 export interface NativeLocaleResponse {
   locale: string;
+}
+
+export interface NativeLocatePointerEnabledResponse {
+  enabled: boolean;
 }
 
 export interface NativeLocationEnabledResponse {
