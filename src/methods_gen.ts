@@ -1673,9 +1673,9 @@ declare module "./plugin.js" {
      */
     nativeGatewayAddress(): Promise<NativeGatewayAddressResponse>;
     /**
-     * Generate a PDF from HTML content
+     * Render HTML to a PDF file through a Chromium-family browser (Chromium, Chrome, Edge or Brave) run headless and cut off from the network. Refused, naming what to install, when none is
      */
-    nativeGeneratePdf(req: NativeGeneratePdfRequest): Promise<boolean>;
+    nativeGeneratePdf(req: NativeGeneratePdfRequest): Promise<void>;
     /**
      * Get detailed info for a single window
      */
@@ -4462,7 +4462,6 @@ Plugin.prototype.nativeGatewayAddress = async function() {
 
 Plugin.prototype.nativeGeneratePdf = async function(req: NativeGeneratePdfRequest) {
   const result = await this.call(MethodNativeGeneratePdf, req);
-  return (result as any).ok;
 };
 
 Plugin.prototype.nativeGetWindowInfo = async function(req: NativeGetWindowInfoRequest) {

@@ -5545,17 +5545,15 @@ export interface NativeGatewayAddressResponse {
 
 export interface NativeGeneratePdfRequest {
   /**
+   * The page, as HTML. Nothing it links to on the network is fetched.
    * non-empty
    */
   html: string;
   /**
+   * Where to write the PDF; replaced if it exists.
    * non-empty
    */
   output_path: string;
-}
-
-export interface NativeGeneratePdfResponse {
-  ok: boolean;
 }
 
 export interface NativeGetWindowInfoRequest {
