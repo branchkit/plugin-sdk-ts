@@ -2825,7 +2825,7 @@ declare module "./plugin.js" {
      */
     nativeTextReplacements(): Promise<NativeTextReplacementsResponse>;
     /**
-     * Get the system text size as a factor of the default (1.0)
+     * Get the system text size as a factor of the default (1.0). Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeTextScale(): Promise<number>;
     /**
