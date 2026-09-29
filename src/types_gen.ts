@@ -2106,6 +2106,29 @@ export interface ScreenshotRegion {
 }
 
 /**
+ * One security mechanism and its state (`native.app_verification`,
+ * `native.system_integrity`): a fact about the machine, never a verdict on
+ * it. Mechanisms differ per OS and none is the equal of another's, so no
+ * list of them adds up to "secure".
+ */
+export interface SecurityFact {
+  /**
+   * What the OS said, where it says more than the state.
+   */
+  detail?: string;
+  /**
+   * `gatekeeper`, `sip`, `smartscreen`, `smart_app_control`,
+   * `secure_boot`, `memory_integrity`, `apparmor`, `selinux`.
+   */
+  mechanism: string;
+  /**
+   * `on`, `off`; `warn` / `block` (SmartScreen), `evaluation` (Smart
+   * App Control), `enforcing` / `permissive` (SELinux).
+   */
+  state: string;
+}
+
+/**
  * List schema info sent to plugins in render_settings (enriched with entry count + source).
  */
 export interface SettingsListSchemaInfo {
@@ -3961,6 +3984,10 @@ export interface NativeAppSupportDirectoryResponse {
   path: string;
 }
 
+export interface NativeAppVerificationResponse {
+  mechanisms: SecurityFact[];
+}
+
 export interface NativeAppVersionRequest {
   bundle_id: string;
 }
@@ -5145,10 +5172,6 @@ export interface NativeFunctionKeysStandardResponse {
   standard: boolean;
 }
 
-export interface NativeGatekeeperStatusResponse {
-  enabled: boolean;
-}
-
 export interface NativeGatewayAddressResponse {
   address: string;
 }
@@ -5959,10 +5982,6 @@ export interface NativePublicIPResponse {
   ip: string;
 }
 
-export interface NativePurgeMemoryResponse {
-  ok: boolean;
-}
-
 export interface NativeQuickLookRequest {
   path: string;
   /**
@@ -6348,14 +6367,6 @@ export interface NativeSetBrightnessRequest {
    * wire uint32 · default null · min 0
    */
   display_id?: number;
-}
-
-export interface NativeSetComputerNameRequest {
-  name: string;
-}
-
-export interface NativeSetComputerNameResponse {
-  ok: boolean;
 }
 
 export interface NativeSetDarkModeRequest {
@@ -6782,10 +6793,6 @@ export interface NativeSidebarIconSizeResponse {
   value: string;
 }
 
-export interface NativeSipStatusResponse {
-  enabled: boolean;
-}
-
 export interface NativeSiriEnabledResponse {
   enabled: boolean;
 }
@@ -6914,8 +6921,8 @@ export interface NativeSystemInfoResponse {
   serial_number?: string;
 }
 
-export interface NativeSystemIntegrityInfoResponse {
-  value: string;
+export interface NativeSystemIntegrityResponse {
+  mechanisms: SecurityFact[];
 }
 
 export interface NativeSystemLanguageResponse {
