@@ -1137,7 +1137,7 @@ declare module "./plugin.js" {
      */
     nativeBatteryCycleCount(): Promise<number>;
     /**
-     * Get battery health status
+     * Get battery health status. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue
      */
     nativeBatteryHealth(): Promise<NativeBatteryHealthResponse>;
     /**
@@ -1213,7 +1213,7 @@ declare module "./plugin.js" {
      */
     nativeCalendarEventsToday(): Promise<CalendarEvent[]>;
     /**
-     * Check if calendar access is available
+     * Check if calendar access is available. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeCalendarPermission(): Promise<NativeCalendarPermissionResponse>;
     /**
@@ -1281,7 +1281,7 @@ declare module "./plugin.js" {
      */
     nativeComputerSleepTime(): Promise<number>;
     /**
-     * Check if contacts access is available
+     * Check if contacts access is available. Exists only on macOS and Windows; elsewhere it is refused with platform_no_analogue
      */
     nativeContactsPermission(): Promise<NativeContactsPermissionResponse>;
     /**
@@ -1449,7 +1449,7 @@ declare module "./plugin.js" {
      */
     nativeDisplays(): Promise<DisplayMetadata[]>;
     /**
-     * Get Do Not Disturb / Focus state (via the BranchKit Focus helper shortcut)
+     * Get Do Not Disturb / Focus state (macOS: via the BranchKit Focus helper shortcut). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue
      */
     nativeDnd(): Promise<NativeDndResponse>;
     /**
@@ -2489,7 +2489,7 @@ declare module "./plugin.js" {
      */
     nativeSetDarkMode(req: NativeSetDarkModeRequest): Promise<void>;
     /**
-     * Set Do Not Disturb on or off (idempotent; via the BranchKit Focus helper shortcut)
+     * Set Do Not Disturb on or off (idempotent; macOS: via the BranchKit Focus helper shortcut). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue
      */
     nativeSetDnd(req: NativeSetDndRequest): Promise<void>;
     /**
@@ -2633,7 +2633,7 @@ declare module "./plugin.js" {
      */
     nativeSetTapToClick(req: NativeSetTapToClickRequest): Promise<boolean>;
     /**
-     * Set the system text size as a factor of the default (1.0); false when refused. Exists only on Linux and Windows; elsewhere it is refused with platform_no_analogue
+     * Set the system text size as a factor of the default (1.0); false when refused. Exists only on Linux; elsewhere it is refused with platform_no_analogue
      */
     nativeSetTextScale(req: NativeSetTextScaleRequest): Promise<boolean>;
     /**
