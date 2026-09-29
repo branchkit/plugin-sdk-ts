@@ -299,6 +299,46 @@ export interface AudioDevice {
   uid: string;
 }
 
+/**
+ * A program that runs in the background or starts at login
+ * (`native.background_items`).
+ */
+export interface BackgroundItem {
+  /**
+   * A human name where the mechanism keeps one (a systemd Description, a
+   * Windows service's display name, an autostart entry's Name).
+   */
+  display_name?: string;
+  /**
+   * What keeps it: `launchd`, `systemd`, `autostart`, `service`,
+   * `run_key` or `startup_folder`.
+   */
+  mechanism: string;
+  /**
+   * Its identifier in its mechanism: a launchd label, a systemd unit, a
+   * Windows service name, a Run value or a Startup-folder file.
+   */
+  name: string;
+  /**
+   * The program it runs, with its arguments where the mechanism records
+   * them as one command line.
+   */
+  program?: string;
+  /**
+   * Whether it is running now; None where the mechanism does not say
+   * (a Run key or autostart entry is a launch, not a process).
+   */
+  running?: boolean;
+  /**
+   * `user` (runs for the signed-in user) or `system` (for the machine).
+   */
+  scope: string;
+  /**
+   * Whether it starts on its own, at login or at boot.
+   */
+  starts_automatically: boolean;
+}
+
 export interface BarcodeResult {
   /**
    * wire double
@@ -4135,6 +4175,10 @@ export interface NativeAxUnobserveResponse {
   result: boolean;
 }
 
+export interface NativeBackgroundItemsResponse {
+  items: BackgroundItem[];
+}
+
 export interface NativeBatchIsTileableRequest {
   /**
    * default []
@@ -5373,14 +5417,6 @@ export interface NativeLaunchAppRequest {
    * default false
    */
   new_instance?: boolean;
-}
-
-export interface NativeLaunchdAgentsResponse {
-  agents: string[];
-}
-
-export interface NativeLaunchdDaemonsResponse {
-  daemons: string[];
 }
 
 export interface NativeListAudioInputDevicesResponse {
