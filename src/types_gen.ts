@@ -2087,6 +2087,19 @@ export interface SettingsTagSchemaInfo {
   source_plugin: string;
 }
 
+/**
+ * One shape.
+ */
+export type Shape =
+  /** A rectangle's outline (`stroke` wide, drawn inside the rectangle), with rounded corners when `radius` is set: a window border, a target. */
+  | { kind: "rect"; color: string; corner_radius?: number; height: number; stroke?: number; width: number; x: number; y: number }
+  /** A filled rectangle: a highlight or a dimmed region. Use a colour with alpha (`#RRGGBB40`) to leave what is under it readable. */
+  | { kind: "fill"; color: string; corner_radius?: number; height: number; width: number; x: number; y: number }
+  /** A circle, outlined when `stroke` is set, filled otherwise. */
+  | { kind: "circle"; color: string; cx: number; cy: number; radius: number; stroke?: number }
+  /** A ring that fills clockwise from twelve o'clock over `duration_ms`, over a faint track: a dwell click's countdown. With `follow_pointer`, the host keeps it centred on the pointer and `cx` / `cy` are ignored (send 0). It stays full when the time is up, until the overlay is cleared or replaced. */
+  | { kind: "ring"; color: string; cx: number; cy: number; duration_ms: number; follow_pointer?: boolean; radius: number; stroke?: number };
+
 export interface ShortcutInfo {
   folder?: string;
   name: string;
@@ -7328,6 +7341,36 @@ export interface OutputStateResponse {
    * phrase, items) rather than only its progress, footer or urgency.
    */
   meaning_changed: boolean;
+  ok: boolean;
+}
+
+export interface OverlayClearRequest {
+  /**
+   * The overlay to remove; nothing happens if it is not showing.
+   */
+  id: string;
+}
+
+export interface OverlayClearResponse {
+  ok: boolean;
+}
+
+export interface OverlayShowRequest {
+  /**
+   * The caller's name for this overlay (letters, digits, `_`, `-`, `.`;
+   * up to 64). Showing it again replaces its shapes. Overlays are kept
+   * per caller, so one plugin cannot replace or clear another's.
+   */
+  id: string;
+  /**
+   * Up to 64 shapes: outlines, fills, circles and a countdown ring. No
+   * text or images: nothing drawn can pass for a prompt. An empty list
+   * clears the overlay.
+   */
+  shapes: Shape[];
+}
+
+export interface OverlayShowResponse {
   ok: boolean;
 }
 
