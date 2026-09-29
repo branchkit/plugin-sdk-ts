@@ -5388,10 +5388,6 @@ export interface NativeFinderNewWindowTargetResponse {
   value: string;
 }
 
-export interface NativeFinderSelectionResponse {
-  paths: string[];
-}
-
 export interface NativeFinderShowExtensionsResponse {
   enabled: boolean;
 }
@@ -6083,17 +6079,6 @@ export interface NativeNowPlayingResponse {
 
 export interface NativeNumberFormatDecimalResponse {
   value: string;
-}
-
-export interface NativeObserveWindowsRequest {
-  /**
-   * wire int32
-   */
-  pid: number;
-}
-
-export interface NativeObserveWindowsResponse {
-  subscription_id: string;
 }
 
 export interface NativeOcrClipboardResponse {
@@ -7373,21 +7358,6 @@ export interface NativeSpacesSpanDisplaysResponse {
   enabled: boolean;
 }
 
-export interface NativeSpeakRequest {
-  /**
-   * wire double · default null
-   */
-  rate?: number;
-  /**
-   * non-empty
-   */
-  text: string;
-  /**
-   * default null
-   */
-  voice?: string;
-}
-
 export interface NativeSpeechLocalesResponse {
   locales: SpeechLocale[];
 }
@@ -7674,17 +7644,6 @@ export interface NativeUnminimizeWindowRequest {
    * non-empty
    */
   window_id: string;
-}
-
-export interface NativeUnobserveWindowsRequest {
-  /**
-   * non-empty
-   */
-  subscription_id: string;
-}
-
-export interface NativeUnobserveWindowsResponse {
-  result: boolean;
 }
 
 export interface NativeUnzipRequest {
