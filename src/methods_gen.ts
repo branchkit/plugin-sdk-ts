@@ -2249,7 +2249,7 @@ declare module "./plugin.js" {
      */
     nativeRandomUuid(): Promise<NativeRandomUuidResponse>;
     /**
-     * Read a preference value for an app domain
+     * Read one setting from another app's settings domain the plugin declared and the user switched on: macOS defaults, GSettings on Linux, the user's registry on Windows
      */
     nativeReadAppPreference(req: NativeReadAppPreferenceRequest): Promise<unknown>;
     /**
@@ -2977,9 +2977,9 @@ declare module "./plugin.js" {
      */
     nativeWorldModel(req: NativeWorldModelRequest): Promise<WorldModel>;
     /**
-     * Write a preference value for an app domain
+     * Change (or, with null, reset) one setting in another app's settings domain the plugin declared for writing and the user switched on
      */
-    nativeWriteAppPreference(req: NativeWriteAppPreferenceRequest): Promise<boolean>;
+    nativeWriteAppPreference(req: NativeWriteAppPreferenceRequest): Promise<void>;
     /**
      * Write string contents to a file
      */
@@ -6049,7 +6049,6 @@ Plugin.prototype.nativeWorldModel = async function(req: NativeWorldModelRequest)
 
 Plugin.prototype.nativeWriteAppPreference = async function(req: NativeWriteAppPreferenceRequest) {
   const result = await this.call(MethodNativeWriteAppPreference, req);
-  return (result as any).ok;
 };
 
 Plugin.prototype.nativeWriteFile = async function(req: NativeWriteFileRequest) {

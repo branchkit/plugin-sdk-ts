@@ -6429,11 +6429,17 @@ export interface NativeRandomUuidResponse {
 
 export interface NativeReadAppPreferenceRequest {
   /**
+   * `<store>:<domain>`, the store this OS keeps settings in:
+   * `defaults:com.apple.dock` (macOS), `gsettings:org.gnome.desktop.interface`
+   * (Linux; a relocatable schema adds `:<path>`), or
+   * `registry:Software\7-Zip\FM`, a key under HKEY_CURRENT_USER at or
+   * below a declared one (Windows).
    * non-empty
    */
   domain: string;
   /**
-   * non-empty
+   * The setting: a defaults key, a GSettings key, or a registry value
+   * name (`""` for the key's default value).
    */
   key: string;
 }
@@ -7886,18 +7892,18 @@ export interface NativeWorldModelRequest {
 
 export interface NativeWriteAppPreferenceRequest {
   /**
+   * As for `native.read_app_preference`; declared under
+   * `requires.preferences.write`.
    * non-empty
    */
   domain: string;
-  /**
-   * non-empty
-   */
   key: string;
+  /**
+   * Opaque by design, as the read's result is. A GSettings value must
+   * fit the key's type; an existing registry value keeps its type.
+   * `null` removes the setting (GSettings: resets it to its default).
+   */
   value: unknown;
-}
-
-export interface NativeWriteAppPreferenceResponse {
-  ok: boolean;
 }
 
 export interface NativeWriteFileRequest {

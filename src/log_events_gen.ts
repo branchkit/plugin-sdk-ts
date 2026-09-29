@@ -33,6 +33,7 @@ export const LogEventNativeHidLifecycle = "native.hid_lifecycle" as const;
 export const LogEventNativeWindowSkipped = "native.window_skipped" as const;
 export const LogEventNativeWorldPollerEvent = "native.world_poller_event" as const;
 export const LogEventOperationCompleted = "operation.completed" as const;
+export const LogEventPluginAppPreference = "plugin.app_preference" as const;
 export const LogEventPluginDbusCall = "plugin.dbus_call" as const;
 export const LogEventPluginDegraded = "plugin.degraded" as const;
 export const LogEventPluginDiagnostic = "plugin.diagnostic" as const;
@@ -108,6 +109,7 @@ export const LogEventRegistry: Record<string, LogEventMeta> = {
     "native.window_skipped": { name: "native.window_skipped", summary: "World poller skipped a non-standard window (debug-level).", since: "0.1.0", source: "native", severity: "debug", redaction: "none" },
     "native.world_poller_event": { name: "native.world_poller_event", summary: "World poller lifecycle event (started, seeded, batch processed, idle).", since: "0.1.0", source: "native", severity: "debug", redaction: "none" },
     "operation.completed": { name: "operation.completed", summary: "An operation handler completed execution.", since: "0.1.0", source: "dispatch", severity: "debug", redaction: "none" },
+    "plugin.app_preference": { name: "plugin.app_preference", summary: "A plugin read or changed (or was refused) a setting in another app's settings domain through native.read_app_preference / native.write_app_preference: allowed, failed, denied (not declared, or declared for reading only), off (switched off by the user) or forbidden (no grant can reach it). The domain and key only, never the value. Audit-eligible.", since: "0.2.0", source: "plugins", severity: "info", redaction: "full" },
     "plugin.dbus_call": { name: "plugin.dbus_call", summary: "A plugin called (or was refused) a D-Bus method through native.dbus_call: allowed, failed, denied (not declared), off (switched off by the user) or forbidden (no grant can reach it). The method and argument signature only. Audit-eligible.", since: "0.2.0", source: "plugins", severity: "info", redaction: "full" },
     "plugin.degraded": { name: "plugin.degraded", summary: "A plugin is running but not fully working — its RPC channel hit the consecutive-timeout threshold (reason absent), it stopped reading its stdin (the platform's reason), or it reported the fault itself via plugin.report_health (its own reason).", since: "0.1.0", source: "plugins", severity: "warn", redaction: "full" },
     "plugin.diagnostic": { name: "plugin.diagnostic", summary: "A plugin emitted a warn- or error-level diagnostic via plugin.debug; cross-posted to actuator.log so plugin-level failures interleave with the actuator's view of dispatch / coordination.", since: "0.2.0", source: "plugins", severity: "warn", redaction: "full" },
