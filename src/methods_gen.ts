@@ -909,7 +909,7 @@ declare module "./plugin.js" {
      */
     inputSelectAll(): Promise<void>;
     /**
-     * Switch keyboard input source
+     * Switch keyboard input source. On Linux, not available on GNOME (GNOME Shell switches input sources only from its own switcher; it exposes no way to ask)
      */
     inputSwitchInputSource(req: InputSwitchInputSourceRequest): Promise<boolean>;
     /**
@@ -969,7 +969,7 @@ declare module "./plugin.js" {
      */
     nativeAlertVolume(): Promise<number>;
     /**
-     * List all on-screen window IDs
+     * List all on-screen window IDs. On Linux, not available on GNOME (GNOME exposes no window list; only the focused window is visible)
      */
     nativeAllWindowIds(): Promise<string[]>;
     /**
@@ -1037,7 +1037,7 @@ declare module "./plugin.js" {
      */
     nativeAppWindows(req: NativeAppWindowsRequest): Promise<WindowDetail[]>;
     /**
-     * Count windows for an app by bundle ID
+     * Count windows for an app by bundle ID. On Linux, not available on GNOME (GNOME exposes no window list; only the focused window is visible)
      */
     nativeAppWindowsCount(req: NativeAppWindowsCountRequest): Promise<number>;
     /**
@@ -1233,7 +1233,7 @@ declare module "./plugin.js" {
      */
     nativeCaptureWindow(req: NativeCaptureWindowRequest): Promise<NativeCaptureWindowResponse>;
     /**
-     * Cascade all windows for an app
+     * Cascade all windows for an app. On Linux, not available on sway (sway tiles windows; there is no cascade); nor on GNOME (GNOME exposes no window list; only the focused window is visible)
      */
     nativeCascadeWindows(req: NativeCascadeWindowsRequest): Promise<boolean>;
     /**
@@ -1329,11 +1329,11 @@ declare module "./plugin.js" {
      */
     nativeCurrentWallpaper(): Promise<NativeCurrentWallpaperResponse>;
     /**
-     * Get the current cursor position
+     * Get the current cursor position. On Linux, not available on sway, GNOME or other Wayland compositors (Wayland gives a client no global pointer position, and XWayland knows it only over its own windows; only X11 sessions can read it)
      */
     nativeCursor(): Promise<NativeCursorResponse>;
     /**
-     * Get current cursor type and position
+     * Get current cursor type and position. On Linux, not available on sway, GNOME or other Wayland compositors (Wayland gives a client no global pointer position, and XWayland knows it only over its own windows; only X11 sessions can read it)
      */
     nativeCursorInfo(): Promise<NativeCursorInfoResponse>;
     /**
@@ -1749,7 +1749,7 @@ declare module "./plugin.js" {
      */
     nativeHidSendReport(req: NativeHidSendReportRequest): Promise<NativeHidSendReportResponse>;
     /**
-     * Hide an app by bundle ID
+     * Hide an app by bundle ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)
      */
     nativeHideApp(req: NativeHideAppRequest): Promise<void>;
     /**
@@ -1809,7 +1809,7 @@ declare module "./plugin.js" {
      */
     nativeIpv6Address(): Promise<NativeIpv6AddressResponse>;
     /**
-     * Check if an application is hidden
+     * Check if an application is hidden. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)
      */
     nativeIsAppHidden(req: NativeIsAppHiddenRequest): Promise<boolean>;
     /**
@@ -1933,7 +1933,7 @@ declare module "./plugin.js" {
      */
     nativeMagnifierEnabled(): Promise<NativeMagnifierEnabledResponse>;
     /**
-     * Maximize window to fill screen
+     * Maximize window to fill screen. On Linux, not available on sway (sway tiles rather than maximizing; there is no such window state); nor on GNOME (GNOME exposes no window IPC; use its own tiling keybinds)
      */
     nativeMaximizeWindow(req: NativeMaximizeWindowRequest): Promise<boolean>;
     /**
@@ -1981,7 +1981,7 @@ declare module "./plugin.js" {
      */
     nativeMicrophonePermission(): Promise<NativeMicrophonePermissionResponse>;
     /**
-     * Minimize a window by ID
+     * Minimize a window by ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)
      */
     nativeMinimizeWindow(req: NativeMinimizeWindowRequest): Promise<void>;
     /**
@@ -2013,11 +2013,11 @@ declare module "./plugin.js" {
      */
     nativeMoveFile(req: NativeMoveFileRequest): Promise<boolean>;
     /**
-     * Move a window to a different display
+     * Move a window to a different display. On Linux, not available on GNOME (GNOME exposes no window IPC to set window properties through)
      */
     nativeMoveWindowToDisplay(req: NativeMoveWindowToDisplayRequest): Promise<void>;
     /**
-     * DEPRECATED, silent no-op on modern macOS: the private CGS move APIs this calls are dead (verified on Sequoia 2026-07-25) — the window does not move and the call still reports true. Kept for older systems. For a working move, drive the visible path the bundled windows plugin uses: mouse-hold the title bar + Ctrl+N. space_id here is an opaque CGS space id from native.list_spaces, NOT the 1-based ordinal that native.switch_space takes. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue
+     * DEPRECATED, silent no-op on modern macOS: the private CGS move APIs this calls are dead (verified on Sequoia 2026-07-25) — the window does not move and the call still reports true. Kept for older systems. For a working move, drive the visible path the bundled windows plugin uses: mouse-hold the title bar + Ctrl+N. space_id here is an opaque CGS space id from native.list_spaces, NOT the 1-based ordinal that native.switch_space takes. Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue. On Linux, not available on GNOME (GNOME moves windows between workspaces only from its own shortcuts; its XWayland windows ignore the EWMH request)
      */
     nativeMoveWindowToSpace(req: NativeMoveWindowToSpaceRequest): Promise<boolean>;
     /**
@@ -2141,7 +2141,7 @@ declare module "./plugin.js" {
      */
     nativePdfPageCount(req: NativePdfPageCountRequest): Promise<number>;
     /**
-     * Pin or unpin a window above all others
+     * Pin or unpin a window above all others. On Linux, not available on GNOME (GNOME exposes no window IPC to set window properties through); nor on sway (sway has no stacking levels; floating windows are always above tiled ones)
      */
     nativePinWindowAbove(req: NativePinWindowAboveRequest): Promise<void>;
     /**
@@ -2441,7 +2441,7 @@ declare module "./plugin.js" {
      */
     nativeSetAirportPower(req: NativeSetAirportPowerRequest): Promise<boolean>;
     /**
-     * Hide or unhide an app
+     * Hide or unhide an app. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)
      */
     nativeSetAppHidden(req: NativeSetAppHiddenRequest): Promise<boolean>;
     /**
@@ -2549,7 +2549,7 @@ declare module "./plugin.js" {
      */
     nativeSetHotCorner(req: NativeSetHotCornerRequest): Promise<boolean>;
     /**
-     * Switch to a keyboard input source by ID
+     * Switch to a keyboard input source by ID. On Linux, not available on GNOME (GNOME Shell switches input sources only from its own switcher; it exposes no way to ask)
      */
     nativeSetInputSource(req: NativeSetInputSourceRequest): Promise<boolean>;
     /**
@@ -2657,11 +2657,11 @@ declare module "./plugin.js" {
      */
     nativeSetWallpaper(req: NativeSetWallpaperRequest): Promise<boolean>;
     /**
-     * Set window transparency
+     * Set window transparency. On Linux, not available on GNOME (GNOME exposes no window IPC to set window properties through)
      */
     nativeSetWindowAlpha(req: NativeSetWindowAlphaRequest): Promise<void>;
     /**
-     * Set a window's level (floating, normal, below)
+     * Set a window's level (floating, normal, below). On Linux, not available on GNOME (GNOME exposes no window IPC to set window properties through); nor on sway (sway has no stacking levels; floating windows are always above tiled ones)
      */
     nativeSetWindowLevel(req: NativeSetWindowLevelRequest): Promise<boolean>;
     /**
@@ -2677,7 +2677,7 @@ declare module "./plugin.js" {
      */
     nativeSetWindowSize(req: NativeSetWindowSizeRequest): Promise<void>;
     /**
-     * Set a window to appear on all spaces (sticky). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue
+     * Set a window to appear on all spaces (sticky). Exists only on macOS and Linux; elsewhere it is refused with platform_no_analogue. On Linux, not available on GNOME (GNOME exposes no window IPC to set window properties through)
      */
     nativeSetWindowSticky(req: NativeSetWindowStickyRequest): Promise<void>;
     /**
@@ -2861,7 +2861,7 @@ declare module "./plugin.js" {
      */
     nativeToggleBluetooth(req: NativeToggleBluetoothRequest): Promise<boolean>;
     /**
-     * Toggle native fullscreen for a window
+     * Toggle native fullscreen for a window. On Linux, not available on sway (sway tiles rather than maximizing; there is no such window state); nor on GNOME (GNOME exposes no window IPC; use its own tiling keybinds)
      */
     nativeToggleFullscreen(req: NativeToggleFullscreenRequest): Promise<void>;
     /**
@@ -2897,11 +2897,11 @@ declare module "./plugin.js" {
      */
     nativeTwentyFourHourClock(): Promise<NativeTwentyFourHourClockResponse>;
     /**
-     * Unhide a hidden application
+     * Unhide a hidden application. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)
      */
     nativeUnhideApp(req: NativeUnhideAppRequest): Promise<void>;
     /**
-     * Restore a minimized window by ID
+     * Restore a minimized window by ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)
      */
     nativeUnminimizeWindow(req: NativeUnminimizeWindowRequest): Promise<void>;
     /**
