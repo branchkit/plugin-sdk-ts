@@ -921,6 +921,12 @@ export interface DisplayInfo {
    */
   id: number;
   /**
+   * Connected but asleep (display sleep): still listed, geometry last
+   * known, not drawing until it wakes. Default false.
+   * default false
+   */
+  is_asleep: boolean;
+  /**
    * wire int32 · default 0
    */
   visible_h: number;
@@ -965,6 +971,16 @@ export interface DisplayMetadata {
    * wire int32
    */
   h: number;
+  /**
+   * The display is connected but asleep (display sleep, DPMS standby,
+   * the console display turned off). It is still listed — it has not been
+   * removed, and it comes back unchanged on wake — but it is not drawing:
+   * its geometry is the last known, and nothing drawn on it or captured
+   * from it is seen until it wakes. Default false, which is also what an
+   * OS or display server that cannot report display sleep reads as.
+   * default false
+   */
+  is_asleep: boolean;
   /**
    * Whether this is a built-in display (laptop screen).
    */
