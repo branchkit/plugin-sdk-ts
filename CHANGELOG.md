@@ -3,6 +3,18 @@
 Versions before this file predate it; their contents are in the repo's
 git history.
 
+## Unreleased
+
+### Pipeline
+
+- `PipelineReader.readEvent` now rejects a stream that ends in the middle of
+  a header (bytes but no trailing newline) with "wire: incomplete header (no
+  trailing newline)" instead of returning `null`. `null` still means end of
+  stream on a frame boundary. Truncation no longer reads as an orderly close,
+  matching the Go and Python readers.
+- `DisplayInfo` gains `is_asleep?: boolean`: the display is connected but in
+  display sleep. Absent means awake.
+
 ## 0.3.0 — 2026-09-28
 
 ### D-Bus calls (Linux)

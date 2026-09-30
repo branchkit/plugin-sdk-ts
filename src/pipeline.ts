@@ -217,6 +217,11 @@ export class PipelineReader {
 
   /**
    * Read the next event, or null on clean EOF.
+   *
+   * A clean EOF is end of stream with nothing buffered. End of stream with a
+   * partial header (bytes but no trailing newline) is an error, not an EOF —
+   * truncation must not read as an orderly close. Same as the Go and Python
+   * readers.
    */
   async readEvent(): Promise<PipelineEvent | null> {
     // Read header line (terminated by \n).
@@ -230,9 +235,11 @@ export class PipelineReader {
         this.buf = this.buf.subarray(idx + 1);
         break;
       }
-      if (this.ended) return null;
+      if (this.ended) {
+        if (this.buf.length === 0) return null;
+        throw new Error("wire: incomplete header (no trailing newline)");
+      }
       await this.waitForData();
-      if (this.ended && this.buf.indexOf(0x0a) < 0) return null;
     }
 
     let header: WireHeader;

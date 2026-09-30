@@ -271,6 +271,48 @@ describe("framing errors", () => {
     await expect(readerOver(raw).readEvent()).rejects.toThrow("unexpected EOF reading payload");
   });
 
+  test("header with no payload bytes at all", async () => {
+    const raw = Buffer.from('{"type":"audio_chunk","payload_length":10}\n');
+    await expect(readerOver(raw).readEvent()).rejects.toThrow("unexpected EOF reading payload");
+  });
+
+  // EOF with bytes buffered but no newline is a truncated header, not an
+  // orderly close — even when those bytes happen to parse as a whole header.
+  test("partial header with no trailing newline", async () => {
+    await expect(readerOver(Buffer.from('{"type":"audio_ch')).readEvent()).rejects.toThrow(
+      "wire: incomplete header (no trailing newline)",
+    );
+  });
+
+  test("complete header JSON missing its newline", async () => {
+    await expect(readerOver(Buffer.from('{"type":"ok"}')).readEvent()).rejects.toThrow(
+      "wire: incomplete header (no trailing newline)",
+    );
+  });
+
+  test("partial header after a good frame", async () => {
+    const reader = readerOver(Buffer.from('{"type":"ok"}\n{"type":"au'));
+    expect((await reader.readEvent())!.type).toBe("ok");
+    await expect(reader.readEvent()).rejects.toThrow("wire: incomplete header (no trailing newline)");
+  });
+
+  test("partial header split across chunks, then end", async () => {
+    const stream = new PassThrough();
+    const reader = new PipelineReader(stream);
+    const pending = reader.readEvent();
+    stream.write('{"type":');
+    await new Promise((r) => setTimeout(r, 5));
+    stream.write('"audio');
+    stream.end();
+    await expect(pending).rejects.toThrow("wire: incomplete header (no trailing newline)");
+  });
+
+  test("clean EOF after a good frame is still null", async () => {
+    const reader = readerOver(Buffer.from('{"type":"ok"}\n'));
+    expect((await reader.readEvent())!.type).toBe("ok");
+    expect(await reader.readEvent()).toBeNull();
+  });
+
   test("a bad frame after a good one still errors", async () => {
     const reader = readerOver(Buffer.from('{"type":"ok"}\n{"type":\n'));
     expect((await reader.readEvent())!.type).toBe("ok");

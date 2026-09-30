@@ -66,6 +66,16 @@ export interface DisplayChanged {
 export interface DisplayInfo {
   display_id: number;
   height: number;
+  /**
+   * The display is connected but asleep (display sleep, not system
+   * sleep): powered down and showing nothing until it wakes. It is still
+   * listed — a sleeping display has not been removed — and its geometry
+   * (size, scale, refresh rate) is its last-known mode, still valid. A
+   * change of this flag arrives as `display_changed`. Absent on the wire
+   * (an older producer) reads as awake; producers that cannot observe
+   * display sleep report `false`.
+   */
+  is_asleep?: boolean;
   is_builtin: boolean;
   is_main: boolean;
   refresh_rate: number;
