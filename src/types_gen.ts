@@ -3462,9 +3462,8 @@ export interface EffectsAssertResponse {
   already_held: boolean;
   /**
    * When the assertion displaced an existing top-of-stack owner, this
-   * names that plugin. The displaced plugin should receive an
-   * `effect_displaced` notification (section 10.2). Notification path is
-   * stubbed in v1 — see registered handler.
+   * names that plugin. The platform broadcasts
+   * `_platform.effect.displaced` naming it as `displaced_owner`.
    */
   displaced?: string;
   /**
@@ -3482,7 +3481,7 @@ export interface EffectsAssertResponse {
   /**
    * True when the assertion is now top-of-stack and effective.
    * False when the user has revoked consent for this effect on this
-   * plugin (fail-next-assertion semantics per section 10.3) or when the
+   * plugin (a revocation fails the next assertion) or when the
    * effect name is unknown.
    */
   granted: boolean;
@@ -9375,7 +9374,10 @@ export interface ActionExecutedEventParams {
 /** Payload of the `_platform.app.focused` event. */
 export interface AppFocusedEventParams {
   /**
-   * macOS bundle identifier (e.g., `com.google.Chrome`).
+   * The focused app's identity: the bundle identifier on macOS
+   * (`com.google.Chrome`), the WM_CLASS class on Linux
+   * (`Google-chrome`), the lowercased executable name on Windows
+   * (`chrome`).
    */
   bundle_id: string;
 }
@@ -9579,6 +9581,13 @@ export interface CollectionUpdatedEventParams {
    * Name of the collection that was updated.
    */
   collection: string;
+  /**
+   * Set when the platform recomposed the collection from manifests
+   * rather than a plugin writing it: `reload` (plugins were reloaded) or
+   * `rebuild` (one plugin was rebuilt in development). Absent on an
+   * ordinary write.
+   */
+  reason?: string;
   /**
    * Plugin ID or `_platform` that wrote the update.
    */

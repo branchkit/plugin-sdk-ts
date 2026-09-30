@@ -657,7 +657,7 @@ declare module "./plugin.js" {
      */
     actionsList(): Promise<ActionsListResponse>;
     /**
-     * Delete an installed model from the caller's own model namespace (ref: <plugin>/<model>)
+     * Delete an installed artifact from the caller's own artifact namespace (ref: <plugin>/<artifact>)
      */
     artifactDelete(req: ArtifactDeleteRequest): Promise<void>;
     /**
