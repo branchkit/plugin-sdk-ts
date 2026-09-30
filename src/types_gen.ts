@@ -1950,6 +1950,48 @@ export interface OwnedCollection {
   writer: string;
 }
 
+/**
+ * One command a phrase named.
+ */
+export interface PhraseStep {
+  /**
+   * What the command is called: its description, else a summary of its
+   * pattern. What a question about the phrase names it by.
+   */
+  label: string;
+  /**
+   * The resolve that matched these words: the action, its owner, the tags
+   * it sets and clears, and the scoped views at the time.
+   */
+  resolved: ResolveResult;
+  /**
+   * Where in the phrase's words this command starts.
+   * wire uint · min 0
+   */
+  start: number;
+  /**
+   * The words it consumed.
+   */
+  words: string[];
+}
+
+/**
+ * Where a phrase stopped short of its last word, and why.
+ */
+export interface PhraseStop {
+  /**
+   * Where in the phrase's words the unresolved rest begins.
+   * wire uint · min 0
+   */
+  at: number;
+  /**
+   * The resolve of the words from `at`: a tie (`tied_candidates`), the
+   * start of a longer command (`has_completions`), a codeword in progress
+   * (`bridge_active`), or no command at all.
+   */
+  resolved: ResolveResult;
+}
+
 export interface PipelineStatusEntry {
   ephemeral: boolean;
   name: string;
@@ -2124,6 +2166,94 @@ export type ReplaceScope =
   | { kind: "collection" }
   /** Narrows to the caller's own records carrying this group label, and stamps `value` on every entry written. Lets one plugin maintain several independent replace-sets in one collection — command sources are the motivating case (`commands.push`'s `group` is exactly this).  Replaces the earlier `prefix` scope, which expressed the same intent as an id-prefix convention — the id doing double duty as identity and scope, with an error class ("entry outside the declared prefix") that existed only to police the convention. A group is a real envelope attribute, so none of that polices anything: entries in a grouped replace are in its group by definition. (`prefix` shipped 2026-08-12 and accumulated zero production callers before its removal.) */
   | { kind: "group"; value: string };
+
+export interface ResolveResult {
+  /**
+   * The winning command's action, template-resolved. Typed in the schema
+   * since 2026-09-19 — it is the same `Action` `dispatch` takes, which is
+   * what a consumer does with it.
+   */
+  action?: Action;
+  /**
+   * All currently-active gates from `plugin.<X>.*` namespaces other than
+   * the resolving caller's own (`plugin.<caller>.*`). Lets the caller
+   * make session-end cleanup decisions ("is any other plugin's mode
+   * active?") without maintaining a parallel local view of state. Host
+   * callers see all plugin gates.
+   */
+  active_plugin_gates: string[];
+  /**
+   * Named captures, keyed by binding name. Empty when the matched action
+   * is a template the platform has already resolved into the concrete
+   * `action`; populated only when template resolution failed. Opaque by
+   * design: each value is whatever its capture bound (a word, a number, a
+   * collection record), so it stays raw JSON.
+   */
+  args: Record<string, unknown>;
+  /**
+   * True when an active `PendingPartial` bridge survived this resolve
+   * (either advanced one token, or rejected the new utterance without
+   * dropping). Tells the voice plugin to leave the discovery HUD as-is
+   * — the bridge's previously-rendered items are still the correct view
+   * of what completes the in-progress capture. Without this flag the
+   * voice plugin would either replace the HUD with empty/AIR content
+   * (because `items` is empty under bridge survival) or close it via
+   * the "no match, no partial" branch. See actuator commit history for
+   * the matching `capture.progress` suppression. False by
+   * default; only true when the bridge survived.
+   */
+  bridge_active: boolean;
+  clears_tags: string[];
+  /**
+   * wire uint · min 0
+   */
+  consumed_count: number;
+  /**
+   * The winning command's dictated-argument descriptor, if declared: the
+   */
+  has_completions: boolean;
+  items: DiscoverItem[];
+  matched: boolean;
+  next_words: string[];
+  owner_plugin?: string;
+  requires_tags: string[];
+  /**
+   * Platform-wide list of namespace prefixes that mark a tag as
+   * "scoped." Voice plugin uses this to classify `sets_tags` entries
+   * from a matched command as scoped mode tags without shadowing the
+   * configuration locally.
+   */
+  scoped_prefixes: string[];
+  /**
+   * Currently active scoped tags at match time.
+   */
+  scoped_tags: string[];
+  sets_tags: string[];
+  telemetry: ResolveTelemetry;
+  /**
+   * The genuinely-tied candidate set, populated only when resolution
+   * reduced to 2+ equally-eligible commands the matcher could not
+   * separate (same gating + scope, same winning length). When non-empty,
+   * `matched` is `false`, NO tag writes were applied, and `command_no_match`
+   * was suppressed: rather than arbitrarily pick an iteration-order winner,
+   * the platform hands the consuming plugin the full set to disambiguate.
+   * The signal is generic — any plugin can read it and resolve the tie
+   * however its surface allows. Additive — a non-tie-aware consumer sees an
+   * empty list and a normal single-winner response.
+   */
+  tied_candidates: TiedCandidate[];
+  title: string;
+  /**
+   * Trace ID generated by the actuator for causal correlation. Links
+   * this resolve result to downstream dispatch, state writes, and HUD
+   * events. Per-match — bridge-driven multi-utterance completions
+   * produce different trace_ids for seed and completion. Cross-
+   * resolve threading for the same push-to-talk hold goes through
+   * the ambient `correlation_id` derived from `session_id`. See
+   * `MatchCommandsResult.trace_id` for the full discussion.
+   */
+  trace_id: string;
+}
 
 /**
  * Serializable mirror of `crate::matching::MatchDecisionTelemetry`. The
@@ -3318,7 +3448,9 @@ export interface CommandsResolveResponse {
   /**
    * Named captures, keyed by binding name. Empty when the matched action
    * is a template the platform has already resolved into the concrete
-   * `action`; populated only when template resolution failed.
+   * `action`; populated only when template resolution failed. Opaque by
+   * design: each value is whatever its capture bound (a word, a number, a
+   * collection record), so it stays raw JSON.
    */
   args: Record<string, unknown>;
   /**
@@ -3384,6 +3516,49 @@ export interface CommandsResolveResponse {
    * `MatchCommandsResult.trace_id` for the full discussion.
    */
   trace_id?: string;
+}
+
+export interface CommandsResolvePhraseRequest {
+  /**
+   * Change nothing. Each step resolves against a scratch copy of the full
+   * active tag set, which the step's tag writes then update, so later
+   * steps see the modes earlier ones enter; the live tags are never
+   * written, no codeword in progress is consulted or advanced, and no
+   * match telemetry is emitted. Default false: each step's tag writes are
+   * applied as it matches, exactly as `commands.resolve` applies them.
+   * default false
+   */
+  preview?: boolean;
+  /**
+   * Audio session ID, as for `commands.resolve`. Informational.
+   */
+  session_id?: string;
+  /**
+   * Input source, as for `commands.resolve`: "command_hold", "continuous",
+   * "selection", "api".
+   */
+  source?: string;
+  /**
+   * The phrase's words, in order.
+   * default []
+   */
+  words?: string[];
+}
+
+export interface CommandsResolvePhraseResponse {
+  /**
+   * Positions of words dropped as silence: no command and no completion
+   * while a scoped mode was active.
+   */
+  dropped?: number[];
+  /**
+   * The commands the phrase named, in order.
+   */
+  steps: PhraseStep[];
+  /**
+   * Present when resolution stopped before the last word.
+   */
+  stopped?: PhraseStop;
 }
 
 export interface CommandsSetOverrideRequest {
