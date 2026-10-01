@@ -2552,6 +2552,37 @@ export interface TileableEntry {
   window_id: string;
 }
 
+/**
+ * One trigger a device source offers.
+ */
+export interface TriggerDecl {
+  /**
+   * The heading it is listed under, e.g. the layer: `"Group 2"`. Absent
+   * lists it under the device alone.
+   */
+  group?: string;
+  /**
+   * default "button"
+   */
+  kind?: TriggerKind;
+  /**
+   * What a person calls it: `"Button 3"`.
+   * non-empty
+   */
+  label: string;
+  /**
+   * The name the source reports it by (`bindings.report`), without an
+   * event word: `"0x28bd:0x0202/g2/button3"`.
+   * non-empty
+   */
+  name: string;
+}
+
+/**
+ * How a device trigger behaves, which decides how it can be bound.
+ */
+export type TriggerKind = "button" | "momentary";
+
 export interface TtsVoice {
   identifier: string;
   language: string;
@@ -2888,6 +2919,22 @@ export interface BindingsSetResponse {
    * wire uint · min 0
    */
   removed: number;
+}
+
+export interface BindingsSetTriggersRequest {
+  /**
+   * Every trigger this plugin offers now, replacing what it published
+   * before. Publish again when a device connects or goes away.
+   */
+  triggers: TriggerDecl[];
+}
+
+export interface BindingsSetTriggersResponse {
+  /**
+   * Triggers published.
+   * wire uint · min 0
+   */
+  count: number;
 }
 
 export interface BlobPublishRequest {
