@@ -1778,7 +1778,7 @@ export type OnPointer = "none" | "fade";
  */
 export interface OutputAction {
   /**
-   * An action type to dispatch — `windows.desk`.
+   * An action type to dispatch — `placement.desk`.
    */
   dispatch?: string;
   /**
@@ -2696,7 +2696,7 @@ export interface WindowInfo {
   /**
    * Desk ordinal of the window's space: user spaces counted 1..N in
    * managed-display order (on macOS, the Mission Control / Ctrl+N index —
-   * the same convention as `windows.desk_switch`). Absent when the window
+   * the same convention as `placement.desk_switch`). Absent when the window
    * is not on exactly one user space: minimized (no space), fullscreen
    * (its space is not a user desk), or pinned to multiple spaces.
    * wire uint32 · default null · min 0
@@ -9434,7 +9434,7 @@ export interface WiringDescribeResponse {
 
 export interface OnActionRequest {
   /**
-   * Fully qualified action type (e.g., 'voice.dictation', 'windows.snap').
+   * Fully qualified action type (e.g., 'voice.dictation', 'placement.snap').
    */
   action: string;
   /**

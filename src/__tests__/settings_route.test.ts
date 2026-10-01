@@ -5,7 +5,7 @@ describe("settings route helpers", () => {
   let saved: string | undefined;
   beforeEach(() => {
     saved = process.env.BRANCHKIT_PLUGIN_ID;
-    process.env.BRANCHKIT_PLUGIN_ID = "windows";
+    process.env.BRANCHKIT_PLUGIN_ID = "tiling";
   });
   afterEach(() => {
     if (saved === undefined) delete process.env.BRANCHKIT_PLUGIN_ID;
@@ -13,9 +13,9 @@ describe("settings route helpers", () => {
   });
 
   test("methodURL spells the one route shape", () => {
-    expect(methodURL("set_gap")).toBe("/v1/plugins/windows/methods/set_gap");
+    expect(methodURL("set_gap")).toBe("/v1/plugins/tiling/methods/set_gap");
     // Leading slash on the method must not double the separator.
-    expect(methodURL("/set_gap")).toBe("/v1/plugins/windows/methods/set_gap");
+    expect(methodURL("/set_gap")).toBe("/v1/plugins/tiling/methods/set_gap");
   });
 
   test("methodURL falls back to unknown without a plugin id", () => {
@@ -24,9 +24,9 @@ describe("settings route helpers", () => {
   });
 
   test("methodPost with and without payload", () => {
-    expect(methodPost("reset")).toBe("@post('/v1/plugins/windows/methods/reset')");
+    expect(methodPost("reset")).toBe("@post('/v1/plugins/tiling/methods/reset')");
     expect(methodPost("set_auto_tile", "{enabled: true}")).toBe(
-      "@post('/v1/plugins/windows/methods/set_auto_tile', {payload: {enabled: true}})",
+      "@post('/v1/plugins/tiling/methods/set_auto_tile', {payload: {enabled: true}})",
     );
   });
 });
