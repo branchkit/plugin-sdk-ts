@@ -2862,6 +2862,30 @@ export interface ArtifactDeleteRequest {
   ref: string;
 }
 
+export interface BindingsProposeRequest {
+  /**
+   * Settings to propose for the caller's own triggers. Nothing is written
+   * until the user answers; then each becomes the user's edit. An empty
+   * `action` proposes turning the trigger off.
+   */
+  put?: BindingEdit[];
+  /**
+   * Triggers (with event words) proposed to go back to their default.
+   * default []
+   */
+  remove?: string[];
+}
+
+export interface BindingsProposeResponse {
+  /**
+   * Changes put to the user in one question (0 when there were none and
+   * nothing was asked). The answer arrives as the user's edits, visible
+   * in `_platform.bindings.active`; nothing is written until then.
+   * wire uint · min 0
+   */
+  asked: number;
+}
+
 export interface BindingsReportRequest {
   /**
    * Which edge happened.
@@ -2896,8 +2920,9 @@ export interface BindingsReportResponse {
 
 export interface BindingsSetRequest {
   /**
-   * Edits to write. Each takes its trigger's edit slot, replacing an
-   * earlier edit there — the user's from Settings included.
+   * Edits to write. Each takes its trigger's edit slot, replacing the
+   * caller's earlier edit there. A slot the user set is refused: ask with
+   * `bindings.propose` instead.
    */
   put?: BindingEdit[];
   /**
