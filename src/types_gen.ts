@@ -203,6 +203,17 @@ export interface ActionFieldSchema {
  */
 export interface ActionTypeSchema {
   /**
+   * Whether running this action can be undone. Omitted means
+   * unclassified, which BranchKit treats as risky. Only `reversible`
+   * changes anything: the person may then always-allow a connected AI app
+   * to run it, and while it runs for such an app BranchKit refuses this
+   * plugin every platform call that cannot be undone. Ignored for a
+   * plugin that can act without platform calls (network access, running
+   * other programs, its own pipeline stages), since nothing could hold it
+   * to the claim.
+   */
+  consequence?: Consequence;
+  /**
    * Ordered list of fields for this action type.
    */
   fields: ActionFieldSchema[];
@@ -831,6 +842,11 @@ export interface ConfusabilityFinding {
   owner: string;
   target: string;
 }
+
+/**
+ * Whether an action type's effect can be undone (`consequence`).
+ */
+export type Consequence = "reversible" | "irreversible" | "external";
 
 export interface ContactInfo {
   email?: string;
