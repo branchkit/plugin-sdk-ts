@@ -372,6 +372,38 @@ export interface BarcodeResult {
 }
 
 /**
+ * The edge a source reports.
+ */
+export type BindingEdge = "down" | "up" | "press";
+
+/**
+ * One edit to one of the caller's own triggers.
+ */
+export interface BindingEdit {
+  /**
+   * The exact dotted action type to run. Empty unbinds the trigger, even
+   * over a plugin's contributed binding.
+   */
+  action: string;
+  /**
+   * Params for the action; absent means `{}`.
+   *
+   * Open by design: the receiving plugin's shape, typed per-plugin by
+   * `branchkit-gen` from that plugin's `action_types`, exactly like a
+   * dispatched action's params.
+   * default null
+   */
+  params?: unknown;
+  /**
+   * The trigger with its event word, if any: `"g2/button3"` fires on a
+   * press, `"g2/button3 down"` / `"g2/button3 up"` are a hold's two
+   * halves, `"g2/button3 toggle"` alternates start/stop, and
+   * `"g2/button3 repeat"` fires phase `repeat` on down and `stop` on up.
+   */
+  trigger: string;
+}
+
+/**
  * A GATT characteristic.
  */
 export interface BleCharacteristic {
@@ -2797,6 +2829,65 @@ export interface ArtifactDeleteRequest {
    * non-empty
    */
   ref: string;
+}
+
+export interface BindingsReportRequest {
+  /**
+   * Which edge happened.
+   */
+  event: BindingEdge;
+  /**
+   * The trigger's name as this plugin spells it, without an event word:
+   * `"g2/button3"`, `"m1/dial1 cw"`. Report a hold's up with the same name
+   * as its down, even if a layer changed in between.
+   * non-empty
+   */
+  trigger: string;
+}
+
+export interface BindingsReportResponse {
+  /**
+   * The bound trigger that matched, with its event word
+   * (`"g2/button3 down"`). Absent when nothing fired.
+   */
+  binding?: string;
+  /**
+   * Whether a binding matched and its action ran. `false` for a trigger
+   * nothing is bound to; the press is dropped and recorded nowhere.
+   */
+  fired: boolean;
+  /**
+   * The executor's status for the action: `"ok"`, `"denied"`, `"not_handled"` or `"error"`. Absent
+   * when nothing fired.
+   */
+  status?: string;
+}
+
+export interface BindingsSetRequest {
+  /**
+   * Edits to write. Each takes its trigger's edit slot, replacing an
+   * earlier edit there — the user's from Settings included.
+   */
+  put?: BindingEdit[];
+  /**
+   * Triggers (with event words) whose edit to drop, so any contributed
+   * binding shows through again.
+   * default []
+   */
+  remove?: string[];
+}
+
+export interface BindingsSetResponse {
+  /**
+   * Edits written.
+   * wire uint · min 0
+   */
+  put: number;
+  /**
+   * Edits dropped (a trigger with no edit counts as nothing).
+   * wire uint · min 0
+   */
+  removed: number;
 }
 
 export interface BlobPublishRequest {
