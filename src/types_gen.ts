@@ -2148,27 +2148,6 @@ export interface RedecodeNoise {
   snr_db: number;
 }
 
-export interface RegistryEntry {
-  action: string;
-  combo: string;
-  /**
-   * Params for the dispatch; absent means `{}`. Every fired bind
-   * executes `Action::Plugin { action_type, params, phase }` through the
-   * shared executor — the string-routing dialect is gone (2026-08-28).
-   *
-   * Open by design, and the only open field in this shape: it is the
-   * receiving plugin's params, typed per-plugin by `branchkit-gen` from
-   * that plugin's `action_types`, exactly like `Action::Plugin.params`.
-   */
-  params?: unknown;
-  source: string;
-}
-
-export interface RegistrySnapshot {
-  entries: RegistryEntry[];
-  listen_up: string[];
-}
-
 export interface ReminderItem {
   due_date?: string;
   is_completed: boolean;
@@ -4245,27 +4224,6 @@ export interface InputTypeTextRequest {
    * Text to type into the active application.
    */
   text: string;
-}
-
-export interface KeybindsRegisterRequest {
-  /**
-   * The full keybind registry to install, replacing what is there.
-   *
-   * Declared 2026-09-19 (census). The handler already deserialized
-   * exactly `RegistrySnapshot` and refused anything else; the doc
-   * comment was transcribing the shape by hand, and had gone stale —
-   * an entry is `{ combo, action, source, params? }`.
-   */
-  snapshot: RegistrySnapshot;
-}
-
-export interface KeybindsRegisterResponse {
-  /**
-   * Number of entries cached after the registration.
-   * wire uint · min 0
-   */
-  count: number;
-  ok: boolean;
 }
 
 export interface NativeAccentColorResponse {
