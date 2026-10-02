@@ -6,7 +6,10 @@
  * (SCM_RIGHTS), already served with this plugin's proxy rules. Every reply is
  * an equivalent fresh connection, so asks only need serialising.
  *
- * Bun only. Node has no way to receive a passed descriptor, and Bun's
+ * Bun only. TS plugins run under Bun unless they declare `sockets.listen`
+ * (built on Node because Bun cannot serve an inherited listener,
+ * oven-sh/bun#22559); those have no network on Linux until that is fixed.
+ * Node has no way to receive a passed descriptor, and Bun's
  * `net.Socket({ fd })` is a dead socket (measured on Bun 1.3.14), so the
  * descriptor is received through `bun:ffi` and used through `Bun.file(fd)`
  * streams, which carry a socket in both directions (TLS included).

@@ -316,7 +316,10 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
       // repo: scripts/check-bun-fd-listen.py). If Bun serves the fd:
       // version-gate this guard, flip the conformance fd-case skip to a pass,
       // and retire the actuator's Node substitution for `sockets.listen`
-      // plugins.
+      // plugins. That also ends the one case where a TS plugin cannot reach
+      // the network on Linux: under Node it cannot receive the proxy
+      // handoff (fd://, see handoff.ts), so a plugin declaring both
+      // sockets.listen and network access is offline there today.
       if (process.versions.bun) {
         settleErr(
           new Error(
