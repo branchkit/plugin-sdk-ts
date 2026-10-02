@@ -4311,7 +4311,9 @@ export interface InputPressKeyRequest {
    */
   code?: number;
   /**
-   * Modifier keys to hold during the tap (e.g. "command", "shift").
+   * Modifier keys to hold during the tap (e.g. "primary", "shift").
+   * "primary" is Command on macOS and Control on Linux and Windows;
+   * "cmd"/"command" is always Command (the Windows or Super key off macOS).
    * default []
    */
   modifiers?: string[];
