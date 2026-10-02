@@ -1,3 +1,4 @@
+import type { Duplex } from "node:stream";
 import { afterEach, describe, expect, test } from "bun:test";
 import {
   createServer as netServer,
@@ -56,7 +57,7 @@ const sockPath = () =>
   join(tmpdir(), `bkd-${process.pid}-${Math.random().toString(36).slice(2)}.sock`);
 
 /** Write `msg`, resolve with the same number of bytes echoed back. */
-function echoOnce(sock: Socket, msg: string): Promise<string> {
+function echoOnce(sock: Duplex, msg: string): Promise<string> {
   return new Promise((resolve, reject) => {
     let buf = Buffer.alloc(0);
     const want = Buffer.byteLength(msg);
@@ -92,7 +93,7 @@ describe("dial (raw TCP through the platform proxy)", () => {
     const sp = sockPath();
     await new Promise<void>((r) => proxy.listen(sp, () => r()));
     process.env.BRANCHKIT_PROXY = `unix://${sp}`;
-    let sock: Socket | undefined;
+    let sock: Duplex | undefined;
     try {
       sock = await dial("127.0.0.1", port);
       expect(await echoOnce(sock, "raw tcp through the tunnel")).toBe(
@@ -137,7 +138,7 @@ describe("dial (raw TCP through the platform proxy)", () => {
     delete process.env.BRANCHKIT_PROXY;
     const echo = echoServer();
     const port = await listenTcp(echo);
-    let sock: Socket | undefined;
+    let sock: Duplex | undefined;
     try {
       sock = await dial("127.0.0.1", port);
       expect(await echoOnce(sock, "direct")).toBe("direct");

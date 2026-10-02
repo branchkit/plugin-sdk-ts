@@ -13,16 +13,19 @@
  * When BRANCHKIT_PROXY is unset (an unsandboxed dev run) the dial is direct.
  */
 
-import { connect as netConnect, type Socket } from "node:net";
+import { connect as netConnect } from "node:net";
+import type { Duplex } from "node:stream";
 import { HostRefusedError, abortError, connectTunnel, parseProxyUrl } from "./proxy.js";
 
 /**
- * Open a raw TCP connection to `host:port`, resolving with an ordinary
- * `net.Socket`. The host must be one the manifest declares; anything else
+ * Open a raw TCP connection to `host:port`, resolving with a duplex stream:
+ * a `net.Socket` when the platform proxy is an address or there is none, a
+ * stream over a handed-off connection on Linux (`fd://`; Bun only — under
+ * Node it rejects with a {@link ProxyHandoffUnsupportedError}). The host must be one the manifest declares; anything else
  * is refused by the proxy and rejects with a {@link HostRefusedError}:
  *
  * ```ts
- * let sock: Socket;
+ * let sock: Duplex;
  * try {
  *   sock = await dial("homeassistant.local", 1883);
  * } catch (e) {
@@ -34,7 +37,7 @@ import { HostRefusedError, abortError, connectTunnel, parseProxyUrl } from "./pr
  * ```
  *
  * `signal` bounds the connect (the proxy dial and the CONNECT handshake
- * included), not later reads and writes — use `sock.setTimeout` for those.
+ * included), not later reads and writes — time those yourself.
  *
  * TLS is the caller's: wrap the socket with `node:tls`'s `connect({ socket,
  * servername })` and let it verify the certificate. The proxy tunnels bytes
@@ -45,7 +48,7 @@ export function dial(
   host: string,
   port: number,
   opts: { signal?: AbortSignal } = {},
-): Promise<Socket> {
+): Promise<Duplex> {
   if (!host) return Promise.reject(new Error("dial: empty host"));
   if (!Number.isInteger(port) || port < 1 || port > 65535) {
     return Promise.reject(new Error(`dial: port ${port} out of range 1-65535`));

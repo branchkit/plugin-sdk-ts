@@ -12,6 +12,10 @@
  *   unix:///path/to/endpoint.sock  — UNIX socket (Linux; bind-mounted into
  *                                    the sandbox at the same path)
  *   http://127.0.0.1:<port>        — localhost TCP (legacy Windows path)
+ *   fd://<n>                       — an inherited channel each connection is
+ *                                    handed over (Linux; Bun only — see
+ *                                    handoff.ts): the plugin opens no
+ *                                    socket of its own
  *   npipe://\\.\pipe\name          — named pipe ACL'd to the plugin's
  *                                    container SID (Windows; no exemption)
  *
@@ -28,7 +32,9 @@
  * included), so SSE/streaming responses are not buffered.
  */
 
-import { connect as netConnect, type Socket } from "node:net";
+import { connect as netConnect } from "node:net";
+import { handoffConnection } from "./handoff.js";
+import type { Duplex } from "node:stream";
 import { connect as tlsConnect } from "node:tls";
 
 /** Statuses that carry a Location the client is expected to follow. */
@@ -38,10 +44,10 @@ const REDIRECT_STATUS = new Set([301, 302, 303, 307, 308]);
 const MAX_REDIRECTS = 20;
 
 interface ProxyEndpoint {
-  kind: "unix" | "tcp" | "npipe";
+  kind: "unix" | "tcp" | "npipe" | "fd";
   path: string; // unix: socket path; npipe: \\.\pipe\ name
   host: string; // tcp: proxy host
-  port: number; // tcp: proxy port
+  port: number; // tcp: proxy port; fd: the channel's descriptor
 }
 
 /** Parse a BRANCHKIT_PROXY value. Throws on unsupported schemes. */
@@ -60,6 +66,13 @@ export function parseProxyUrl(v: string): ProxyEndpoint {
     }
     return { kind: "tcp", path: "", host: rest.slice(0, i), port };
   }
+  if (v.startsWith("fd://")) {
+    const fd = Number(v.slice("fd://".length));
+    if (!Number.isInteger(fd) || fd < 0 || v.length === "fd://".length) {
+      throw new Error(`bad proxy channel in ${JSON.stringify(v)}`);
+    }
+    return { kind: "fd", path: "", host: "", port: fd };
+  }
   if (v.startsWith("npipe://")) {
     // Windows: a named pipe ACL'd to the plugin's container SID, reached
     // with no loopback exemption. net.connect(path) speaks both a Unix
@@ -69,7 +82,7 @@ export function parseProxyUrl(v: string): ProxyEndpoint {
     return { kind: "npipe", path, host: "", port: 0 };
   }
   throw new Error(
-    `unsupported BRANCHKIT_PROXY ${JSON.stringify(v)} (want unix://, http:// or npipe://)`,
+    `unsupported BRANCHKIT_PROXY ${JSON.stringify(v)} (want fd://, unix://, http:// or npipe://)`,
   );
 }
 
@@ -118,16 +131,37 @@ export function connectTunnel(
   host: string,
   port: number,
   signal?: AbortSignal,
-): Promise<Socket> {
+): Promise<Duplex> {
+  if (endpoint.kind === "fd") {
+    if (signal?.aborted) return Promise.reject(abortError());
+    // The connection arrives already open: speak CONNECT on it at once.
+    return handoffConnection(endpoint.port).then((sock) =>
+      handshake(sock, host, port, signal, true),
+    );
+  }
+  const sock =
+    endpoint.kind === "tcp"
+      ? netConnect(endpoint.port, endpoint.host)
+      : netConnect(endpoint.path); // unix socket or Windows named pipe
+  return handshake(sock, host, port, signal, false);
+}
+
+/** CONNECT host:port on `sock` and resolve with it once the proxy says 200.
+ * `open`: the stream is already connected (a handed-off socket); otherwise
+ * wait for its "connect" event. */
+function handshake(
+  sock: Duplex,
+  host: string,
+  port: number,
+  signal: AbortSignal | undefined,
+  open: boolean,
+): Promise<Duplex> {
   return new Promise((resolve, reject) => {
     if (signal?.aborted) {
+      sock.destroy();
       reject(abortError());
       return;
     }
-    const sock =
-      endpoint.kind === "tcp"
-        ? netConnect(endpoint.port, endpoint.host)
-        : netConnect(endpoint.path); // unix socket or Windows named pipe
     let head = Buffer.alloc(0);
     let settled = false;
 
@@ -151,9 +185,10 @@ export function connectTunnel(
     signal?.addEventListener("abort", onAbort, { once: true });
 
     sock.on("error", fail);
-    sock.on("connect", () => {
+    const ask = () =>
       sock.write(`CONNECT ${host}:${port} HTTP/1.1\r\nHost: ${host}:${port}\r\n\r\n`);
-    });
+    if (open) ask();
+    else sock.on("connect", ask);
     function onData(d: Buffer) {
       head = Buffer.concat([head, d]);
       const end = head.indexOf("\r\n\r\n");
@@ -244,7 +279,7 @@ class ChunkedDecoder {
 /** Issue one HTTP/1.1 request over an established tunnel socket and adapt
  * the response to a WHATWG Response with a streaming body. */
 function requestOverTunnel(
-  sock: Socket,
+  sock: Duplex,
   url: URL,
   method: string,
   reqHeaders: Headers,
@@ -432,7 +467,7 @@ export function proxiedFetchVia(
       const raw = await connectTunnel(endpoint, current.hostname, port, signal);
       const sock =
         current.protocol === "https:"
-          ? (tlsConnect({ socket: raw, servername: current.hostname }) as unknown as Socket)
+          ? (tlsConnect({ socket: raw, servername: current.hostname }) as unknown as Duplex)
           : raw;
       const res = await requestOverTunnel(sock, current, method, headers, bodyBytes, signal);
 
