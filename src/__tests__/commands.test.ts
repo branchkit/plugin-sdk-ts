@@ -1,6 +1,7 @@
 import { describe, test, expect } from "bun:test";
-import { readFileSync, writeFileSync, mkdirSync, rmSync } from "node:fs";
+import { readFileSync, writeFileSync, mkdirSync, rmSync, mkdtempSync } from "node:fs";
 import { join } from "node:path";
+import { tmpdir } from "node:os";
 import { PushCommands } from "../commands.js";
 
 // We can't easily test PushCommands end-to-end (needs a running Plugin),
@@ -11,7 +12,10 @@ import { PushCommands } from "../commands.js";
 // write fixture files, set BRANCHKIT_PLUGIN_DIR, and verify the commands
 // that would be sent.
 
-const FIXTURE_DIR = join(import.meta.dir, "__fixtures_commands__");
+// A folder of this run's own: a fixed path beside the tests is shared by every
+// run of this suite at once (several checkouts, or two processes), and one
+// run's cleanup then deletes the folder from under another's listener.
+const FIXTURE_DIR = mkdtempSync(join(tmpdir(), "bk-sdk-commands-"));
 
 function setup() {
   rmSync(FIXTURE_DIR, { recursive: true, force: true });

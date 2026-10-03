@@ -1,9 +1,13 @@
 import { describe, test, expect } from "bun:test";
-import { existsSync, mkdirSync, rmSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, rmSync, readFileSync, writeFileSync, mkdtempSync } from "node:fs";
 import { join } from "node:path";
+import { tmpdir } from "node:os";
 import { ListenLocal, type ConnectInfo } from "../listen.js";
 
-const FIXTURE_DIR = join(import.meta.dir, "__fixtures_listen__");
+// A folder of this run's own: a fixed path beside the tests is shared by every
+// run of this suite at once (several checkouts, or two processes), and one
+// run's cleanup then deletes the folder from under another's listener.
+const FIXTURE_DIR = mkdtempSync(join(tmpdir(), "bk-sdk-listen-"));
 
 function setup() {
   rmSync(FIXTURE_DIR, { recursive: true, force: true });
