@@ -465,17 +465,23 @@ function lookupHarnessBinary(): string | undefined {
     `${process.env.HOME ?? ""}/Applications/BranchKit.app/Contents/Resources/branchkit-test-harness`,
   ];
 
+  // Cargo writes branchkit-test-harness.exe on Windows; without the suffix
+  // every candidate misses there and harness tests skip.
+  const suffixes = process.platform === "win32" ? ["", ".exe"] : [""];
   for (const c of candidates) {
-    const abs = resolve(c);
-    if (existsSync(abs)) return abs;
+    for (const suffix of suffixes) {
+      const abs = resolve(c + suffix);
+      if (existsSync(abs)) return abs;
+    }
   }
 
-  // Try PATH via which
+  // Try PATH (`where` on Windows, which has no `which`)
   try {
-    const found = execSync("which branchkit-test-harness", {
+    const finder = process.platform === "win32" ? "where" : "which";
+    const found = execSync(`${finder} branchkit-test-harness`, {
       encoding: "utf8",
       stdio: ["ignore", "pipe", "ignore"],
-    }).trim();
+    }).split(/\r?\n/)[0]?.trim() ?? "";
     if (found) return found;
   } catch {
     // fall through
