@@ -617,6 +617,7 @@ export const MethodPlatformProfile = "platform.profile" as const; // since 0.2.0
 export const MethodPluginDataExport = "plugin.data.export" as const; // since 0.1.0
 export const MethodPluginDebug = "plugin.debug" as const; // since 0.1.0
 export const MethodPluginReportHealth = "plugin.report_health" as const; // since 0.1.0
+export const MethodPluginReportSetup = "plugin.report_setup" as const; // since 0.1.0
 export const MethodPrivacyGetRecording = "privacy.get_recording" as const; // stable, since 0.1.0
 export const MethodPrivacySetRecording = "privacy.set_recording" as const; // stable, since 0.1.0
 export const MethodPrivilegesList = "privileges.list" as const; // since 0.1.0
