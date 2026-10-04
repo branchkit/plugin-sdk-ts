@@ -607,6 +607,7 @@ export const MethodOverlayClear = "overlay.clear" as const; // since 0.2.0
 export const MethodOverlayShow = "overlay.show" as const; // since 0.2.0
 export const MethodOverridesApply = "overrides.apply" as const; // stable, since 0.1.0
 export const MethodOverridesList = "overrides.list" as const; // since 0.1.0
+export const MethodPipelinesAudioLevel = "pipelines.audio_level" as const; // since 0.1.0
 export const MethodPipelinesGrammar = "pipelines.grammar" as const; // since 0.1.0
 export const MethodPipelinesInject = "pipelines.inject" as const; // since 0.1.0
 export const MethodPipelinesRun = "pipelines.run" as const; // since 0.1.0
