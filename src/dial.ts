@@ -7,8 +7,8 @@
  * Inside the sandbox the plugin has no direct egress; the platform's
  * filtering proxy is the only route and it enforces the manifest's declared
  * host allowlist. `dial` is that route: when BRANCHKIT_PROXY is set the
- * connection is a CONNECT tunnel through the proxy (unix:// on Linux and
- * macOS, npipe:// on Windows — the same dial the SDK's patched `fetch`
+ * connection is a CONNECT tunnel through the proxy (fd:// on Linux, unix://
+ * on macOS, npipe:// on Windows — the same dial the SDK's patched `fetch`
  * uses), and the proxy records every attempt as `plugin.network_connect`.
  * When BRANCHKIT_PROXY is unset (an unsandboxed dev run) the dial is direct.
  */

@@ -9,9 +9,9 @@
  * enforcing the declared hostname allowlist. The actuator advertises the
  * endpoint in BRANCHKIT_PROXY:
  *
- *   unix:///path/to/endpoint.sock  — UNIX socket (Linux; bind-mounted into
- *                                    the sandbox at the same path)
- *   http://127.0.0.1:<port>        — localhost TCP (legacy Windows path)
+ *   unix:///path/to/endpoint.sock  — UNIX socket (macOS: the one socket
+ *                                    path the plugin's sandbox allows)
+ *   http://127.0.0.1:<port>        — localhost TCP (test harnesses only)
  *   fd://<n>                       — an inherited channel each connection is
  *                                    handed over (Linux; Bun only — see
  *                                    handoff.ts): the plugin opens no
@@ -22,8 +22,8 @@
  * The SDK patches `globalThis.fetch` at import time so a plugin author
  * writes ordinary `fetch()` calls and the platform routes and enforces.
  * TLS is tunneled opaquely (CONNECT, then a normal client-side handshake —
- * the proxy never sees plaintext). When BRANCHKIT_PROXY is unset (macOS
- * in-kernel enforcement, unsandboxed dev), fetch is left untouched.
+ * the proxy never sees plaintext). When BRANCHKIT_PROXY is unset (no hosts
+ * declared, or an unsandboxed dev run), fetch is left untouched.
  *
  * The tunnel client is hand-rolled over node:net/node:tls with minimal
  * HTTP/1.1 response parsing, because Bun (the plugin runtime) neither
