@@ -1791,7 +1791,7 @@ declare module "./plugin.js" {
      */
     nativeHostname(): Promise<NativeHostnameResponse>;
     /**
-     * Resolve a hostname to IP addresses
+     * Resolve a hostname to IP addresses. A plugin may resolve only a host it declares in requires.network that the user has switched on
      */
     nativeHostnameResolve(req: NativeHostnameResolveRequest): Promise<string[]>;
     /**
@@ -2063,11 +2063,11 @@ declare module "./plugin.js" {
      */
     nativeNetworkProxyEnabled(): Promise<NativeNetworkProxyEnabledResponse>;
     /**
-     * Run a quick network quality test (upload/download Mbps). Exists only on macOS; elsewhere it is refused with platform_no_analogue
+     * Run a quick network quality test (upload/download Mbps). The test contacts Apple, so a plugin declares mensura.cdn-apple.com in requires.network. Exists only on macOS; elsewhere it is refused with platform_no_analogue
      */
     nativeNetworkQuality(): Promise<NativeNetworkQualityResponse>;
     /**
-     * Check if a host is reachable via network
+     * Check if a host is reachable via network. A plugin may check only a host it declares in requires.network that the user has switched on
      */
     nativeNetworkReachable(req: NativeNetworkReachableRequest): Promise<NativeNetworkReachableResponse>;
     /**
@@ -2171,7 +2171,7 @@ declare module "./plugin.js" {
      */
     nativePinchToZoom(): Promise<NativePinchToZoomResponse>;
     /**
-     * Ping a host and return latency in milliseconds
+     * Ping a host and return latency in milliseconds. A plugin may ping only a host it declares in requires.network that the user has switched on
      */
     nativePing(req: NativePingRequest): Promise<number>;
     /**
@@ -2267,7 +2267,7 @@ declare module "./plugin.js" {
      */
     nativeProxySettings(): Promise<NativeProxySettingsResponse>;
     /**
-     * Get the external/public IP address via a DNS lookup (no HTTP)
+     * Get the external/public IP address via a DNS lookup (no HTTP). The lookup asks OpenDNS, so a plugin declares resolver1.opendns.com in requires.network
      */
     nativePublicIP(): Promise<NativePublicIPResponse>;
     /**
