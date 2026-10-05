@@ -2467,10 +2467,51 @@ export interface SpaceInfo {
   space_type: string;
 }
 
+/**
+ * One engine in `speech.engines`.
+ */
+export interface SpeechEngineInfo {
+  /**
+   * What `speech.say` names it by: `system`, or a stage's qualified name.
+   */
+  engine: string;
+  /**
+   * Why the engine asked for could not start (a model not downloaded).
+   */
+  error?: string;
+  /**
+   * Running now (the OS voice always is).
+   */
+  running: boolean;
+  /**
+   * The voices it declared when it last started; empty for an engine
+   * not yet started, and for the OS voice today.
+   */
+  voices: SpeechVoice[];
+}
+
 export interface SpeechLocale {
   identifier: string;
   is_available: boolean;
   language: string;
+}
+
+/**
+ * One voice an engine declared.
+ */
+export interface SpeechVoice {
+  /**
+   * What `speech.say`'s `voice` names it by.
+   */
+  id: string;
+  /**
+   * BCP 47 tag of the language it speaks.
+   */
+  locale: string;
+  /**
+   * The voice as a person would choose it.
+   */
+  name: string;
 }
 
 /**
@@ -9393,7 +9434,42 @@ export interface SpeechAnnounceRequest {
   text: string;
 }
 
+export interface SpeechEnginesRequest {
+  /**
+   * Start this engine if it is not running and wait (up to 30 s) for its
+   * voices. Omitted: list every engine as it is, starting none — an
+   * engine holds its model in memory once started.
+   * default null
+   */
+  engine?: string;
+}
+
+export interface SpeechEnginesResponse {
+  engines: SpeechEngineInfo[];
+}
+
+export interface SpeechRestartEngineRequest {
+  /**
+   * A speech engine stage the calling plugin ships.
+   * non-empty
+   */
+  engine: string;
+}
+
 export interface SpeechSayRequest {
+  /**
+   * What speaks it: `"system"` (the default) is the operating system's
+   * own voice; otherwise the qualified name of a speech engine stage a
+   * plugin ships (`stage_type` `tts`), started with its first utterance
+   * and kept running.
+   * default null
+   */
+  engine?: string;
+  /**
+   * BCP 47 tag of the language the words are in, when known.
+   * default null
+   */
+  locale?: string;
   /**
    * `"normal"` queues behind whatever is playing; `"high"` cuts it off
    * and speaks now. Defaults to normal.
@@ -9401,10 +9477,30 @@ export interface SpeechSayRequest {
    */
   priority?: string;
   /**
+   * Pace relative to the voice's normal one: 1.0 is normal, 2.0 twice as
+   * fast. Speech engines only, today.
+   * wire float · default null
+   */
+  rate?: number;
+  /**
    * The words. Plain language, no markup; the system voice reads it as is.
    * non-empty
    */
   text: string;
+  /**
+   * A voice the engine declared (its capability's `voices`); absent or
+   * unknown means the engine's default. Speech engines only, today.
+   * default null
+   */
+  voice?: string;
+}
+
+export interface SpeechSayResponse {
+  /**
+   * The utterance: `_platform.speech.started` / `finished` carry it.
+   */
+  id: string;
+  ok: boolean;
 }
 
 export interface SystemLaunchAppRequest {
@@ -10400,6 +10496,36 @@ export interface SelectionPickedEventParams {
    * Phonetic tag used to select the item.
    */
   tag: string;
+}
+
+/** Payload of the `_platform.speech.finished` event. */
+export interface SpeechFinishedEventParams {
+  /**
+   * What spoke it, as in `_platform.speech.started`.
+   */
+  engine: string;
+  /**
+   * The utterance, as `speech.say` returned it.
+   */
+  id: string;
+  /**
+   * True when it was stopped, superseded or failed before its end.
+   * default false
+   */
+  interrupted?: boolean;
+}
+
+/** Payload of the `_platform.speech.started` event. */
+export interface SpeechStartedEventParams {
+  /**
+   * What spoke it: `system` for the OS voice, otherwise the speech
+   * engine stage's qualified name.
+   */
+  engine: string;
+  /**
+   * The utterance, as `speech.say` returned it.
+   */
+  id: string;
 }
 
 /** Payload of the `_platform.thermal.changed` event. */
