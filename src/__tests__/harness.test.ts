@@ -63,7 +63,7 @@ describe.skipIf(!harnessBinaryAvailable() || !helloworldBuilt)("Harness", () => 
     const h = await Harness.start(HELLOWORLD_DIR);
     try {
       // Seed the consumed `apps` vocabulary so the capture branch is live —
-      // helloworld only consumes it; in production the system plugin
+      // helloworld only consumes it; in production the apps plugin
       // provides it (the stub carries the same schema, and the writer must
       // be the introducer because named_entities pins introducer_only).
       // With "branchkit" seeded, "hello branchkit" completes BOTH
@@ -75,7 +75,7 @@ describe.skipIf(!harnessBinaryAvailable() || !helloworldBuilt)("Harness", () => 
       await h.loadManifest(APPS_PROVIDER_DIR);
       await h.writeCollection(
         "apps",
-        { spoken: "branchkit", bundle_id: "com.test.branchkit" },
+        { spoken: "branchkit", app_id: "com.test.branchkit" },
         "apps-provider-stub",
       );
       const result = await h.simulateCommand("hello branchkit");
@@ -108,7 +108,7 @@ describe.skipIf(!harnessBinaryAvailable() || !helloworldBuilt)("Harness", () => 
       await h.loadManifest(APPS_PROVIDER_DIR);
       await h.writeCollection(
         "apps",
-        { spoken: "finder", bundle_id: "com.apple.finder" },
+        { spoken: "finder", app_id: "com.apple.finder" },
         "apps-provider-stub",
       );
       const result = await h.mustSimulateCommand("hello finder");
