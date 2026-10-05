@@ -128,6 +128,7 @@ export const OutputKindMode = "mode" as const;
 export const OutputKindOutcome = "outcome" as const;
 export const OutputKindProblem = "problem" as const;
 export const OutputKindProgress = "progress" as const;
+export const OutputKindNotice = "notice" as const;
 
 // KnownOutputKinds lists the full closed-vocabulary set, in the
 // platform's own order.
@@ -137,6 +138,7 @@ export const KnownOutputKinds = [
   "outcome",
   "problem",
   "progress",
+  "notice",
 ] as const;
 
 // OutputUrgency* are the closed-vocabulary `urgency` values of a
