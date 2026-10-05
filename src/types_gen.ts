@@ -504,6 +504,19 @@ export interface CameraDevice {
 }
 
 /**
+ * The text on either side of the caret in the focused text field: up to 64
+ * characters before the selection's start and after its end (with nothing
+ * selected, both sides of the caret). What a plugin
+ * typing into the field needs to fit its text into what is already there: a
+ * leading space, a capital at a sentence start. Never read from a password
+ * field: the capability answers nothing there.
+ */
+export interface CaretContext {
+  after: string;
+  before: string;
+}
+
+/**
  * Clipboard contents read from the OS.
  */
 export interface ClipboardContents {
@@ -5108,6 +5121,10 @@ export interface NativeCaptureWindowResponse {
    * Base64-encoded PNG bytes.
    */
   image_base64: string;
+}
+
+export interface NativeCaretContextResponse {
+  context?: CaretContext;
 }
 
 export interface NativeCascadeWindowsRequest {
