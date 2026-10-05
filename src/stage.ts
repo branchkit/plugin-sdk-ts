@@ -14,12 +14,15 @@
  *
  * ## Which entry point
  *
- * Two, because there are two loop shapes:
+ * Three, because there are three loop shapes:
  *
  * - {@link serveAudioConsumer} — read-driven. The stage's work is a reaction
  *   to an inbound audio session. VAD gates, STT engines, command recognizers.
  * - {@link serveSource} — notifier-driven. The stage produces spontaneously
  *   from a device, OS notification, or timer, and may never read stdin at all.
+ * - {@link serveSpeechEngine} — request-driven. Each `speak` request becomes
+ *   an audio session the stage produces, streaming, and stops the moment the
+ *   platform cancels it. Text-to-speech engines.
  *
  * An audio source is the second shape plus {@link SourceOptions.listenForStop}.
  *
@@ -42,8 +45,8 @@
 import type { Readable, Writable } from "node:stream";
 import { PipelineReader, PipelineWriter } from "./pipeline.js";
 import type { PipelineEvent } from "./pipeline.js";
-import { EventCapability, EventFlowCredit } from "./pipeline_events_gen.js";
-import type { Capability } from "./pipeline_events_gen.js";
+import { EventCapability, EventError, EventFlowCredit } from "./pipeline_events_gen.js";
+import type { Capability, ErrorEvent } from "./pipeline_events_gen.js";
 // The runtime names the audio session types in two places: the AudioConsumer
 // interface, and the stop request a listenForStop source reads. Both are audio
 // assumptions in an otherwise domain-free runtime — visible here on purpose.
@@ -51,8 +54,15 @@ import {
   EventAudioChunk,
   EventAudioStart,
   EventAudioStop,
+  EventSpeak,
 } from "./pipeline_events_audio_gen.js";
-import type { AudioChunk, AudioStart, AudioStop } from "./pipeline_events_audio_gen.js";
+import type {
+  AudioChunk,
+  AudioFormat,
+  AudioStart,
+  AudioStop,
+  Speak,
+} from "./pipeline_events_audio_gen.js";
 
 // A stage speaks this vocabulary and nothing else, so re-export it here: one
 // subpath import gets the runtime and the types together. It is deliberately
@@ -529,4 +539,228 @@ async function watchForStop(input: Readable, ctx: SourceCtx): Promise<void> {
     // this stage should stop rather than die.
   }
   ctx.requestStop();
+}
+
+// ---------------------------------------------------------------- speech engine
+
+/**
+ * What {@link SpeechEngine.speak} is handed: where the utterance's audio goes,
+ * and whether it has been cancelled.
+ */
+export class SpeakCtx {
+  private started = false;
+
+  constructor(
+    private readonly w: PipelineWriter,
+    readonly sessionId: string,
+    private readonly controller: AbortController,
+  ) {}
+
+  /** Aborted when the platform cancels the utterance (or goes away). */
+  get signal(): AbortSignal {
+    return this.controller.signal;
+  }
+
+  /**
+   * Has the platform cancelled this utterance? Stop synthesizing when it has:
+   * nothing more of it will be sent.
+   */
+  get cancelled(): boolean {
+    return this.controller.signal.aborted;
+  }
+
+  /**
+   * Open the utterance's audio in `format`. Call it once, before the first
+   * {@link SpeakCtx.audio}. Engines usually know their format only once the
+   * model is loaded, which is why it is given here and not in the capability.
+   */
+  async start(format: AudioFormat): Promise<void> {
+    if (this.started) throw new Error("speech engine: start called twice for one utterance");
+    this.started = true;
+    if (this.cancelled) return;
+    await this.w.writeEvent({
+      type: EventAudioStart,
+      data: { session_id: this.sessionId, format } as unknown as Record<string, unknown>,
+      payload: new Uint8Array(0),
+    });
+  }
+
+  /**
+   * Send one chunk of audio, in the format given to {@link SpeakCtx.start}, as
+   * soon as it is synthesized: in pieces as the engine makes them, never the
+   * whole utterance at the end, so the first words play while the rest are
+   * made.
+   *
+   * Returns `Flow.Stop` once the utterance is cancelled, without sending
+   * anything: stop synthesizing and return. The runtime closes the utterance
+   * either way.
+   *
+   * The chunk's `timestamp_ms` is wall time: JavaScript runtimes expose no
+   * absolute reading of the OS clock the platform stamps microphone audio
+   * with (on macOS, Node's `process.hrtime` is `CLOCK_MONOTONIC`, not the
+   * uptime clock, and Bun's starts at zero per process). That is harmless
+   * here: the platform times what the person heard from the audio sink's
+   * `playback_*` reports, never from a speech engine's chunk stamps.
+   */
+  async audio(pcm: Uint8Array): Promise<Flow> {
+    if (!this.started) throw new Error("speech engine: audio before start");
+    if (this.cancelled) return Flow.Stop;
+    await this.w.writeEvent({
+      type: EventAudioChunk,
+      data: { session_id: this.sessionId, timestamp_ms: Date.now() } as unknown as Record<
+        string,
+        unknown
+      >,
+      payload: pcm,
+    });
+    return Flow.Continue;
+  }
+}
+
+/**
+ * A text-to-speech stage (`stage_type` `tts`).
+ *
+ * The engine implements one thing, how to say one request; the runtime owns
+ * the rest of the contract — the handshake, the order requests are spoken in,
+ * cancellation, and closing every utterance with exactly one `audio_stop`,
+ * including one that failed or was cancelled before it began.
+ */
+export interface SpeechEngine {
+  /**
+   * Say `req`: call `ctx.start` once with the audio format, then `ctx.audio`
+   * for each piece as it is synthesized, and resolve when the utterance is
+   * done or `audio` says `Flow.Stop`.
+   *
+   * A rejection fails this utterance only: the runtime sends an `error` for
+   * it, closes it, and goes on to the next. A failure that makes the engine
+   * unusable belongs before {@link serveSpeechEngine} (a model that does not
+   * load), where {@link run} turns it into exit 1.
+   */
+  speak(req: Speak, ctx: SpeakCtx): Promise<void>;
+}
+
+/** Serve a speech engine on stdin/stdout. */
+export function serveSpeechEngine(capability: Capability, engine: SpeechEngine): Promise<void> {
+  return serveSpeechEngineOn(process.stdin, process.stdout, capability, engine);
+}
+
+type SpeakInbound = { speak: Speak } | { cancel: string };
+
+/** {@link serveSpeechEngine} over explicit streams, for tests. */
+export async function serveSpeechEngineOn(
+  input: Readable,
+  output: Writable,
+  capability: Capability,
+  engine: SpeechEngine,
+): Promise<void> {
+  const w = new PipelineWriter(output);
+  await w.writeEvent({
+    type: EventCapability,
+    data: capability as unknown as Record<string, unknown>,
+    payload: new Uint8Array(0),
+  });
+
+  // The utterance being spoken, so a cancel for it reaches the engine while
+  // speak is still running rather than after it resolves.
+  // Held in an object: the reader closure reads what the loop below writes,
+  // and a bare `let` would be narrowed to its initial null there.
+  const current: { u: { id: string; controller: AbortController } | null } = { u: null };
+  const inbox: SpeakInbound[] = [];
+  let gone = false;
+  let wake: (() => void) | null = null;
+  const poke = () => {
+    const resolve = wake;
+    wake = null;
+    resolve?.();
+  };
+
+  void (async () => {
+    const reader = new PipelineReader(input);
+    try {
+      for (;;) {
+        const ev = await reader.readEvent();
+        if (ev === null) break;
+        const data = ev.data as Record<string, unknown> | undefined;
+        if (ev.type === EventSpeak) {
+          if (typeof data?.session_id !== "string" || typeof data?.text !== "string") {
+            logWarn("speak: undecodable request");
+            continue;
+          }
+          inbox.push({ speak: data as unknown as Speak });
+          poke();
+        } else if (ev.type === EventAudioStop && typeof data?.session_id === "string") {
+          const id = data.session_id;
+          if (current.u && current.u.id === id) current.u.controller.abort();
+          inbox.push({ cancel: id });
+          poke();
+        }
+      }
+    } catch {
+      // A broken pipe or malformed input: treat it as the platform gone.
+    }
+    // EOF: the platform is gone, and whatever is being said will not be heard.
+    current.u?.controller.abort();
+    gone = true;
+    poke();
+  })();
+
+  const closeUtterance = (id: string) =>
+    w.writeEvent({
+      type: EventAudioStop,
+      data: { session_id: id },
+      payload: new Uint8Array(0),
+    });
+
+  const queue: Speak[] = [];
+  for (;;) {
+    // Take everything that has arrived before choosing what to say next, so a
+    // cancel already sent for a queued utterance is honored before it starts.
+    if (gone) return;
+    for (const msg of inbox.splice(0)) {
+      if ("speak" in msg) {
+        queue.push(msg.speak);
+        continue;
+      }
+      // Queued and not yet begun: close it now. A cancel for the utterance
+      // being spoken already went through its signal, and one for an id no
+      // longer known is moot.
+      const i = queue.findIndex((q) => q.session_id === msg.cancel);
+      if (i >= 0) {
+        queue.splice(i, 1);
+        await closeUtterance(msg.cancel);
+      }
+    }
+    const req = queue.shift();
+    if (!req) {
+      await new Promise<void>((resolve) => {
+        wake = resolve;
+        if (gone || inbox.length > 0) poke();
+      });
+      continue;
+    }
+
+    const controller = new AbortController();
+    current.u = { id: req.session_id, controller };
+    let failure: unknown = null;
+    try {
+      await engine.speak(req, new SpeakCtx(w, req.session_id, controller));
+    } catch (e) {
+      failure = e;
+    }
+    current.u = null;
+    if (failure !== null) {
+      const err: ErrorEvent = {
+        session_id: req.session_id,
+        code: "speak_failed",
+        message: failure instanceof Error ? failure.message : String(failure),
+        fatal: false,
+      };
+      await w.writeEvent({
+        type: EventError,
+        data: err as unknown as Record<string, unknown>,
+        payload: new Uint8Array(0),
+      });
+    }
+    await closeUtterance(req.session_id);
+  }
 }

@@ -136,6 +136,17 @@ export interface Capability {
    * predates it ignores it and delivers every event.
    */
   streams?: StreamDecl[];
+  /**
+   * The voices a speech engine (`stage_type` `tts`) can speak in, so the
+   * person can be offered a choice without the platform knowing anything
+   * about the engine. The first is the engine's default: a `speak` request
+   * that names no voice, or a voice not listed here, is spoken in it.
+   *
+   * Empty = the stage is not a speech engine, which is every other stage.
+   * A speech engine declares at least one; the conformance harness holds
+   * it to that.
+   */
+  voices?: VoiceInfo[];
 }
 
 /**
@@ -193,6 +204,25 @@ export interface StreamDecl {
    * 250): the platform warns when a stream runs well past its declaration.
    */
   rate_hz: number;
+}
+
+/**
+ * One voice a speech engine declares in Capability.voices: the id a speak request names it by, a name a person can choose it by, and the language it speaks.
+ */
+export interface VoiceInfo {
+  /**
+   * What a `speak` request names this voice by. Stable across releases
+   * of the engine: a person's stored choice refers to it.
+   */
+  id: string;
+  /**
+   * BCP 47 tag of the language it speaks — "en-US", "pt-BR".
+   */
+  locale: string;
+  /**
+   * The voice as a person would choose it — "Heart (American English)".
+   */
+  name: string;
 }
 
 /**

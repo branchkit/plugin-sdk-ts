@@ -5,6 +5,23 @@ git history.
 
 ## Unreleased
 
+### Speech engines (stage runtime)
+
+- Added `serveSpeechEngine` / `serveSpeechEngineOn` with the `SpeechEngine`
+  interface and `SpeakCtx` (`./stage`): the third stage shape, a
+  text-to-speech engine. Each `speak` request becomes an audio session the
+  stage streams back (`start`, then `audio` per piece); the runtime keeps
+  requests in order, cancels the one in progress the moment the platform
+  sends its `audio_stop` (`cancelled`, `signal`), closes a queued one that is
+  cancelled before it starts, and ends every utterance with exactly one
+  `audio_stop`, after an `error` when `speak` rejects.
+- A speech engine's chunk `timestamp_ms` is wall time here: JavaScript
+  runtimes expose no absolute reading of the clock the platform stamps
+  microphone audio with. The platform times what was heard from the audio
+  sink's reports, so nothing depends on it.
+- Generated: `Speak`, `PlaybackStarted`, `PlaybackEnded` and their event
+  tags; `Capability.voices` with `VoiceInfo`.
+
 ### Device triggers
 
 - Added `bindingsSetTriggers` (`TriggerDecl`, `TriggerKind`): a device plugin publishes
