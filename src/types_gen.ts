@@ -1898,8 +1898,9 @@ export interface OutputState {
   footer?: string;
   /**
    * One of the closed [`OutputKind`] vocabulary: `choices`, `mode`,
-   * `outcome`, `problem`, `progress`. Carried as a string so a kind this
-   * platform does not know degrades to `outcome` instead of failing.
+   * `outcome`, `problem`, `progress`, `notice`. Carried as a string so a
+   * kind this platform does not know degrades to `outcome` instead of
+   * failing.
    */
   kind: string;
   /**

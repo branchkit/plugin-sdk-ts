@@ -18,7 +18,7 @@ describe("semantic output helpers", () => {
   });
 
   test("the vocabulary is generated in the platform's order", () => {
-    expect([...KnownOutputKinds]).toEqual(["choices", "mode", "outcome", "problem", "progress"]);
+    expect([...KnownOutputKinds]).toEqual(["choices", "mode", "outcome", "problem", "progress", "notice"]);
   });
 
   test("outputState carries the document untouched and decodes {ok, generation}", async () => {
