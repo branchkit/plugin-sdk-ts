@@ -648,6 +648,7 @@ export const MethodSpeechEngines = "speech.engines" as const; // since 0.2.0
 export const MethodSpeechRestartEngine = "speech.restart_engine" as const; // since 0.2.0
 export const MethodSpeechSay = "speech.say" as const; // since 0.1.0
 export const MethodSpeechStop = "speech.stop" as const; // since 0.1.0
+export const MethodStagesRequest = "stages.request" as const; // since 0.2.0
 export const MethodSystemLaunchApp = "system.launch_app" as const; // since 0.1.0
 export const MethodSystemNotify = "system.notify" as const; // since 0.1.0
 export const MethodSystemRunShell = "system.run_shell" as const; // since 0.1.0

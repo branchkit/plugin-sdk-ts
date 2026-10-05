@@ -15,6 +15,8 @@ export type { AudioFormat };
 export const EventCapability = "capability" as const;
 export const EventError = "error" as const;
 export const EventFlowCredit = "flow_credit" as const;
+export const EventReply = "reply" as const;
+export const EventRequest = "request" as const;
 
 /**
  * The open namespace a stage emits custom events under: at least three
@@ -183,6 +185,28 @@ export interface ErrorEvent {
 export interface FlowCredit {
   frames: number;
   session_id: string;
+}
+
+/**
+ * `reply`: a request stage's answer to one `request`. Exactly one of `body`
+ * (the answer) and `error` (why there is none) is set.
+ */
+export interface Reply {
+  body?: unknown;
+  error?: string;
+  request_id: string;
+}
+
+/**
+ * `request`: the host asks a request stage (`stage_type: "request"`) for one
+ * answer. The stage answers every request with exactly one `reply` carrying
+ * the same `request_id`, in the order the requests arrived. What `body`
+ * holds is between the stage and the plugin that ships it: the platform
+ * carries it and never reads it.
+ */
+export interface Request {
+  body?: unknown;
+  request_id: string;
 }
 
 /**

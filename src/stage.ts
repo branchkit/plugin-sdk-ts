@@ -14,7 +14,7 @@
  *
  * ## Which entry point
  *
- * Three, because there are three loop shapes:
+ * Four, because there are four loop shapes:
  *
  * - {@link serveAudioConsumer} — read-driven. The stage's work is a reaction
  *   to an inbound audio session. VAD gates, STT engines, command recognizers.
@@ -23,6 +23,9 @@
  * - {@link serveSpeechEngine} — request-driven. Each `speak` request becomes
  *   an audio session the stage produces, streaming, and stops the moment the
  *   platform cancels it. Text-to-speech engines.
+ * - {@link serveRequests} — request-driven, one answer per request. Text or
+ *   data in, one reply out, for work a plugin wants done in a confined
+ *   process of its own: a language model, a translator, a classifier.
  *
  * An audio source is the second shape plus {@link SourceOptions.listenForStop}.
  *
@@ -45,8 +48,14 @@
 import type { Readable, Writable } from "node:stream";
 import { PipelineReader, PipelineWriter } from "./pipeline.js";
 import type { PipelineEvent } from "./pipeline.js";
-import { EventCapability, EventError, EventFlowCredit } from "./pipeline_events_gen.js";
-import type { Capability, ErrorEvent } from "./pipeline_events_gen.js";
+import {
+  EventCapability,
+  EventError,
+  EventFlowCredit,
+  EventReply,
+  EventRequest,
+} from "./pipeline_events_gen.js";
+import type { Capability, ErrorEvent, Reply } from "./pipeline_events_gen.js";
 // The runtime names the audio session types in two places: the AudioConsumer
 // interface, and the stop request a listenForStop source reads. Both are audio
 // assumptions in an otherwise domain-free runtime — visible here on purpose.
@@ -762,5 +771,83 @@ export async function serveSpeechEngineOn(
       });
     }
     await closeUtterance(req.session_id);
+  }
+}
+
+// ---------------------------------------------------------------- request stage
+
+/**
+ * A request stage's work (`stage_type` `request`): answer one request's
+ * `body`. The fourth stage shape, beside the audio consumer, the source and
+ * the speech engine.
+ *
+ * Resolve with the answer, which becomes the reply's `body`. A rejection (or
+ * a thrown error) becomes this request's reply `error`, carrying the error's
+ * message, and the stage goes on to the next request. A failure that makes
+ * the stage unusable (a model that does not load) belongs before
+ * {@link serveRequests}, where {@link run} turns it into exit 1.
+ *
+ * Requests are answered one at a time, in arrival order.
+ */
+export type RequestHandler = (body: unknown) => Promise<unknown>;
+
+/**
+ * Serve a request stage on stdin/stdout: send the capability, then answer
+ * every `request` with exactly one `reply` carrying its `request_id`, until
+ * stdin closes. A `request` that cannot be read (no `request_id`) gets an
+ * `error` event, since there is no id to reply to; other event types are
+ * ignored, as wire leniency is contract.
+ */
+export function serveRequests(capability: Capability, handler: RequestHandler): Promise<void> {
+  return serveRequestsOn(process.stdin, process.stdout, capability, handler);
+}
+
+/** {@link serveRequests} over explicit streams, for tests. */
+export async function serveRequestsOn(
+  input: Readable,
+  output: Writable,
+  capability: Capability,
+  handler: RequestHandler,
+): Promise<void> {
+  const w = new PipelineWriter(output);
+  await w.writeEvent({
+    type: EventCapability,
+    data: capability as unknown as Record<string, unknown>,
+    payload: new Uint8Array(0),
+  });
+
+  const reader = new PipelineReader(input);
+  for (;;) {
+    const ev = await reader.readEvent();
+    if (ev === null) return;
+    if (ev.type !== EventRequest) continue;
+    const data = ev.data as Record<string, unknown> | undefined;
+    if (typeof data?.request_id !== "string") {
+      const err: ErrorEvent = {
+        code: "bad_request",
+        message: "unreadable request: missing string field `request_id`",
+        fatal: false,
+      };
+      await w.writeEvent({
+        type: EventError,
+        data: err as unknown as Record<string, unknown>,
+        payload: new Uint8Array(0),
+      });
+      continue;
+    }
+    const requestId = data.request_id;
+    let reply: Reply;
+    try {
+      // `?? null` keeps a handler that resolves with nothing a reply with a
+      // body: JSON drops `undefined`, which would leave neither field set.
+      reply = { request_id: requestId, body: (await handler(data.body ?? null)) ?? null };
+    } catch (e) {
+      reply = { request_id: requestId, error: e instanceof Error ? e.message : String(e) };
+    }
+    await w.writeEvent({
+      type: EventReply,
+      data: reply as unknown as Record<string, unknown>,
+      payload: new Uint8Array(0),
+    });
   }
 }
