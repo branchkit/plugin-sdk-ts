@@ -700,6 +700,7 @@ export const EventPipelineStarted = "_platform.pipeline.started" as const;
 export const EventPipelineStopped = "_platform.pipeline.stopped" as const;
 export const EventPipelineTranscript = "_platform.pipeline.transcript" as const;
 export const EventPipelineWarmed = "_platform.pipeline.warmed" as const;
+export const EventPipelineWarming = "_platform.pipeline.warming" as const;
 export const EventPluginDegraded = "_platform.plugin.degraded" as const;
 export const EventPluginDisabled = "_platform.plugin.disabled" as const;
 export const EventPluginEnabled = "_platform.plugin.enabled" as const;

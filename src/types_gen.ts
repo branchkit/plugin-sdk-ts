@@ -10466,6 +10466,15 @@ export interface PipelineWarmedEventParams {
   pipeline: string;
 }
 
+/** Payload of the `_platform.pipeline.warming` event. */
+export interface PipelineWarmingEventParams {
+  pipeline: string;
+  /**
+   * The consumer stages being started, by qualified name.
+   */
+  stages: string[];
+}
+
 /** Payload of the `_platform.plugin.degraded` event. */
 export interface PluginDegradedEventParams {
   /**
