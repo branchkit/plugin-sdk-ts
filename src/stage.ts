@@ -45,6 +45,7 @@
  *   There is deliberately no sender-side helper here.
  */
 
+import "./sandbox_tmp.js"; // side-effect: on macOS under Bun, Apple frameworks use $TMPDIR
 import type { Readable, Writable } from "node:stream";
 import { PipelineReader, PipelineWriter } from "./pipeline.js";
 import type { PipelineEvent } from "./pipeline.js";

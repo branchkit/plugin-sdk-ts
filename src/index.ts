@@ -1,3 +1,4 @@
+import "./sandbox_tmp.js"; // side-effect: on macOS under Bun, Apple frameworks use $TMPDIR
 import "./proxy.js"; // side-effect: route fetch through BRANCHKIT_PROXY when sandboxed (per-host tier)
 export {
   Plugin,
