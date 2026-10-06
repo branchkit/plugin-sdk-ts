@@ -2459,7 +2459,7 @@ declare module "./plugin.js" {
      */
     nativeSelectedFinderItems(): Promise<string[]>;
     /**
-     * Get the currently selected text from the frontmost app
+     * Get the text selected in the focused app, never from a password field. Read through the OS accessibility interface; on macOS, an app that offers no selection through it is asked to copy, and the clipboard is put back.
      */
     nativeSelectedText(): Promise<NativeSelectedTextResponse>;
     /**
