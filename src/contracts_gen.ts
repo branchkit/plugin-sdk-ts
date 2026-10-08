@@ -696,6 +696,7 @@ export const EventOutputCleared = "_platform.output.cleared" as const;
 export const EventOutputState = "_platform.output.state" as const;
 export const EventPermissionChanged = "_platform.permission.changed" as const;
 export const EventPipelineError = "_platform.pipeline.error" as const;
+export const EventPipelineExecuted = "_platform.pipeline.executed" as const;
 export const EventPipelineStarted = "_platform.pipeline.started" as const;
 export const EventPipelineStopped = "_platform.pipeline.stopped" as const;
 export const EventPipelineTranscript = "_platform.pipeline.transcript" as const;

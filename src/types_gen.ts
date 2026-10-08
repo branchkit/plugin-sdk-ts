@@ -1164,6 +1164,29 @@ export interface EnumeratedCommand {
   sets_tags: string[];
 }
 
+/**
+ * One action's result in a [`PipelineExecutedEventParams`]. Carries the
+ * action's type, never its params: those can hold what the person said.
+ */
+export interface ExecutedActionReport {
+  /**
+   * Dotted action type (`tiling.snap`); `sequence` for a sequence.
+   */
+  action_type: string;
+  /**
+   * Why it was refused, when `status` is `denied` and the platform knows.
+   */
+  denial?: string;
+  /**
+   * Plugin that handled it, when it routed to one.
+   */
+  handler?: string;
+  /**
+   * `ok`, `error`, `not_handled`, `denied` or `simulated`.
+   */
+  status: string;
+}
+
 export interface ExternalDisk {
   file_system?: string;
   /**
@@ -10404,6 +10427,32 @@ export interface PermissionChangedEventParams {
 export interface PipelineErrorEventParams {
   error: string;
   pipeline: string;
+}
+
+/** Payload of the `_platform.pipeline.executed` event. */
+export interface PipelineExecutedEventParams {
+  /**
+   * One entry per action, in the order they ran.
+   * default []
+   */
+  actions?: ExecutedActionReport[];
+  /**
+   * `"ran"`: every action in `actions` was executed (each with its own
+   * status). `"dropped"`: the owner's `on_transcript` call failed (it
+   * timed out, returned an error, was not running, or answered with
+   * actions that could not be read) and nothing ran; a late answer is
+   * discarded. `reason` says which.
+   */
+  outcome: string;
+  /**
+   * The pipeline's owner, the plugin that introduced it.
+   */
+  owner_plugin: string;
+  pipeline: string;
+  /**
+   * Why the turn was dropped. Absent when it ran.
+   */
+  reason?: string;
 }
 
 /** Payload of the `_platform.pipeline.started` event. */
