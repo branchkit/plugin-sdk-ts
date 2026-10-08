@@ -1165,7 +1165,7 @@ export interface EnumeratedCommand {
 }
 
 /**
- * One action's result in a [`PipelineExecutedEventParams`]. Carries the
+ * One action's result in a `_platform.pipeline.executed` event. Carries the
  * action's type, never its params: those can hold what the person said.
  */
 export interface ExecutedActionReport {
