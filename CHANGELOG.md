@@ -5,6 +5,15 @@ git history.
 
 ## Unreleased
 
+### Listen
+
+- A socket served through the actuator's listener relay (Windows) now
+  reports the client as its `remoteAddress` / `remotePort` /
+  `remoteFamily`, so `req.socket.remoteAddress` is the client's, as it is
+  on an inherited listener. The relay header is now `BKRELAY/2`, whose
+  answer carries the peer (`OK <addr>`); a bare `OK` from an older actuator
+  is still accepted. Needs an actuator that speaks version 2.
+
 ### Output
 
 - `OutputStateRequest.draws_own_window`: publish a state for every other

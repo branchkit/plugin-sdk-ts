@@ -2,7 +2,7 @@ import { describe, expect, test } from "bun:test";
 import { createServer as createTcpServer, type Socket } from "node:net";
 import { request } from "node:http";
 import { ListenLocal } from "../listen.js";
-import { RELAY_HEADER_PREFIX, relayEnv } from "../relay.js";
+import { RELAY_HEADER_PREFIX, parseRelayAnswer, relayEnv } from "../relay.js";
 
 // A stand-in for the actuator's relay (listener_relay.rs): parks plugin
 // connections presenting the right header, and for each client on the public
@@ -29,7 +29,7 @@ function fakeRelay(token: string): Promise<{ rendezvous: string; publicPort: num
       client.destroy();
       return;
     }
-    plugin.write("OK\n");
+    plugin.write(`OK ${client.remoteAddress}:${client.remotePort}\n`);
     client.pipe(plugin);
     plugin.pipe(client);
     client.on("close", () => plugin.destroy());
@@ -68,6 +68,38 @@ function get(port: number, path: string, token?: string): Promise<{ status: numb
   });
 }
 
+// get, also reporting the client socket's local port (the peer the relay
+// should have carried).
+function getWithLocalPort(port: number, path: string, token: string): Promise<{ body: string; localPort: number }> {
+  return new Promise((resolve, reject) => {
+    const req = request(
+      { host: "127.0.0.1", port, path, method: "GET", agent: false, headers: { Authorization: `Bearer ${token}` } },
+      (res) => {
+        let body = "";
+        res.on("data", (c) => (body += c));
+        res.on("end", () => resolve({ body, localPort: req.socket?.localPort ?? 0 }));
+      },
+    );
+    req.on("error", reject);
+    req.end();
+  });
+}
+
+describe("parseRelayAnswer", () => {
+  test("reads the client's address from OK <peer>", () => {
+    expect(parseRelayAnswer("OK 127.0.0.1:50741")).toEqual({ address: "127.0.0.1", port: 50741, family: "IPv4" });
+    expect(parseRelayAnswer("OK [::1]:50741")).toEqual({ address: "::1", port: 50741, family: "IPv6" });
+  });
+  test("a bare OK (version 1) pairs with no peer", () => {
+    expect(parseRelayAnswer("OK")).toBeNull();
+  });
+  test("anything else is not a pairing", () => {
+    for (const bad of ["", "OK ", "NO 127.0.0.1:1", "OK nonsense", "OK 127.0.0.1:0", "OK 127.0.0.1:70000", "OK ::1:5", "OK [127.0.0.1]:5"]) {
+      expect(parseRelayAnswer(bad)).toBeUndefined();
+    }
+  });
+});
+
 describe("relay", () => {
   // Under Bun, node:http does not accept sockets fed via emit("connection")
   // the way Node does; the relay path runs under the Node engine (the build
@@ -90,12 +122,20 @@ describe("relay", () => {
         res.writeHead(200);
         res.end("pong");
       });
+      // The relayed request reports the client's address, carried in the
+      // relay's answer, not the rendezvous socket's.
+      listener.handleFunc("GET", "/peer", (req, res) => {
+        res.writeHead(200);
+        res.end(`${req.socket.remoteAddress} ${req.socket.remotePort} ${req.socket.remoteFamily}`);
+      });
       listener.serve();
       await new Promise((r) => setTimeout(r, 100)); // let the pool park
       for (let i = 0; i < 3; i++) {
         const ok = await get(relay.publicPort, "/ping", listener.getToken());
         expect(ok).toEqual({ status: 200, body: "pong" });
       }
+      const peer = await getWithLocalPort(relay.publicPort, "/peer", listener.getToken());
+      expect(peer.body).toBe(`127.0.0.1 ${peer.localPort} IPv4`);
       const denied = await get(relay.publicPort, "/ping");
       expect(denied.status).toBe(401);
       listener.shutdown();

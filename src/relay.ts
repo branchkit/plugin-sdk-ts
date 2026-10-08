@@ -1,4 +1,4 @@
-import { connect, type Socket } from "node:net";
+import { connect, isIP, type Socket } from "node:net";
 import type { Server } from "node:http";
 
 /**
@@ -12,16 +12,27 @@ import type { Server } from "node:http";
  * opened outward. The plugin parks a few such connections at the actuator's
  * per-spawn rendezvous (BRANCHKIT_LISTEN_RELAY, presenting
  * BRANCHKIT_LISTEN_RELAY_TOKEN on the first line); when a client arrives the
- * actuator writes "OK\n" on one of them and pumps bytes both ways. Each
+ * actuator writes "OK <peer>\n" on one of them and pumps bytes both ways. Each
  * paired socket is handed to the http.Server as a `connection`, which is how
  * Node's own cluster module feeds a server, so everything above it — routes,
  * the token check, serve()/shutdown() — is unchanged.
+ *
+ * <peer> is the client's address as the actuator's public listener accepted
+ * it. The socket the plugin holds is the rendezvous pipe, whose own peer says
+ * nothing about the client, so the paired socket reports <peer> as its
+ * remoteAddress/remotePort/remoteFamily — `req.socket.remoteAddress` is the
+ * client's, exactly as on an inherited fd. A plugin that asks the platform
+ * which app owns the other end of a loopback connection needs that port. The
+ * header's version 2 asks for the peer; a bare "OK\n" (an actuator speaking
+ * version 1) is still accepted, and the socket's own peer stands.
  *
  * The branch is chosen by the ENVIRONMENT, not by the platform: the actuator
  * decides per spawn, and a test on any OS can play the actuator.
  */
 
-export const RELAY_HEADER_PREFIX = "BKRELAY/1 ";
+export const RELAY_HEADER_PREFIX = "BKRELAY/2 ";
+/** The answer line's bound: "OK " plus an address. */
+const ANSWER_MAX = 128;
 const POOL_SIZE = 4;
 const RETRY_MIN_MS = 200;
 const RETRY_MAX_MS = 2000;
@@ -55,6 +66,43 @@ function dialRendezvous(env: RelayEnv): Socket {
   return "path" in env.rendezvous
     ? connect(env.rendezvous.path)
     : connect(env.rendezvous.port, env.rendezvous.host);
+}
+
+/** A client's address as the relay answer carries it. */
+export interface RelayPeer {
+  address: string;
+  port: number;
+  family: "IPv4" | "IPv6";
+}
+
+/**
+ * Parse the actuator's answer line (without its newline): "OK <peer>" gives
+ * the client's address, a bare "OK" (version 1) gives null, anything else
+ * is not a pairing (undefined).
+ */
+export function parseRelayAnswer(line: string): RelayPeer | null | undefined {
+  if (line === "OK") return null;
+  if (!line.startsWith("OK ")) return undefined;
+  const rest = line.slice(3);
+  const i = rest.lastIndexOf(":");
+  if (i <= 0) return undefined;
+  let host = rest.slice(0, i);
+  const portText = rest.slice(i + 1);
+  if (!/^[0-9]{1,5}$/.test(portText)) return undefined;
+  const port = Number.parseInt(portText, 10);
+  if (port <= 0 || port > 65535) return undefined;
+  const v6 = host.startsWith("[") && host.endsWith("]");
+  if (v6) host = host.slice(1, -1);
+  const family = isIP(host);
+  if (family === 0 || (family === 6) !== v6) return undefined;
+  return { address: host, port, family: v6 ? "IPv6" : "IPv4" };
+}
+
+/** Make a paired socket report the relayed client as its peer. */
+function adoptPeer(socket: Socket, peer: RelayPeer): void {
+  Object.defineProperty(socket, "remoteAddress", { value: peer.address, configurable: true });
+  Object.defineProperty(socket, "remotePort", { value: peer.port, configurable: true });
+  Object.defineProperty(socket, "remoteFamily", { value: peer.family, configurable: true });
 }
 
 /** Declared listeners as the actuator published them: `id=port,…`. */
@@ -102,17 +150,23 @@ export function startRelayPool(server: Server, env: RelayEnv, listenerId: string
     socket.on("data", function onData(chunk: Buffer) {
       if (paired) return;
       seen = Buffer.concat([seen, chunk]);
-      if (seen.length < 3) return;
-      if (seen.subarray(0, 3).toString() !== "OK\n") {
+      const nl = seen.indexOf(0x0a);
+      if (nl === -1) {
+        if (seen.length > ANSWER_MAX) socket.destroy();
+        return;
+      }
+      const peer = parseRelayAnswer(seen.subarray(0, nl).toString());
+      if (peer === undefined) {
         socket.destroy();
         return;
       }
       paired = true;
       parked.delete(socket);
       socket.removeListener("data", onData);
-      // The client's first bytes may share the segment with OK: put them
-      // back so the HTTP parser sees them first.
-      const rest = seen.subarray(3);
+      if (peer) adoptPeer(socket, peer);
+      // The client's first bytes may share the segment with the answer: put
+      // them back so the HTTP parser sees them first.
+      const rest = seen.subarray(nl + 1);
       if (rest.length > 0) socket.unshift(rest);
       // A replacement first, so the pool never dips while this one serves.
       park();
