@@ -263,7 +263,7 @@ export interface ActiveSpace {
 /**
  * Anchor position for a HUD window on screen.
  */
-export type Anchor = "top-left" | "top-right" | "bottom-left" | "bottom-right" | "bottom-center" | "center";
+export type Anchor = "top-left" | "top-right" | "top-center" | "bottom-left" | "bottom-right" | "bottom-center" | "center";
 
 /**
  * One app's audio in the system mixer: its own volume and mute, apart from
