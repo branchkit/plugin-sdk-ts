@@ -991,6 +991,13 @@ export interface DisplayInfo {
    */
   is_asleep: boolean;
   /**
+   * The system's main display: where the menu bar is (macOS), the
+   * primary monitor (Windows), RandR's primary output (X11). Default
+   * false; a source that cannot say leaves every display false.
+   * default false
+   */
+  is_primary: boolean;
+  /**
    * wire int32 · default 0
    */
   visible_h: number;
