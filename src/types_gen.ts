@@ -2322,9 +2322,9 @@ export interface ResolveResult {
    */
   consumed_count: number;
   /**
-   * The required tag is a select mode's: the platform draws its list as
-   * a palette card itself, so a renderer of its own (voice's Discovery
-   * window) leaves it to that card.
+   * The required tag, or a mode in force, is a select mode's: the
+   * platform draws its list as a palette card itself, so a renderer of
+   * its own (voice's Discovery window) leaves it to that card.
    */
   drawn_by_platform: boolean;
   /**
@@ -3773,9 +3773,9 @@ export interface CommandsResolveResponse {
    */
   consumed_count: number;
   /**
-   * The required tag is a select mode's: the platform draws its list as
-   * a palette card itself, so a renderer of its own (voice's Discovery
-   * window) leaves it to that card.
+   * The required tag, or a mode in force, is a select mode's: the
+   * platform draws its list as a palette card itself, so a renderer of
+   * its own (voice's Discovery window) leaves it to that card.
    */
   drawn_by_platform?: boolean;
   /**
