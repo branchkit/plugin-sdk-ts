@@ -2248,7 +2248,7 @@ export interface RedecodeNoise {
 /**
  * What a HUD window is placed against.
  */
-export type RelativeTo = "display" | "focused_window" | "pointer";
+export type RelativeTo = "display" | "focused_window" | "pointer" | "caret";
 
 export interface ReminderItem {
   due_date?: string;
@@ -5231,6 +5231,10 @@ export interface NativeCaptureWindowResponse {
    * Base64-encoded PNG bytes.
    */
   image_base64: string;
+}
+
+export interface NativeCaretBoundsResponse {
+  bounds?: AccessibleBounds;
 }
 
 export interface NativeCaretContextResponse {

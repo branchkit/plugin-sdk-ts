@@ -154,6 +154,7 @@ export const MethodNativeCameraPermission = "native.camera_permission" as const;
 export const MethodNativeCameras = "native.cameras" as const; // since 0.1.0
 export const MethodNativeCapsLockState = "native.caps_lock_state" as const; // since 0.1.0
 export const MethodNativeCaptureWindow = "native.capture_window" as const; // since 0.1.0
+export const MethodNativeCaretBounds = "native.caret_bounds" as const; // since 0.2.0
 export const MethodNativeCaretContext = "native.caret_context" as const; // since 0.2.0
 export const MethodNativeCascadeWindows = "native.cascade_windows" as const; // since 0.1.0
 export const MethodNativeCenterWindow = "native.center_window" as const; // since 0.1.0
