@@ -2322,6 +2322,12 @@ export interface ResolveResult {
    */
   consumed_count: number;
   /**
+   * The required tag is a select mode's: the platform draws its list as
+   * a palette card itself, so a renderer of its own (voice's Discovery
+   * window) leaves it to that card.
+   */
+  drawn_by_platform: boolean;
+  /**
    * The winning command's dictated-argument descriptor, if declared: the
    */
   has_completions: boolean;
@@ -3766,6 +3772,12 @@ export interface CommandsResolveResponse {
    * wire uint · min 0
    */
   consumed_count: number;
+  /**
+   * The required tag is a select mode's: the platform draws its list as
+   * a palette card itself, so a renderer of its own (voice's Discovery
+   * window) leaves it to that card.
+   */
+  drawn_by_platform?: boolean;
   /**
    * The winning command's dictated-argument descriptor, if declared: the
    */
