@@ -261,9 +261,12 @@ export interface ActiveSpace {
 }
 
 /**
- * Anchor position for a HUD window on screen.
+ * Where a HUD window sits against what it is placed relative to: one of the
+ * nine points of a three-by-three grid, a vertical position (top, centre,
+ * bottom) and a horizontal one (left, centre, right). The grid is complete,
+ * so the list never grows.
  */
-export type Anchor = "top-left" | "top-right" | "top-center" | "bottom-left" | "bottom-right" | "bottom-center" | "center";
+export type Anchor = "top-left" | "top-right" | "top-center" | "bottom-left" | "bottom-right" | "bottom-center" | "center" | "center-left" | "center-right";
 
 /**
  * One app's audio in the system mixer: its own volume and mute, apart from
@@ -1796,6 +1799,22 @@ export interface OcrRegion {
   y: number;
 }
 
+/**
+ * A nudge from where the anchor puts a window, in pixels: `x` to the right,
+ * `y` down. With `relative_to: display` and `anchor: top-left`, the
+ * window's exact place on the display.
+ */
+export interface Offset {
+  /**
+   * wire int32 · default 0
+   */
+  x?: number;
+  /**
+   * wire int32 · default 0
+   */
+  y?: number;
+}
+
 export type OnActionStatus = "ok" | "error" | "not_handled";
 
 /**
@@ -2215,6 +2234,11 @@ export interface RedecodeNoise {
    */
   snr_db: number;
 }
+
+/**
+ * What a HUD window is placed against.
+ */
+export type RelativeTo = "display" | "focused_window" | "pointer";
 
 export interface ReminderItem {
   due_date?: string;
@@ -4107,11 +4131,22 @@ export interface HUDCreateChannelRequest {
    */
   min_height?: number;
   /**
+   * A nudge from the anchored place, in pixels: `x` right, `y` down.
+   * default {"x":0,"y":0}
+   */
+  offset?: Offset;
+  /**
    * Pointer-dodge behavior: "none" (default) or "fade" (dodge the mouse —
    * fade to near-transparent while the pointer is inside the frame).
    * default "none"
    */
   on_pointer?: OnPointer;
+  /**
+   * What the window is placed against: `display` (the default),
+   * `focused_window` or `pointer`.
+   * default "display"
+   */
+  relative_to?: RelativeTo;
   /**
    * Stack position among windows sharing this anchor: offsets ascend from the
    * anchor edge, so the lowest pins at the corner (a persistent status window)
