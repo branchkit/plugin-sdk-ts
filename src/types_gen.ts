@@ -1801,8 +1801,10 @@ export interface OcrRegion {
 
 /**
  * A nudge from where the anchor puts a window, in pixels: `x` to the right,
- * `y` down. With `relative_to: display` and `anchor: top-left`, the
- * window's exact place on the display.
+ * `y` down. The anchored place is 20 pixels in from the edges of the
+ * display's usable area (or the focused window), so with `anchor:
+ * top-left` the window's top-left corner is at that inset plus the offset;
+ * a negative offset reaches the edge.
  */
 export interface Offset {
   /**
