@@ -5,6 +5,14 @@ git history.
 
 ## Unreleased
 
+### Network
+
+- A proxy connection that ends before the proxy answers `CONNECT` now
+  rejects `dial()` and the proxied `fetch` with "branchkit proxy closed the
+  connection during CONNECT". It used to wait for an answer that could not
+  come, until the caller's own timeout or forever. The Go and Python SDKs
+  already failed this way.
+
 ### World
 
 - `DisplayInfo.is_primary`: whether a display is the system's main one (the

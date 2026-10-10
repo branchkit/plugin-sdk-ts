@@ -170,11 +170,17 @@ function handshake(
     // UpstreamClient's 10s timeout could not fire while the proxy dial or the
     // CONNECT handshake hung — the request sat forever and the socket leaked.
     const onAbort = () => fail(abortError());
+    // The proxy hanging up before its answer is a failure, not a wait: a
+    // stream that has ended emits nothing more, so without this the caller
+    // sat until its own timeout, or forever without one.
+    const onEnd = () => fail(new Error("branchkit proxy closed the connection during CONNECT"));
     const done = () => {
       settled = true;
       signal?.removeEventListener("abort", onAbort);
       sock.removeListener("data", onData);
       sock.removeListener("error", fail);
+      sock.removeListener("end", onEnd);
+      sock.removeListener("close", onEnd);
     };
     function fail(err: Error) {
       if (settled) return;
@@ -185,6 +191,8 @@ function handshake(
     signal?.addEventListener("abort", onAbort, { once: true });
 
     sock.on("error", fail);
+    sock.on("end", onEnd);
+    sock.on("close", onEnd);
     const ask = () =>
       sock.write(`CONNECT ${host}:${port} HTTP/1.1\r\nHost: ${host}:${port}\r\n\r\n`);
     if (open) ask();

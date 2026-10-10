@@ -6,23 +6,42 @@ import { describe, expect, test } from "bun:test";
 import { dlopen, FFIType, ptr } from "bun:ffi";
 import { connectTunnel, parseProxyUrl } from "../proxy.js";
 
+// The broker keeps its copy of the passed end until the SDK has spoken on
+// it. Closing it straight after send_fds leaves the message the socket's
+// only reference while it waits in the channel, and macOS's unix-socket
+// garbage collector then sometimes flushes it: the SDK receives a socket
+// already shut for reading, and the proxy's 200 is discarded. Measured on
+// macOS 15 with a pure-Python client, no Bun involved: one connection in
+// roughly every 70-400 back-to-back ones arrived dead, none in 15,000 once
+// the sender held its copy. With two connections per run that was the
+// occasional timeout this test used to show.
 const BROKER = `
-import socket
+import socket, sys
 chan = socket.socket(fileno=3)
+mode = sys.argv[1]
 while True:
     if not chan.recv(1):
         break
     mine, theirs = socket.socketpair()
     socket.send_fds(chan, [b"c"], [theirs.fileno()])
-    theirs.close()
     head = b""
     while b"\\r\\n\\r\\n" not in head:
         head += mine.recv(1)
+    theirs.close()
+    if mode == "hangup":
+        mine.close()
+        continue
     mine.sendall(b"HTTP/1.1 200 Connection Established\\r\\n\\r\\n")
     data = mine.recv(64)
     mine.sendall(b"echo:" + data)
     mine.close()
 `;
+
+function spawnBroker(mode: "echo" | "hangup", channel: number) {
+  return Bun.spawn(["python3", "-c", BROKER, mode], {
+    stdio: ["ignore", "inherit", "inherit", channel],
+  });
+}
 
 function socketpair(): [number, number] {
   const libc = dlopen(process.platform === "darwin" ? "libc.dylib" : "libc.so.6", {
@@ -53,9 +72,7 @@ describe("proxy handoff (fd://)", () => {
   // Unix fd passing; the channel only ever exists on Linux.
   test.skipIf(process.platform === "win32")("each ask gets a working connection", async () => {
     const [mine, theirs] = socketpair();
-    const broker = Bun.spawn(["python3", "-c", BROKER], {
-      stdio: ["ignore", "inherit", "inherit", theirs],
-    });
+    const broker = spawnBroker("echo", theirs);
     try {
       const endpoint = parseProxyUrl(`fd://${mine}`);
       for (const msg of ["one", "two"]) {
@@ -63,6 +80,21 @@ describe("proxy handoff (fd://)", () => {
         expect(await echoOnce(sock, msg)).toBe(`echo:${msg}`);
         sock.destroy();
       }
+    } finally {
+      broker.kill();
+    }
+  });
+
+  // A proxy that hangs up before answering CONNECT is an error at once, not
+  // a wait for a 200 that cannot come.
+  test.skipIf(process.platform === "win32")("a hang-up before the answer rejects", async () => {
+    const [mine, theirs] = socketpair();
+    const broker = spawnBroker("hangup", theirs);
+    try {
+      const endpoint = parseProxyUrl(`fd://${mine}`);
+      await expect(connectTunnel(endpoint, "example.invalid", 443)).rejects.toThrow(
+        "closed the connection during CONNECT",
+      );
     } finally {
       broker.kill();
     }
