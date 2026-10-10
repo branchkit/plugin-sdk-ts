@@ -37,7 +37,11 @@ function miniProxy(allowedHost: string): NetServer {
         sock.pipe(up);
         up.pipe(sock);
       });
-      up.on("error", () => sock.end("HTTP/1.1 400 Bad Request\r\nContent-Length: 0\r\n\r\n"));
+      // The cause rides in the status line, so a failed upstream dial is
+      // named as one in the SDK's error.
+      up.on("error", (e: NodeJS.ErrnoException) =>
+        sock.end(`HTTP/1.1 400 Bad Request (upstream dial: ${e.code ?? e.message})\r\nContent-Length: 0\r\n\r\n`),
+      );
       sock.on("error", () => up.destroy());
     };
     sock.on("data", onData);

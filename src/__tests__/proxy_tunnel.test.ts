@@ -39,7 +39,13 @@ function miniProxy(
         client.pipe(up);
         up.pipe(client);
       });
-      up.on("error", () => client.destroy());
+      // Answer a failed upstream dial with its cause, as host_proxy answers
+      // "declared but unreachable": a silent hang-up reads as the SDK's
+      // "closed the connection during CONNECT" and hides that it was this
+      // test's own TCP dial that failed.
+      up.on("error", (e: NodeJS.ErrnoException) =>
+        client.end(`HTTP/1.1 400 Bad Request (upstream dial: ${e.code ?? e.message})\r\nContent-Length: 0\r\n\r\n`),
+      );
     };
     client.on("data", onData);
   });
