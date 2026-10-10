@@ -470,7 +470,7 @@ function lookupHarnessBinary(): string | undefined {
   // The Windows install folder, which is not on PATH. (The Linux packages
   // put the harness in /usr/bin, so PATH below finds it.)
   if (process.env.LOCALAPPDATA) {
-    candidates.push(join(process.env.LOCALAPPDATA, "Programs", "BranchKit", "branchkit-test-harness"));
+    candidates.push(join(process.env.LOCALAPPDATA, "Programs", "BranchKit", "branchkit-test-harness")); // build-identity: allow — the Windows install folder, not app data
   }
 
   // Cargo writes branchkit-test-harness.exe on Windows; without the suffix
