@@ -12,6 +12,11 @@ git history.
   connection during CONNECT". It used to wait for an answer that could not
   come, until the caller's own timeout or forever. The Go and Python SDKs
   already failed this way.
+- Over a handed-off proxy channel (`BRANCHKIT_PROXY=fd://N`, Linux), a dial
+  that gave up waiting for the channel's answer no longer leaves the next
+  dial one answer behind. The late answer is read and discarded before the
+  next ask, so every dial gets the connection that answers its own ask;
+  before, it got the previous dial's, and so did every dial after it.
 
 ### World
 

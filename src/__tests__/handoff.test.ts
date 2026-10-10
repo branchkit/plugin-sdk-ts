@@ -5,6 +5,7 @@
 import { describe, expect, test } from "bun:test";
 import { dlopen, FFIType, ptr } from "bun:ffi";
 import { connectTunnel, parseProxyUrl } from "../proxy.js";
+import { handoffConnection } from "../handoff.js";
 
 // The broker keeps its copy of the passed end until the SDK has spoken on
 // it. Closing it straight after send_fds leaves the message the socket's
@@ -35,6 +36,26 @@ while True:
     data = mine.recv(64)
     mine.sendall(b"echo:" + data)
     mine.close()
+`;
+
+// Answers the first ask late, after the SDK has given up on it, and tags
+// each connection it hands over with its number. Holds every passed socket
+// until it exits.
+const LATE_BROKER = `
+import socket, time
+chan = socket.socket(fileno=3)
+held = []
+tag = 1
+while True:
+    if not chan.recv(1):
+        break
+    if tag == 1:
+        time.sleep(0.3)
+    mine, theirs = socket.socketpair()
+    held += [mine, theirs]
+    mine.sendall(str(tag).encode())
+    socket.send_fds(chan, [b"c"], [theirs.fileno()])
+    tag += 1
 `;
 
 function spawnBroker(mode: "echo" | "hangup", channel: number) {
@@ -95,6 +116,28 @@ describe("proxy handoff (fd://)", () => {
       await expect(connectTunnel(endpoint, "example.invalid", 443)).rejects.toThrow(
         "closed the connection during CONNECT",
       );
+    } finally {
+      broker.kill();
+    }
+  });
+
+  // A dial whose wait for the channel gives up leaves its reply to arrive
+  // later. The next dial must still get the connection answering ITS ask,
+  // not that late one.
+  test.skipIf(process.platform === "win32")("after a timed-out read, the next ask gets its own connection", async () => {
+    const [mine, theirs] = socketpair();
+    const broker = Bun.spawn(["python3", "-c", LATE_BROKER], {
+      stdio: ["ignore", "inherit", "inherit", theirs],
+    });
+    try {
+      await expect(handoffConnection(mine, 50)).rejects.toThrow("did not answer");
+      const sock = await handoffConnection(mine, 5000);
+      const tag = await new Promise<string>((resolve, reject) => {
+        sock.once("data", (d) => resolve(d.toString()));
+        sock.once("error", reject);
+      });
+      sock.destroy();
+      expect(tag).toBe("2");
     } finally {
       broker.kill();
     }

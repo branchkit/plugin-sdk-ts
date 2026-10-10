@@ -59,20 +59,53 @@ async function loadLibc(): Promise<void> {
 
 let chain: Promise<unknown> = Promise.resolve();
 
-/** Ask the channel at `channelFd` for one proxy connection. */
-export function handoffConnection(channelFd: number): Promise<Duplex> {
+/** Replies asked for and not yet read, per channel. A read that gives up
+ * leaves its reply to arrive later; each is read and discarded before the
+ * next ask, so a dial always takes the reply to its own ask, never an
+ * earlier one. */
+const owed = new Map<number, number>();
+
+/** The channel did not answer before the deadline. */
+class NoAnswerError extends Error {}
+
+/** Ask the channel at `channelFd` for one proxy connection. `timeoutMs`
+ * bounds the wait for the channel's answer. */
+export function handoffConnection(channelFd: number, timeoutMs = HANDOFF_TIMEOUT_MS): Promise<Duplex> {
   if (!process.versions.bun) return Promise.reject(new ProxyHandoffUnsupportedError());
-  const next = chain.then(() => receiveOne(channelFd));
+  const next = chain.then(() => receiveOne(channelFd, timeoutMs));
   chain = next.catch(() => undefined);
   return next;
 }
 
-async function receiveOne(channelFd: number): Promise<Duplex> {
+async function receiveOne(channelFd: number, timeoutMs: number): Promise<Duplex> {
   await loadLibc();
+  const deadline = Date.now() + timeoutMs;
+  while ((owed.get(channelFd) ?? 0) > 0) {
+    let late: number | null;
+    try {
+      late = await readReply(channelFd, deadline);
+    } catch (e) {
+      if (e instanceof NoAnswerError) {
+        throw new Error("the proxy channel has not yet answered an earlier ask");
+      }
+      throw e;
+    }
+    if (late !== null) closeFd(late);
+  }
   const ask = new Uint8Array([0x63]);
   if (libc.symbols.send(channelFd, ffi.ptr(ask), 1, 0) !== 1) {
     throw new Error("could not ask the proxy channel for a connection");
   }
+  owed.set(channelFd, (owed.get(channelFd) ?? 0) + 1);
+  const fd = await readReply(channelFd, deadline);
+  if (fd === null) throw new Error("the proxy channel replied without a connection");
+  return fdStream(fd);
+}
+
+/** Read one reply off the channel: the descriptor it carries, or null for a
+ * reply without one. Throws NoAnswerError, having taken nothing off the
+ * channel, if no reply comes before `deadline`. */
+async function readReply(channelFd: number, deadline: number): Promise<number | null> {
   const byte = new Uint8Array(8);
   const iov = new Uint8Array(16);
   const iv = new DataView(iov.buffer);
@@ -80,7 +113,6 @@ async function receiveOne(channelFd: number): Promise<Duplex> {
   iv.setBigUint64(8, 1n, true);
   const control = new Uint8Array(64);
   const msg = new Uint8Array(LAYOUT.size);
-  const deadline = Date.now() + HANDOFF_TIMEOUT_MS;
   for (;;) {
     msg.fill(0);
     control.fill(0);
@@ -94,13 +126,14 @@ async function receiveOne(channelFd: number): Promise<Duplex> {
     const n = libc.symbols.recvmsg(channelFd, ffi.ptr(msg), LAYOUT.dontwait);
     if (n === 0) throw new Error("the proxy channel closed");
     if (n > 0) {
+      owed.set(channelFd, (owed.get(channelFd) ?? 1) - 1);
       const c = new DataView(control.buffer);
       if (c.getInt32(LAYOUT.cmsgData - 8, true) !== SOL_SOCKET || c.getInt32(LAYOUT.cmsgData - 4, true) !== SCM_RIGHTS) {
-        throw new Error("the proxy channel replied without a connection");
+        return null;
       }
-      return fdStream(c.getInt32(LAYOUT.cmsgData, true));
+      return c.getInt32(LAYOUT.cmsgData, true);
     }
-    if (Date.now() > deadline) throw new Error("the proxy channel did not answer");
+    if (Date.now() > deadline) throw new NoAnswerError("the proxy channel did not answer");
     await Bun.sleep(1);
   }
 }
