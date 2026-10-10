@@ -2126,6 +2126,12 @@ export interface PipelineStatusEntry {
   name: string;
 }
 
+/**
+ * Why a pipeline stopped. Only `requested` is a stop someone asked for; the
+ * others end a run its owner may want to start again.
+ */
+export type PipelineStopReason = "requested" | "ended" | "error" | "reload";
+
 export type PluginLogLevel = "trace" | "info" | "warn" | "error" | "debug";
 
 export interface PoolStageStatusEntry {
@@ -10527,7 +10533,17 @@ export interface PipelineStartedEventParams {
 
 /** Payload of the `_platform.pipeline.stopped` event. */
 export interface PipelineStoppedEventParams {
+  /**
+   * What went wrong, when `reason` is `error`. The same text
+   * `_platform.pipeline.error` carried just before.
+   */
+  error?: string;
   pipeline: string;
+  reason: PipelineStopReason;
+  /**
+   * `keybind` when the pipeline's own keybind trigger stopped it.
+   */
+  trigger?: string;
 }
 
 /** Payload of the `_platform.pipeline.transcript` event. */
