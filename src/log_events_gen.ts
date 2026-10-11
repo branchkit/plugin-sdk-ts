@@ -33,6 +33,7 @@ export const LogEventNativeHidLifecycle = "native.hid_lifecycle" as const;
 export const LogEventNativeWindowSkipped = "native.window_skipped" as const;
 export const LogEventNativeWorldPollerEvent = "native.world_poller_event" as const;
 export const LogEventOperationCompleted = "operation.completed" as const;
+export const LogEventOperationLatency = "operation.latency" as const;
 export const LogEventPluginAppPreference = "plugin.app_preference" as const;
 export const LogEventPluginDbusCall = "plugin.dbus_call" as const;
 export const LogEventPluginDegraded = "plugin.degraded" as const;
@@ -57,6 +58,7 @@ export const LogEventRpcOutboundCallSent = "rpc.outbound_call_sent" as const;
 export const LogEventRpcOutboundNotify = "rpc.outbound_notify" as const;
 export const LogEventSessionControlMessage = "session.control_message" as const;
 export const LogEventStageDiagnostic = "stage.diagnostic" as const;
+export const LogEventStageRequestCompleted = "stage.request_completed" as const;
 export const LogEventStateRetentionSwept = "state.retention_swept" as const;
 export const LogEventStateTagCleared = "state.tag_cleared" as const;
 export const LogEventStateTagLifecycleClear = "state.tag_lifecycle_clear" as const;
@@ -110,6 +112,7 @@ export const LogEventRegistry: Record<string, LogEventMeta> = {
     "native.window_skipped": { name: "native.window_skipped", summary: "World poller skipped a non-standard window (debug-level).", since: "0.1.0", source: "native", severity: "debug", redaction: "none" },
     "native.world_poller_event": { name: "native.world_poller_event", summary: "World poller lifecycle event (started, seeded, batch processed, idle).", since: "0.1.0", source: "native", severity: "debug", redaction: "none" },
     "operation.completed": { name: "operation.completed", summary: "An operation handler completed execution.", since: "0.1.0", source: "dispatch", severity: "debug", redaction: "none" },
+    "operation.latency": { name: "operation.latency", summary: "An operation on the latency path (typing text, reading the caret, resolving a phrase) completed; its duration at Info, correlated to the caller's chain.", since: "0.2.0", source: "dispatch", severity: "info", redaction: "none" },
     "plugin.app_preference": { name: "plugin.app_preference", summary: "A plugin read or changed (or was refused) a setting in another app's settings domain through native.read_app_preference / native.write_app_preference: allowed, failed, denied (not declared, or declared for reading only), off (switched off by the user) or forbidden (no grant can reach it). The domain and key only, never the value. Audit-eligible.", since: "0.2.0", source: "plugins", severity: "info", redaction: "full" },
     "plugin.dbus_call": { name: "plugin.dbus_call", summary: "A plugin called (or was refused) a D-Bus method through native.dbus_call: allowed, failed, denied (not declared), off (switched off by the user) or forbidden (no grant can reach it). The method and argument signature only. Audit-eligible.", since: "0.2.0", source: "plugins", severity: "info", redaction: "full" },
     "plugin.degraded": { name: "plugin.degraded", summary: "A plugin is running but not fully working — its RPC channel hit the consecutive-timeout threshold (reason absent), it stopped reading its stdin (the platform's reason), or it reported the fault itself via plugin.report_health (its own reason).", since: "0.1.0", source: "plugins", severity: "warn", redaction: "full" },
@@ -134,6 +137,7 @@ export const LogEventRegistry: Record<string, LogEventMeta> = {
     "rpc.outbound_notify": { name: "rpc.outbound_notify", summary: "An actuator-to-plugin RPC notification (fire-and-forget) was sent.", since: "0.1.0", source: "plugins", severity: "debug", redaction: "none" },
     "session.control_message": { name: "session.control_message", summary: "A control message was forwarded to the Swift host (HUD show, mode reset, etc.).", since: "0.1.0", source: "dispatch", severity: "info", redaction: "full" },
     "stage.diagnostic": { name: "stage.diagnostic", summary: "A pipeline stage emitted a diagnostic line (e.g. a [PERF] latency measurement); correlated to the command via tr_ derived from the stage's session id.", since: "0.2.0", source: "generic", severity: "info", redaction: "full" },
+    "stage.request_completed": { name: "stage.request_completed", summary: "A `stages.request` round trip completed: which stage, how long, whether it failed or timed out. Correlated to the caller's chain.", since: "0.2.0", source: "dispatch", severity: "info", redaction: "none" },
     "state.retention_swept": { name: "state.retention_swept", summary: "Retention sweep removed expired records from a collection.", since: "0.1.0", source: "state", severity: "info", redaction: "none" },
     "state.tag_cleared": { name: "state.tag_cleared", summary: "One or more tags were cleared via a gate-shape collection mutation.", since: "0.1.0", source: "state", severity: "info", redaction: "none" },
     "state.tag_lifecycle_clear": { name: "state.tag_lifecycle_clear", summary: "Lifecycle policy cleared transient tags after a triggering event.", since: "0.1.0", source: "state", severity: "debug", redaction: "none" },
