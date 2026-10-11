@@ -314,6 +314,38 @@ export interface AudioDevice {
 }
 
 /**
+ * One control a person can act on.
+ */
+export interface AxTarget {
+  /**
+   * The action that acts on it: `press`, `toggle`, `focus`, `expand` or
+   * `show_menu`.
+   */
+  action: string;
+  /**
+   * Where it is on screen, in the coordinates window frames use.
+   */
+  bounds: AccessibleBounds;
+  /**
+   * The element's handle, for `native.ax_perform_action`.
+   */
+  id: string;
+  /**
+   * What it is called: its name, else its description. Absent when it
+   * has neither, and always absent for a protected (password) field.
+   */
+  name?: string;
+  /**
+   * A password field: its name is withheld.
+   */
+  protected: boolean;
+  /**
+   * Its ARIA role (`button`, `link`, `checkbox`, `textbox`, ...).
+   */
+  role: string;
+}
+
+/**
  * A program that runs in the background or starts at login
  * (`native.background_items`).
  */
@@ -4903,6 +4935,51 @@ export interface NativeAxSetAttributeRequest {
 
 export interface NativeAxSetAttributeResponse {
   result: boolean;
+}
+
+export interface NativeAxTargetsRequest {
+  /**
+   * The most elements to read (default 1500, at most 3000).
+   * wire uint32 · default null · min 0
+   */
+  budget?: number;
+  /**
+   * The most targets to return (default 200).
+   * wire uint32 · default null · min 0
+   */
+  limit?: number;
+  /**
+   * The application to read; the one in front when absent.
+   * wire int32 · default null
+   */
+  pid?: number;
+  /**
+   * Only controls whose centre lies inside this rectangle (a gaze point
+   * and its surroundings); the whole focused window when absent.
+   */
+  region?: AccessibleBounds;
+}
+
+export interface NativeAxTargetsResponse {
+  /**
+   * The application whose window was read.
+   * wire int32
+   */
+  pid: number;
+  /**
+   * The controls, in walk order: the window's own controls breadth
+   * first, web content (a browser page, an Electron app's document)
+   * after them.
+   */
+  targets: AxTarget[];
+  /**
+   * A limit stopped the walk: the list is not the whole window.
+   */
+  truncated: boolean;
+  /**
+   * The window's own bounds, when it reports them.
+   */
+  window?: AccessibleBounds;
 }
 
 export interface NativeAxUnobserveRequest {

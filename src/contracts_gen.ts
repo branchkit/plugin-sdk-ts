@@ -124,6 +124,7 @@ export const MethodNativeAxObserve = "native.ax_observe" as const; // since 0.1.
 export const MethodNativeAxPerformAction = "native.ax_perform_action" as const; // since 0.1.0
 export const MethodNativeAxReadAttributes = "native.ax_read_attributes" as const; // since 0.1.0
 export const MethodNativeAxSetAttribute = "native.ax_set_attribute" as const; // since 0.1.0
+export const MethodNativeAxTargets = "native.ax_targets" as const; // since 0.2.0
 export const MethodNativeAxUnobserve = "native.ax_unobserve" as const; // since 0.1.0
 export const MethodNativeBackgroundItems = "native.background_items" as const; // since 0.2.0
 export const MethodNativeBatchIsTileable = "native.batch_is_tileable" as const; // since 0.1.0
