@@ -20,6 +20,7 @@ const BROKER = `
 import socket, sys
 chan = socket.socket(fileno=3)
 mode = sys.argv[1]
+print("ready", flush=True)
 while True:
     if not chan.recv(1):
         break
@@ -44,6 +45,7 @@ while True:
 const LATE_BROKER = `
 import socket, time
 chan = socket.socket(fileno=3)
+print("ready", flush=True)
 held = []
 tag = 1
 while True:
@@ -58,10 +60,33 @@ while True:
     tag += 1
 `;
 
-function spawnBroker(mode: "echo" | "hangup", channel: number) {
-  return Bun.spawn(["python3", "-c", BROKER, mode], {
-    stdio: ["ignore", "inherit", "inherit", channel],
+// Each broker prints "ready" once it holds the channel, and the test waits
+// for that before its first dial. On a loaded machine the interpreter alone
+// can take seconds to start, and that wait belongs to the setup, not to the
+// dial: these tests flaked at bun's default 5 s timeout with Python start and
+// two tunnels inside it. FD_TIMEOUT_MS gives the dials room on a busy
+// machine; an answer that never comes still fails, just later.
+const FD_TIMEOUT_MS = 20_000;
+
+async function spawnReady(args: string[], channel: number) {
+  const broker = Bun.spawn(["python3", "-c", ...args], {
+    stdio: ["ignore", "pipe", "inherit", channel],
   });
+  const reader = broker.stdout.getReader();
+  let seen = "";
+  while (!seen.includes("ready")) {
+    const { value, done } = await reader.read();
+    if (done) {
+      throw new Error(`the broker exited before it was ready (stdout: ${JSON.stringify(seen)})`);
+    }
+    seen += new TextDecoder().decode(value);
+  }
+  reader.releaseLock();
+  return broker;
+}
+
+function spawnBroker(mode: "echo" | "hangup", channel: number) {
+  return spawnReady([BROKER, mode], channel);
 }
 
 function socketpair(): [number, number] {
@@ -93,7 +118,7 @@ describe("proxy handoff (fd://)", () => {
   // Unix fd passing; the channel only ever exists on Linux.
   test.skipIf(process.platform === "win32")("each ask gets a working connection", async () => {
     const [mine, theirs] = socketpair();
-    const broker = spawnBroker("echo", theirs);
+    const broker = await spawnBroker("echo", theirs);
     try {
       const endpoint = parseProxyUrl(`fd://${mine}`);
       for (const msg of ["one", "two"]) {
@@ -104,13 +129,13 @@ describe("proxy handoff (fd://)", () => {
     } finally {
       broker.kill();
     }
-  });
+  }, FD_TIMEOUT_MS);
 
   // A proxy that hangs up before answering CONNECT is an error at once, not
   // a wait for a 200 that cannot come.
   test.skipIf(process.platform === "win32")("a hang-up before the answer rejects", async () => {
     const [mine, theirs] = socketpair();
-    const broker = spawnBroker("hangup", theirs);
+    const broker = await spawnBroker("hangup", theirs);
     try {
       const endpoint = parseProxyUrl(`fd://${mine}`);
       await expect(connectTunnel(endpoint, "example.invalid", 443)).rejects.toThrow(
@@ -119,16 +144,14 @@ describe("proxy handoff (fd://)", () => {
     } finally {
       broker.kill();
     }
-  });
+  }, FD_TIMEOUT_MS);
 
   // A dial whose wait for the channel gives up leaves its reply to arrive
   // later. The next dial must still get the connection answering ITS ask,
   // not that late one.
   test.skipIf(process.platform === "win32")("after a timed-out read, the next ask gets its own connection", async () => {
     const [mine, theirs] = socketpair();
-    const broker = Bun.spawn(["python3", "-c", LATE_BROKER], {
-      stdio: ["ignore", "inherit", "inherit", theirs],
-    });
+    const broker = await spawnReady([LATE_BROKER], theirs);
     try {
       await expect(handoffConnection(mine, 50)).rejects.toThrow("did not answer");
       const sock = await handoffConnection(mine, 5000);
@@ -141,5 +164,5 @@ describe("proxy handoff (fd://)", () => {
     } finally {
       broker.kill();
     }
-  });
+  }, FD_TIMEOUT_MS);
 });

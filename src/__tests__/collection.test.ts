@@ -1,6 +1,7 @@
 import { describe, test, expect } from "bun:test";
 import { Plugin } from "../plugin.js";
 import { listOpts } from "../collection.js";
+import { waitFor } from "./wait.js";
 import type { CollectionUpdatedEventParams } from "../types_gen.js";
 import { EventCollectionUpdated } from "../contracts_gen.js";
 import "../methods_gen.js";
@@ -326,7 +327,9 @@ describe("notification readiness gate", () => {
     });
     void p.run();
 
-    await new Promise((r) => setTimeout(r, 10));
+    // Wait for the delivery rather than a fixed 10 ms, which a loaded
+    // machine can outlast.
+    await waitFor(() => got.length >= 5, 5000, "the five queued notifications");
     expect(got).toEqual([0, 1, 2, 3, 4]);
   });
 
@@ -339,7 +342,8 @@ describe("notification readiness gate", () => {
     // Mirrors Go's `select { case <-p.ready: case <-p.closed: return }`. A pump
     // awaiting only readiness would never settle for a process signalled
     // before run().
-    await new Promise((r) => setTimeout(r, 10));
+    // @ts-expect-error — notifyPumpActive is private
+    await waitFor(() => p.notifyPumpActive === false, 5000, "the pump to stop");
     // @ts-expect-error — notifyPumpActive is private
     expect(p.notifyPumpActive).toBe(false);
   });
