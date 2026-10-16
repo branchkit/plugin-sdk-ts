@@ -9,7 +9,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { proxiedFetchVia } from "../proxy.js";
 
-// A stand-in for the actuator's host_proxy: a CONNECT proxy over a UNIX socket
+// A stand-in for the platform's host_proxy: a CONNECT proxy over a UNIX socket
 // that tunnels an allowed host and refuses the rest. The SDK's real dial +
 // requestOverTunnel run against it, so this exercises the hand-rolled
 // ChunkedDecoder — the one place the TS tunnel parses HTTP itself.

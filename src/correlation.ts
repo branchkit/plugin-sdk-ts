@@ -2,7 +2,7 @@ import { AsyncLocalStorage } from "node:async_hooks";
 
 // Ambient inbound-correlation tracking.
 //
-// The actuator carries correlation in a thread-local read via
+// The platform carries correlation in a thread-local read via
 // `correlation::current()` and stamps every event it emits from the live
 // scope. The TS SDK mirrors that so a handler can thread the inbound id
 // forward without any signature change. JS is single-threaded but handlers

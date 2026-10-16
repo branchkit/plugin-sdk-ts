@@ -18,7 +18,7 @@ import "../collection_log.js";
 
 /**
  * Build a Plugin with `call` stubbed. `respond(method, params)` returns
- * the result that the actuator would have sent back. The inbox lets
+ * the result that the platform would have sent back. The inbox lets
  * tests assert on the wire shape after the call resolves.
  */
 function fakePlugin(
@@ -128,7 +128,7 @@ describe("collection_log helpers", () => {
     expect(errorKindOf(caught)).toBe(ErrorKindUnsupported);
   });
 
-  // An actuator predating structured errors sends no `data`. The call must
+  // A platform predating structured errors sends no `data`. The call must
   // still produce a usable error, but cannot be classified — so kind-based
   // matching correctly does not fire.
   test("an error without data degrades instead of throwing", async () => {
@@ -194,7 +194,7 @@ describe("collection_log helpers", () => {
     expect(entry.timestamp_ms).toBe(12345);
   });
 
-  test("listLog returns entries in actuator order", async () => {
+  test("listLog returns entries in platform order", async () => {
     const { plugin, inbox } = fakePlugin(() => ({
       records: [
         { id: "01H_B", timestamp_ms: 200, revision: 1, payload: {} },

@@ -2,7 +2,7 @@ import { describe, test, expect } from "bun:test";
 import { Plugin } from "../plugin.js";
 
 // A state stream — a stage stream declared `latest`, whose notifications the
-// actuator marks `delivery: "latest"` — holds one place in the notification
+// platform marks `delivery: "latest"` — holds one place in the notification
 // queue, newest value winning. The Go and Python SDKs do the same; the
 // sdk-test coalescing case holds all three to it.
 describe("state-stream notifications", () => {

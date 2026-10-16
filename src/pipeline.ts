@@ -21,7 +21,7 @@ export interface PipelineEvent {
 }
 
 /**
- * Wire header shape — matches the Rust actuator's WireHeader.
+ * Wire header shape — matches the Rust platform's WireHeader.
  * `data` is omitted when empty/null. `payload_length` is omitted when zero.
  */
 interface WireHeader {

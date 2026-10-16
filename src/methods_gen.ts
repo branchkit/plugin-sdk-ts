@@ -3165,7 +3165,7 @@ declare module "./plugin.js" {
      */
     recognitionBiasSet(req: RecognitionBiasSetRequest): Promise<RecognitionBiasSetResponse>;
     /**
-     * Re-decode the caller's own captured audio through a registered recognizer stage against the LIVE grammar (the fragility ladder) — the actuator runs it because the grammar is platform state and plugins cannot exec
+     * Re-decode the caller's own captured audio through a registered recognizer stage against the LIVE grammar (the fragility ladder) — the platform runs it because the grammar is platform state and plugins cannot exec
      */
     recognitionRedecode(req: RecognitionRedecodeRequest): Promise<RecognitionRedecodeResponse>;
     /**
@@ -3257,7 +3257,7 @@ declare module "./plugin.js" {
      */
     systemNotify(req: SystemNotifyRequest): Promise<void>;
     /**
-     * Start a shell command via /bin/bash -c, run by the actuator outside any plugin sandbox (security-sensitive; not on Windows)
+     * Start a shell command via /bin/bash -c, run by the platform outside any plugin sandbox (security-sensitive; not on Windows)
      */
     systemRunShell(req: SystemRunShellRequest): Promise<void>;
     /**

@@ -4,7 +4,7 @@ import { request } from "node:http";
 import { ListenLocal } from "../listen.js";
 import { RELAY_HEADER_PREFIX, parseRelayAnswer, relayEnv } from "../relay.js";
 
-// A stand-in for the actuator's relay (listener_relay.rs): parks plugin
+// A stand-in for the platform's relay (listener_relay.rs): parks plugin
 // connections presenting the right header, and for each client on the public
 // port writes OK on one of them and pumps bytes both ways.
 function fakeRelay(token: string): Promise<{ rendezvous: string; publicPort: number; stop: () => void }> {
@@ -106,7 +106,7 @@ describe("relay", () => {
   // picks Node for any plugin declaring sockets.listen), so the wire is
   // verified there. See the fd case in listen.test.ts for the same split.
   const runtimeIsBun = Boolean(process.versions.bun);
-  test.skipIf(runtimeIsBun)("ListenLocal serves through the actuator's relay", async () => {
+  test.skipIf(runtimeIsBun)("ListenLocal serves through the platform's relay", async () => {
     const token = "0123456789abcdef0123456789abcdef";
     const relay = await fakeRelay(token);
     const saved = { ...process.env };

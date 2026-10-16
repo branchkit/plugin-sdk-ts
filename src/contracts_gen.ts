@@ -4,7 +4,7 @@
 /** BranchKit API version (from contracts/api-version.json). */
 export const APIVersion = "0.2.0" as const;
 
-// RPC method names: plugin → actuator (use with plugin.call()).
+// RPC method names: plugin → platform (use with plugin.call()).
 export const MethodActionsList = "actions.list" as const; // since 0.1.0
 export const MethodArtifactDelete = "artifact.delete" as const; // since 0.1.0
 export const MethodBindingsPropose = "bindings.propose" as const; // since 0.1.0
@@ -662,7 +662,7 @@ export const MethodTrialResolveSamples = "trial.resolve_samples" as const; // si
 export const MethodVocabularyCommit = "vocabulary.commit" as const; // since 0.1.0
 export const MethodWiringDescribe = "wiring.describe" as const; // since 0.1.0
 
-// RPC method names: actuator → plugin (use with plugin.handle()).
+// RPC method names: platform → plugin (use with plugin.handle()).
 export const HookOnAction = "on_action" as const; // since 0.1.0
 export const HookOnCommandsChanged = "on_commands_changed" as const; // since 0.1.0
 export const HookOnTranscript = "on_transcript" as const; // since 0.1.0

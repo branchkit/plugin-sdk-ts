@@ -9,7 +9,7 @@ import {
 } from "../commands.js";
 import type { Plugin } from "../plugin.js";
 
-// The builder's job is to produce the exact wire JSON the actuator parses.
+// The builder's job is to produce the exact wire JSON the platform parses.
 // JSON.stringify round-trips here mirror what pushCommandSpecs sends.
 function wire(spec: unknown): Record<string, unknown> {
   return JSON.parse(JSON.stringify(spec));
@@ -52,7 +52,7 @@ describe("command builder", () => {
 
   test("unset tag fields are absent from the wire, never null", () => {
     // Every field the schema marks optional is omitted when unset — the
-    // actuator applies its default, and the Go and Python builders produce
+    // platform applies its default, and the Go and Python builders produce
     // the same shape. (The SDKs used to force `[]` by hand.)
     const m = wire(command(word("ping")).action("noop").build());
     for (const k of ["requires_tags", "sets_tags", "clears_tags", "sets_on_partial", "variants", "cancels_bridge"]) {

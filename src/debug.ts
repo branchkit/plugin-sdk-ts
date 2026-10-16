@@ -31,7 +31,7 @@ declare module "./plugin.js" {
     /**
      * Write a warning line. Cross-posted to `branchkit.log` via the
      * `plugin.diagnostic` event so plugin-level warnings interleave
-     * with the actuator's view of dispatch / coordination.
+     * with the platform's view of dispatch / coordination.
      */
     warn(tag: string, data: unknown): Promise<void>;
     /**

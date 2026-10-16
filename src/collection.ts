@@ -11,7 +11,7 @@ import type {
 
 export type { CollectionPutEntry };
 
-// ReplaceScope itself is generated (types_gen.ts) from the actuator's tagged
+// ReplaceScope itself is generated (types_gen.ts) from the platform's tagged
 // enum — a discriminated union, with the platform's own doc on it. Construct
 // one with scopeCollection() or scopeGroup().
 

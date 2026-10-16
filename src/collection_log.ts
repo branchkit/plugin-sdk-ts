@@ -26,7 +26,7 @@ export interface LogListOpts {
 declare module "./plugin.js" {
   interface Plugin {
     /**
-     * Append an entry to a log-kind collection. The actuator generates a
+     * Append an entry to a log-kind collection. The platform generates a
      * ULID and timestamp and validates the payload against the collection's
      * declared `fields`. Returns the assigned entry id.
      *
@@ -99,7 +99,7 @@ Plugin.prototype.append = async function (name: string, payload: unknown): Promi
   try {
     const entry = await this.collectionAppend({ name, payload });
     if (!entry) {
-      throw new Error("collection.append: actuator returned no entry");
+      throw new Error("collection.append: platform returned no entry");
     }
     return entry.id;
   } catch (e) {
@@ -114,7 +114,7 @@ Plugin.prototype.appendEntry = async function (
   try {
     const entry = await this.collectionAppend({ name, payload });
     if (!entry) {
-      throw new Error("collection.append: actuator returned no entry");
+      throw new Error("collection.append: platform returned no entry");
     }
     return entry;
   } catch (e) {

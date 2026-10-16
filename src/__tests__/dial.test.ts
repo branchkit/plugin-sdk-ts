@@ -11,7 +11,7 @@ import { join } from "node:path";
 import { dial } from "../dial.js";
 import { HostRefusedError } from "../proxy.js";
 
-/** Test-side CONNECT proxy mirroring the actuator's host_proxy: allow →
+/** Test-side CONNECT proxy mirroring the platform's host_proxy: allow →
  * tunnel, deny → 403. Same shape as proxy.test.ts's. */
 function miniProxy(allowedHost: string): NetServer {
   return netServer((sock: Socket) => {

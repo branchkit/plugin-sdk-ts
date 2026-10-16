@@ -44,7 +44,7 @@ function fakePlugin(store: Record<string, unknown>): {
 
 describe("settings mirror write/read-through", () => {
   // The race this API exists to close: after setUser resolves, the very
-  // next get() (the re-render the actuator triggers on method return)
+  // next get() (the re-render the platform triggers on method return)
   // must see the write without waiting for collection.updated.
   test("setUser is observable to an immediate get", async () => {
     const store: Record<string, unknown> = { editor: "" };

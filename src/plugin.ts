@@ -33,7 +33,7 @@ interface RpcMessage {
   error?: RpcError;
   /**
    * Envelope-level correlation id (`tr_<base62>`). Lives outside `params`
-   * so methods and notifies carry it uniformly. The actuator stamps
+   * so methods and notifies carry it uniformly. The platform stamps
    * outbound calls from its current scope; inbound calls preserve the
    * id from the wire.
    */
@@ -47,7 +47,7 @@ interface RpcMessage {
   on_behalf_of?: string;
   /**
    * The sender of an inbound event notification, as the platform
-   * authenticated it. The actuator sets it on the notifications it delivers
+   * authenticated it. The platform sets it on the notifications it delivers
    * from the event bus; nothing the plugin sends carries it.
    */
   source?: string;
@@ -79,7 +79,7 @@ interface RpcError {
   message: string;
   /**
    * Structured classification (JSON-RPC 2.0 `data`). Absent from errors sent
-   * by an actuator predating structured errors, and from errors a plugin
+   * by a platform predating structured errors, and from errors a plugin
    * sends back — always treat it as optional.
    */
   data?: FaultData;
@@ -90,7 +90,7 @@ interface RpcError {
  * are populated when they apply.
  *
  * `kind` is typed as `ErrorKind` (a plain `string`), NOT a union of the known
- * values — an actuator newer than this SDK may send a kind with no constant
+ * values — a platform newer than this SDK may send a kind with no constant
  * here, and that must fall through a `switch` rather than fail to parse.
  */
 // FaultData itself is generated into closed_vocab_gen.ts alongside the
@@ -145,7 +145,7 @@ interface PendingCall {
 // --- RPC call error ---
 
 /**
- * An error returned by the actuator in response to a plugin call.
+ * An error returned by the platform in response to a plugin call.
  *
  * Branch on `kind`, never on `message` — the prose is human-readable and its
  * wording is not part of the contract:
@@ -159,12 +159,12 @@ interface PendingCall {
  * }
  * ```
  *
- * Version skew: an actuator predating structured errors sends no `data`, so
+ * Version skew: a platform predating structured errors sends no `data`, so
  * `kind` is `undefined` and only `code` and `message` are meaningful.
  */
 export class RpcCallError extends Error {
   /**
-   * JSON-RPC error code. Derived from `kind` actuator-side, so the two never
+   * JSON-RPC error code. Derived from `kind` platform-side, so the two never
    * disagree; prefer `kind` for branching.
    */
   code: number;
@@ -184,7 +184,7 @@ export class RpcCallError extends Error {
 
 /**
  * What {@link Plugin.call} rejects with when no answer arrives in time. It is
- * not a failure: the actuator may have carried the call out and only the
+ * not a failure: the platform may have carried the call out and only the
  * answer is missing, so a write that timed out may have been committed. Tell
  * it apart from a definite refusal ({@link RpcCallError}) with `instanceof`,
  * and for a write, re-read or re-assert rather than assume either outcome.
@@ -234,7 +234,7 @@ export class RecordingDisabledError extends RpcCallError {
 export class UnsupportedError extends RpcCallError {
   /**
    * Why the op cannot run here, from `data.reason`. Undefined only when the
-   * actuator sent none. A value newer than this SDK passes through as-is.
+   * platform sent none. A value newer than this SDK passes through as-is.
    */
   reason?: UnsupportedReason;
 
@@ -324,8 +324,8 @@ export class Plugin {
   private notifyPumpActive = false;
 
   /**
-   * This plugin's own id, as the actuator assigned it
-   * (BRANCHKIT_PLUGIN_ID), or `"unknown"` when running outside the actuator.
+   * This plugin's own id, as the platform assigned it
+   * (BRANCHKIT_PLUGIN_ID), or `"unknown"` when running outside the platform.
    *
    * Exposed because a plugin routinely needs to name itself to the platform —
    * most directly to ask for its OWN records:
@@ -347,7 +347,7 @@ export class Plugin {
    * never touches stdin or stdout: every call rejects at once with
    * "detached plugin", notifications go nowhere, mirrors never fetch, and
    * run() resolves immediately. A host built on it exercises the plugin's
-   * own logic without a live actuator; swap a seam or a mirror for the
+   * own logic without a live platform; swap a seam or a mirror for the
    * platform behaviour a test needs.
    */
   // What this machine can do, from on_ready's params or the first
@@ -383,7 +383,7 @@ export class Plugin {
       if (p) this.#platform = p;
     });
 
-    // Built-in introspection: the actuator calls list_action_types after the
+    // Built-in introspection: the platform calls list_action_types after the
     // plugin reaches readiness to validate that handlers match the manifest's
     // `action_types` block. Registering here keeps plugins from having to
     // wire it themselves.
@@ -392,7 +392,7 @@ export class Plugin {
     }));
 
     // Built-in introspection: registered RPC method names, fetched by the
-    // actuator at readiness so the settings-HTML validator can flag @post
+    // platform at readiness so the settings-HTML validator can flag @post
     // URLs that name no handler — otherwise a typo'd method is a dead
     // button with no error anywhere.
     this.handlers.set("list_methods", async () => ({
@@ -404,7 +404,7 @@ export class Plugin {
   }
 
   /**
-   * Register a handler for actuator→plugin requests.
+   * Register a handler for platform→plugin requests.
    * The handler receives params and returns a result (serialized as JSON) or throws.
    *
    * handle("on_action", ...) and handleAction(...) are mutually exclusive —
@@ -586,7 +586,7 @@ export class Plugin {
 
   /**
    * Register a callback that fires when all plugins are ready.
-   * The actuator sends on_ready after every plugin has called run().
+   * The platform sends on_ready after every plugin has called run().
    * This is the safe place to read other plugins' collections.
    * Must be called before run().
    *
@@ -600,7 +600,7 @@ export class Plugin {
   /**
    * What this machine can do: the OS, the Linux desktop session, the host,
    * every operation a call to which would be refused here (with the
-   * refusal's own reason), and the host events that never fire. The actuator
+   * refusal's own reason), and the host events that never fire. The platform
    * sends it with on_ready, so it is set by the time an onReady callback
    * runs; null before, unless supports() has already fetched it.
    */
@@ -631,7 +631,7 @@ export class Plugin {
   }
 
   /**
-   * Register a listener for actuator→plugin notifications (fire-and-forget).
+   * Register a listener for platform→plugin notifications (fire-and-forget).
    * Multiple listeners can be registered for the same method.
    *
    * An async listener MUST return its promise (do not `void` it) — the ordered
@@ -670,7 +670,7 @@ export class Plugin {
   }
 
   /**
-   * Send a request to the actuator and wait for a response.
+   * Send a request to the platform and wait for a response.
    * Default timeout: 10s (T1). Override with timeoutMs (T3).
    */
   call<T = unknown>(method: string, params?: unknown, timeoutMs = 10_000): Promise<T> {
@@ -702,7 +702,7 @@ export class Plugin {
       });
 
       // Write the request, inheriting the ambient inbound correlation so the
-      // call joins the upstream causal chain (the actuator opens a scope from
+      // call joins the upstream causal chain (the platform opens a scope from
       // the envelope id for the whole RPC).
       this.write({
         jsonrpc: "2.0",
@@ -716,7 +716,7 @@ export class Plugin {
   }
 
   /**
-   * Send a fire-and-forget notification to the actuator (no response expected).
+   * Send a fire-and-forget notification to the platform (no response expected).
    */
   notify(method: string, params?: unknown): void {
     this.write({
@@ -729,7 +729,7 @@ export class Plugin {
   }
 
   /**
-   * The inbound correlation id for the actuator→plugin request or notification
+   * The inbound correlation id for the platform→plugin request or notification
    * currently being handled, or "" if none is in flight. Handlers use it to
    * tie their own work back to the upstream causal chain; outbound calls
    * inherit it automatically, so most handlers never need to read it directly.
@@ -864,7 +864,7 @@ export class Plugin {
 
   // Routes one parsed inbound message — response, request, or notification.
   // Named `routeMessage` (not `dispatch`) because `dispatch` is the public
-  // generated RPC method that calls the actuator's dispatch endpoint
+  // generated RPC method that calls the platform's dispatch endpoint
   // (see methods_gen.ts) and would otherwise collide on Plugin.prototype.
   private routeMessage(msg: RpcMessage): void {
     // Response to a pending call — has id + (result or error), no method
@@ -881,14 +881,14 @@ export class Plugin {
       return;
     }
 
-    // Request from actuator — has id + method
+    // Request from platform — has id + method
     if (msg.id !== undefined && msg.method) {
       // Fire async — don't block the read loop (C1)
       this.handleRequest(msg.id, msg.method, msg.params, msg.correlation_id);
       return;
     }
 
-    // Notification from actuator — has method, no id (W5: no response).
+    // Notification from platform — has method, no id (W5: no response).
     // Enqueue for the single ordered pump so listeners run in wire order.
     if (msg.id === undefined && msg.method) {
       this.enqueueNotification(
@@ -971,7 +971,7 @@ export class Plugin {
   private async drainNotifications(): Promise<void> {
     // Hold delivery until run() signals that listeners are registered — the
     // same gate handleRequest applies to inbound requests, and the one the Go
-    // SDK applies to BOTH lanes (notifyWorker). The actuator's forwarder starts
+    // SDK applies to BOTH lanes (notifyWorker). The platform's forwarder starts
     // writing as soon as the RPC session exists — it gates on subscription +
     // interaction, never on `plugin.initialized` — so without this a
     // notification arriving during plugin setup was dropped on the floor by the
@@ -1036,7 +1036,7 @@ export class Plugin {
 }
 
 /**
- * Returns the BranchKit API version from the actuator (env var),
+ * Returns the BranchKit API version from the platform (env var),
  * falling back to the version this SDK was compiled against.
  */
 export function apiVersion(): string {
@@ -1045,16 +1045,16 @@ export function apiVersion(): string {
 
 /**
  * Returns the plugin's installation directory, as handed to the process by the
- * actuator via BRANCHKIT_PLUGIN_DIR. Falls back to "." when unset, which is what
- * a plugin run by hand outside the actuator sees.
+ * platform via BRANCHKIT_PLUGIN_DIR. Falls back to "." when unset, which is what
+ * a plugin run by hand outside the platform sees.
  *
- * This is launch-contract surface, not convenience: the actuator sets the
+ * This is launch-contract surface, not convenience: the platform sets the
  * variable, every plugin that reads a file next to its manifest needs it, and
  * resolving it costs no dependency. Same class as apiVersion().
  *
  * The command loaders (PushCommands, loadCommands) deliberately do NOT route
  * through this. They distinguish unset from any directory — an unset variable
- * means "not launched by the actuator, load nothing", and a "." fallback would
+ * means "not launched by the platform, load nothing", and a "." fallback would
  * have them scan the working directory for commands.json instead.
  */
 export function pluginDir(): string {
@@ -1063,8 +1063,8 @@ export function pluginDir(): string {
 
 /**
  * Returns the directory this plugin may read and write freely, as handed to the
- * process by the actuator via BRANCHKIT_PLUGIN_DATA. Returns `""` when unset,
- * which means the plugin was not launched by the actuator.
+ * process by the platform via BRANCHKIT_PLUGIN_DATA. Returns `""` when unset,
+ * which means the plugin was not launched by the platform.
  *
  * This is the plugin's OWN data namespace, and it is the answer to "where do I
  * keep the files I own?" The sandbox grants read/write here and denies the rest
@@ -1089,15 +1089,15 @@ export function pluginDataDir(): string {
 /**
  * Returns the plugin's own model namespace — where the CLI provisions the
  * models this plugin declares in `provides.models` — as handed to the process
- * by the actuator via BRANCHKIT_MODELS_DIR. Returns `""` when unset, meaning
- * the plugin was not launched by the actuator.
+ * by the platform via BRANCHKIT_MODELS_DIR. Returns `""` when unset, meaning
+ * the plugin was not launched by the platform.
  *
  * READ-ONLY. A plugin that ships an engine needs this to answer "which of my
  * models are installed?" for its own UI, which is a question it should not have
  * to ask the platform. Writing is a different matter: the CLI is the only
  * component with network access and the per-part content pin is what makes a
  * model's bytes trustworthy, so the sandbox grants read here and nothing more.
- * Removing a model is `model.delete`, which the actuator performs within this
+ * Removing a model is `model.delete`, which the platform performs within this
  * same namespace.
  *
  * The models a plugin declares are a flat namespace it owns, so a declared

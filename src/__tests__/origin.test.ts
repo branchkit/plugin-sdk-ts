@@ -57,7 +57,7 @@ describe("Plugin.currentEventOrigin", () => {
       on_behalf_of: "headphones.lua",
     });
     route(plugin, { method: "scripts.headphones.charged", source: "impostor" });
-    // No origin at all: an older actuator, or a notification that is not a
+    // No origin at all: an older platform, or a notification that is not a
     // bus event. Must not inherit the previous delivery's sender.
     route(plugin, { method: "scripts.headphones.charged" });
     await waitFor(() => exact.length === 3 && patterned.length === 3);

@@ -31,7 +31,7 @@ describe("platform profile", () => {
     expect(await p.supports("vendor.never_heard_of_it")).toBe(true);
   });
 
-  test("an old actuator's bare on_ready leaves no profile, and supports() says true", async () => {
+  test("an old platform's bare on_ready leaves no profile, and supports() says true", async () => {
     const p = new Plugin({ detached: true });
     await deliver(p, "on_ready", {});
     expect(p.platform()).toBeNull();

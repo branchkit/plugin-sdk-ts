@@ -35,7 +35,7 @@ export { dial } from "./dial.js";
 export { sayAction, dispatchAction } from "./output.js";
 export { HostRefusedError } from "./proxy.js";
 export { ProxyHandoffUnsupportedError } from "./handoff.js";
-// Closed vocabularies generated from the actuator (error kinds, input
+// Closed vocabularies generated from the platform (error kinds, input
 // directives, effect names). Go gets these for free via package `shared`.
 export * from "./closed_vocab_gen.js";
 export * from "./contracts_gen.js";

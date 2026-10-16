@@ -40,16 +40,16 @@ git history.
   `"center-right"` join the seven there were.
 - `hudCreateChannel` takes `relative_to` (`"display"`, the default,
   `"focused_window"` or `"pointer"`) and `offset` (`{ x, y }` in pixels),
-  as the manifest's `hud_windows` do. Needs an actuator that knows them.
+  as the manifest's `hud_windows` do. Needs a platform that knows them.
 
 ### Listen
 
-- A socket served through the actuator's listener relay (Windows) now
+- A socket served through the platform's listener relay (Windows) now
   reports the client as its `remoteAddress` / `remotePort` /
   `remoteFamily`, so `req.socket.remoteAddress` is the client's, as it is
   on an inherited listener. The relay header is now `BKRELAY/2`, whose
-  answer carries the peer (`OK <addr>`); a bare `OK` from an older actuator
-  is still accepted. Needs an actuator that speaks version 2.
+  answer carries the peer (`OK <addr>`); a bare `OK` from an older platform
+  is still accepted. Needs a platform that speaks version 2.
 
 ### Output
 
@@ -164,7 +164,7 @@ git history.
   platform authenticated (a plugin id, `_platform`, or a stage's name) and
   can be trusted; `onBehalfOf` is that emitter's own actor label, a claim by
   `source`. Same ambient shape as `currentCorrelation()`; empty in a request
-  handler. An actuator that does not send the sender leaves it empty.
+  handler. A platform that does not send the sender leaves it empty.
 
 ## 0.2.0 — 2026-09-19
 

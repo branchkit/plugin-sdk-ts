@@ -81,7 +81,7 @@ export class SettingsMirror<T> {
    * own is domain data and belongs in its own collection, not here.
    *
    * The write and the mirror refresh are ONE operation on purpose. The
-   * actuator re-renders the settings tab the moment your handler
+   * platform re-renders the settings tab the moment your handler
    * returns, while the mirror normally catches up later via
    * collection.updated — a re-render that reads the mirror loses that
    * race and draws the stale value (CQRS projection lag). After setUser

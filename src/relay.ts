@@ -2,32 +2,32 @@ import { connect, isIP, type Socket } from "node:net";
 import type { Server } from "node:http";
 
 /**
- * The actuator's listener relay. (Node cannot `listen` on an inherited socket
+ * The platform's listener relay. (Node cannot `listen` on an inherited socket
  * handle on Windows, so fd-style hand-over is not an option.)
  *
  * On Windows a plugin runs in an AppContainer whose loopback exemption is
  * outbound-only: a listener the plugin binds itself is unreachable from
- * outside. So there the actuator binds the declared listeners OUTSIDE the
+ * outside. So there the platform binds the declared listeners OUTSIDE the
  * sandbox and relays each inbound connection over a connection the plugin
- * opened outward. The plugin parks a few such connections at the actuator's
+ * opened outward. The plugin parks a few such connections at the platform's
  * per-spawn rendezvous (BRANCHKIT_LISTEN_RELAY, presenting
  * BRANCHKIT_LISTEN_RELAY_TOKEN on the first line); when a client arrives the
- * actuator writes "OK <peer>\n" on one of them and pumps bytes both ways. Each
+ * platform writes "OK <peer>\n" on one of them and pumps bytes both ways. Each
  * paired socket is handed to the http.Server as a `connection`, which is how
  * Node's own cluster module feeds a server, so everything above it — routes,
  * the token check, serve()/shutdown() — is unchanged.
  *
- * <peer> is the client's address as the actuator's public listener accepted
+ * <peer> is the client's address as the platform's public listener accepted
  * it. The socket the plugin holds is the rendezvous pipe, whose own peer says
  * nothing about the client, so the paired socket reports <peer> as its
  * remoteAddress/remotePort/remoteFamily — `req.socket.remoteAddress` is the
  * client's, exactly as on an inherited fd. A plugin that asks the platform
  * which app owns the other end of a loopback connection needs that port. The
- * header's version 2 asks for the peer; a bare "OK\n" (an actuator speaking
+ * header's version 2 asks for the peer; a bare "OK\n" (a platform speaking
  * version 1) is still accepted, and the socket's own peer stands.
  *
- * The branch is chosen by the ENVIRONMENT, not by the platform: the actuator
- * decides per spawn, and a test on any OS can play the actuator.
+ * The branch is chosen by the ENVIRONMENT, not by the platform: the platform
+ * decides per spawn, and a test on any OS can play the platform.
  */
 
 export const RELAY_HEADER_PREFIX = "BKRELAY/2 ";
@@ -44,7 +44,7 @@ export interface RelayEnv {
   token: string;
 }
 
-/** The relay the actuator set up for this spawn, or null. */
+/** The relay the platform set up for this spawn, or null. */
 export function relayEnv(): RelayEnv | null {
   const raw = process.env.BRANCHKIT_LISTEN_RELAY ?? "";
   const token = process.env.BRANCHKIT_LISTEN_RELAY_TOKEN ?? "";
@@ -76,7 +76,7 @@ export interface RelayPeer {
 }
 
 /**
- * Parse the actuator's answer line (without its newline): "OK <peer>" gives
+ * Parse the platform's answer line (without its newline): "OK <peer>" gives
  * the client's address, a bare "OK" (version 1) gives null, anything else
  * is not a pairing (undefined).
  */
@@ -105,7 +105,7 @@ function adoptPeer(socket: Socket, peer: RelayPeer): void {
   Object.defineProperty(socket, "remoteFamily", { value: peer.family, configurable: true });
 }
 
-/** Declared listeners as the actuator published them: `id=port,…`. */
+/** Declared listeners as the platform published them: `id=port,…`. */
 export function grantedListeners(): { id: string; port: number }[] {
   const raw = process.env.BRANCHKIT_LISTEN_PORTS ?? "";
   const out: { id: string; port: number }[] = [];
@@ -124,7 +124,7 @@ export interface RelayPool {
 
 /**
  * Keep POOL_SIZE connections parked at the rendezvous for `listenerId`;
- * hand each one the actuator pairs to `server` as a connection.
+ * hand each one the platform pairs to `server` as a connection.
  */
 export function startRelayPool(server: Server, env: RelayEnv, listenerId: string): RelayPool {
   let stopped = false;

@@ -35,13 +35,13 @@ export const KnownEffects = [
   "suppress_voice_commands",
 ] as const;
 
-// ErrorKind* are the closed-vocabulary `kind` values the actuator puts
+// ErrorKind* are the closed-vocabulary `kind` values the platform puts
 // in a JSON-RPC error's `data.kind`. Branch on RpcCallError.kind rather
 // than matching the message prose. Source of truth:
 // `core/src/fault.rs::ErrorKind`.
 //
 // NOTE: ErrorKind is `string`, deliberately NOT a union of the values
-// below. An actuator newer than this SDK may send a kind that is not
+// below. A platform newer than this SDK may send a kind that is not
 // listed here, and a union type would make that a parse failure
 // instead of a fall-through.
 export type ErrorKind = string;
@@ -56,8 +56,8 @@ export const ErrorKindInvalidParams = "invalid_params" as const;
 export const ErrorKindUnsupported = "unsupported" as const;
 export const ErrorKindInternal = "internal" as const;
 
-// ErrorCodeFor maps a kind to the JSON-RPC error code the actuator
-// sends with it. Derived from the kind actuator-side.
+// ErrorCodeFor maps a kind to the JSON-RPC error code the platform
+// sends with it. Derived from the kind platform-side.
 export const ErrorCodeFor: Record<string, number> = {
   "not_permitted": -32002,
   "recording_disabled": -32006,
@@ -118,7 +118,7 @@ export const KnownUnsupportedReasons = [
 
 // OutputKind* are the closed-vocabulary `kind` values of a semantic
 // output document (`output.state`): what a person needs in order to
-// act. A plugin never invents a kind — the actuator renders an
+// act. A plugin never invents a kind — the platform renders an
 // unknown one as OutputKindOutcome. `OutputKind` is `string`, not a
 // union, for the same reason ErrorKind is. Source of truth:
 // `core/src/output_state.rs::OutputKind`.

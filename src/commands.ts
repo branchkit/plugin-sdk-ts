@@ -23,7 +23,7 @@ interface ContextFile {
 
 /**
  * Load commands.json and any context files from commands/,
- * then push them all to the actuator via commands.push.
+ * then push them all to the platform via commands.push.
  *
  * File layout:
  *
@@ -71,7 +71,7 @@ export async function PushCommands(plugin: Plugin): Promise<number> {
   //
   // The cast is the file boundary, and it is honest: these came out of
   // JSON on disk, so at the type level they are whatever the author wrote.
-  // The actuator validates each one INDIVIDUALLY and reports a bad command
+  // The platform validates each one INDIVIDUALLY and reports a bad command
   // as one bad command — which is why `commands` is a runtime
   // `serde_json::Value` there with only its schema declared. Checking the
   // shape a second time here would duplicate that and diverge from it.
@@ -131,7 +131,7 @@ function mergeRequiresTags(
 // Codegen emits `CommandSpec` with `unknown` `pattern` / `action` fields (the
 // same quirk the `listOpts` builder smooths over), so constructing a command
 // by hand means writing JSON literals inline. This builder produces a
-// `CommandSpec` with first-class pattern slots — and exposes the actuator's
+// `CommandSpec` with first-class pattern slots — and exposes the platform's
 // alternatives capability (`oneOf`) that no authoring surface reached before.
 //
 //   command(oneOf("refresh", "reload"))
@@ -198,7 +198,7 @@ export class CommandBuilder {
   constructor(slots: PatternSlot[]) {
     // Only the pattern and the (required) action slot: every other field is
     // optional on the wire, and an unset one is simply absent — the same
-    // shape the Go and Python builders produce, and what the actuator's
+    // shape the Go and Python builders produce, and what the platform's
     // defaults are for. `action` is filled by action(); until then it is
     // undefined, which JSON.stringify drops.
     this.spec = { pattern: slots, action: undefined };
@@ -255,7 +255,7 @@ export class CommandBuilder {
    * Declare the command's prefix-discovery affordance (see {@link DiscoveryMode}):
    * the bare literal prefix of a `prefix + tail-capture` pattern opens the
    * Discovery HUD when spoken alone, instead of firing. Valid only on a
-   * literal-prefix + single-tail-capture pattern; the actuator rejects other
+   * literal-prefix + single-tail-capture pattern; the platform rejects other
    * shapes at load.
    */
   discovery(mode: DiscoveryMode): this {
@@ -311,7 +311,7 @@ export function loadCommands(): CommandSpec[] {
   return raw as unknown as CommandSpec[];
 }
 
-// The actuator's command parser rejects an explicit JSON `null` for these
+// The platform's command parser rejects an explicit JSON `null` for these
 // array fields (it accepts an array or an absent field). The builder defaults
 // them to [], but a spec from loadCommands carries whatever the file had — so
 // coerce null/undefined to [] before the wire. Mirrors Go's
@@ -335,7 +335,7 @@ function normalizeCommandSpec(spec: CommandSpec): CommandSpec {
 }
 
 /**
- * Register a built/loaded set of commands with the actuator via commands.push
+ * Register a built/loaded set of commands with the platform via commands.push
  * (replace-per-plugin semantics). Sibling to PushCommands, which loads and
  * pushes files in one step. Returns the number of command variants registered.
  */

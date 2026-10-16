@@ -11,7 +11,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { parseProxyUrl, proxiedFetchVia } from "../proxy.js";
 
-/** Test-side CONNECT proxy mirroring the actuator's host_proxy: allow →
+/** Test-side CONNECT proxy mirroring the platform's host_proxy: allow →
  * tunnel, deny → 403. */
 function miniProxy(allowedHost: string): NetServer {
   return netServer((sock: Socket) => {

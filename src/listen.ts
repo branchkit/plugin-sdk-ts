@@ -33,7 +33,7 @@ function tokensMatch(presented: string, expected: string): boolean {
 
 /**
  * Listener accepts inbound HTTP connections from an external service
- * and provides access to the Plugin for forwarding data to the actuator.
+ * and provides access to the Plugin for forwarding data to the platform.
  *
  * Usage:
  *
@@ -41,7 +41,7 @@ function tokensMatch(presented: string, expected: string): boolean {
  * const plugin = new Plugin();
  * const listener = await ListenLocal(plugin);
  * listener.handleFunc("POST", "/push", (req, res) => {
- *   // use plugin.call() to forward data to actuator
+ *   // use plugin.call() to forward data to platform
  * });
  * listener.serve();
  * await plugin.run();
@@ -56,7 +56,7 @@ export class Listener {
   private serving = false;
   readonly plugin: Plugin;
   private stopped = false;
-  /** @internal — the relay pool feeding this server, when the actuator relays. */
+  /** @internal — the relay pool feeding this server, when the platform relays. */
   _relay: RelayPool | null = null;
 
   /** @internal — use ListenLocal() to create */
@@ -163,11 +163,11 @@ export class Listener {
 }
 
 /**
- * Number of actuator-granted listener sockets (manifest `sockets.listen`,
+ * Number of platform-granted listener sockets (manifest `sockets.listen`,
  * delivered per the LISTEN_FDS convention at fds 3+). 0 when none were
- * granted — old actuators, unsandboxed dev runs, or no manifest
+ * granted — old platforms, unsandboxed dev runs, or no manifest
  * declaration. Unlike systemd's convention, LISTEN_PID is deliberately
- * not set or checked: the actuator cannot know the child pid before
+ * not set or checked: the platform cannot know the child pid before
  * spawn, and plugin identity is already established by fd ownership.
  */
 export function inheritedListenerCount(): number {
@@ -180,7 +180,7 @@ export function inheritedListenerCount(): number {
  * Generates a pairing token and writes a connect.json discovery file
  * to BRANCHKIT_PLUGIN_DIR so the external service can find the port and token.
  *
- * When the actuator granted listener sockets (manifest `sockets.listen`),
+ * When the platform granted listener sockets (manifest `sockets.listen`),
  * the FIRST granted listener (fd 3) is used instead of self-binding.
  * This is not an optimization: inside the Linux sandbox the plugin runs
  * in an empty network namespace, where a self-bound "127.0.0.1" is a
@@ -222,7 +222,7 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
 
       // Tripwire for runtimes that accept listen({fd}) but silently bind a
       // fresh socket instead (Bun's node:http does exactly this): when the
-      // actuator published the granted ports, serving anywhere else means
+      // platform published the granted ports, serving anywhere else means
       // the inherited listener was dropped on the floor — inside the
       // sandbox that is a dead private loopback, so fail loudly.
       if (usingInherited) {
@@ -265,7 +265,7 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
       settleOk(listener);
     };
 
-    // No fd, but the actuator bound the listener outside the sandbox and
+    // No fd, but the platform bound the listener outside the sandbox and
     // relays to us (Windows — see relay.ts): feed the server from the pool
     // instead of listening. The address is the PUBLIC port it published.
     const relay = usingInherited ? null : relayEnv();
@@ -315,7 +315,7 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
       // own. When bumping the pinned Bun version, run the fd-listen probe (app
       // repo: scripts/check-bun-fd-listen.py). If Bun serves the fd:
       // version-gate this guard, flip the conformance fd-case skip to a pass,
-      // and retire the actuator's Node substitution for `sockets.listen`
+      // and retire the platform's Node substitution for `sockets.listen`
       // plugins. That also ends the one case where a TS plugin cannot reach
       // the network on Linux: under Node it cannot receive the proxy
       // handoff (fd://, see handoff.ts), so a plugin declaring both
@@ -342,9 +342,9 @@ export function ListenLocal(plugin: Plugin): Promise<Listener> {
 }
 
 /**
- * Ports of the actuator-granted listeners, parsed from
+ * Ports of the platform-granted listeners, parsed from
  * BRANCHKIT_LISTEN_PORTS ("id=port" pairs, comma-separated). Empty when
- * the actuator didn't publish them (old actuator / none granted).
+ * the platform didn't publish them (old platform / none granted).
  */
 function grantedPorts(): number[] {
   const raw = process.env.BRANCHKIT_LISTEN_PORTS ?? "";

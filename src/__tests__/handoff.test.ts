@@ -1,6 +1,6 @@
 // The proxy handoff (fd://N): the SDK asks over an inherited channel and
 // receives each connection as a passed socket. A Python stand-in for the
-// actuator's broker holds the other end: per ask it makes a fresh pair,
+// platform's broker holds the other end: per ask it makes a fresh pair,
 // answers CONNECT with 200 on one end and echoes, and passes the other back.
 import { describe, expect, test } from "bun:test";
 import { dlopen, FFIType, ptr } from "bun:ffi";

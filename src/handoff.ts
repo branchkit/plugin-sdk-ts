@@ -1,5 +1,5 @@
 /**
- * The proxy handoff (`BRANCHKIT_PROXY=fd://N`, Linux): the actuator hands
+ * The proxy handoff (`BRANCHKIT_PROXY=fd://N`, Linux): the platform hands
  * each connection to the plugin's filtering proxy over an inherited channel,
  * so the plugin never opens a socket or names a path (the sandbox forbids
  * both). Ask with one byte; the reply is one byte carrying a connected socket

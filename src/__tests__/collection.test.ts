@@ -248,7 +248,7 @@ describe("collection state helpers", () => {
     });
     void p.run(); // resolves readiness; the pump holds delivery until then
 
-    // Drive the ordered notification pump directly; the actuator side is
+    // Drive the ordered notification pump directly; the platform side is
     // exercised by the conformance harness. Delivery is async (wire-ordered),
     // so flush the pump before asserting.
     // @ts-expect-error — enqueueNotification is private
@@ -310,7 +310,7 @@ describe("notification readiness gate", () => {
     const p = new Plugin();
     const got: number[] = [];
 
-    // The actuator's forwarder starts writing as soon as the RPC session
+    // The platform's forwarder starts writing as soon as the RPC session
     // exists; it gates on subscription + interaction, never on
     // `plugin.initialized`. So these land before any listener is registered.
     for (let i = 0; i < 5; i++) {
