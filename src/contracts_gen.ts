@@ -6,6 +6,7 @@ export const APIVersion = "0.2.0" as const;
 
 // RPC method names: plugin → platform (use with plugin.call()).
 export const MethodActionsList = "actions.list" as const; // since 0.1.0
+export const MethodActionsPush = "actions.push" as const; // since 0.2.0
 export const MethodArtifactDelete = "artifact.delete" as const; // since 0.1.0
 export const MethodBindingsPropose = "bindings.propose" as const; // since 0.1.0
 export const MethodBindingsReport = "bindings.report" as const; // since 0.1.0

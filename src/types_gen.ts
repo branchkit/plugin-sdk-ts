@@ -138,7 +138,7 @@ export interface ActionFieldSchema {
    * field described here is described identically in every surface that
    * renders it, including your own.
    */
-  description: string;
+  description?: string;
   /**
    * Optional display role for generic UI rendering. See `FieldDisplay`.
    * Currently consumed by the Collections tab's log-kind timeline view
@@ -158,17 +158,17 @@ export interface ActionFieldSchema {
   /**
    * Allowed string values for `field_type: "enum"`. Ignored otherwise.
    */
-  enum_values: string[];
+  enum_values?: string[];
   /**
    * Declared type for this field. See `FieldType`.
    * default "string"
    */
-  field_type: FieldType;
+  field_type?: FieldType;
   /**
    * Nested field list for `field_type: "object"` (recursive). Ignored
    * for other field types.
    */
-  fields: ActionFieldSchema[];
+  fields?: ActionFieldSchema[];
   /**
    * `secret_ref` only: the ONE host the stored credential may be sent
    * to. A credential saved from Settings is bound to this, and the binding
@@ -185,7 +185,7 @@ export interface ActionFieldSchema {
    * Human-readable label for UI rendering.
    * default ""
    */
-  label: string;
+  label?: string;
   /**
    * Placeholder text for input fields.
    */
@@ -194,7 +194,7 @@ export interface ActionFieldSchema {
    * Whether this field is required.
    * default false
    */
-  required: boolean;
+  required?: boolean;
 }
 
 /**
@@ -216,12 +216,12 @@ export interface ActionTypeSchema {
   /**
    * Ordered list of fields for this action type.
    */
-  fields: ActionFieldSchema[];
+  fields?: ActionFieldSchema[];
   /**
    * Human-readable label (e.g. "Click Element", "Snap Window").
    * default ""
    */
-  label: string;
+  label?: string;
   /**
    * Supported interaction modes: "tap" (single press), "hold" (start/stop via phase),
    * and/or "toggle" (start/stop cycle). Defaults to ["tap"] if omitted.
@@ -230,7 +230,7 @@ export interface ActionTypeSchema {
    * itself via `phase`, so a peripheral UI should not ask the user to pick
    * a separate release action for it.
    */
-  modes: string[];
+  modes?: string[];
   /**
    * Platform operations this action cannot work without (e.g.
    * `["native.toggle_fullscreen"]`). Where the machine refuses any of
@@ -241,7 +241,7 @@ export interface ActionTypeSchema {
    * only what the action has no way around; an operation it merely
    * prefers belongs in the handler's own `Supports` check.
    */
-  uses: string[];
+  uses?: string[];
 }
 
 /**
@@ -2983,6 +2983,37 @@ export interface WorldModel {
 
 export interface ActionsListResponse {
   actions: Record<string, ActionTypeSchema>;
+}
+
+export interface ActionsPushRequest {
+  /**
+   * Action types by name, without the plugin's `action_prefix`
+   * (`linear.update_issue` becomes `<prefix>.linear.update_issue`). The
+   * same shape as the manifest's `action_types`. Replaces what this
+   * plugin pushed before: all of it, or one `group`. An empty map clears.
+   * A name the manifest declares is refused: a pushed action cannot
+   * redefine one the person consented to at install.
+   */
+  actions: Record<string, ActionTypeSchema>;
+  /**
+   * Replace only this group of your pushed actions (one per connected
+   * server, say), leaving the others. Omit to replace the whole set.
+   */
+  group?: string;
+}
+
+export interface ActionsPushResponse {
+  /**
+   * How many action types this plugin now holds from pushes, all groups.
+   * wire uint · min 0
+   */
+  count: number;
+  /**
+   * Problems that do not refuse the push, worded as manifest load
+   * words them (an operation in `uses` missing from
+   * `requires.capabilities.uses`, for instance).
+   */
+  warnings?: string[];
 }
 
 export interface ArtifactDeleteRequest {
