@@ -138,7 +138,7 @@ export interface ActionFieldSchema {
    * field described here is described identically in every surface that
    * renders it, including your own.
    */
-  description?: string;
+  description: string;
   /**
    * Optional display role for generic UI rendering. See `FieldDisplay`.
    * Currently consumed by the Collections tab's log-kind timeline view
@@ -158,17 +158,17 @@ export interface ActionFieldSchema {
   /**
    * Allowed string values for `field_type: "enum"`. Ignored otherwise.
    */
-  enum_values?: string[];
+  enum_values: string[];
   /**
    * Declared type for this field. See `FieldType`.
    * default "string"
    */
-  field_type?: FieldType;
+  field_type: FieldType;
   /**
    * Nested field list for `field_type: "object"` (recursive). Ignored
    * for other field types.
    */
-  fields?: ActionFieldSchema[];
+  fields: ActionFieldSchema[];
   /**
    * `secret_ref` only: the ONE host the stored credential may be sent
    * to. A credential saved from Settings is bound to this, and the binding
@@ -185,7 +185,7 @@ export interface ActionFieldSchema {
    * Human-readable label for UI rendering.
    * default ""
    */
-  label?: string;
+  label: string;
   /**
    * Placeholder text for input fields.
    */
@@ -194,7 +194,7 @@ export interface ActionFieldSchema {
    * Whether this field is required.
    * default false
    */
-  required?: boolean;
+  required: boolean;
 }
 
 /**
@@ -216,12 +216,12 @@ export interface ActionTypeSchema {
   /**
    * Ordered list of fields for this action type.
    */
-  fields?: ActionFieldSchema[];
+  fields: ActionFieldSchema[];
   /**
    * Human-readable label (e.g. "Click Element", "Snap Window").
    * default ""
    */
-  label?: string;
+  label: string;
   /**
    * Supported interaction modes: "tap" (single press), "hold" (start/stop via phase),
    * and/or "toggle" (start/stop cycle). Defaults to ["tap"] if omitted.
@@ -230,7 +230,7 @@ export interface ActionTypeSchema {
    * itself via `phase`, so a peripheral UI should not ask the user to pick
    * a separate release action for it.
    */
-  modes?: string[];
+  modes: string[];
   /**
    * Platform operations this action cannot work without (e.g.
    * `["native.toggle_fullscreen"]`). Where the machine refuses any of
@@ -241,7 +241,7 @@ export interface ActionTypeSchema {
    * only what the action has no way around; an operation it merely
    * prefers belongs in the handler's own `Supports` check.
    */
-  uses?: string[];
+  uses: string[];
 }
 
 /**
@@ -2204,6 +2204,64 @@ export interface ProcessInfo {
   user?: string;
 }
 
+/**
+ * One input of a pushed action type: the manifest's `ActionFieldSchema`,
+ * request-side. No `default`: it would be untyped JSON, and a pushed
+ * action's caller fills every input it needs.
+ */
+export interface PushedActionField {
+  description?: string;
+  display?: FieldDisplay;
+  enum_values?: string[];
+  field_type?: FieldType;
+  /**
+   * Nested inputs of an `object` field.
+   */
+  fields?: PushedActionField[];
+  for_host?: string;
+  /**
+   * JSON key name.
+   */
+  key: string;
+  label?: string;
+  placeholder?: string;
+  required?: boolean;
+}
+
+/**
+ * One action type as `actions.push` takes it: the manifest's
+ * `ActionTypeSchema` with the inputs a plugin may leave out optional, and a
+ * `label` it must give (a pushed action is read by a person in the builder).
+ * Its own type, not `ActionTypeSchema`, because a request-side type's
+ * defaulted fields are generated optional: sharing it would turn the
+ * fields every plugin READS (`actions.list`, `render_settings`) into
+ * pointers. Same field names, so it converts to the manifest shape as is;
+ * `pushed_types_track_the_manifest_shape` fails if the two drift.
+ */
+export interface PushedActionType {
+  /**
+   * Whether running it can be undone; omitted means unclassified,
+   * treated as risky.
+   */
+  consequence?: Consequence;
+  /**
+   * Its inputs, in order.
+   */
+  fields?: PushedActionField[];
+  /**
+   * What the person sees in the builder ("Update an issue").
+   */
+  label: string;
+  /**
+   * `tap`, `hold` and/or `toggle`; `["tap"]` when omitted.
+   */
+  modes?: string[];
+  /**
+   * Platform operations it cannot work without, by method name.
+   */
+  uses?: string[];
+}
+
 export interface RedecodeItem {
   /**
    * When set, the platform stamps the live never-standalone Lever E penalty
@@ -2994,7 +3052,7 @@ export interface ActionsPushRequest {
    * A name the manifest declares is refused: a pushed action cannot
    * redefine one the person consented to at install.
    */
-  actions: Record<string, ActionTypeSchema>;
+  actions: Record<string, PushedActionType>;
   /**
    * Replace only this group of your pushed actions (one per connected
    * server, say), leaving the others. Omit to replace the whole set.
