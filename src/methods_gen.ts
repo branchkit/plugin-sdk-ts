@@ -3121,7 +3121,7 @@ declare module "./plugin.js" {
      */
     pluginDataExport(req: PluginDataExportRequest): Promise<PluginDataExportResponse>;
     /**
-     * Write a diagnostic line to this plugin's per-plugin log file. Use shared.Logf instead for cross-cutting coordination lines that belong in actuator.log.
+     * Write a diagnostic line to this plugin's per-plugin log file. Use shared.Logf instead for cross-cutting coordination lines that belong in branchkit.log.
      */
     pluginDebug(req: PluginDebugRequest): Promise<void>;
     /**

@@ -20,7 +20,7 @@ declare module "./plugin.js" {
      * diagnostics you want visible by default.
      *
      * Levels: trace < debug < info (default threshold) < warn < error; warn
-     * and error also cross-post to actuator.log.
+     * and error also cross-post to branchkit.log.
      */
     debug(tag: string, data: unknown): Promise<void>;
     /**
@@ -29,13 +29,13 @@ declare module "./plugin.js" {
      */
     info(tag: string, data: unknown): Promise<void>;
     /**
-     * Write a warning line. Cross-posted to `actuator.log` via the
+     * Write a warning line. Cross-posted to `branchkit.log` via the
      * `plugin.diagnostic` event so plugin-level warnings interleave
      * with the actuator's view of dispatch / coordination.
      */
     warn(tag: string, data: unknown): Promise<void>;
     /**
-     * Write an error line. Cross-posted to `actuator.log` (same as `warn`).
+     * Write an error line. Cross-posted to `branchkit.log` (same as `warn`).
      * Use for unrecoverable problems within plugin scope.
      */
     error(tag: string, data: unknown): Promise<void>;
