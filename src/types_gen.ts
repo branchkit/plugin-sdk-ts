@@ -3051,8 +3051,9 @@ export interface ActionsPushRequest {
    * plugin pushed before: all of it, or one `group`. An empty map clears.
    * A name the manifest declares is refused: a pushed action cannot
    * redefine one the person consented to at install.
+   * default {}
    */
-  actions: Record<string, PushedActionType>;
+  actions?: Record<string, PushedActionType>;
   /**
    * Replace only this group of your pushed actions (one per connected
    * server, say), leaving the others. Omit to replace the whole set.
