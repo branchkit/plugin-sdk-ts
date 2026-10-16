@@ -497,6 +497,25 @@ export interface BleWriteEntry {
 }
 
 /**
+ * A command the words name that the platform has switched off.
+ */
+export interface BlockedCommand {
+  /**
+   * The command's name.
+   */
+  command: string;
+  /**
+   * The gate tags themselves (`_platform.unavailable:<op>`,
+   * `_platform.action_absent:<type>`, `_platform.action_changed:<type>`).
+   */
+  gates: string[];
+  /**
+   * Why, one sentence per gate, in the person's words.
+   */
+  reasons: string[];
+}
+
+/**
  * A paired or connected Bluetooth device.
  */
 export interface BluetoothDevice {
@@ -754,6 +773,13 @@ export interface CommandRowData {
    * written in.
    */
   action_json?: unknown;
+  /**
+   * Why the platform has this command switched off, one sentence per
+   * reason (an operation this machine refuses; a pushed action gone or
+   * changed); empty when it is live. A changed action needs the person to
+   * open the command and save it again.
+   */
+  blocked_reasons: string[];
   canonical: string;
   category: string;
   clears_tags: string[];
@@ -2372,6 +2398,15 @@ export interface ResolveResult {
    */
   args: Record<string, unknown>;
   /**
+   * When nothing matched because the command the words name is switched
+   * off by the platform itself (an operation this machine refuses, a
+   * pushed action gone or changed), which command and why, so the caller
+   * can say so instead of nothing (bug fdd14d7). Never set for a mode or
+   * context the person has not entered: only platform gates are lifted to
+   * find it.
+   */
+  blocked?: BlockedCommand;
+  /**
    * True when an active `PendingPartial` bridge survived this resolve
    * (either advanced one token, or rejected the new utterance without
    * dropping). Tells the voice plugin to leave the discovery HUD as-is
@@ -3840,6 +3875,15 @@ export interface CommandsResolveResponse {
    * collection record), so it stays raw JSON.
    */
   args: Record<string, unknown>;
+  /**
+   * When nothing matched because the command the words name is switched
+   * off by the platform itself (an operation this machine refuses, a
+   * pushed action gone or changed), which command and why, so the caller
+   * can say so instead of nothing (bug fdd14d7). Never set for a mode or
+   * context the person has not entered: only platform gates are lifted to
+   * find it.
+   */
+  blocked?: BlockedCommand;
   /**
    * True when an active `PendingPartial` bridge survived this resolve
    * (either advanced one token, or rejected the new utterance without
