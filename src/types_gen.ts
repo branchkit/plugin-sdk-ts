@@ -8821,11 +8821,11 @@ export interface OauthConnectRequest {
    */
   api_host: string;
   /**
-   * The service's authorization endpoint (https). The person's browser
-   * goes here.
-   * non-empty
+   * The service's authorization endpoint (https), when no `issuer` is
+   * given. The person's browser goes here.
+   * default null
    */
-  authorization_endpoint: string;
+  authorization_endpoint?: string;
   /**
    * Your client ID with this service: one you registered as the plugin's
    * author, one you obtained by dynamic client registration, or the
@@ -8834,6 +8834,16 @@ export interface OauthConnectRequest {
    * non-empty
    */
   client_id: string;
+  /**
+   * The service's issuer (https), for a service that publishes its
+   * endpoints (RFC 8414 authorization server metadata, or OpenID Connect
+   * discovery): BranchKit reads the authorization and token endpoints
+   * from it, as this plugin, and they must name the same issuer. Give
+   * this or both endpoints. Must be a host this plugin declares or has
+   * requested.
+   * default null
+   */
+  issuer?: string;
   /**
    * Your name for the service, used again in `oauth.status`,
    * `oauth.disconnect` and the token's secret name (`oauth.<provider>`):
@@ -8859,12 +8869,14 @@ export interface OauthConnectRequest {
    */
   scopes?: string[];
   /**
-   * The service's token endpoint (https). Must be a host this plugin
-   * declares or has requested with `network.request_host`; the exchange
-   * goes out through this plugin's network grants.
-   * non-empty
+   * The service's token endpoint (https), when no `issuer` is given. It
+   * must be on the authorization endpoint's host or one of its
+   * subdomains: the place the person signs in vouches for where the code
+   * is redeemed. Must be a host this plugin declares or has requested;
+   * the exchange goes out through this plugin's network grants.
+   * default null
    */
-  token_endpoint: string;
+  token_endpoint?: string;
 }
 
 export interface OauthConnectResponse {
