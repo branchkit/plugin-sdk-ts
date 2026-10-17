@@ -8863,8 +8863,9 @@ export interface OauthConnectRequest {
    */
   resource?: string;
   /**
-   * The scopes to ask for, as the service names them. Shown to the person
-   * before they sign in.
+   * The scopes to ask for, as the service names them: at most 20, each
+   * 1-200 printable characters with no spaces or quotes. Shown to the
+   * person, as the service's words, before they sign in.
    * default []
    */
   scopes?: string[];
