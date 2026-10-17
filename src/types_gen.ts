@@ -2356,6 +2356,12 @@ export interface RedecodeNoise {
 }
 
 /**
+ * Which loopback name the service accepts in a redirect address. Some
+ * accept only `localhost`, some only `127.0.0.1`.
+ */
+export type RedirectHost = "loopback" | "localhost";
+
+/**
  * What a HUD window is placed against.
  */
 export type RelativeTo = "display" | "focused_window" | "pointer" | "caret";
@@ -8806,6 +8812,114 @@ export interface NetworkRequestHostResponse {
   status: string;
 }
 
+export interface OauthConnectRequest {
+  /**
+   * The host the access token is sent to (often the API host, which can
+   * differ from the token endpoint's). Must be a host this plugin
+   * declares or has requested.
+   * non-empty
+   */
+  api_host: string;
+  /**
+   * The service's authorization endpoint (https). The person's browser
+   * goes here.
+   * non-empty
+   */
+  authorization_endpoint: string;
+  /**
+   * Your client ID with this service: one you registered as the plugin's
+   * author, one you obtained by dynamic client registration, or the
+   * person's own. A public client: no secret is sent, PKCE protects the
+   * exchange.
+   * non-empty
+   */
+  client_id: string;
+  /**
+   * Your name for the service, used again in `oauth.status`,
+   * `oauth.disconnect` and the token's secret name (`oauth.<provider>`):
+   * 1-64 of `a-z 0-9 _ -`.
+   * non-empty
+   */
+  provider: string;
+  /**
+   * The loopback name the service accepts in its redirect address.
+   * Default `loopback` (`127.0.0.1`).
+   */
+  redirect_host?: RedirectHost;
+  /**
+   * A resource indicator (RFC 8707) sent with both requests, when the
+   * service wants one: an MCP server's own URL, for instance.
+   * default null
+   */
+  resource?: string;
+  /**
+   * The scopes to ask for, as the service names them. Shown to the person
+   * before they sign in.
+   * default []
+   */
+  scopes?: string[];
+  /**
+   * The service's token endpoint (https). Must be a host this plugin
+   * declares or has requested with `network.request_host`; the exchange
+   * goes out through this plugin's network grants.
+   * non-empty
+   */
+  token_endpoint: string;
+}
+
+export interface OauthConnectResponse {
+  /**
+   * `asking`: the person is being asked. `_platform.oauth.changed` says
+   * how it ends.
+   */
+  status: string;
+}
+
+export interface OauthDisconnectRequest {
+  /**
+   * The provider name given to `oauth.connect`.
+   * non-empty
+   */
+  provider: string;
+}
+
+export interface OauthDisconnectResponse {
+  /**
+   * Whether there was a sign-in to forget.
+   */
+  removed: boolean;
+}
+
+export interface OauthStatusRequest {
+  /**
+   * The provider name given to `oauth.connect`.
+   * non-empty
+   */
+  provider: string;
+}
+
+export interface OauthStatusResponse {
+  /**
+   * Where the token is sent, when signed in.
+   */
+  api_host?: string;
+  /**
+   * Signed in: a request naming `oauth.<provider>` to the API host
+   * carries the token.
+   */
+  connected: boolean;
+  /**
+   * When the access token stops working (milliseconds since the Unix
+   * epoch), if the service said.
+   * wire uint64 (64-bit) · min 0
+   */
+  expires_at_ms?: number;
+  /**
+   * What the service granted, when signed in.
+   */
+  scopes: string[];
+}
+
 export interface OutputClearRequest {
   /**
    * The channel on which nothing is true now. Must be owned by the
@@ -10609,6 +10723,27 @@ export interface NetworkChangedEventParams {
    * Whether a usable network path exists right now.
    */
   reachable: boolean;
+}
+
+/** Payload of the `_platform.oauth.changed` event. */
+export interface OauthChangedEventParams {
+  /**
+   * Signed in now: requests naming the provider's token will carry it.
+   */
+  connected: boolean;
+  /**
+   * The plugin the sign-in is for.
+   */
+  plugin: string;
+  /**
+   * The provider name the plugin gave `oauth.connect`.
+   */
+  provider: string;
+  /**
+   * Why not, when `connected` is false: the person chose not now, the
+   * service refused, the exchange failed, or the person signed out.
+   */
+  reason?: string;
 }
 
 /** Payload of the `_platform.output.cleared` event. */
