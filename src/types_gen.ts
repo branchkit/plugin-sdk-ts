@@ -2630,6 +2630,11 @@ export interface ShortcutInfo {
 }
 
 /**
+ * How the person approves a sign-in.
+ */
+export type SignInFlow = "browser" | "device";
+
+/**
  * Information about a macOS Space.
  */
 export interface SpaceInfo {
@@ -8834,6 +8839,20 @@ export interface OauthConnectRequest {
    * non-empty
    */
   client_id: string;
+  /**
+   * The device flow's device authorization endpoint (https), when no
+   * `issuer` is given. The token endpoint must be on its host or a
+   * subdomain.
+   * default null
+   */
+  device_authorization_endpoint?: string;
+  /**
+   * How the person approves: `browser` (default), the service's page in
+   * the browser here, or `device`, a short code the person enters on the
+   * service's page on this machine or another device (RFC 8628, for a
+   * service that offers it).
+   */
+  flow?: SignInFlow;
   /**
    * The service's issuer (https), for a service that publishes its
    * endpoints (RFC 8414 authorization server metadata, or OpenID Connect
