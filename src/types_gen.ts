@@ -10982,7 +10982,23 @@ export interface PipelineTranscriptEventParams {
    * (prose) stands.
    */
   dictation_profile?: string;
+  /**
+   * The application focused when this utterance ended: for a held
+   * pipeline, at the stop (the app the words were meant for); for one
+   * never stopped, now. Reported, never interpreted.
+   */
+  focused_app?: string;
+  /**
+   * The application focused as this transcript is emitted. Differs from
+   * `focused_app` when focus moved while a held pipeline transcribed.
+   */
+  focused_app_now?: string;
   is_final: boolean;
+  /**
+   * The engine's own "this text may still change" mark, as it sent it.
+   * default false
+   */
+  partial?: boolean;
   pipeline: string;
   text: string;
   /**
