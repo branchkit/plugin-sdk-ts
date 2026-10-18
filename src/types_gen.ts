@@ -1875,6 +1875,16 @@ export interface Offset {
 export type OnActionStatus = "ok" | "error" | "not_handled";
 
 /**
+ * The result of `on_commands_changed`, and its SCHEMA, as the request is.
+ */
+export interface OnCommandsChangedResponse {
+  /**
+   * wire uint · min 0
+   */
+  processed_count: number;
+}
+
+/**
  * What a HUD window does when the pointer moves into its frame.
  */
 export type OnPointer = "none" | "fade";
@@ -2179,6 +2189,41 @@ export interface PipelineStatusEntry {
  * others end a run its owner may want to start again.
  */
 export type PipelineStopReason = "requested" | "ended" | "error" | "reload";
+
+/**
+ * What this machine can do, asked before calling rather than learned from a
+ * refusal.
+ *
+ * Titled `PlatformProfileResponse`, the name every SDK already gives
+ * `platform.profile`'s result: `on_ready` carries the same struct, and one
+ * title makes the two one SDK type (emit-sdk lifts it as a shared
+ * component) rather than two with the same fields.
+ */
+export interface PlatformProfileResponse {
+  /**
+   * The host process serving host-dependent operations and events.
+   */
+  host: string;
+  /**
+   * `macos`, `linux` or `windows`.
+   */
+  os: string;
+  /**
+   * On Linux, the desktop session the window tools drive: `x11`, `sway`,
+   * `gnome` or `other_wayland`. Absent on other systems.
+   */
+  session?: string;
+  /**
+   * Every operation a plugin can call that would be refused here, with
+   * the reason and detail the refusal itself carries. An operation not
+   * listed runs here.
+   */
+  unavailable: UnavailableOperation[];
+  /**
+   * Host events (`_platform.*`) that are never delivered here.
+   */
+  unobservable_events: string[];
+}
 
 export type PluginLogLevel = "trace" | "info" | "warn" | "error" | "debug";
 
@@ -9271,32 +9316,6 @@ export interface PipelinesWarmResponse {
   warmed: boolean;
 }
 
-export interface PlatformProfileResponse {
-  /**
-   * The host process serving host-dependent operations and events.
-   */
-  host: string;
-  /**
-   * `macos`, `linux` or `windows`.
-   */
-  os: string;
-  /**
-   * On Linux, the desktop session the window tools drive: `x11`, `sway`,
-   * `gnome` or `other_wayland`. Absent on other systems.
-   */
-  session?: string;
-  /**
-   * Every operation a plugin can call that would be refused here, with
-   * the reason and detail the refusal itself carries. An operation not
-   * listed runs here.
-   */
-  unavailable: UnavailableOperation[];
-  /**
-   * Host events (`_platform.*`) that are never delivered here.
-   */
-  unobservable_events: string[];
-}
-
 export interface PluginDataExportRequest {
   /**
    * Name to save it under. Defaults to the source file's name. A path
@@ -10132,6 +10151,23 @@ export interface WiringDescribeResponse {
 
 // ===== Platform → Plugin request/response types =====
 
+export interface ListActionTypesResponse {
+  /**
+   * A plugin that dispatches dynamically registers none and may answer
+   * `null`.
+   * default null
+   */
+  action_types?: string[];
+}
+
+export interface ListMethodsResponse {
+  /**
+   * `null` or absent means "cannot tell", not "none".
+   * default null
+   */
+  methods?: string[];
+}
+
 export interface OnActionRequest {
   /**
    * Fully qualified action type (e.g., 'voice.dictation', 'placement.snap').
@@ -10195,11 +10231,12 @@ export interface OnCommandsChangedRequest {
   user_commands?: CommandSnapshot[];
 }
 
-export interface OnCommandsChangedResponse {
+export interface OnReadyRequest {
   /**
-   * wire int64 (64-bit)
+   * What this machine can do: `platform.profile`'s answer, kept by the SDK
+   * so a plugin can ask before it calls.
    */
-  processed_count: number;
+  platform: PlatformProfileResponse;
 }
 
 export interface OnTranscriptRequest {

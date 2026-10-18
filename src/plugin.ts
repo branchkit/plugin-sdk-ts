@@ -3,7 +3,14 @@ import { methodsOver } from "./caller.js";
 import { Events } from "./events_gen.js";
 import type { Methods } from "./methods_gen.js";
 import { Log } from "./log.js";
-import { APIVersion, HookOnAction, HookRenderSettings } from "./contracts_gen.js";
+import {
+  APIVersion,
+  HookListActionTypes,
+  HookListMethods,
+  HookOnAction,
+  HookOnReady,
+  HookRenderSettings,
+} from "./contracts_gen.js";
 
 import {
   type ErrorKind,
@@ -382,7 +389,7 @@ export class Plugin extends Events {
 
     // Keep the platform profile on_ready carries. Registered before any
     // plugin listener, so a plugin's own onReady already sees platform().
-    this.on("on_ready", (params) => {
+    this.on(HookOnReady, (params) => {
       const p = (params as { platform?: PlatformProfileResponse } | null)?.platform;
       if (p) this.#platform = p;
     });
@@ -391,7 +398,7 @@ export class Plugin extends Events {
     // plugin reaches readiness to validate that handlers match the manifest's
     // `action_types` block. Registering here keeps plugins from having to
     // wire it themselves.
-    this.handlers.set("list_action_types", async () => ({
+    this.handlers.set(HookListActionTypes, async () => ({
       action_types: this.registeredActionTypes() ?? [],
     }));
 
@@ -399,7 +406,7 @@ export class Plugin extends Events {
     // platform at readiness so the settings-HTML validator can flag @post
     // URLs that name no handler — otherwise a typo'd method is a dead
     // button with no error anywhere.
-    this.handlers.set("list_methods", async () => ({
+    this.handlers.set(HookListMethods, async () => ({
       methods: Array.from(this.handlers.keys()).sort(),
     }));
 
@@ -598,7 +605,7 @@ export class Plugin extends Events {
    * so an on_ready fetch completes before any update event lands.
    */
   onReady(fn: () => void | Promise<void>): void {
-    this.on("on_ready", () => fn());
+    this.on(HookOnReady, () => fn());
   }
 
   /**
