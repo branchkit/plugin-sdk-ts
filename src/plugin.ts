@@ -1,6 +1,7 @@
 import { createInterface } from "node:readline";
 import { methodsOver } from "./caller.js";
-import { Methods } from "./methods_gen.js";
+import { Events } from "./events_gen.js";
+import type { Methods } from "./methods_gen.js";
 import { Log } from "./log.js";
 import { APIVersion, HookOnAction, HookRenderSettings } from "./contracts_gen.js";
 
@@ -281,7 +282,7 @@ export function errorKindOf(e: unknown): ErrorKind | undefined {
 // tripwire fires at the same size whichever SDK a plugin uses.
 const OVERSIZED_FRAME_BYTES = 1024 * 1024;
 
-export class Plugin extends Methods {
+export class Plugin extends Events {
   private pluginId: string;
   // A plugin with no platform behind it (`new Plugin({ detached: true })`):
   // every call rejects at once, nothing is written, run() returns.

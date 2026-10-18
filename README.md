@@ -168,7 +168,7 @@ does not start.
 |---|---|
 | Handle an action | generated `handle<Action>` (from `action_types`), `handleAction<T>(action, fn)` |
 | Serve your own method | `handle(method, fn)`, `handleCommand(method, fn)` |
-| React to events | `on(event, fn)`, `onPattern("ext.acme.**", fn)`, `plugin.currentEventOrigin()`; emit with `eventsEmit` |
+| React to events | generated `on<Event>(fn)` per platform event (`onAppFocused((evt: AppFocusedEventParams) => …)`; a signal takes `() => …`), `on(event, fn)` for other plugins' events, `onPattern("ext.acme.**", fn)`, `plugin.currentEventOrigin()`; emit with `eventsEmit` |
 | Store state | `get` / `list` / `listPage` / `count` / `put` / `putMany` / `patch` / `delete` / `replace`, `subscribe` |
 | Append-only logs | `append`, `appendKeyed`, `listLog`, `getLogEntry`, `deleteLogEntry` |
 | Keep a live copy | `mirrorCollection(name)`, `settings<T>(name)` |

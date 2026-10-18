@@ -41,6 +41,7 @@ export * from "./closed_vocab_gen.js";
 export * from "./contracts_gen.js";
 export * from "./types_gen.js";
 export { Methods } from "./methods_gen.js";
+export { Events } from "./events_gen.js";
 export { type Caller, methodsOver } from "./caller.js";
 import "./collection_log.js"; // module augmentation — log-kind helpers
 import "./collection.js"; // module augmentation — state uniform helpers

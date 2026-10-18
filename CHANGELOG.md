@@ -5,6 +5,20 @@ git history.
 
 ## Unreleased
 
+### Typed event subscription
+
+- One generated helper per platform event, beside the call wrappers:
+  `plugin.onAppFocused((evt) => { … })`, with `evt` typed
+  `AppFocusedEventParams`. It ties the event's name to its generated
+  payload type, so a renamed event or field fails to type-check, where a
+  `plugin.on("_platform.app.focused", …)` listener compiled and heard
+  nothing. An event with no payload, or a signal (its payload is advisory:
+  re-read the state it announces), takes `() => …`. The helpers are a
+  generated abstract class `Events` that `Plugin` extends.
+  `onEffectDisplaced` stays the hand-written helper for its event.
+- `on` and `onPattern` are unchanged, for other plugins' events and
+  patterns.
+
 ## 0.4.0 — 2026-10-17
 
 ### Typed wrappers
