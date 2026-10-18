@@ -2,9 +2,6 @@ import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import type { Plugin } from "./plugin.js";
 import type { CommandSpec } from "./types_gen.js";
-// Side-effect import: installs the generated wrappers on Plugin.prototype,
-// which is where `commandsPush` comes from. Same line hud.ts carries.
-import "./methods_gen.js";
 
 /**
  * Context file format: a context-scoped command file.

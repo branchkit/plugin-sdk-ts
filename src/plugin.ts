@@ -1,4 +1,6 @@
 import { createInterface } from "node:readline";
+import { methodsOver } from "./caller.js";
+import { Methods } from "./methods_gen.js";
 import { Log } from "./log.js";
 import { APIVersion, HookOnAction, HookRenderSettings } from "./contracts_gen.js";
 
@@ -279,7 +281,7 @@ export function errorKindOf(e: unknown): ErrorKind | undefined {
 // tripwire fires at the same size whichever SDK a plugin uses.
 const OVERSIZED_FRAME_BYTES = 1024 * 1024;
 
-export class Plugin {
+export class Plugin extends Methods {
   private pluginId: string;
   // A plugin with no platform behind it (`new Plugin({ detached: true })`):
   // every call rejects at once, nothing is written, run() returns.
@@ -355,6 +357,7 @@ export class Plugin {
   #platform: PlatformProfileResponse | null = null;
 
   constructor(opts: { detached?: boolean } = {}) {
+    super();
     this.detached = opts.detached === true;
     this.pluginId = this.detached ? "detached" : (process.env.BRANCHKIT_PLUGIN_ID ?? "unknown");
 
@@ -716,6 +719,18 @@ export class Plugin {
   }
 
   /**
+   * The typed wrappers with `timeoutMs` as each call's timeout, in place of
+   * call's 10 s default: `await plugin.withTimeout(30_000).pipelinesRun(req)`.
+   * A timeout is not a failure (see CallTimeoutError): the platform may have
+   * carried the call out.
+   */
+  withTimeout(timeoutMs: number): Methods {
+    return methodsOver({
+      call: <T = unknown>(method: string, params?: unknown) => this.call<T>(method, params, timeoutMs),
+    });
+  }
+
+  /**
    * Send a fire-and-forget notification to the platform (no response expected).
    */
   notify(method: string, params?: unknown): void {
@@ -865,7 +880,7 @@ export class Plugin {
   // Routes one parsed inbound message — response, request, or notification.
   // Named `routeMessage` (not `dispatch`) because `dispatch` is the public
   // generated RPC method that calls the platform's dispatch endpoint
-  // (see methods_gen.ts) and would otherwise collide on Plugin.prototype.
+  // (see methods_gen.ts), which a member here would override.
   private routeMessage(msg: RpcMessage): void {
     // Response to a pending call — has id + (result or error), no method
     if (msg.id !== undefined && !msg.method) {

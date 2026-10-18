@@ -40,7 +40,8 @@ export { ProxyHandoffUnsupportedError } from "./handoff.js";
 export * from "./closed_vocab_gen.js";
 export * from "./contracts_gen.js";
 export * from "./types_gen.js";
-import "./methods_gen.js"; // module augmentation — side-effect import
+export { Methods } from "./methods_gen.js";
+export { type Caller, methodsOver } from "./caller.js";
 import "./collection_log.js"; // module augmentation — log-kind helpers
 import "./collection.js"; // module augmentation — state uniform helpers
 import "./effects.js"; // module augmentation — capability-mechanism helpers

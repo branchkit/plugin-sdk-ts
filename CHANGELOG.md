@@ -5,6 +5,18 @@ git history.
 
 ## Unreleased
 
+### Typed wrappers
+
+- The generated wrappers are a generated abstract class `Methods` over
+  `call`, and `Plugin` extends it, so `plugin.collectionGet(req)` and every
+  other call site is unchanged. They are no longer patched onto
+  `Plugin.prototype`, which overwrote a same-named member of `Plugin`'s
+  own without a word. `methodsOver(caller)` gives the same wrappers over
+  any `Caller`, such as a test's fake, with no transport.
+- `plugin.withTimeout(ms)` returns the wrappers with `ms` as each call's
+  timeout, in place of `call`'s 10 s default. Before, only a raw
+  `call(method, params, timeoutMs)` could wait longer.
+
 ### Network
 
 - A proxy connection that ends before the proxy answers `CONNECT` now

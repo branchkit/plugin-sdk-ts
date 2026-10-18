@@ -6,7 +6,6 @@
  * envelope they build.
  */
 import { Plugin } from "./plugin.js";
-import "./methods_gen.js";
 
 declare module "./plugin.js" {
   interface Plugin {
