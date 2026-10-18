@@ -5,6 +5,8 @@ git history.
 
 ## Unreleased
 
+## 0.6.0 — 2026-10-18
+
 ### Transcript payload
 
 - `PipelineTranscriptEventParams` gains `focused_app`, `focused_app_now` and
