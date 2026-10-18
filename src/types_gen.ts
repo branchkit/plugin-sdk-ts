@@ -580,6 +580,11 @@ export interface CaretContext {
 }
 
 /**
+ * How a client secret reaches the token endpoint (RFC 6749 section 2.3.1).
+ */
+export type ClientAuth = "basic" | "post";
+
+/**
  * Clipboard contents read from the OS.
  */
 export interface ClipboardContents {
@@ -8832,6 +8837,11 @@ export interface OauthConnectRequest {
    */
   authorization_endpoint?: string;
   /**
+   * How the client secret is sent: `basic` (default, HTTP Basic) or
+   * `post` (in the form body), as the service requires.
+   */
+  client_auth?: ClientAuth;
+  /**
    * Your client ID with this service: one you registered as the plugin's
    * author, one you obtained by dynamic client registration, or the
    * person's own. A public client: no secret is sent, PKCE protects the
@@ -8839,6 +8849,16 @@ export interface OauthConnectRequest {
    * non-empty
    */
   client_id: string;
+  /**
+   * For a service that insists on a client secret: the name of a secret
+   * in this plugin's drawer, bound to the token endpoint's host. Ask the
+   * person for it with `secrets.request_slot` (their own app's secret),
+   * or store one the service publishes as not secret with `secrets.set`.
+   * BranchKit sends it to the token endpoint and nowhere else; the plugin
+   * never reads it back.
+   * default null
+   */
+  client_secret?: string;
   /**
    * The device flow's device authorization endpoint (https), when no
    * `issuer` is given. The token endpoint must be on its host or a
