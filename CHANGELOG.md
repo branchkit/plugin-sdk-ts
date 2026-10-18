@@ -5,6 +5,8 @@ git history.
 
 ## Unreleased
 
+## 0.4.0 — 2026-10-17
+
 ### Typed wrappers
 
 - The generated wrappers are a generated abstract class `Methods` over
