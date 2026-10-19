@@ -2492,6 +2492,9 @@ export interface ResolveResult {
    * default; only true when the bridge survived.
    */
   bridge_active: boolean;
+  /**
+   * The tags this resolve cleared, on the same terms as `sets_tags`.
+   */
   clears_tags: string[];
   /**
    * wire uint · min 0
@@ -2523,6 +2526,11 @@ export interface ResolveResult {
    * Currently active scoped tags at match time.
    */
   scoped_tags: string[];
+  /**
+   * The tags this resolve set: what its commit applied, not only what the
+   * command asked for, so a write the policy chain refused, or one a hold
+   * ended before, is absent. A preview reports what committing would set.
+   */
   sets_tags: string[];
   telemetry: ResolveTelemetry;
   /**
@@ -3975,6 +3983,9 @@ export interface CommandsResolveResponse {
    * default; only true when the bridge survived.
    */
   bridge_active?: boolean;
+  /**
+   * The tags this resolve cleared, on the same terms as `sets_tags`.
+   */
   clears_tags: string[];
   /**
    * wire uint · min 0
@@ -4006,6 +4017,11 @@ export interface CommandsResolveResponse {
    * Currently active scoped tags at match time.
    */
   scoped_tags?: string[];
+  /**
+   * The tags this resolve set: what its commit applied, not only what the
+   * command asked for, so a write the policy chain refused, or one a hold
+   * ended before, is absent. A preview reports what committing would set.
+   */
   sets_tags: string[];
   telemetry: ResolveTelemetry;
   /**
