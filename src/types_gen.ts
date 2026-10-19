@@ -1500,6 +1500,11 @@ export interface HudFragment {
 }
 
 /**
+ * What the indicator shows.
+ */
+export type IndicatorState = "idle" | "input_text" | "input_action" | "listening" | "standby" | "processing" | "speaking" | "loading";
+
+/**
  * An available keyboard input source.
  */
 export interface InputSource {
@@ -3203,6 +3208,13 @@ export interface ArtifactDeleteRequest {
   ref: string;
 }
 
+export interface ArtifactDownloadRequest {
+  /**
+   * non-empty
+   */
+  ref: string;
+}
+
 export interface BindingsProposeRequest {
   /**
    * Settings to propose for the caller's own triggers. Nothing is written
@@ -4483,6 +4495,10 @@ export interface HUDShowRequest {
    * non-empty
    */
   channel: string;
+}
+
+export interface IndicatorSetRequest {
+  state: IndicatorState;
 }
 
 export interface InputClickRequest {
