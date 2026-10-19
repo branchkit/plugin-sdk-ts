@@ -4119,15 +4119,6 @@ export interface CommandsSetOverrideRequest {
   new_pattern: string;
 }
 
-export interface ControlSignalRequest {
-  /**
-   * Raw control-stream signal string (e.g. "open hud", "hide discovery").
-   * Forwarded verbatim to the Swift shell via the platform's control stream.
-   * non-empty
-   */
-  signal: string;
-}
-
 export interface DispatchRequest {
   /**
    * The action to dispatch.
@@ -4136,11 +4127,6 @@ export interface DispatchRequest {
 }
 
 export interface DispatchResponse {
-  /**
-   * Control message to forward to the Swift host (if any).
-   * Present on `status == "ok"`; absent on `status == "error"`.
-   */
-  control_message?: string;
   /**
    * Plugin that handled the action. Present on `status == "ok"`.
    */
@@ -9737,11 +9723,6 @@ export interface SelectionPickRequest {
 
 export interface SelectionPickResponse {
   /**
-   * Control message to forward to the Swift host
-   * (always `"close hud"` here).
-   */
-  control_message: string;
-  /**
    * Id of the picked item (from the original `HUDItem.id`).
    */
   item_id: string;
@@ -9776,11 +9757,6 @@ export interface SelectionSetRequest {
 }
 
 export interface SessionEndCleanupResponse {
-  /**
-   * Control message to forward to the Swift host
-   * (e.g. "hide discovery", "hide hud"), if any.
-   */
-  control_message?: string;
   ok: boolean;
   /**
    * Whether the input plugin should reset its recognition engine after
@@ -10229,11 +10205,6 @@ export interface OnActionRequest {
 }
 
 export interface OnActionResponse {
-  /**
-   * Control message to forward to the Swift host (e.g., 'show commands').
-   * default ""
-   */
-  control_message?: string;
   /**
    * Structured result payload. Opaque to the platform — piped through
    * to the dispatch caller as-is. Plugins use this to return data from

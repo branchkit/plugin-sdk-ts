@@ -43,7 +43,6 @@ export const MethodCommandsResetOverride = "commands.reset_override" as const; /
 export const MethodCommandsResolve = "commands.resolve" as const; // since 0.1.0
 export const MethodCommandsResolvePhrase = "commands.resolve_phrase" as const; // since 0.1.0
 export const MethodCommandsSetOverride = "commands.set_override" as const; // since 0.1.0
-export const MethodControlSignal = "control.signal" as const; // since 0.1.0
 export const MethodDiscoveryClosed = "discovery.closed" as const; // since 0.1.0
 export const MethodDispatch = "dispatch" as const; // since 0.1.0
 export const MethodEffectsAssert = "effects.assert" as const; // since 0.1.0

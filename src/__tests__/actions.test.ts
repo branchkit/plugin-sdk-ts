@@ -92,7 +92,7 @@ describe("handleAction", () => {
   it("passes through OnActionResponse return value verbatim", async () => {
     const plugin = new Plugin();
     plugin.handleAction("bar.say", async () => {
-      const resp: OnActionResponse = { status: "ok", control_message: "hello" };
+      const resp: OnActionResponse = { status: "ok", result: { said: "hello" } };
       return resp;
     });
 
@@ -101,7 +101,7 @@ describe("handleAction", () => {
     const result = (await onAction({ action: "bar.say", params: {} })) as OnActionResponse;
 
     expect(result.status).toBe("ok");
-    expect(result.control_message).toBe("hello");
+    expect(result.result).toEqual({ said: "hello" });
   });
 
   it("registeredActionTypes() lists the registered actions", () => {

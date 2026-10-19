@@ -20,7 +20,6 @@ interface RpcError {
 
 export interface ActionResponse {
   status?: string;
-  control_message?: string;
   result?: unknown;
 }
 
