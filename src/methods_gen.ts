@@ -3624,21 +3624,21 @@ export abstract class Methods {
   }
 
   /**
-   * Open a URL or file path with the default handler
+   * Open a URL or file path with the default handler. A plugin may open a web address only for a host it declares in requires.network that the user has switched on
    */
   async nativeOpenTarget(req: NativeOpenTargetRequest): Promise<void> {
     const result = await this.call(MethodNativeOpenTarget, req);
   }
 
   /**
-   * Open a web (http, https) or email (mailto) link in its default handler; any other scheme is refused
+   * Open a web (http, https) or email (mailto) link in its default handler; any other scheme is refused. A plugin may open a web address only for a host it declares in requires.network that the user has switched on
    */
   async nativeOpenURL(req: NativeOpenURLRequest): Promise<void> {
     const result = await this.call(MethodNativeOpenUrl, req);
   }
 
   /**
-   * Open a URL or path with a specific application
+   * Open a URL or path with a specific application. A plugin may open a web address only for a host it declares in requires.network that the user has switched on
    */
   async nativeOpenWithApp(req: NativeOpenWithAppRequest): Promise<void> {
     const result = await this.call(MethodNativeOpenWithApp, req);
