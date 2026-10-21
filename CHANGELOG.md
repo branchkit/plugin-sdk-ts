@@ -5,6 +5,15 @@ git history.
 
 ## Unreleased
 
+## 0.12.0 — 2026-10-21
+
+Pages, part two: the old names are gone.
+
+- Breaking: the deprecated `settingsTab` and `SettingsTabFn` are removed;
+  register a page with `plugin.page(key, fn)` / `PageFn`.
+- The manifest declares a plugin's pages as `implements.pages` (was
+  `implements.settings_tabs`, now refused with the rename named).
+
 ## 0.11.0 — 2026-10-21
 
 Pages: a plugin's own screens are registered as pages.
