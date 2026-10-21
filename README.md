@@ -174,7 +174,7 @@ does not start.
 | Keep a live copy | `mirrorCollection(name)`, `settings<T>(name)` |
 | Contribute commands | `command(word("open"), capture("app", "apps")).action(…).build()`, `pushCommandSpecs`, `pushCommandGroup` |
 | Bind keys and device buttons | manifest `collection_data["_platform.bindings"]`; a device plugin lists its triggers with `bindingsSetTriggers`, reports presses with `bindingsReport` and proposes settings from its own screen with `bindingsPropose` (guides: *Triggers and authority*, *Make a device a binding source*) |
-| A page of your own | `page(key, fn)` + `implements.settings_tabs` in the manifest (`implements.pages` from the next release); `postButton` / `signalButton` / `confirmButton` |
+| A page of your own | `page(key, fn)` + `implements.pages` in the manifest; `postButton` / `signalButton` / `confirmButton` |
 | Show something | `outputState({ state })` with `sayAction` / `dispatchAction`, `hudPush` |
 | Hold a system effect | `assertEffect`, `retractEffect`, `isEffectActive`, `onEffectDisplaced` |
 | Trace a request | `plugin.currentCorrelation()` |

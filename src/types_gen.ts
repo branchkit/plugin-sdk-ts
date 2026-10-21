@@ -10395,7 +10395,7 @@ export interface RenderSettingsRequest {
    */
   search: string;
   /**
-   * Which settings tab to render (from manifest implements.settings_tabs[].key).
+   * Which page to render (from manifest implements.pages[].key).
    */
   tab_key: string;
   /**

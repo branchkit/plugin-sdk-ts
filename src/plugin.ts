@@ -139,12 +139,6 @@ export interface ActionRequest<T = unknown> {
  */
 export type PageFn = (req: RenderSettingsRequest) => string | Promise<string>;
 
-/**
- * The old name of {@link PageFn}.
- * @deprecated Use PageFn. Removed once the plugins built here have moved.
- */
-export type SettingsTabFn = PageFn;
-
 export type ActionHandlerFn<T = unknown> = (
 
   req: ActionRequest<T>,
@@ -449,8 +443,7 @@ export class Plugin extends Events {
 
   /**
    * Register the renderer for the page `key` the manifest declares in
-   * `implements.settings_tabs` (renamed `implements.pages` in the next
-   * release): one of the plugin's own pages, shown in its tab
+   * `implements.pages`: one of the plugin's own pages, shown in its tab
    * strip in BranchKit. The renderer returns the page's HTML FRAGMENT — the platform's frame
    * owns the container it is morphed into — and the SDK attaches the
    * stylesheet registered with {@link Plugin.settingsCSS}.
@@ -481,14 +474,6 @@ export class Plugin extends Events {
       this.handlers.set(HookRenderSettings, (params) => this.renderPage(params));
     }
     this.pages.set(key, fn);
-  }
-
-  /**
-   * The old name of {@link Plugin.page}.
-   * @deprecated Use page. Removed once the plugins built here have moved.
-   */
-  settingsTab(key: string, fn: SettingsTabFn): void {
-    this.page(key, fn);
   }
 
   /**
