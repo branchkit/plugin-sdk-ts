@@ -449,7 +449,8 @@ export class Plugin extends Events {
 
   /**
    * Register the renderer for the page `key` the manifest declares in
-   * `implements.pages`: one of the plugin's own pages, shown in its tab
+   * `implements.settings_tabs` (renamed `implements.pages` in the next
+   * release): one of the plugin's own pages, shown in its tab
    * strip in BranchKit. The renderer returns the page's HTML FRAGMENT — the platform's frame
    * owns the container it is morphed into — and the SDK attaches the
    * stylesheet registered with {@link Plugin.settingsCSS}.
