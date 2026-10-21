@@ -5,6 +5,15 @@ git history.
 
 ## Unreleased
 
+## 0.10.0 — 2026-10-20
+
+Re-decodes can target the dictation stages.
+
+- `RecognitionRedecodeRequest.language`: the language a dictation stage's
+  probe decodes in, as the live stage's `--language`. A command stage
+  ignores it. The dictation stages (WhisperKit, whisper.cpp) can now be
+  re-decoded through `recognition.redecode` too.
+
 ## 0.9.0 — 2026-10-20
 
 Re-decodes can match the live recognizer, and report time, confidence and
