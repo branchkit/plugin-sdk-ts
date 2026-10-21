@@ -50,7 +50,7 @@ import "./debug.js"; // module augmentation — per-plugin debug log helper
 import "./mirror.js"; // module augmentation — consumed-collection mirror
 export { CollectionMirror } from "./mirror.js";
 import "./settings.js"; // module augmentation — typed settings mirror
-export type { SettingsTabFn } from "./plugin.js";
+export type { PageFn, SettingsTabFn } from "./plugin.js";
 
 import "./hud.js";
 export { SettingsMirror } from "./settings.js";

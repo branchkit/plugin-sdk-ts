@@ -87,7 +87,7 @@ describe("settings mirror write/read-through", () => {
 // The SDK-owned render_settings hook: one renderer per tab key, the
 // registered stylesheet on every response, an error for a key nobody
 // registered, and every settings mirror refreshed before the tab draws.
-describe("settings tabs", () => {
+describe("pages", () => {
   async function render(plugin: Plugin, tab_key: string): Promise<{ html: string; css?: string }> {
     // @ts-expect-error — reaching the private handler table for the test
     const fn = plugin.handlers.get("render_settings");
@@ -100,8 +100,8 @@ describe("settings tabs", () => {
     const { plugin } = fakePlugin(store);
     const mirror = plugin.settings<TestConfig>("plugin.test.config");
     plugin.settingsCSS(".alpha{}");
-    plugin.settingsTab("alpha", () => `<p id="alpha">${mirror.get()?.editor ?? ""}</p>`);
-    plugin.settingsTab("beta", async (req) => `<p id="beta">${req.tab_key}</p>`);
+    plugin.page("alpha", () => `<p id="alpha">${mirror.get()?.editor ?? ""}</p>`);
+    plugin.page("beta", async (req) => `<p id="beta">${req.tab_key}</p>`);
 
     // The store moved behind the mirror's back (no collection.updated);
     // the render must still see the current value.
@@ -118,7 +118,7 @@ describe("settings tabs", () => {
 
   test("renderer errors propagate rather than becoming an empty tab", async () => {
     const { plugin } = fakePlugin({});
-    plugin.settingsTab("broken", () => {
+    plugin.page("broken", () => {
       throw new Error("cannot draw");
     });
     await expect(render(plugin, "broken")).rejects.toThrow("cannot draw");
@@ -128,11 +128,11 @@ describe("settings tabs", () => {
   // throws at registration whether or not a tab was registered first.
   test("handle(render_settings) is rejected", () => {
     const a = fakePlugin({}).plugin;
-    expect(() => a.handle("render_settings", async () => ({}))).toThrow("settingsTab");
+    expect(() => a.handle("render_settings", async () => ({}))).toThrow("page(key, fn)");
 
     const b = fakePlugin({}).plugin;
-    b.settingsTab("x", () => "");
-    expect(() => b.handle("render_settings", async () => ({}))).toThrow("settingsTab");
+    b.page("x", () => "");
+    expect(() => b.handle("render_settings", async () => ({}))).toThrow("page(key, fn)");
   });
 });
 

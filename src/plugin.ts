@@ -134,10 +134,16 @@ export interface ActionRequest<T = unknown> {
  * Any other return is sent back as the JSON-RPC result verbatim.
  */
 /**
- * Renders one settings tab: the tab's HTML fragment for a render_settings
- * request. Registered with {@link Plugin.settingsTab}.
+ * Renders one of the plugin's pages: the page's HTML fragment for a
+ * render_settings request. Registered with {@link Plugin.page}.
  */
-export type SettingsTabFn = (req: RenderSettingsRequest) => string | Promise<string>;
+export type PageFn = (req: RenderSettingsRequest) => string | Promise<string>;
+
+/**
+ * The old name of {@link PageFn}.
+ * @deprecated Use PageFn. Removed once the plugins built here have moved.
+ */
+export type SettingsTabFn = PageFn;
 
 export type ActionHandlerFn<T = unknown> = (
 
@@ -303,10 +309,10 @@ export class Plugin extends Events {
   private pending = new Map<number, PendingCall>();
   // Lazily initialized when handleAction is first called.
   private actionHandlers: Map<string, ActionHandlerFn> | null = null;
-  // Non-null once settingsTab has installed the SDK's own render_settings
+  // Non-null once page has installed the SDK's own render_settings
   // handler; settingsMirrors are refreshed by that handler before every
-  // render (see settingsTab).
-  private settingsTabs: Map<string, SettingsTabFn> | null = null;
+  // render (see page).
+  private pages: Map<string, PageFn> | null = null;
   private settingsCss = "";
   private settingsMirrors: Array<{ refresh(): Promise<void> }> = [];
 
@@ -423,7 +429,7 @@ export class Plugin extends Events {
    * other has been registered throws, regardless of order.
    *
    * "render_settings" is not registrable here at all: the SDK owns that hook
-   * and installs it through {@link Plugin.settingsTab}, one renderer per
+   * and installs it through {@link Plugin.page}, one renderer per
    * manifest tab. handle throws on it so a plugin cannot bypass the dispatch.
    */
   handle(method: string, fn: HandlerFn): void {
@@ -435,15 +441,16 @@ export class Plugin extends Events {
     }
     if (method === HookRenderSettings) {
       throw new Error(
-        "plugin-sdk-ts: render_settings is the SDK's hook — register each tab with settingsTab(key, fn)",
+        "plugin-sdk-ts: render_settings is the SDK's hook — register each page with page(key, fn)",
       );
     }
     this.handlers.set(method, fn);
   }
 
   /**
-   * Register the renderer for the manifest-declared settings tab `key`.
-   * The renderer returns the tab's HTML FRAGMENT — the platform's frame
+   * Register the renderer for the page `key` the manifest declares in
+   * `implements.pages`: one of the plugin's own pages, shown in its tab
+   * strip in BranchKit. The renderer returns the page's HTML FRAGMENT — the platform's frame
    * owns the container it is morphed into — and the SDK attaches the
    * stylesheet registered with {@link Plugin.settingsCSS}.
    *
@@ -464,15 +471,23 @@ export class Plugin extends Events {
    * tab: a method changes state, and the re-render that follows draws it.
    *
    * This is the only way to install a render_settings handler:
-   * handle("render_settings", ...) throws, so every tab goes through this
+   * handle("render_settings", ...) throws, so every page goes through this
    * dispatch.
    */
-  settingsTab(key: string, fn: SettingsTabFn): void {
-    if (this.settingsTabs === null) {
-      this.settingsTabs = new Map();
-      this.handlers.set(HookRenderSettings, (params) => this.renderSettingsTab(params));
+  page(key: string, fn: PageFn): void {
+    if (this.pages === null) {
+      this.pages = new Map();
+      this.handlers.set(HookRenderSettings, (params) => this.renderPage(params));
     }
-    this.settingsTabs.set(key, fn);
+    this.pages.set(key, fn);
+  }
+
+  /**
+   * The old name of {@link Plugin.page}.
+   * @deprecated Use page. Removed once the plugins built here have moved.
+   */
+  settingsTab(key: string, fn: SettingsTabFn): void {
+    this.page(key, fn);
   }
 
   /**
@@ -491,11 +506,11 @@ export class Plugin extends Events {
     this.settingsMirrors.push(mirror);
   }
 
-  private async renderSettingsTab(params: unknown): Promise<RenderSettingsResponse> {
+  private async renderPage(params: unknown): Promise<RenderSettingsResponse> {
     const req = (params ?? {}) as RenderSettingsRequest;
-    const fn = this.settingsTabs?.get(req.tab_key);
+    const fn = this.pages?.get(req.tab_key);
     if (!fn) {
-      throw new Error(`no renderer registered for settings tab "${req.tab_key}"`);
+      throw new Error(`no renderer registered for page "${req.tab_key}"`);
     }
     // Read through before drawing. A refresh failure is logged, not
     // fatal: the mirror keeps its last snapshot and the tab still draws.
