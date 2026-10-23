@@ -2216,7 +2216,7 @@ export interface PlatformProfileResponse {
   os: string;
   /**
    * On Linux, the desktop session the window tools drive: `x11`, `sway`,
-   * `gnome` or `other_wayland`. Absent on other systems.
+   * `hyprland`, `gnome` or `other_wayland`. Absent on other systems.
    */
   session?: string;
   /**

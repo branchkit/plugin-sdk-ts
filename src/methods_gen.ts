@@ -1874,7 +1874,7 @@ export abstract class Methods {
   }
 
   /**
-   * Cascade all windows for an app. On Linux, not available on sway (sway tiles windows; there is no cascade); nor on GNOME (GNOME exposes no window list; only the focused window is visible)
+   * Cascade all windows for an app. On Linux, not available on sway (sway tiles windows; there is no cascade); nor on GNOME (GNOME exposes no window list; only the focused window is visible); nor on Hyprland (Hyprland tiles windows; there is no cascade)
    */
   async nativeCascadeWindows(req: NativeCascadeWindowsRequest): Promise<boolean> {
     const result = await this.call(MethodNativeCascadeWindows, req);
@@ -2903,7 +2903,7 @@ export abstract class Methods {
   }
 
   /**
-   * Hide an app by bundle ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)
+   * Hide an app by bundle ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through); nor on Hyprland (Hyprland has no minimize; it hides windows on special workspaces instead)
    */
   async nativeHideApp(req: NativeHideAppRequest): Promise<void> {
     const result = await this.call(MethodNativeHideApp, req);
@@ -3022,7 +3022,7 @@ export abstract class Methods {
   }
 
   /**
-   * Check if an application is hidden. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)
+   * Check if an application is hidden. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through); nor on Hyprland (Hyprland has no minimize; it hides windows on special workspaces instead)
    */
   async nativeIsAppHidden(req: NativeIsAppHiddenRequest): Promise<boolean> {
     const result = await this.call(MethodNativeIsAppHidden, req);
@@ -3359,7 +3359,7 @@ export abstract class Methods {
   }
 
   /**
-   * Minimize a window by ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)
+   * Minimize a window by ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through); nor on Hyprland (Hyprland has no minimize; it hides windows on special workspaces instead)
    */
   async nativeMinimizeWindow(req: NativeMinimizeWindowRequest): Promise<void> {
     const result = await this.call(MethodNativeMinimizeWindow, req);
@@ -4262,7 +4262,7 @@ export abstract class Methods {
   }
 
   /**
-   * Hide or unhide an app. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)
+   * Hide or unhide an app. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through); nor on Hyprland (Hyprland has no minimize; it hides windows on special workspaces instead)
    */
   async nativeSetAppHidden(req: NativeSetAppHiddenRequest): Promise<boolean> {
     const result = await this.call(MethodNativeSetAppHidden, req);
@@ -5159,14 +5159,14 @@ export abstract class Methods {
   }
 
   /**
-   * Unhide a hidden application. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)
+   * Unhide a hidden application. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through); nor on Hyprland (Hyprland has no minimize; it hides windows on special workspaces instead)
    */
   async nativeUnhideApp(req: NativeUnhideAppRequest): Promise<void> {
     const result = await this.call(MethodNativeUnhideApp, req);
   }
 
   /**
-   * Restore a minimized window by ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through)
+   * Restore a minimized window by ID. On Linux, not available on sway (this compositor has no minimize; sway uses the scratchpad); nor on GNOME (GNOME exposes no window IPC to minimize through); nor on Hyprland (Hyprland has no minimize; it hides windows on special workspaces instead)
    */
   async nativeUnminimizeWindow(req: NativeUnminimizeWindowRequest): Promise<void> {
     const result = await this.call(MethodNativeUnminimizeWindow, req);
