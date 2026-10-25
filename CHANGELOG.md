@@ -5,6 +5,21 @@ git history.
 
 ## Unreleased
 
+## 0.13.0 — 2026-10-25
+
+- New log-event constants: `plugin.restarted` (cause, backoff and restart
+  count), `plugin.restart_budget_exhausted`, and `stage.respawned` (a
+  pipeline stage started afresh instead of reused, with the reason).
+  `state.ttl_swept` is now emitted at Info, once per collection a TTL sweep
+  removed records from.
+- A window's frame source can now be `assumed`: the platform cannot see the
+  window (the focused window on GNOME Wayland) and gives its display's
+  visible bounds, so its geometry is not a fact.
+- Generated docs: `commands.resolve`'s `collections` narrows completions to
+  commands stored in the named command-set collections; Hyprland is named
+  among the desktop sessions an operation cannot run on, and the platform
+  profile's `session` field lists `hyprland`.
+
 ## 0.12.0 — 2026-10-21
 
 Pages, part two: the old names are gone.
