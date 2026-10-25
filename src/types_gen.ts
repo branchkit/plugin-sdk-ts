@@ -3925,8 +3925,8 @@ export interface CommandsResolveRequest {
    */
   active_tags?: string[];
   /**
-   * Narrow completions to commands contributed by these collections'
-   * contributors. None or empty = all.
+   * Narrow completions to commands stored in these command-set
+   * collections. None or empty = all.
    * default null
    */
   collections?: string[];
