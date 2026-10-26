@@ -29,7 +29,9 @@ const APPS_PROVIDER_DIR = new URL(
 ).pathname;
 
 const HELLOWORLD_BIN = `${HELLOWORLD_DIR}/helloworld-plugin`;
-const helloworldBuilt = existsSync(HELLOWORLD_BIN);
+// On Windows go build writes helloworld-plugin.exe.
+const helloworldBuilt =
+  existsSync(HELLOWORLD_BIN) || existsSync(`${HELLOWORLD_BIN}.exe`);
 const HELLOWORLD_MISSING =
   `helloworld plugin not built (${HELLOWORLD_BIN}); build it with ` +
   "`cd plugins/helloworld/src && go build -o ../helloworld-plugin .`";
