@@ -5,6 +5,16 @@ git history.
 
 ## Unreleased
 
+## 0.14.0 — 2026-10-28
+
+- New log-event constants for changes a person (or a plugin acting for
+  them) makes to their own commands and lists: `command.user_created`,
+  `command.user_modified`, `command.user_deleted`,
+  `state.collection_created` and `state.collection_deleted`. Each names who
+  made the change; the content is redacted unless log recording is on.
+- The harness tests find the helloworld plugin under its `.exe` name on
+  Windows.
+
 ## 0.13.0 — 2026-10-25
 
 - New log-event constants: `plugin.restarted` (cause, backoff and restart
