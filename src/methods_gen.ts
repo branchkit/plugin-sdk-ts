@@ -5631,7 +5631,7 @@ export abstract class Methods {
   }
 
   /**
-   * Re-decode the caller's own captured audio through a registered recognizer stage against the LIVE grammar (the fragility ladder) — the platform runs it because the grammar is platform state and plugins cannot exec
+   * Re-decode the caller's own captured audio through one of its own recognizer stages against the LIVE grammar (the fragility ladder) — the platform runs it because the grammar is platform state and plugins cannot exec
    */
   async recognitionRedecode(req: RecognitionRedecodeRequest): Promise<RecognitionRedecodeResponse> {
     const result = await this.call(MethodRecognitionRedecode, req);

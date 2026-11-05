@@ -9632,7 +9632,7 @@ export interface RecognitionRedecodeRequest {
   model: string;
   /**
    * Registered stage id whose binary's `probe` subcommand runs the re-decode,
-   * e.g. `"voice.sherpa_commands"`. Validated against the stage registry.
+   * e.g. `"voice.sherpa_commands"`. Must be one of the caller's own stages.
    * non-empty
    */
   stage: string;
