@@ -10980,6 +10980,13 @@ export interface PermissionChangedEventParams {
 export interface PipelineErrorEventParams {
   error: string;
   pipeline: string;
+  /**
+   * The run that failed, as its `_platform.pipeline.started` named it.
+   * Empty when no run failed (a `pipelines.warm` that could not start the
+   * pipeline's stages).
+   * default ""
+   */
+  run_id?: string;
 }
 
 /** Payload of the `_platform.pipeline.executed` event. */
@@ -11021,7 +11028,8 @@ export interface PipelineStartedEventParams {
   pipeline: string;
   /**
    * This run's id: opaque, never reused for another run. The run's
-   * `_platform.pipeline.stopped` and every `on_transcript` it causes carry
+   * `_platform.pipeline.stopped`, its `_platform.pipeline.error`, and each
+   * `_platform.pipeline.transcript` and `on_transcript` it causes carry
    * the same one.
    * default ""
    */
@@ -11085,6 +11093,13 @@ export interface PipelineTranscriptEventParams {
    */
   partial?: boolean;
   pipeline: string;
+  /**
+   * The run that produced this transcript, as its
+   * `_platform.pipeline.started` named it. Empty when no run produced it
+   * (`pipelines.ingest_transcript`).
+   * default ""
+   */
+  run_id?: string;
   text: string;
   /**
    * Shared-clock onset (ms, the audio chunk timebase) of each word of
