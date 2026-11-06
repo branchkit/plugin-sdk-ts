@@ -11,7 +11,7 @@
 // BRANCHKIT_REQUIRE_HARNESS=1 (any CI lane that builds them) to make a
 // missing piece FAIL instead: a skip reports green, so a lookup that quietly
 // stops finding the binary would otherwise go unnoticed.
-import { describe, test, expect } from "bun:test";
+import { describe, test, expect, setDefaultTimeout } from "bun:test";
 import { existsSync } from "node:fs";
 import {
   Harness,
@@ -48,6 +48,12 @@ if (!harnessBinaryAvailable()) {
   }
   console.warn(`harness.test.ts: skipping — ${HELLOWORLD_MISSING}`);
 }
+
+// Each test starts the harness binary, which spawns the plugin: on a loaded
+// machine that alone can take longer than bun's 5 s default, and the test
+// then fails before the harness client's own 30 s per-call bound (harness.ts)
+// would. Give every test room for one start plus a few calls.
+setDefaultTimeout(60_000);
 
 describe.skipIf(!harnessBinaryAvailable() || !helloworldBuilt)("Harness", () => {
   test("start and get plugin state", async () => {
