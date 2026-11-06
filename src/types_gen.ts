@@ -10337,6 +10337,16 @@ export interface OnTranscriptRequest {
    */
   pipeline: string;
   /**
+   * The run of that pipeline that produced it: the same opaque id as the
+   * `run_id` on that run's `_platform.pipeline.started` and
+   * `_platform.pipeline.stopped`, never reused for another run. A plugin
+   * that runs one pipeline more than once at a time (a held run and a
+   * persistent one, say) tells their transcripts apart by it. Empty when
+   * no run produced the transcript (`pipelines.ingest_transcript`).
+   * default ""
+   */
+  run_id?: string;
+  /**
    * Recognized text.
    */
   text: string;
@@ -11009,6 +11019,13 @@ export interface PipelineStartedEventParams {
    */
   ephemeral?: boolean;
   pipeline: string;
+  /**
+   * This run's id: opaque, never reused for another run. The run's
+   * `_platform.pipeline.stopped` and every `on_transcript` it causes carry
+   * the same one.
+   * default ""
+   */
+  run_id?: string;
 }
 
 /** Payload of the `_platform.pipeline.stopped` event. */
@@ -11020,6 +11037,11 @@ export interface PipelineStoppedEventParams {
   error?: string;
   pipeline: string;
   reason: PipelineStopReason;
+  /**
+   * The run that stopped, as its `_platform.pipeline.started` named it.
+   * default ""
+   */
+  run_id?: string;
   /**
    * `keybind` when the pipeline's own keybind trigger stopped it.
    */
