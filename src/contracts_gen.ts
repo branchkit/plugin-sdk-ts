@@ -674,6 +674,7 @@ export const HookListMethods = "list_methods" as const; // since 0.1.0
 export const HookOnAction = "on_action" as const; // since 0.1.0
 export const HookOnCommandsChanged = "on_commands_changed" as const; // since 0.1.0
 export const HookOnReady = "on_ready" as const; // since 0.1.0
+export const HookOnStop = "on_stop" as const; // since 0.2.0
 export const HookOnTranscript = "on_transcript" as const; // since 0.1.0
 export const HookRenderSettings = "render_settings" as const; // since 0.1.0
 export const HookTrialApplyFixture = "trial_apply_fixture" as const; // since 0.1.0
