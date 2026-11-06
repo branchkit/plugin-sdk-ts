@@ -5,6 +5,13 @@ git history.
 
 ## Unreleased
 
+- `onStop(async () => …)`: the plugin's cleanup before the platform stops
+  it (switched off, removed, restarted for a new build or a lost
+  capability, the app quitting). It runs with the connection still open,
+  so it may call the platform, and when it settles the new `on_stop`
+  request (`HookOnStop`) is answered. The platform waits at most 5 s (2 s
+  at quit). A plugin that does not register it is stopped as before.
+
 ## 0.14.0 — 2026-10-28
 
 - New log-event constants for changes a person (or a plugin acting for

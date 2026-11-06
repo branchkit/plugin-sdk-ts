@@ -177,6 +177,7 @@ does not start.
 | A page of your own | `page(key, fn)` + `implements.pages` in the manifest; `postButton` / `signalButton` / `confirmButton` |
 | Show something | `outputState({ state })` with `sayAction` / `dispatchAction`, `hudPush` |
 | Hold a system effect | `assertEffect`, `retractEffect`, `isEffectActive`, `onEffectDisplaced` |
+| Clean up before you are stopped | `onStop(async () => …)`: runs with the connection open (switched off, removed, restarted, the app quitting), for up to 5 s; not on a crash, so check again at start |
 | Trace a request | `plugin.currentCorrelation()` |
 | Label calls made for something you host (a script, an extension) | `actingFor(actor, fn)` |
 | Find your files | `pluginDir()`, `pluginDataDir()`, `apiVersion()` |

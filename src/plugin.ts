@@ -9,6 +9,7 @@ import {
   HookListMethods,
   HookOnAction,
   HookOnReady,
+  HookOnStop,
   HookRenderSettings,
 } from "./contracts_gen.js";
 
@@ -607,6 +608,35 @@ export class Plugin extends Events {
    */
   onReady(fn: () => void | Promise<void>): void {
     this.on(HookOnReady, () => fn());
+  }
+
+  /**
+   * Register the plugin's cleanup for when the platform stops it: switched
+   * off or removed, restarted to load a new build, a required capability
+   * lost, or the app quitting. Registering it is what asks the platform to
+   * send on_stop (it reads list_methods); a plugin that does not register it
+   * is stopped as before, with no request first.
+   *
+   * `fn` runs while the connection is still open, so it may call the
+   * platform (put windows back, flush a record). When it settles, on_stop is
+   * answered, and the platform then closes stdin and stops the process as it
+   * always does. The platform waits at most 5 s for the answer (2 s when the
+   * app is quitting); after that, calls reject with "plugin shutting down".
+   * A throw is logged by the platform and changes nothing else: the plugin is
+   * stopped either way. A crash or a hang is not asked, so state that must
+   * survive those still needs a check at the next start.
+   *
+   * Must be called before run().
+   *
+   *     plugin.onStop(async () => {
+   *       await restoreParkedWindows();
+   *     });
+   */
+  onStop(fn: () => void | Promise<void>): void {
+    this.handle(HookOnStop, async () => {
+      await fn();
+      return {};
+    });
   }
 
   /**
