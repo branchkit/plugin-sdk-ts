@@ -52,6 +52,7 @@ export const MethodEventsAppend = "events.append" as const; // since 0.1.0
 export const MethodEventsEmit = "events.emit" as const; // since 0.1.0
 export const MethodHttpRequest = "http.request" as const; // since 0.2.0
 export const MethodHudCreateChannel = "hud.create_channel" as const; // since 0.1.0
+export const MethodHudFocus = "hud.focus" as const; // since 0.2.0
 export const MethodHudHide = "hud.hide" as const; // since 0.1.0
 export const MethodHudPush = "hud.push" as const; // since 0.1.0
 export const MethodHudRemoveChannel = "hud.remove_channel" as const; // since 0.1.0
