@@ -3,6 +3,21 @@
 Versions before this file predate it; their contents are in the repo's
 git history.
 
+## 0.16.0 — 2026-11-06
+
+- Selections belong to the plugin that set them. `methods.selectionSet`
+  opens a window only on a channel the plugin created (another plugin's,
+  a platform window, or one that does not exist is refused), and with no
+  `channel` it opens no window at all (it used to open `main`). Each plugin
+  has its own list; one plugin's set no longer replaces another's.
+- `selectionPick({ index, owner })`: `owner` names whose list to answer
+  (default the caller's own). Answering another plugin's list needs the
+  `dispatch` privilege and the person's dispatch grant to that plugin.
+- `methods.selectionClear({ owner })` (`selection.clear`): end the plugin's
+  own selection without a pick and close its window.
+- `SelectionPickedEventParams` gains `plugin_id` (whose list) and
+  `picked_by` (who answered it).
+
 ## 0.15.0 — 2026-11-06
 
 - `methods.hudFocus({ channel })` (`hud.focus`): give the keyboard to one of the plugin's own HUD cards or windows.

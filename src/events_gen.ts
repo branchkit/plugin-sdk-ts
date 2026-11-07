@@ -289,7 +289,7 @@ export abstract class Events extends Methods {
     this.on(EventPrivilegeGranted, (params) => fn(params as PrivilegeGrantedEventParams));
   }
 
-  /** Register `fn` for the _platform.selection.picked event: User selected an item from the selection HUD. */
+  /** Register `fn` for the _platform.selection.picked event: An item of a selection was picked: names whose list (plugin_id) and who answered it (picked_by). */
   onSelectionPicked(fn: (params: SelectionPickedEventParams) => void | Promise<void>): void {
     this.on(EventSelectionPicked, (params) => fn(params as SelectionPickedEventParams));
   }

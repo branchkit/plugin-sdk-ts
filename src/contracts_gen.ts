@@ -642,6 +642,7 @@ export const MethodSecretsIsSet = "secrets.is_set" as const; // since 0.2.0
 export const MethodSecretsList = "secrets.list" as const; // since 0.2.0
 export const MethodSecretsRequestSlot = "secrets.request_slot" as const; // since 0.2.0
 export const MethodSecretsSet = "secrets.set" as const; // since 0.2.0
+export const MethodSelectionClear = "selection.clear" as const; // since 0.2.0
 export const MethodSelectionPick = "selection.pick" as const; // since 0.1.0
 export const MethodSelectionSet = "selection.set" as const; // since 0.1.0
 export const MethodSessionBoundary = "session.boundary" as const; // since 0.1.0

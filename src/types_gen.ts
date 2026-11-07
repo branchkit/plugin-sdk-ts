@@ -9796,12 +9796,38 @@ export interface SecretsSetResponse {
   created: boolean;
 }
 
+export interface SelectionClearRequest {
+  /**
+   * Whose selection to end. Omitted, the caller's own. A plugin may end
+   * only its own; the host may end any.
+   * default null
+   */
+  owner?: string;
+}
+
+export interface SelectionClearResponse {
+  /**
+   * Whether there was a selection to end. `false` is not an error: the
+   * list was already picked, cleared, or never set.
+   */
+  cleared: boolean;
+  ok: boolean;
+}
+
 export interface SelectionPickRequest {
   /**
    * Zero-based index into the previously-set selection items array.
    * wire uint64 (64-bit) · min 0
    */
   index: number;
+  /**
+   * Whose selection to answer: the plugin id that set it. Omitted, the
+   * caller's own. A plugin answering another plugin's list needs the
+   * `dispatch` privilege and the person's dispatch grant to that plugin,
+   * the same record that lets it run that plugin's actions.
+   * default null
+   */
+  owner?: string;
 }
 
 export interface SelectionPickResponse {
@@ -9819,7 +9845,10 @@ export interface SelectionPickResponse {
 
 export interface SelectionSetRequest {
   /**
-   * HUD channel to show the selection in. Defaults to `"main"`.
+   * The window to show the selection in: a HUD channel the calling
+   * plugin created. Another plugin's channel, a platform window or a
+   * name that is not a channel id is refused. Omitted, no window opens:
+   * the list can still be picked, by voice or by another plugin.
    * default null
    */
   channel?: string;
@@ -11241,6 +11270,18 @@ export interface SelectionPickedEventParams {
    * ID of the selected item.
    */
   item_id: string;
+  /**
+   * Who answered it: the owner itself, another plugin holding the
+   * `dispatch` privilege and a dispatch grant to the owner, or
+   * `_platform` for the host. A list's owner tells its own pick from
+   * another plugin's by comparing this with `plugin_id`.
+   */
+  picked_by: string;
+  /**
+   * The plugin whose list was answered: the one that set it with
+   * `selection.set`, or `_platform` for the host's own list.
+   */
+  plugin_id: string;
   /**
    * Phonetic tag used to select the item.
    */
