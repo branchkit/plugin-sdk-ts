@@ -9572,7 +9572,7 @@ export interface RecognitionBiasApplyRequest {
    */
   force?: boolean;
   /**
-   * Strength to apply (> 0; the setting is also switched on).
+   * Strength to apply (above 0, at most 32; the setting is also switched on).
    * wire double
    */
   strength: number;
@@ -9606,7 +9606,7 @@ export interface RecognitionBiasSetRequest {
    */
   enabled?: boolean;
   /**
-   * Omitted = leave the stored strength unchanged. Negative → 0.
+   * Omitted = leave the stored strength unchanged. Negative → 0, above 32 → 32.
    * wire double · default null
    */
   strength?: number;
